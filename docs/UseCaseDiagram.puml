@@ -55,6 +55,12 @@ usecase FRC02 as "Open/Close Enrollments in Course"
 
 man --> (FRC02)
 
+usecase FRC02.1 as "Open Enrollments"
+usecase FRC02.2 as "Close Enrollments"
+
+(FRC02) --> (FRC02.1)
+(FRC02) --> (FRC02.2)
+
 usecase FRC03 as "Open/Close Course"
 
 man --> (FRC03)
