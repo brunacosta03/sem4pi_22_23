@@ -2,25 +2,50 @@
 skinparam actorStyle awesome
 left to right direction
 
-actor Manager as man
-actor Teacher as tea
-actor Student as stu
+
+package actors{
+    actor Manager as man
+    actor Teacher as tea
+    actor Student as stu
+
+
+
+    note left of man
+        The manager can
+        also be refered as
+        the administrator
+    end note
+}
+
 
 actor User as usr
 
+'----------------------------------------------------------------------------------------------------'
 
-
-note right of man
-    The manager can
-    also be refered as
-    the administrator
-end note
+package Users{
 
 usecase FRU01 as "Management of Users"
 
+usecase FRU01.1 as "Create User"
+
+usecase FRU01.2 as "Enable User"
+
+usecase FRU01.3 as "Disable User"
+
+usecase FRU01.4 as "List Users"
+
 man --> (FRU01)
-tea --> (FRU01)
-stu --> (FRU01)
+FRU01 --> (FRU01.1)
+FRU01 --> (FRU01.2)
+FRU01 --> (FRU01.3)
+FRU01 --> (FRU01.4)
+
+}
+
+'----------------------------------------------------------------------------------------------------'
+
+package Courses{
+
 
 usecase FRC01 as "Create Course"
 
@@ -33,6 +58,12 @@ man --> (FRC02)
 usecase FRC03 as "Open/Close Course"
 
 man --> (FRC03)
+
+usecase FRC03.1 as "Open Course"
+usecase FRC03.2 as "Close Course"
+
+(FRC03) --> (FRC03.1)
+(FRC03) --> (FRC03.2)
 
 usecase FRC04 as "Set Course Teachers"
 
@@ -56,6 +87,12 @@ usecase FRC08 as "Approve/Reject Enlistment in Course"
 
 man --> (FRC08)
 
+usecase FRC08.1 as "Approve Enlistment"
+usecase FRC08.2 as "Reject Enlistment"
+
+(FRC08) --> (FRC08.1)
+(FRC08) --> (FRC08.2)
+
 usecase FRC09 as "Schedule of Class"
 
 tea --> (FRC09)
@@ -67,6 +104,12 @@ tea --> (FRC10)
 usecase FRC11 as "Update Schedule of Class"
 
 tea --> (FRC11)
+
+}
+
+'----------------------------------------------------------------------------------------------------'
+
+package Exams{
 
 usecase FRE01 as "Create Exam"
 
@@ -91,6 +134,12 @@ stu --> (FRE05)
 usecase FRE06 as "List Course Grades"
 
 tea --> (FRE06)
+
+}
+
+'----------------------------------------------------------------------------------------------------'
+
+package "Shared Boards" as Boards{
 
 usecase FRB01 as "Create Board"
 
@@ -124,6 +173,12 @@ usecase FRB08 as "Archive Board"
 
 usr --> (FRB08)
 
+}
+
+'----------------------------------------------------------------------------------------------------'
+
+package Meetings{
+
 usecase FRM01 as "Schedule a Meeting"
 
 usr --> (FRM01)
@@ -136,9 +191,19 @@ usecase FRM03 as "Accept/Reject Meeting"
 
 usr --> (FRM03)
 
+usecase FRM03.1 as "Accept Meeting"
+usecase FRM03.2 as "Reject Meeting"
+
+(FRM03) --> (FRM03.1)
+(FRM03) --> (FRM03.2)
+
 usecase FRM04 as "List Participants"
 
 usr --> (FRM04)
+
+}
+
+'----------------------------------------------------------------------------------------------------'
 
 usr <|-- man
 usr <|-- tea
