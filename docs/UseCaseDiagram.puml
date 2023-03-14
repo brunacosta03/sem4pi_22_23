@@ -1,0 +1,147 @@
+@startuml
+skinparam actorStyle awesome
+left to right direction
+
+actor Manager as man
+actor Teacher as tea
+actor Student as stu
+
+actor User as usr
+
+
+
+note right of man
+    The manager can
+    also be refered as
+    the administrator
+end note
+
+usecase FRU01 as "Management of Users"
+
+man --> (FRU01)
+tea --> (FRU01)
+stu --> (FRU01)
+
+usecase FRC01 as "Create Course"
+
+man --> (FRC01)
+
+usecase FRC02 as "Open/Close Enrollments in Course"
+
+man --> (FRC02)
+
+usecase FRC03 as "Open/Close Course"
+
+man --> (FRC03)
+
+usecase FRC04 as "Set Course Teachers"
+
+man --> (FRC04)
+
+usecase FRC05 as "List Courses"
+
+man --> (FRC05)
+tea --> (FRC05)
+stu --> (FRC05)
+
+usecase FRC06 as "Bulk Enroll Students in Course"
+
+man --> (FRC06)
+
+usecase FRC07 as "Request Enrollment in Course"
+
+stu --> (FRC07)
+
+usecase FRC08 as "Approve/Reject Enlistment in Course"
+
+man --> (FRC08)
+
+usecase FRC09 as "Schedule of Class"
+
+tea --> (FRC09)
+
+usecase FRC10 as "Schedule of Extra Class"
+
+tea --> (FRC10)
+
+usecase FRC11 as "Update Schedule of Class"
+
+tea --> (FRC11)
+
+usecase FRE01 as "Create Exam"
+
+tea --> (FRE01)
+
+usecase FRE02 as "List Exams"
+
+stu --> (FRE02)
+
+usecase FRE03 as "List Course Exams"
+
+tea --> (FRE03)
+
+usecase FRE04 as "Take Exam"
+
+stu --> (FRE04)
+
+usecase FRE05 as "List Grades"
+
+stu --> (FRE05)
+
+usecase FRE06 as "List Course Grades"
+
+tea --> (FRE06)
+
+usecase FRB01 as "Create Board"
+
+usr --> (FRB01)
+
+usecase FRB02 as "Share Board"
+
+usr --> (FRB02)
+
+usecase FRB03 as "View Board"
+
+usr --> (FRB03)
+
+usecase FRB04 as "Create Post-it"
+
+usr --> (FRB04)
+
+usecase FRB05 as "Change Post-it"
+
+usr --> (FRB05)
+
+usecase FRB06 as "Undo Post-it Change"
+
+usr --> (FRB06)
+
+usecase FRB07 as "View Board History"
+
+usr --> (FRB07)
+
+usecase FRB08 as "Archive Board"
+
+usr --> (FRB08)
+
+usecase FRM01 as "Schedule a Meeting"
+
+usr --> (FRM01)
+
+usecase FRM02 as "Cancel Meeting"
+
+usr --> (FRM02)
+
+usecase FRM03 as "Accept/Reject Meeting"
+
+usr --> (FRM03)
+
+usecase FRM04 as "List Participants"
+
+usr --> (FRM04)
+
+usr <|-- man
+usr <|-- tea
+usr <|-- stu
+
+@enduml
