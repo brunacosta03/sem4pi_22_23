@@ -1,7 +1,61 @@
 @startuml
 'https://plantuml.com/class-diagram
-left to right direction
 
 
+
+package "User Aggregate"{
+
+    class "<<Entity>> <<Root>>\nUser" as user
+
+    class "<<Value Object>>\nEmail" as email
+    class "<<Value Object>>\nPassword" as pass
+    class "<<Value Object>>\nFull Name" as fn
+    class "<<Value Object>>\nShort Name" as sn
+    enum "<<Value Object>>\nRole" as role
+
+    user -- email
+    user -- pass
+    user -- fn
+    user -- sn
+    user -- role
+
+    note left of role
+         Can be one of the following:
+            - Manager
+            - Teacher
+            - Student
+    end note
+
+}
+
+package "Course Aggregate"{
+    class "<<Entity>> <<Root>>\nCourse" as course
+
+    class "<<Value Object>>\nName" as cname
+    enum "<<Value Object>>\nState" as cstate
+    class "<<Value Object>>\nDescription" as cdesc
+    class "<<Value Object>>\nLimit" as climit
+    class "<<Value Object>>\nEdition" as cedit
+
+    course -- cname
+    course -- cstate
+    course -- cdesc
+    course -- climit
+    course -- cedit
+
+    note left of cstate
+        Can be one of the following:
+            - Open
+            - Closed
+    end note
+
+    note left of climit
+        Each course as a lower
+        and higher limit
+        number of students
+    end note
+}
+
+user --> course
 
 @enduml

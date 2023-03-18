@@ -24,21 +24,22 @@ actor User as usr
 
 package Users{
 
-usecase FRU01 as "Management of Users"
+    usecase FRU01 as "Management of Users"
 
-usecase FRU01.1 as "Create User"
+    usecase FRU011 as "Create User"
 
-usecase FRU01.2 as "Enable User"
+    usecase FRU012 as "Enable User"
 
-usecase FRU01.3 as "Disable User"
+    usecase FRU013 as "Disable User"
 
-usecase FRU01.4 as "List Users"
+    usecase FRU014 as "List Users"
 
-man --> (FRU01)
-FRU01 --> (FRU01.1)
-FRU01 --> (FRU01.2)
-FRU01 --> (FRU01.3)
-FRU01 --> (FRU01.4)
+    man --> (FRU01)
+
+    FRU01 --> (FRU011)
+    FRU01 --> (FRU012)
+    FRU01 --> (FRU013)
+    FRU01 --> (FRU014)
 
 }
 
@@ -55,21 +56,21 @@ usecase FRC02 as "Open/Close Enrollments in Course"
 
 man --> (FRC02)
 
-usecase FRC02.1 as "Open Enrollments"
-usecase FRC02.2 as "Close Enrollments"
+usecase FRC021 as "Open Enrollments"
+usecase FRC022 as "Close Enrollments"
 
-(FRC02) --> (FRC02.1)
-(FRC02) --> (FRC02.2)
+(FRC02) --> (FRC021)
+(FRC02) --> (FRC022)
 
 usecase FRC03 as "Open/Close Course"
 
 man --> (FRC03)
 
-usecase FRC03.1 as "Open Course"
-usecase FRC03.2 as "Close Course"
+usecase FRC031 as "Open Course"
+usecase FRC032 as "Close Course"
 
-(FRC03) --> (FRC03.1)
-(FRC03) --> (FRC03.2)
+(FRC03) --> (FRC031)
+(FRC03) --> (FRC032)
 
 usecase FRC04 as "Set Course Teachers"
 
@@ -93,11 +94,11 @@ usecase FRC08 as "Approve/Reject Enlistment in Course"
 
 man --> (FRC08)
 
-usecase FRC08.1 as "Approve Enlistment"
-usecase FRC08.2 as "Reject Enlistment"
+usecase FRC081 as "Approve Enlistment"
+usecase FRC082 as "Reject Enlistment"
 
-(FRC08) --> (FRC08.1)
-(FRC08) --> (FRC08.2)
+(FRC08) --> (FRC081)
+(FRC08) --> (FRC082)
 
 usecase FRC09 as "Schedule of Class"
 
@@ -197,11 +198,11 @@ usecase FRM03 as "Accept/Reject Meeting"
 
 usr --> (FRM03)
 
-usecase FRM03.1 as "Accept Meeting"
-usecase FRM03.2 as "Reject Meeting"
+usecase FRM031 as "Accept Meeting"
+usecase FRM032 as "Reject Meeting"
 
-(FRM03) --> (FRM03.1)
-(FRM03) --> (FRM03.2)
+(FRM03) --> (FRM031)
+(FRM03) --> (FRM032)
 
 usecase FRM04 as "List Participants"
 
