@@ -81,6 +81,9 @@ package UserAggregate{
 package CourseAggregate{
     entity Course <<entity>><<root>>
 
+    'Course value objects
+    card Code <<Value Object>> {
+    }
     card Name <<Value Object>>{
     }
     card State <<Value Object>>{
@@ -95,8 +98,9 @@ package CourseAggregate{
     Course -- State
     Course -- Description
     Course -- Limit
+    Course -- Code
 
-    note left of State
+    note right of State
         Can be one of the following:
             - Open
             - Closed
@@ -107,11 +111,17 @@ package CourseAggregate{
         and higher limit
         number of students
     end note
+
+    note right of Code
+        Each course has a unique code
+        Example: "JAVA-1"
+    end note
 }
 
 package EditionAggregate{
     entity Edition <<entity>>
 
+    'Edition value objects
     card Year <<Value Object>>{
     }
     card Semester <<Value Object>>{
@@ -119,6 +129,12 @@ package EditionAggregate{
 
     Edition -- Year
     Edition -- Semester
+
+    note left
+     Still waiting for the client answer
+     since Edition is a concept that needs
+     to be further specified.
+    end note
 }
 
     User --> Course
