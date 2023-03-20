@@ -24,7 +24,30 @@ skinparam card {
 
 package UserAggregate{
     entity User <<entity>><<root>>
+    entity Student <<entity>>
+    'Student value objects
+    card BirthDate <<Value Object>>{
+    }
+    card TaxPayerNumber <<Value Object>>{
+    }
+    card MechanographicNumber <<Value Object>>{
+    }
+    Student -- BirthDate
+    Student -- TaxPayerNumber
+    Student -- MechanographicNumber
 
+    entity Teacher <<entity>>
+    'Teacher value objects
+    card Acronym <<Value Object>>{
+    }
+    Teacher -- BirthDate
+    Teacher -- TaxPayerNumber
+    Teacher -- Acronym
+
+    entity Manager <<entity>>
+
+
+'User value objects
     card Email <<Value Object>>{
     }
     card Password <<Value Object>>{
@@ -41,6 +64,10 @@ package UserAggregate{
     User -- FullName
     User -- ShortName
     User -- Role
+
+    Student --|> User
+    Teacher --|> User
+    Manager --|> User
 
     note left of Role
          Can be one of the following:
@@ -62,14 +89,12 @@ package CourseAggregate{
     }
     card Limit <<Value Object>>{
     }
-    card Edition <<Value Object>>{
-    }
+
 
     Course -- Name
     Course -- State
     Course -- Description
     Course -- Limit
-    Course -- Edition
 
     note left of State
         Can be one of the following:
@@ -84,6 +109,19 @@ package CourseAggregate{
     end note
 }
 
+package EditionAggregate{
+    entity Edition <<entity>>
+
+    card Year <<Value Object>>{
+    }
+    card Semester <<Value Object>>{
+    }
+
+    Edition -- Year
+    Edition -- Semester
+}
+
     User --> Course
+    Course --> Edition
 
 @enduml
