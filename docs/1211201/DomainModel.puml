@@ -1,5 +1,4 @@
-@startuml
-'https://plantuml.com/class-diagram
+@startuml "User and Course Aggregates"
 
 hide methods
 
@@ -23,23 +22,27 @@ skinparam card {
 }
 
 
-package "User Aggregate"{
+package UserAggregate{
+    entity User <<entity>><<root>>
 
-    entity User <<Entity>> <<Root>> as user
+    card Email <<Value Object>>{
+    }
+    card Password <<Value Object>>{
+    }
+    card FullName <<Value Object>>{
+    }
+    card ShortName <<Value Object>>{
+    }
+    card Role <<Value Object>>{
+    }
 
-    card Email <<Value Object>> as email
-    card Password <<Value Object>> as pass
-    card "Full Name" <<Value Object>> as fn
-    card "Short Name" <<Value Object>> as sn
-    card Role <<Value Object>> as role
+    User -- Email
+    User -- Password
+    User -- FullName
+    User -- ShortName
+    User -- Role
 
-    user -- email
-    user -- pass
-    user -- fn
-    user -- sn
-    user -- role
-
-    note left of role
+    note left of Role
          Can be one of the following:
             - Manager
             - Teacher
@@ -48,28 +51,39 @@ package "User Aggregate"{
 
 }
 
-package "Course Aggregate"{
-    entity Course <<Entity>> <<root>> as course
+package CourseAggregate{
+    entity Course <<entity>><<root>>
 
-    card Name as cname
-    card State <<Value Object>> as cstate
-    card Description <<Value Object>> as cdesc
-    card Limit <<Value Object>> as climit
-    card Edition <<Value Object>> as cedit
+    card Name <<Value Object>>{
+    }
+    card State <<Value Object>>{
+    }
+    card Description <<Value Object>>{
+    }
+    card Limit <<Value Object>>{
+    }
+    card Edition <<Value Object>>{
+    }
 
-    course -- cname
-    course -- cstate
-    course -- cdesc
-    course -- climit
-    course -- cedit
+    Course -- Name
+    Course -- State
+    Course -- Description
+    Course -- Limit
+    Course -- Edition
 
-    note left of cstate
+    note left of State
+        Can be one of the following:
+            - Open
+            - Closed
+    end note
+
+    note left of Limit
         Each course as a lower
         and higher limit
         number of students
     end note
 }
 
-    user --> course
+    User --> Course
 
 @enduml
