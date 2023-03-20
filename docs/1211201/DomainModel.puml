@@ -1,17 +1,37 @@
 @startuml
 'https://plantuml.com/class-diagram
 
+hide methods
+
+skinparam classAttributeIconSize 0
+
+skinparam class {
+    LifeLineBorderColor DodgerBlue
+    LifeLineBackgroundColor APPLICATION
+    BackgroundColor #D8F5FF
+    ArrowColor DodgerBlue
+    BorderColor DodgerBlue
+}
+
+skinparam packageStyle rectangle
+skinparam card {
+    LifeLineBorderColor DodgerBlue
+    LifeLineBackgroundColor APPLICATION
+    BackgroundColor #D8F5FF
+    ArrowColor DodgerBlue
+    BorderColor DodgerBlue
+}
 
 
 package "User Aggregate"{
 
-    class "<<Entity>> <<Root>>\nUser" as user
+    entity User <<Entity>> <<Root>> as user
 
-    class "<<Value Object>>\nEmail" as email
-    class "<<Value Object>>\nPassword" as pass
-    class "<<Value Object>>\nFull Name" as fn
-    class "<<Value Object>>\nShort Name" as sn
-    enum "<<Value Object>>\nRole" as role
+    card Email <<Value Object>> as email
+    card Password <<Value Object>> as pass
+    card "Full Name" <<Value Object>> as fn
+    card "Short Name" <<Value Object>> as sn
+    card Role <<Value Object>> as role
 
     user -- email
     user -- pass
@@ -29,13 +49,13 @@ package "User Aggregate"{
 }
 
 package "Course Aggregate"{
-    class "<<Entity>> <<Root>>\nCourse" as course
+    entity Course <<Entity>> <<root>> as course
 
-    class "<<Value Object>>\nName" as cname
-    enum "<<Value Object>>\nState" as cstate
-    class "<<Value Object>>\nDescription" as cdesc
-    class "<<Value Object>>\nLimit" as climit
-    class "<<Value Object>>\nEdition" as cedit
+    card Name as cname
+    card State <<Value Object>> as cstate
+    card Description <<Value Object>> as cdesc
+    card Limit <<Value Object>> as climit
+    card Edition <<Value Object>> as cedit
 
     course -- cname
     course -- cstate
@@ -44,18 +64,12 @@ package "Course Aggregate"{
     course -- cedit
 
     note left of cstate
-        Can be one of the following:
-            - Open
-            - Closed
-    end note
-
-    note left of climit
         Each course as a lower
         and higher limit
         number of students
     end note
 }
 
-user --> course
+    user --> course
 
 @enduml
