@@ -57,6 +57,8 @@ package "Course Aggregate"{
     }
     card Limit <<Value Object>>{
     }
+    card Edition <<Value Object>>{
+    }
 
 
     Course --> Name
@@ -69,6 +71,8 @@ package "Course Aggregate"{
         Can be one of the following:
             - Open
             - Closed
+            - Enroll
+            - InProgress
     end note
 
     note left of Limit
@@ -82,21 +86,13 @@ package "Course Aggregate"{
         Example: "JAVA-1"
     end note
 
-    entity Edition <<entity>>
-
-
-    note left
-        Still waiting for the client answer
-        since Edition is a concept that needs
-        to be further specified.
+    note left of Edition
+        Different editions of a course
+        are to be considered different
+        courses
     end note
 
-    'Different editions of a course are to be considered different courses
-    'combinations:
-    'same course code, same edition = same course (needs to be verified in the application, when creating a course)
-    'same course code, different edition = different course(valid)
-    'different course code, same edition = different course(valid)
-    'different course code, different edition = different course(valid)
+
 }
 
 package "Teacher Aggregate"{
