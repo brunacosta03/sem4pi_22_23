@@ -1,6 +1,7 @@
 @startuml "User and Course Aggregates"
 
 hide methods
+left to right direction
 
 skinparam classAttributeIconSize 0
 
@@ -22,30 +23,8 @@ skinparam card {
 }
 
 
-package UserAggregate{
+package "User Aggregate"{
     entity User <<entity>><<root>>
-    entity Student <<entity>>
-    'Student value objects
-    card BirthDate <<Value Object>>{
-    }
-    card TaxPayerNumber <<Value Object>>{
-    }
-    card MechanographicNumber <<Value Object>>{
-    }
-    Student -- BirthDate
-    Student -- TaxPayerNumber
-    Student -- MechanographicNumber
-
-    entity Teacher <<entity>>
-    'Teacher value objects
-    card Acronym <<Value Object>>{
-    }
-    Teacher -- BirthDate
-    Teacher -- TaxPayerNumber
-    Teacher -- Acronym
-
-    entity Manager <<entity>>
-
 
 'User value objects
     card Email <<Value Object>>{
@@ -56,29 +35,15 @@ package UserAggregate{
     }
     card ShortName <<Value Object>>{
     }
-    card Role <<Value Object>>{
-    }
 
-    User -- Email
-    User -- Password
-    User -- FullName
-    User -- ShortName
-    User -- Role
-
-    Student --|> User
-    Teacher --|> User
-    Manager --|> User
-
-    note left of Role
-         Can be one of the following:
-            - Manager
-            - Teacher
-            - Student
-    end note
+    User --> Email
+    User --> Password
+    User --> FullName
+    User --> ShortName
 
 }
 
-package CourseAggregate{
+package "Course Aggregate"{
     entity Course <<entity>><<root>>
 
     'Course value objects
@@ -94,11 +59,11 @@ package CourseAggregate{
     }
 
 
-    Course -- Name
-    Course -- State
-    Course -- Description
-    Course -- Limit
-    Course -- Code
+    Course --> Name
+    Course --> State
+    Course --> Description
+    Course --> Limit
+    Course --> Code
 
     note right of State
         Can be one of the following:
@@ -116,28 +81,71 @@ package CourseAggregate{
         Each course has a unique code
         Example: "JAVA-1"
     end note
-}
 
-package EditionAggregate{
     entity Edition <<entity>>
 
-    'Edition value objects
-    card Year <<Value Object>>{
-    }
-    card Semester <<Value Object>>{
-    }
-
-    Edition -- Year
-    Edition -- Semester
 
     note left
-     Still waiting for the client answer
-     since Edition is a concept that needs
-     to be further specified.
+        Still waiting for the client answer
+        since Edition is a concept that needs
+        to be further specified.
     end note
+
+    'Different editions of a course are to be considered different courses
+    'combinations:
+    'same course code, same edition = same course (needs to be verified in the application, when creating a course)
+    'same course code, different edition = different course(valid)
+    'different course code, same edition = different course(valid)
+    'different course code, different edition = different course(valid)
 }
 
-    User --> Course
+package "Teacher Aggregate"{
+
+    entity Teacher <<entity>><<root>>
+
+    'Teacher value objects
+    card Acronym <<Value Object>>{
+    }
+    card BirthDate <<Value Object>>{
+    }
+    card TaxPayerNumber <<Value Object>>{
+    }
+    Teacher --> BirthDate
+    Teacher --> TaxPayerNumber
+    Teacher --> Acronym
+
+}
+
+package "Manager Aggregate"{
+
+    entity Manager <<entity>><<root>>
+
+}
+
+package "Student Aggregate"{
+
+    entity Student <<entity>><<root>>
+    'Student value objects
+    card BirthDate <<Value Object>>{
+    }
+    card TaxPayerNumber <<Value Object>>{
+    }
+    card MechanographicNumber <<Value Object>>{
+    }
+    Student --> BirthDate
+    Student --> TaxPayerNumber
+    Student --> MechanographicNumber
+
+}
+
+    'Every system actor is a user
+    Teacher --> User
+    Manager --> User
+    Student --> User
+
+    Teacher --> Course
+    Student --> Course
+
     Course --> Edition
 
 @enduml
