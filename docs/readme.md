@@ -4,27 +4,21 @@
 
 The members of the group:
 
-| Student Nr.	                     | Name			  |
-|----------------------------------|----------|
-| **[1170000](1170000/readme.md)** | John Doe |
-|                                  | 						   |
-|                                  | 						   |
-|                                  | 						   |
-|                                  | 						   |
-|                                  | 						   |
-|                                  | 						   |
+| Student Nr.	                   | Name	     |
+|----------------------------------|-------------|
+| **[1201205](1201205/readme.md)** | Samuel Dias |
+| **[1201416](1201416/readme.md)** | Pedro Alves |
+| **[1211136](121113y/readme.md)** | Bruna Costa |
+| **[1211201](1211201/readme.md)** | Henrique Pinto |
 
 
 ## 2. Task Assignment
 
 The assignment of tasks (requirements/user stories/use cases) during the project.
 
-| Student Nr.	                 | Sprint A                     | Sprint B                     | Sprint C                     |
-|------------------------------|------------------------------|------------------------------|------------------------------|
-| [1170000](1170000/readme.md) | [US G002](us_g002/readme.md) | [US 1001](us_1001/readme.md) | [US 3004](us_3004/readme.md) |
-| 	                            |                              |                              |                              |
-| 	                            |                              |                              |                              |
-| 	                            |                              |                              |                              |
-| 	                            |                              |                              |                              |
-| 	                            |                              |                              |                              |
-| 	                            |                              |                              |                              |
+| Student Nr.	                | Sprint A                     | Sprint B                     | Sprint C                     |
+|-------------------------------|------------------------------|------------------------------|------------------------------|
+| [1201205](1201205/readme.md)  | US G001 ; [US G002](SPRINT%20A/US_G002/readme.md) ; US G003 ; US G004 ; [US G005](SPRINT%20A/US_G002/readme.md) ; [US G006](SPRINT%20A/US_G006/readme.md) |                              |                              |
+| [1201416](1201416/readme.md)  | US G001 ; [US G002](SPRINT%20A/US_G002/readme.md) ; US G003 ; US G004 ; [US G005](SPRINT%20A/US_G002/readme.md) ; [US G006](SPRINT%20A/US_G006/readme.md) |                              |                              |
+| [1211136](1211136/readme.md)  | US G001 ; [US G002](SPRINT%20A/US_G002/readme.md) ; US G003 ; US G004 ; [US G005](SPRINT%20A/US_G002/readme.md) ; [US G006](SPRINT%20A/US_G006/readme.md) |                              |                              |
+| [1211201](1211201/readme.md)  | US G001 ; [US G002](SPRINT%20A/US_G002/readme.md) ; US G003 ; US G004 ; [US G005](SPRINT%20A/US_G002/readme.md) ; [US G006](SPRINT%20A/US_G006/readme.md) |  
