@@ -1,7 +1,117 @@
-@startuml
-'https://plantuml.com/class-diagram
+@startuml "Shared Boards"
 left to right direction
 
+hide methods
+
+skinparam classAttributeIconSize 0
+
+skinparam class {
+    LifeLineBorderColor DodgerBlue
+    LifeLineBackgroundColor APPLICATION
+    BackgroundColor #D8F5FF
+    ArrowColor DodgerBlue
+    BorderColor DodgerBlue
+}
+
+skinparam packageStyle rectangle
+skinparam card {
+    LifeLineBorderColor DodgerBlue
+    LifeLineBackgroundColor APPLICATION
+    BackgroundColor #D8F5FF
+    ArrowColor DodgerBlue
+    BorderColor DodgerBlue
+}
+
+' PostIt
+package PostItAggregate{
+    entity PostIt <<Entity>><<root>>
+
+    card PostItContent <<Value Object>>{
+    }
+
+    card PostItRow <<Value Object>>{
+    }
+
+    card PostItCol <<Value Object>>{
+    }
+
+    card PostItTimeStamp <<Value Object>>{
+    }
+
+    PostItContent <-- PostIt
+    PostItRow <-- PostIt
+    PostItCol <-- PostIt
+    PostItTimeStamp <-- PostIt
+}
+
+
+' User
+package UserAggregate{
+    entity User <<Entity>><<root>>
+
+    card ShortName <<Value Object>>{
+    }
+
+    card Email <<Value Object>>{
+    }
+
+    ShortName <-- User
+    Email <-- User
+    UpdateEventPostIt <-- User :interested in
+}
+
+
+' Board
+package BoardAggregate{
+    entity Board <<Entity>><<root>>
+    
+    card BoardTitle <<Value Object>>{
+    }
+
+    entity BoardRow <<Entity>>{
+    }
+
+    entity BoardCol <<Entity>>{
+    }
+
+    card BoardState <<Value Object>>{
+    }
+
+    card Title <<Value Object>>{
+    }
+
+    card Number <<Value Object>>{
+    }
+
+    BoardTitle <-- Board
+    BoardRow <-- Board
+    BoardCol <-- Board
+    BoardState <-- Board
+    Number <-- BoardRow
+    Number <-- BoardCol
+    Title <-- Number
+
+
+
+    entity BoardPermissions <<Entity>>
+
+    BoardPermissions <-- Board
+}
+
+
+
+' Relations
+PostIt --> "1" User :owner
+Board --> "1" User :owner
+PostIt --> "1" Board :belongs
+
+
+
+' Events
+card UpdateEventPostIt <<Event>>{
+}
+
+UpdateEventPostIt <-- PostIt :notify
 
 
 @enduml
