@@ -66,6 +66,7 @@ package "Course Aggregate"{
     Course --> Description
     Course --> Limit
     Course --> Code
+    Course --> Edition
 
     note right of State
         Can be one of the following:
@@ -134,14 +135,14 @@ package "Student Aggregate"{
 
 }
 
-    'Every system actor is a user
-    Teacher --> User
-    Manager --> User
-    Student --> User
+    'Every system actor has a user object associated (composition)
+    Teacher --> "1" User
+    Manager --> "1" User
+    Student --> "1" User
 
-    Teacher --> Course
-    Student --> Course
+    Teacher --> "N" Course
+    Student --> "N" Course
 
-    Course --> Edition
+
 
 @enduml
