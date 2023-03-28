@@ -108,8 +108,8 @@ package "Student Aggregate"{
     entity Student <<entity>><<root>>
 }
     User -->"1" Meeting
-    Meeting --> "*" Invite
     User --> "1" Invite
+    Invite --> "1" Meeting
 
     Teacher --> "*" Class
     Class --> "*" Student
