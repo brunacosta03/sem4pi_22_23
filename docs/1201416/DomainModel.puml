@@ -1,7 +1,119 @@
 @startuml
-'https://plantuml.com/class-diagram
+
+hide methods
 left to right direction
 
+skinparam classAttributeIconSize 0
+
+skinparam class {
+    LifeLineBorderColor DodgerBlue
+    LifeLineBackgroundColor APPLICATION
+    BackgroundColor #D8F5FF
+    ArrowColor DodgerBlue
+    BorderColor DodgerBlue
+}
+
+skinparam packageStyle rectangle
+
+skinparam card {
+    LifeLineBorderColor DodgerBlue
+    LifeLineBackgroundColor APPLICATION
+    BackgroundColor #D8F5FF
+    ArrowColor DodgerBlue
+    BorderColor DodgerBlue
+}
 
 
+package "User Aggregate"{
+    entity User <<entity>><<root>>
+
+    card Email <<Value Object>>{
+    }
+    card Password <<Value Object>>{
+    }
+    card FullName <<Value Object>>{
+    }
+    card ShortName <<Value Object>>{
+    }
+
+    User --> Email
+    User --> Password
+    User --> FullName
+    User --> ShortName
+}
+
+package "Invite Aggregate"{
+    entity Invite <<entity>><<root>>
+
+    card Response <<Value Object>>{
+    }
+    note right of Response
+    The user accepts or rejects an invitation.
+    The status of someone that did not answer should be "no answer" or "unknown".
+    end note
+
+    Invite --> Response
+}
+
+package "Meeting Aggregate"{
+    entity Meeting <<entity>><<root>>
+
+    card MeetingID <<value Object>>{
+    }
+    card MeetingDate <<value Object>>{
+    }
+    card MeetingDuration <<value Object>>{
+    }
+
+    Meeting --> MeetingID
+    Meeting --> MeetingDate
+    Meeting --> MeetingDuration
+}
+package "Teacher Aggregate"{
+    entity Teacher <<entity>><<root>>
+
+}
+package "Class Aggregate"{
+    entity Class <<entity>><<root>>
+
+    card ClassDate <<value Object>>{
+    }
+
+    card ClassDuration <<value Object>>{
+    }
+
+    card Title <<value Object>>{
+    }
+
+    note right of ClassDate
+    A class is always a recurring weekly event.
+
+    It should be impossible to schedule classes that
+    are coincident with other classes of the same course.
+
+    The system should also warn if one of the participants
+    in the class (either a teacher or a student) has other classes
+    at the same time. Teachers can schedule extra classes.
+    end note
+
+    note right of Title
+    A class must have a unique title
+    end note
+
+    Class --> ClassDate
+    Class --> ClassDuration
+    Class --> Title
+}
+package "Student Aggregate"{
+    entity Student <<entity>><<root>>
+}
+    User -->"1" Meeting
+    Meeting --> "*" Invite
+    User --> "1" Invite
+
+    Teacher --> "*" Class
+    Class --> "*" Student
+
+    User --> "1" Student
+    User --> "1" Teacher
 @enduml
