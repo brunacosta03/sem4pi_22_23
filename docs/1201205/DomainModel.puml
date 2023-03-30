@@ -68,10 +68,10 @@ package BoardAggregate{
     card BoardTitle <<Value Object>>{
     }
 
-    entity BoardRow <<Entity>>{
+    card BoardMaxRow <<Value Object>>{
     }
 
-    entity BoardCol <<Entity>>{
+    card BoardMaxCol <<Value Object>>{
     }
 
     card BoardState <<Value Object>>{
@@ -84,13 +84,26 @@ package BoardAggregate{
     }
 
     BoardTitle <-- Board
-    BoardRow <-- Board
-    BoardCol <-- Board
+    BoardMaxRow <-- Board
+    BoardMaxCol <-- Board
     BoardState <-- Board
-    Number <-- BoardRow
-    Number <-- BoardCol
-    Title <-- Number
 
+    entity BoardEntry <<Entity>>{
+    }
+
+    card BoardRow <<Value Object>>{
+    }
+
+    card BoardCol <<Value Object>>{
+    }
+
+    BoardEntry <-- Board
+    BoardRow <-- BoardEntry
+    BoardCol <-- BoardEntry
+    Number <-- BoardRow
+    Title <-- BoardCol
+    Number <-- BoardCol
+    Title <-- BoardRow
 
 
     entity BoardPermissions <<Entity>>
