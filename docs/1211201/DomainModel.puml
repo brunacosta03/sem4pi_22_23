@@ -86,13 +86,21 @@ package "Course Aggregate"{
         Example: "JAVA-1"
     end note
 
-    note left of Edition
-        Different editions of a course
-        are to be considered different
-        courses
+    entity Edition <<entity>>
+
+
+    note left
+        Still waiting for the client answer
+        since Edition is a concept that needs
+        to be further specified.
     end note
 
-
+    'Different editions of a course are to be considered different courses
+    'combinations:
+    'same course code, same edition = same course (needs to be verified in the application, when creating a course)
+    'same course code, different edition = different course(valid)
+    'different course code, same edition = different course(valid)
+    'different course code, different edition = different course(valid)
 }
 
 package "Teacher Aggregate"{
