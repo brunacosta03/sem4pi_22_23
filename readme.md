@@ -3,7 +3,25 @@
 
 ## 1. Description of the Project
 
-*To Do*
+**Learning Systems (LS)** is an IT company specialized in the development of learning solutions wanting to develop a new remote learning platform called **eCourse**. 
+
+The platform supports the activites of the 3 (three) major actors of a course, such as teachers, students and managers and several functionalities, such
+
+The duration of this project is 3 (three) months, starting on February 22th and ending on June 18h.
+
+The platform supports the activites of the 3 (three) major actors of a course, such as teachers, students and managers and several functionalities. The most distinctive features are **Automated Exams** and **Shared Boards**.
+
+The first one guarantee that students automatically have feedback and resulting grades after submitting an exam. The second one is a board that is used to share and organize ideas an information.
+
+The platform is also able to manage:
+- **Users** (create, disable/enable and list);
+- **Courses** (create, open/close enrollment, open/close course, define teachers, approve/reject enlistment);
+- **Classes** (schedule a class, schedule an extra class, update schedule);
+- **Exams** (create, list, list course exams, take exam, list grades, list course grades);
+- **Shared Boards** (create, share, view history, archive);
+- **Post-It** (create, change, undo change);
+- **Meetings** (schedule, cancel, accept/reject, list);
+- Other type of requirements that should be taken into account for the given problem.
 
 ## 2. Planning and Technical Documentation
 
