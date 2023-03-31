@@ -66,6 +66,7 @@ package "Course Aggregate"{
     Course --> Description
     Course --> Limit
     Course --> Code
+    Course --> Edition
 
     note right of State
         Can be one of the following:
@@ -86,21 +87,13 @@ package "Course Aggregate"{
         Example: "JAVA-1"
     end note
 
-    entity Edition <<entity>>
-
-
-    note left
-        Still waiting for the client answer
-        since Edition is a concept that needs
-        to be further specified.
+    note left of Edition
+        Different editions of a course
+        are to be considered different
+        courses
     end note
 
-    'Different editions of a course are to be considered different courses
-    'combinations:
-    'same course code, same edition = same course (needs to be verified in the application, when creating a course)
-    'same course code, different edition = different course(valid)
-    'different course code, same edition = different course(valid)
-    'different course code, different edition = different course(valid)
+
 }
 
 package "Teacher Aggregate"{
@@ -142,14 +135,14 @@ package "Student Aggregate"{
 
 }
 
-    'Every system actor is a user
-    Teacher --> User
-    Manager --> User
-    Student --> User
+    'Every system actor has a user object associated (composition)
+    Teacher --> "1" User
+    Manager --> "1" User
+    Student --> "1" User
 
-    Teacher --> Course
-    Student --> Course
+    Teacher --> "N" Course
+    Student --> "N" Course
 
-    Course --> Edition
+
 
 @enduml
