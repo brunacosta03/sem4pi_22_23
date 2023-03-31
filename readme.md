@@ -21,25 +21,45 @@ The platform is also able to manage:
 
 The duration of this project is 3 (three) months, starting on February 22th and ending on June 18h.
 
+
 ## 2. Planning and Technical Documentation
 
 [Planning and Technical Documentation](docs/readme.md)
 
 ## 3. How to Build
 
-*To Do*
+To build the project, run the files:
+
+    rebuild-all.bat
+    or
+    rebuild-all.sh
 
 ## 4. How to Execute Tests
 
-*To Do*
+If you want to run tests for all modules just run in command line:
+
+    mvn test
 
 ## 5. How to Run
 
-*To Do*
+Assuming the build was done, we can run the application through the files:
+
+
+eCourse - BackOffice
+    
+    run-backoffice.bat
+    or
+    run-backoffice.sh
 
 ## 6. How to Install/Deploy into Another Machine (or Virtual Machine)
 
-*To Do*
+For example if you want to deploy into another machine eCourse - BackOffice you need to:
+
+    rebuild-all.bat
+    run-backoffice.bat
+    or
+    rebuild-all.sh
+    run-backoffice.sh    
 
 ## 7. How to Generate PlantUML Diagrams
 
