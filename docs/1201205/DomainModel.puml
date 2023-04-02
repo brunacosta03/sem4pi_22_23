@@ -63,7 +63,7 @@ package UserAggregate{
 
 ' Board
 package BoardAggregate{
-    entity Board <<Entity>><<root>>
+    entity SharedBoard <<Entity>><<root>>
     
     card BoardTitle <<Value Object>>{
     }
@@ -83,10 +83,10 @@ package BoardAggregate{
     card Number <<Value Object>>{
     }
 
-    BoardTitle <-- Board
-    BoardNRow <-- Board
-    BoardNCol <-- Board
-    BoardState <-- Board
+    BoardTitle <-- SharedBoard
+    BoardNRow <-- SharedBoard
+    BoardNCol <-- SharedBoard
+    BoardState <-- SharedBoard
 
     entity BoardEntry <<Entity>>{
     }
@@ -97,7 +97,7 @@ package BoardAggregate{
     card BoardCol <<Value Object>>{
     }
 
-    BoardEntry <-- Board
+    BoardEntry <-- SharedBoard
     BoardRow <-- BoardEntry
     BoardCol <-- BoardEntry
     Number <-- BoardRow
@@ -111,12 +111,12 @@ package BoardAggregate{
     card AccessLevel <<Value Object>>{
     }
 
-    BoardPermissions <-- Board
+    BoardPermissions <-- SharedBoard
     BoardPermissions --> User
     BoardPermissions --> AccessLevel
 }
 
-' Board
+' Board Config
 package BoardConfigAggregate{
     entity BoardCreateConfig <<Entity>><<root>>
 
@@ -132,9 +132,9 @@ package BoardConfigAggregate{
 
 ' Relations
 PostIt --> "1" User :owner
-Board --> "1" User :owner
-PostIt --> "1" Board :belongs
-BoardCreateConfig <-- Board :has
+SharedBoard --> "1" User :owner
+PostIt --> "1" SharedBoard :belongs
+BoardCreateConfig <-- SharedBoard :has
 
 
 
