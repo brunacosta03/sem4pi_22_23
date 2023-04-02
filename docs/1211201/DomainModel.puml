@@ -23,6 +23,7 @@ skinparam card {
 }
 
 
+
 package "User Aggregate"{
     entity User <<entity>><<root>>
 
