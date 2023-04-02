@@ -23,6 +23,7 @@ skinparam card {
 }
 
 
+
 package "User Aggregate"{
     entity User <<entity>><<root>>
 
@@ -35,11 +36,18 @@ package "User Aggregate"{
     }
     card ShortName <<Value Object>>{
     }
+    card Role <<Value Object>>{
+    }
 
     User --> Email
     User --> Password
     User --> FullName
     User --> ShortName
+    User --> Role
+    note left of Role
+        This is only used for purposes
+        of authorization
+    end note
 
 }
 
