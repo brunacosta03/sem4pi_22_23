@@ -114,20 +114,27 @@ package BoardAggregate{
     BoardPermissions <-- Board
     BoardPermissions --> User
     BoardPermissions --> AccessLevel
-
-    entity BoardCreateConfig <<Entity>>
-    
-    BoardCreateConfig <-- Board
-    BoardCreateConfig --> Number
-    BoardCreateConfig --> Number
 }
 
+' Board
+package BoardConfigAggregate{
+    entity BoardCreateConfig <<Entity>><<root>>
 
+    card BoardMaxRow <<Value Object>>{
+    }
+
+    card BoardMaxCol <<Value Object>>{
+    }
+    
+    BoardCreateConfig --> BoardMaxRow
+    BoardCreateConfig --> BoardMaxCol
+}
 
 ' Relations
 PostIt --> "1" User :owner
 Board --> "1" User :owner
 PostIt --> "1" Board :belongs
+BoardCreateConfig <-- Board :has
 
 
 
