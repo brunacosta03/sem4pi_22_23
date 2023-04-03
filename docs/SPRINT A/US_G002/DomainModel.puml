@@ -115,13 +115,13 @@ package "Teacher Aggregate" {
     'Teacher value objects
     card Acronym <<Value Object>> {
     }
-    card BirthDate <<Value Object>> {
+    card TeacherBirthDate <<Value Object>> {
     }
-    card TaxPayerNumber <<Value Object>> {
+    card TeacherTaxPayerNumber <<Value Object>> {
     }
 
-    Teacher --> BirthDate
-    Teacher --> TaxPayerNumber
+    Teacher --> TeacherBirthDate
+    Teacher --> TeacherTaxPayerNumber
     Teacher --> Acronym
 }
 
@@ -179,9 +179,14 @@ package "Student Aggregate" {
     'Student value objects
     card MechanographicNumber <<Value Object>>{
     }
+    card StudentBirthDate <<Value Object>>{
+    }
+    card StudentTaxPayerNumber <<Value Object>>{
+    }
 
+    Student --> StudentBirthDate
+    Student --> StudentTaxPayerNumber
     Student --> MechanographicNumber
-
 }
 
 package "Application Aggregate" {
