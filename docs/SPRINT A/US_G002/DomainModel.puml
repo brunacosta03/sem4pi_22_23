@@ -1,11 +1,9 @@
-@startuml "User and Course Aggregates"
+@startuml "Domain Model"
 
 hide methods
 left to right direction
 
 skinparam classAttributeIconSize 0
-
-title Domain Model
 
 skinparam class {
     LifeLineBorderColor DodgerBlue
@@ -16,6 +14,7 @@ skinparam class {
 }
 
 skinparam packageStyle rectangle
+
 skinparam card {
     LifeLineBorderColor DodgerBlue
     LifeLineBackgroundColor APPLICATION
@@ -24,9 +23,7 @@ skinparam card {
     BorderColor DodgerBlue
 }
 
-
-
-package "User Aggregate"{
+package "User Aggregate" {
     entity User <<entity>><<root>>
 
 'User value objects
@@ -42,7 +39,10 @@ package "User Aggregate"{
     }
     card UserState <<Value Object>>{
     }
-    enum RoleType{
+    enum RoleType {
+        Teacher
+        Student
+        Manager
     }
 
     User --> Email
@@ -51,17 +51,16 @@ package "User Aggregate"{
     User --> ShortName
     User --> Role
     User --> UserState
+
     note left of Role
         This is only used for purposes
         of authorization
     end note
 
     Role --> RoleType
-
-
 }
 
-package "Course Aggregate"{
+package "Course Aggregate" {
     entity Course <<entity>><<root>>
 
     'Course value objects
@@ -77,7 +76,6 @@ package "Course Aggregate"{
     }
     card Edition <<Value Object>>{
     }
-
 
     Course --> Name
     Course --> State
@@ -110,27 +108,24 @@ package "Course Aggregate"{
         are to be considered different
         courses
     end note
-
 }
 
-package "Teacher Aggregate"{
-
+package "Teacher Aggregate" {
     entity Teacher <<entity>><<root>>
-
     'Teacher value objects
-    card Acronym <<Value Object>>{
+    card Acronym <<Value Object>> {
     }
-    card BirthDate <<Value Object>>{
+    card BirthDate <<Value Object>> {
     }
-    card TaxPayerNumber <<Value Object>>{
+    card TaxPayerNumber <<Value Object>> {
     }
+
     Teacher --> BirthDate
     Teacher --> TaxPayerNumber
     Teacher --> Acronym
-
 }
 
-package "Class Aggregate"{
+package "Class Aggregate" {
     entity Class <<entity>><<root>>
 
     card ClassDate <<Value Object>>{
@@ -139,7 +134,7 @@ package "Class Aggregate"{
     card ClassDuration <<Value Object>>{
     }
 
-    card Title <<Value Object>>{
+    card ClassTitle <<Value Object>>{
     }
 
     card ClassType <<Value Object>>{
@@ -156,7 +151,7 @@ package "Class Aggregate"{
             at the same time. Teachers can schedule extra classes.
         end note
 
-        note right of Title
+        note right of ClassTitle
             A class must have a unique title
         end note
 
@@ -164,7 +159,7 @@ package "Class Aggregate"{
 
     Class --> ClassDate
     Class --> ClassDuration
-    Class --> Title
+    Class --> ClassTitle
     Class --> ClassType
     Class --> Participant
 
@@ -175,29 +170,21 @@ package "Class Aggregate"{
     end note
 }
 
-package "Manager Aggregate"{
-
+package "Manager Aggregate" {
     entity Manager <<entity>><<root>>
-
 }
 
-package "Student Aggregate"{
-
+package "Student Aggregate" {
     entity Student <<entity>><<root>>
     'Student value objects
-    card BirthDate <<Value Object>>{
-    }
-    card TaxPayerNumber <<Value Object>>{
-    }
     card MechanographicNumber <<Value Object>>{
     }
-    Student --> BirthDate
-    Student --> TaxPayerNumber
+
     Student --> MechanographicNumber
 
 }
 
-package "Application Aggregate"{
+package "Application Aggregate" {
     entity Application <<entity>><<root>>
 
     note right of Application
@@ -206,7 +193,7 @@ package "Application Aggregate"{
     end note
 }
 
-package "Calendar Aggregate"{
+package "Calendar Aggregate" {
     entity Calendar <<entity>><<root>>
 }
 
@@ -229,7 +216,7 @@ package "ExamTemplate Aggregate" {
     card CloseDate <<Value Object>> {
         }
 
-    Entity Header <<Entity>> {
+    entity Header <<entity>> {
         }
 
     card HeaderDescription <<Value Object>> {
@@ -253,7 +240,7 @@ package "ExamTemplate Aggregate" {
         After-Closing
         }
 
-    entity Section <<Entity>> {
+    entity Section <<entity>> {
         }
 
     card SectionNumber <<Value Object>> {
@@ -326,37 +313,31 @@ package "ExamTemplate Aggregate" {
 }
 
 package "Exam Aggregate" {
-
-    entity Exam <<Entity>> <<root>> {
+    entity Exam <<entity>> <<root>> {
     }
-
-
     entity ExamQuestion <<entity>> {
     }
-
     card Answer <<Value Object>> {
     }
-
     card Grade <<Value Object>> {
     }
     card Grading <<Value Object>>{
     }
 
-Exam --> Grading
-Exam --> ExamQuestion
+    Exam --> Grading
+    Exam --> ExamQuestion
 
-ExamQuestion --> Answer
-ExamQuestion --> Grade
+    ExamQuestion --> Answer
+    ExamQuestion --> Grade
 
-note right of Grading
-    - A value between 0 and 20
-    - If a Student misses an Exam, the Exam Grade is N/A
-    - The total exam grade is the sum of the grades of all the questions
-end note
-
+    note right of Grading
+        - A value between 0 and 20
+        - If a Student misses an Exam, the Exam Grade is N/A
+        - The total exam grade is the sum of the grades of all the questions
+    end note
 }
 
-package "Meeting Aggregate"{
+package "Meeting Aggregate" {
     entity Meeting <<entity>><<root>>
 
     card MeetingDate <<value Object>>{
@@ -369,36 +350,32 @@ package "Meeting Aggregate"{
     card Response <<Value Object>>{
         }
 
-        note right of Response
+    note right of Response
         The user accepts or rejects an invitation.
         The status of someone that did not answer should be "no answer" or "unknown".
-        end note
+    end note
 
     Invite --> Response
 
     Meeting --> MeetingDate
     Meeting --> MeetingDuration
     Meeting --> Invite
-
 }
 
-package PostItAggregate{
-    entity PostIt <<Entity>><<root>>
-
+package PostItAggregate {
+    entity PostIt <<entity>><<root>>
     card PostItContent <<Value Object>>{
     }
 
     card PostItRow <<Value Object>>{
     }
-
     card PostItCol <<Value Object>>{
     }
-
     card PostItTimeStamp <<Value Object>>{
     }
-
     card PostItState <<Value Object>>{
     }
+
     note right of PostItState
         0 - Deleted
         1 - Active
@@ -411,25 +388,19 @@ package PostItAggregate{
     PostItState <-- PostIt
 }
 
-package BoardAggregate{
-    entity SharedBoard <<Entity>><<root>>
-
+package BoardAggregate {
+    entity SharedBoard <<entity>><<root>>
     card BoardTitle <<Value Object>>{
     }
-
     card BoardNRow <<Value Object>>{
     }
-
     card BoardNCol <<Value Object>>{
     }
-
     card BoardState <<Value Object>>{
     }
-
-    card Title <<Value Object>>{
+    card EntryTitle <<Value Object>>{
     }
-
-    card Number <<Value Object>>{
+    card EntryNumber <<Value Object>>{
     }
 
     BoardTitle <-- SharedBoard
@@ -439,24 +410,21 @@ package BoardAggregate{
 
     entity BoardEntry <<Entity>>{
     }
-
     card BoardRow <<Value Object>>{
     }
-
     card BoardCol <<Value Object>>{
     }
 
     BoardEntry <-- SharedBoard
     BoardRow <-- BoardEntry
     BoardCol <-- BoardEntry
-    Number <-- BoardRow
-    Title <-- BoardCol
-    Number <-- BoardCol
-    Title <-- BoardRow
+    EntryNumber <-- BoardRow
+    EntryTitle <-- BoardCol
+    EntryNumber <-- BoardCol
+    EntryTitle <-- BoardRow
 
 
     entity BoardPermissions <<Entity>>
-
     card AccessLevel <<Value Object>>{
     }
 
@@ -474,7 +442,6 @@ package BoardAggregate{
 
     card BoardMaxRow <<Value Object>>{
     }
-
     card BoardMaxCol <<Value Object>>{
     }
 
@@ -482,10 +449,10 @@ package BoardAggregate{
     BoardCreateConfig --> BoardMaxCol
 }
 
-card UpdateEventPostIt <<Event>>{
+card UpdateEventPostIt <<Event>> {
 }
 
-    'Every system actor has a user object associated (composition)
+'Every system actor has a user object associated (composition)
     Teacher --> "1" User : has
     Manager --> "1" User : has
     Student --> "1" User : has
@@ -521,6 +488,7 @@ card UpdateEventPostIt <<Event>>{
     BoardCreateConfig <-- SharedBoard
     UpdateEventPostIt <-- User :interested in
     UpdateEventPostIt <-- PostIt :notify
+
 
 
 @enduml
