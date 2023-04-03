@@ -1,28 +1,29 @@
-# US G002
-
-*This is an example template*
+# US G006
 
 ## 1. Context
 
-*Explain the context for this task. It is the first time the task is assigned to be developed or this tasks was incomplete in a previous sprint and is to be completed in this sprint? Are we fixing some bug?*
+*In this User Story, the Project Manager wants us to incorporate Authentication and Authorization in our System, in order to give access accordingly to the application(s).*
 
 ## 2. Requirements
 
-*In this section you should present the functionality that is being developed, how do you understand it, as well as possible correlations to other requirements (i.e., dependencies).*
+**US G006** - As a **Project Manager**, I want the system to support and apply authentication and authorization for all its users and functionalities.
 
-*Example*
+- G006.1. Firstly, we shall implement authentication so no intruder can access the system.
 
-**US G002** As {Ator} I Want...
+- G006.2. Only and only then, we shall implement authorization so that each user can access its functionalities accordingly.
 
-- G002.1. Blá Blá Blá ...
+- G006.3. The system must **never** persist the real password of the users. An encryption algorithm must be used to store the password(and a decryption one to check it).
 
-- G002.2. Blá Blá Blá ...
-
-*Regarding this requirement we understand that it relates to...*
+*Regarding this requirement we understand that it relates to the security of our system, and it has extreme importance.*
 
 ## 3. Analysis
 
 *In this section, the team should report the study/analysis/comparison that was done in order to take the best design decisions for the requirement. This section should also include supporting diagrams/artifacts (such as domain model; use case diagrams, etc.),*
+
+![Domain Model Excerpt](Analysis/Domain_Model_Excerpt.svg)
+
+- This is an excerpt of our Domain Model, it gives us the clear idea of how the User should be identified in order to perform authentication, and it also distinguishes its paper in the system, that will be used to perform authorization.
+- Our use case diagram is still not much relevant for this since this feature does not have any dependencies, it is the main dependency for the rest of the system (a user must be logged in and have permission to perform most, if not all use cases).
 
 ## 4. Design
 
@@ -32,7 +33,11 @@
 
 ### 4.2. Class Diagram
 
-![a class diagram](class-diagram-01.svg "A Class Diagram")
+#### 4.2.1. Authentication and Authorization class diagram
+![a class diagram](Design/Class_Diagram.svg)
+- Through the *authentication service*, the user will be able to login into its own application, depending on its roles.
+- The *authentication service* will be responsible for checking if the role of the user is valid to the corresponding use case they might want to perform.
+
 
 ### 4.3. Applied Patterns
 
