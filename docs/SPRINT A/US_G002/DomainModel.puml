@@ -35,11 +35,9 @@ package "User Aggregate" {
     }
     card ShortName <<Value Object>>{
     }
-    card Role <<Value Object>>{
-    }
     card UserState <<Value Object>>{
     }
-    enum RoleType {
+    enum Role <<Value Object>> {
         Teacher
         Student
         Manager
@@ -56,8 +54,6 @@ package "User Aggregate" {
         This is only used for purposes
         of authorization
     end note
-
-    Role --> RoleType
 }
 
 package "Course Aggregate" {
