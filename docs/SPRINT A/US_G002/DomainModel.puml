@@ -1,7 +1,526 @@
-@startuml
-'https://plantuml.com/class-diagram
+@startuml "User and Course Aggregates"
+
+hide methods
 left to right direction
 
+skinparam classAttributeIconSize 0
+
+title Domain Model
+
+skinparam class {
+    LifeLineBorderColor DodgerBlue
+    LifeLineBackgroundColor APPLICATION
+    BackgroundColor #D8F5FF
+    ArrowColor DodgerBlue
+    BorderColor DodgerBlue
+}
+
+skinparam packageStyle rectangle
+skinparam card {
+    LifeLineBorderColor DodgerBlue
+    LifeLineBackgroundColor APPLICATION
+    BackgroundColor #D8F5FF
+    ArrowColor DodgerBlue
+    BorderColor DodgerBlue
+}
+
+
+
+package "User Aggregate"{
+    entity User <<entity>><<root>>
+
+'User value objects
+    card Email <<Value Object>>{
+    }
+    card Password <<Value Object>>{
+    }
+    card FullName <<Value Object>>{
+    }
+    card ShortName <<Value Object>>{
+    }
+    card Role <<Value Object>>{
+    }
+    card UserState <<Value Object>>{
+    }
+    enum RoleType{
+    }
+
+    User --> Email
+    User --> Password
+    User --> FullName
+    User --> ShortName
+    User --> Role
+    User --> UserState
+    note left of Role
+        This is only used for purposes
+        of authorization
+    end note
+
+    Role --> RoleType
+
+
+}
+
+package "Course Aggregate"{
+    entity Course <<entity>><<root>>
+
+    'Course value objects
+    card Code <<Value Object>> {
+    }
+    card Name <<Value Object>>{
+    }
+    card State <<Value Object>>{
+    }
+    card Description <<Value Object>>{
+    }
+    card Limit <<Value Object>>{
+    }
+    card Edition <<Value Object>>{
+    }
+
+
+    Course --> Name
+    Course --> State
+    Course --> Description
+    Course --> Limit
+    Course --> Code
+    Course --> Edition
+
+    note right of State
+        Can be one of the following:
+            - Open
+            - Closed
+            - Enroll
+            - InProgress
+    end note
+
+    note left of Limit
+        Each course as a lower
+        and higher limit
+        number of students
+    end note
+
+    note right of Code
+        Each course has a unique code
+        Example: "JAVA-1"
+    end note
+
+    note left of Edition
+        Different editions of a course
+        are to be considered different
+        courses
+    end note
+
+}
+
+package "Teacher Aggregate"{
+
+    entity Teacher <<entity>><<root>>
+
+    'Teacher value objects
+    card Acronym <<Value Object>>{
+    }
+    card BirthDate <<Value Object>>{
+    }
+    card TaxPayerNumber <<Value Object>>{
+    }
+    Teacher --> BirthDate
+    Teacher --> TaxPayerNumber
+    Teacher --> Acronym
+
+}
+
+package "Class Aggregate"{
+    entity Class <<entity>><<root>>
+
+    card ClassDate <<Value Object>>{
+    }
+
+    card ClassDuration <<Value Object>>{
+    }
+
+    card Title <<Value Object>>{
+    }
+
+    card ClassType <<Value Object>>{
+    }
+
+        note right of ClassDate
+            A class is always a recurring weekly event.
+
+            It should be impossible to schedule classes that
+            are coincident with other classes of the same course.
+
+            The system should also warn if one of the participants
+            in the class (either a teacher or a student) has other classes
+            at the same time. Teachers can schedule extra classes.
+        end note
+
+        note right of Title
+            A class must have a unique title
+        end note
+
+    entity Participant <<entity>>
+
+    Class --> ClassDate
+    Class --> ClassDuration
+    Class --> Title
+    Class --> ClassType
+    Class --> Participant
+
+    note right of ClassType
+        Can be one of the following:
+            - Recurring
+            - Extra
+    end note
+}
+
+package "Manager Aggregate"{
+
+    entity Manager <<entity>><<root>>
+
+}
+
+package "Student Aggregate"{
+
+    entity Student <<entity>><<root>>
+    'Student value objects
+    card BirthDate <<Value Object>>{
+    }
+    card TaxPayerNumber <<Value Object>>{
+    }
+    card MechanographicNumber <<Value Object>>{
+    }
+    Student --> BirthDate
+    Student --> TaxPayerNumber
+    Student --> MechanographicNumber
+
+}
+
+package "Application Aggregate"{
+    entity Application <<entity>><<root>>
+
+    note right of Application
+        An application is a request
+        to enroll in a course.
+    end note
+}
+
+package "Calendar Aggregate"{
+    entity Calendar <<entity>><<root>>
+}
+
+package "ExamTemplate Aggregate" {
+    entity ExamTemplate <<Entity>> <<root>> {
+    }
+
+    card Title <<Value Object>> {
+        }
+
+    card ExamDescription <<Value Object>> {
+        }
+
+    card SolutionList <<Value Object>> {
+        }
+
+    card OpenDate <<Value Object>> {
+        }
+
+    card CloseDate <<Value Object>> {
+        }
+
+    Entity Header <<Entity>> {
+        }
+
+    card HeaderDescription <<Value Object>> {
+        }
+
+    card HeaderGrade <<Value Object>> {
+        }
+
+    card HeaderFeedback <<Value Object>> {
+        }
+
+    enum FeedbackType <<Enumeration>> {
+        None
+        On-Submission
+        After-Closing
+        }
+
+    enum GradeType <<Enumeration>> {
+        None
+        On-Submission
+        After-Closing
+        }
+
+    entity Section <<Entity>> {
+        }
+
+    card SectionNumber <<Value Object>> {
+        }
+
+    card SectionDescription <<Value Object>> {
+        }
+
+    card SectionTitle <<Value Object>> {
+        }
+
+    card Feedback <<Value Object>> {
+        }
+
+    entity ExamTemplateQuestion <<entity>> {
+        }
+
+    card QuestionDescription <<Value Object>> {
+        }
+
+    card AnswerOptionList <<Value Object>> {
+        }
+
+    enum QuestionType <<Value Object>> {
+        Matching
+        MultipleChoice
+        ShortAnswer
+        Numerical
+        MissingWords
+        TrueFalse
+        }
+
+    card Weight <<Value Object>> {
+        }
+
+    ExamTemplate --> Title
+    ExamTemplate --> Header
+    ExamTemplate --> OpenDate
+    ExamTemplate --> CloseDate
+    ExamTemplate --> ExamDescription
+    ExamTemplate --> Section
+    ExamTemplate --> Feedback
+
+    Header --> HeaderDescription
+    Header --> HeaderFeedback
+    Header --> HeaderGrade
+
+    HeaderGrade --> GradeType
+    HeaderFeedback --> FeedbackType
+
+    Section --> SectionDescription
+    Section --> SectionTitle
+    Section --> ExamTemplateQuestion
+    Section --> SectionNumber
+
+    note right of SectionNumber
+        Its number will be auto-incremented
+    end note
+
+    note right of Feedback
+        - Feedback is a text explaining the Solution (why the answer is correct or incorrect)
+        - If a Student misses an Exam, the Feedback is N/A
+    end note
+
+    ExamTemplateQuestion --> SolutionList
+    ExamTemplateQuestion --> QuestionType
+    ExamTemplateQuestion --> Weight
+    ExamTemplateQuestion --> QuestionDescription
+    ExamTemplateQuestion --> AnswerOptionList
+}
+
+package "Exam Aggregate" {
+
+    entity Exam <<Entity>> <<root>> {
+    }
+
+
+    entity ExamQuestion <<entity>> {
+    }
+
+    card Answer <<Value Object>> {
+    }
+
+    card Grade <<Value Object>> {
+    }
+    card Grading <<Value Object>>{
+    }
+
+Exam --> Grading
+Exam --> ExamQuestion
+
+ExamQuestion --> Answer
+ExamQuestion --> Grade
+
+note right of Grading
+    - A value between 0 and 20
+    - If a Student misses an Exam, the Exam Grade is N/A
+    - The total exam grade is the sum of the grades of all the questions
+end note
+
+}
+
+package "Meeting Aggregate"{
+    entity Meeting <<entity>><<root>>
+
+    card MeetingDate <<value Object>>{
+    }
+    card MeetingDuration <<value Object>>{
+    }
+
+    entity Invite <<entity>>
+
+    card Response <<Value Object>>{
+        }
+
+        note right of Response
+        The user accepts or rejects an invitation.
+        The status of someone that did not answer should be "no answer" or "unknown".
+        end note
+
+    Invite --> Response
+
+    Meeting --> MeetingDate
+    Meeting --> MeetingDuration
+    Meeting --> Invite
+
+}
+
+package PostItAggregate{
+    entity PostIt <<Entity>><<root>>
+
+    card PostItContent <<Value Object>>{
+    }
+
+    card PostItRow <<Value Object>>{
+    }
+
+    card PostItCol <<Value Object>>{
+    }
+
+    card PostItTimeStamp <<Value Object>>{
+    }
+
+    card PostItState <<Value Object>>{
+    }
+    note right of PostItState
+        0 - Deleted
+        1 - Active
+    end note
+
+    PostItContent <-- PostIt
+    PostItRow <-- PostIt
+    PostItCol <-- PostIt
+    PostItTimeStamp <-- PostIt
+    PostItState <-- PostIt
+}
+
+package BoardAggregate{
+    entity SharedBoard <<Entity>><<root>>
+
+    card BoardTitle <<Value Object>>{
+    }
+
+    card BoardNRow <<Value Object>>{
+    }
+
+    card BoardNCol <<Value Object>>{
+    }
+
+    card BoardState <<Value Object>>{
+    }
+
+    card Title <<Value Object>>{
+    }
+
+    card Number <<Value Object>>{
+    }
+
+    BoardTitle <-- SharedBoard
+    BoardNRow <-- SharedBoard
+    BoardNCol <-- SharedBoard
+    BoardState <-- SharedBoard
+
+    entity BoardEntry <<Entity>>{
+    }
+
+    card BoardRow <<Value Object>>{
+    }
+
+    card BoardCol <<Value Object>>{
+    }
+
+    BoardEntry <-- SharedBoard
+    BoardRow <-- BoardEntry
+    BoardCol <-- BoardEntry
+    Number <-- BoardRow
+    Title <-- BoardCol
+    Number <-- BoardCol
+    Title <-- BoardRow
+
+
+    entity BoardPermissions <<Entity>>
+
+    card AccessLevel <<Value Object>>{
+    }
+
+    BoardPermissions <-- SharedBoard
+    BoardPermissions --> User
+    BoardPermissions --> AccessLevel
+
+    class BoardCreateConfig <<Util>><<Transient>>
+
+    note left of BoardCreateConfig
+        This will be extracted from a config file,
+        the default value is
+        20 rows and 10 columns
+    end note
+
+    card BoardMaxRow <<Value Object>>{
+    }
+
+    card BoardMaxCol <<Value Object>>{
+    }
+
+    BoardCreateConfig --> BoardMaxRow
+    BoardCreateConfig --> BoardMaxCol
+}
+
+card UpdateEventPostIt <<Event>>{
+}
+
+    'Every system actor has a user object associated (composition)
+    Teacher --> "1" User : has
+    Manager --> "1" User : has
+    Student --> "1" User : has
+
+    Course --> "1" Teacher : is owned
+    Course --> "N" Teacher : has
+    Student --> "N" Course : enrolls
+
+    Application --> "1" Student : is of
+    Application --> "1" Course : belongs to
+
+    'Teacher --> Class
+    Class --> "1" Course : belongs to
+
+    'Class --> Student
+
+    Calendar --> "N" Class : keeps track of
+
+    User --> "1" Calendar : has
+
+    Participant --> User : has
+    Teacher --> "N" ExamTemplate : creates
+    Course --> "N" ExamTemplate : has
+    Exam --> "1" ExamTemplate : is based on
+    Student --> "N" Exam : takes
+
+    Calendar --> "N" Meeting : keeps track of
+    Invite --> User : references
+
+    PostIt --> "1" User :owner
+    SharedBoard --> "1" User :owner
+    PostIt --> "1" SharedBoard :belongs
+    BoardCreateConfig <-- SharedBoard
+    UpdateEventPostIt <-- User :interested in
+    UpdateEventPostIt <-- PostIt :notify
 
 
 @enduml
