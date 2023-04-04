@@ -39,13 +39,17 @@
 - It will also ask the user to check if its role is present in the provided list of accepted roles to that application
 - If the user is valid, the service will call the authorization service and ask it to create a user session, returning an optional, that may have a user session if login was valid, and may have a null pointer if login was not valid
 
+#### 4.1.2. Sequence Diagram of the Authorization
+
+![authorization](Design/AuthorizationSequenceDiagram/SD.svg)
+- In each use case, the user will be verified, its role will be checked (needs to be in  the list of accepted roles for that use case) and then the use case will be performed.
+
 ### 4.2. Class Diagram
 
 #### 4.2.1. Authentication and Authorization class diagram
 ![a class diagram](Design/Class_Diagram.svg)
 - Through the *authentication service*, the user will be able to login into its own application, depending on its roles.
 - The *authentication service* will be responsible for checking if the role of the user is valid to the corresponding use case they might want to perform.
-
 
 ### 4.3. Applied Patterns
 
