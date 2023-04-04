@@ -1,6 +1,9 @@
 @startuml
 
 
+class AuthzRegistry <<Utility>> {
+}
+
 ' Services
 class AuthenticationService <<service>> {
     + authenticate()
@@ -71,6 +74,9 @@ UserSession --> User
 ' (Since it has business logic rules and can't be directly be persisted)
 Password ..> PasswordPolicy
 Password ..> PasswordEncoder
+
+AuthzRegistry --> AuthenticationService
+AuthzRegistry --> AuthorizationService
 
 
 
