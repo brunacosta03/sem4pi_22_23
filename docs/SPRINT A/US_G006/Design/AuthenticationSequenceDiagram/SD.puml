@@ -43,7 +43,7 @@ ref over userRepo
 end ref
     userRepo --> auth : optional
 deactivate userRepo
-    auth -> optional : filter(user -> user.passwordMatches(password, encoder) &&\n (noRolesToValidate(roles) || u.hasAnyOf(roles)))
+    auth -> optional : filter(user -> user.passwordMatches(password, encoder) &&\n (noRolesToValidate(roles) || user.hasAnyOf(roles)) &&\n  user.isActive())
 
 activate userRepo
 
