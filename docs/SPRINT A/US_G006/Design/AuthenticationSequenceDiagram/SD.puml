@@ -1,0 +1,96 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+actor "User" as userActor
+
+participant ": LoginUI" as ui
+participant ": AuthenticationService" as auth
+participant ": AuthorizationService" as authz
+participant ": UserRepository" as userRepo
+participant ": User" as user
+participant ": UserSession" as session
+participant "Email" as email
+participant ": Optional" as optional
+
+note right of optional
+    Optional abstractions are not fully represented here.
+    Must read java Optional documentation in order to implement
+    our code.
+end note
+
+activate userActor
+    userActor -> ui : wants to login
+activate ui
+    ui --> userActor : asks for email and password
+deactivate ui
+    userActor -> ui : provides necessary information
+activate ui
+    ui -> auth : authenticate(email, password, requiredRoles)
+deactivate ui
+
+
+activate auth
+    auth -> auth : retrieveUser(email)
+    auth -> email: Email.valueOf(emailString)
+activate email
+    email --> auth : email
+deactivate email
+    auth -> userRepo : ofIdentity(email)
+activate userRepo
+ref over userRepo
+    Repository_Implementation
+end ref
+    userRepo --> auth : optional
+deactivate userRepo
+    auth -> optional : filter(user -> user.passwordMatches(password, encoder) &&\n (noRolesToValidate(roles) || u.hasAnyOf(roles)))
+
+activate userRepo
+
+
+activate optional
+    optional --> auth : optional
+deactivate optional
+    auth -> optional : orElse(null)
+activate optional
+deactivate auth
+    alt user exists, password is correct\nand has one of the required roles
+        optional --> auth: user
+activate auth
+    else user does not exist or password is incorrect\nor does not have one of the required roles
+        optional --> auth: null
+deactivate optional
+    end alt
+
+    auth -> authz : createUserSession(user)
+activate authz
+    alt user was previously valid and successfully authenticated
+        authz --> session** : create(user)
+
+    else user had something wrong with authentication so its object is null
+        authz -> authz : clearSession() (session = null)
+    end alt
+    authz -> authz : session()
+    authz --> auth : optional
+deactivate
+    auth --> ui : optional
+deactivate auth
+activate ui
+    ui -> optional : isPresent()
+    activate optional
+    optional --> ui : bool
+    deactivate optional
+    alt there is user session
+        ui --> userActor : informs login was a success
+    else there isn't user session
+        ui --> userActor : informs login failed
+    end alt
+deactivate authz
+deactivate auth
+deactivate ui
+deactivate userActor
+
+
+
+
+@enduml

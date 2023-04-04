@@ -31,6 +31,14 @@
 
 ### 4.1. Realization
 
+#### 4.1.1. Sequence Diagram of the Authentication
+
+![authentication](Design/AuthenticationSequenceDiagram/SD.svg)
+- After User inputs its data, the authenticaction service will check if the user exists by its repository
+- If the user exists, the service will ask the user class to check if the raw password is the same as the decrypted one that we got from our repository
+- It will also ask the user to check if its role is present in the provided list of accepted roles to that application
+- If the user is valid, the service will call the authorization service and ask it to create a user session, returning an optional, that may have a user session if login was valid, and may have a null pointer if login was not valid
+
 ### 4.2. Class Diagram
 
 #### 4.2.1. Authentication and Authorization class diagram
