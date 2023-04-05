@@ -1,17 +1,15 @@
 @startuml
-'https://plantuml.com/sequence-diagram
-
 autonumber
 actor "User" as userActor
 
-participant ": LoginUI" as ui
-participant ": AuthenticationService" as auth
-participant ": AuthorizationService" as authz
-participant ": UserRepository" as userRepo
-participant ": User" as user
-participant ": UserSession" as session
-participant "Email" as email
-participant ": Optional" as optional
+participant "LoginUI" as ui <<presentation>>
+participant "AuthenticationService" as auth <<service>>
+participant "AuthorizationService" as authz <<service>>
+participant "User" as user <<domain>>
+participant UserSession  as session
+participant "Email" as email <<value object>>
+participant "Optional" as optional
+database "UserRepository" as userRepo
 
 note right of optional
     Optional abstractions are not fully represented here.
@@ -38,15 +36,12 @@ activate email
 deactivate email
     auth -> userRepo : ofIdentity(email)
 activate userRepo
-ref over userRepo
-    Repository_Implementation
-end ref
+    note right of userRepo: Repository implementation \nwill depend on the argument\n passed in authzregistry
     userRepo --> auth : optional
 deactivate userRepo
     auth -> optional : filter(user -> user.passwordMatches(password, encoder) &&\n (noRolesToValidate(roles) || user.hasAnyOf(roles)) &&\n  user.isActive())
     note right of auth: filtering was shortened for readability
 
-activate userRepo
 
 
 activate optional

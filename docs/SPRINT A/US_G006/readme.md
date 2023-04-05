@@ -40,6 +40,11 @@
 ![authorization](Design/AuthorizationSequenceDiagram/SD.svg)
 - In each use case, the user will be verified, its role will be checked (needs to be in  the list of accepted roles for that use case) and then the use case will be performed.
 
+#### 4.1.3. Sequence Diagram for the AuthzRegistry setup
+
+![authzregistry](Design/AuthzRegistryConfigSequenceDiagram/SD.svg)
+- The authzregistry is a tool that will register how the authentication and authorization will be run. For example, in the configure method we specify if we want to access a "in-memory" database or a server database, we also specify the password encoding algorithm and the password policy to be used.
+
 ### 4.2. Class Diagram
 
 #### 4.2.1. Authentication and Authorization class diagram
@@ -48,6 +53,26 @@
 - The *authentication service* will be responsible for checking if the role of the user is valid to the corresponding use case they might want to perform.
 
 ### 4.3. Applied Patterns
+
+#### 4.3.1. Factory
+
+- Our PersistenceContext will create a RepositoryFactory based on the configuration file, and then the RepositoryFactory will create the repository that we need in order to persist our domain entity.
+
+#### 4.3.2. Single Responsibility Principle
+
+- Every class has a purpose. Each class will be responsible for its own validation and its own purpose, DDD is a perfect example of that, since, for example, our User's Email will be validated by the Email class and not the User class.
+- But regarding examples, this is a good principle, so we know where our functions are based on what they do.
+
+#### 4.3.3. Open/Closed Principle
+
+- For this principle in specific, we chose to do a more abstract approach, then implement what we need, so if we need to extend our system, we don't need to change classes, rather we implement a new one and extend the behaviours of the pre-existing ones.
+- For example, if we want to add a new database technology we just need to extend the PersistenceContext class and implement the new database technology(new repository implementations).
+
+#### 4.3.4. Repository Pattern
+
+- The repository pattern is a pattern that allows us to abstract the data access layer, so we can change the database technology without changing the rest of the system.
+- New Programmers might not know how to use a specific database technology, but they will know how to use the repository pattern, so they can implement the repository pattern and use it in the system.
+- In our case, we will have a interface repository that shows us different functionalities we can use, and then we will have its own implementations with their own specific database technology.
 
 ### 4.4. Tests
 

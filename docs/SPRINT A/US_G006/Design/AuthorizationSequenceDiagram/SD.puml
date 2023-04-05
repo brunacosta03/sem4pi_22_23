@@ -3,13 +3,13 @@ autonumber
 
 actor "User" as usr
 
-participant ": xUI" as ui
-participant ": xController" as ctrl
-participant ": AuthorizationService" as authz
-participant ": UserSession" as session
-participant "AuthzRegistry" as reg
-participant "Optional" as opt
-participant ": User" as userClass
+participant xUI as ui <<presentation>>
+participant xController as ctrl <<application>>
+participant AuthzRegistry as reg <<util>>
+participant AuthorizationService as authz <<service>>
+participant Optional as opt
+participant UserSession as session
+participant User as userClass <<domain>>
 
 activate usr
 activate ui
@@ -38,6 +38,7 @@ deactivate opt
     authz --> ui : transports exception into UI
 activate ui
     ui --> usr : informs insuccess of performing use case
+deactivate ui
 end alt
 
 authz -> session : authenticatedUser()
@@ -56,6 +57,7 @@ alt user role is not present in accepted roles
 deactivate authz
 activate ctrl
     ctrl --> ui : transports exception into UI
+activate ui
 deactivate ctrl
     ui --> usr : informs that user doesn't\nhave access to \nthis use case
 end alt
