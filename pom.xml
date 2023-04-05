@@ -20,7 +20,8 @@
 
 
 	<modules>
-		<module>ecourse.app.backoffice.console</module>
+        <module>ecourse.app.bootstrap</module>
+		<module>ecourse.app.user</module>
 	</modules>
 
 	<dependencies>

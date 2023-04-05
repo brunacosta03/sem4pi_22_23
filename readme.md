@@ -45,21 +45,21 @@ If you want to run tests for all modules just run in command line:
 Assuming the build was done, we can run the application through the files:
 
 
-eCourse - BackOffice
+eCourse - User
     
-    run-backoffice.bat
+    run-user.bat
     or
-    run-backoffice.sh
+    run-user.sh
 
 ## 6. How to Install/Deploy into Another Machine (or Virtual Machine)
 
-For example if you want to deploy into another machine eCourse - BackOffice you need to:
+For example if you want to deploy into another machine eCourse - User you need to:
 
     rebuild-all.bat
-    run-backoffice.bat
+    run-user.bat
     or
     rebuild-all.sh
-    run-backoffice.sh    
+    run-user.sh    
 
 ## 7. How to Generate PlantUML Diagrams
 
