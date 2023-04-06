@@ -1,6 +1,6 @@
 @startuml
 
-title Domain Model Excerpt
+title domain Model Excerpt
 
 hide methods
 left to right direction

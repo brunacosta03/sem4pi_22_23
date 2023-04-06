@@ -1,4 +1,4 @@
-@startuml "Domain Model"
+@startuml "domain Model"
 
 hide methods
 left to right direction

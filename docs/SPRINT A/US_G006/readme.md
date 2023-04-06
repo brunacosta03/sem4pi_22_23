@@ -18,9 +18,9 @@
 
 ## 3. Analysis
 
-![Domain Model Excerpt](Analysis/Domain_Model_Excerpt.svg)
+![domain Model Excerpt](Analysis/Domain_Model_Excerpt.svg)
 
-- This is an excerpt of our Domain Model, it gives us the clear idea of how the User should be identified in order to perform authentication, and it also distinguishes its paper in the system, that will be used to perform authorization.
+- This is an excerpt of our domain Model, it gives us the clear idea of how the User should be identified in order to perform authentication, and it also distinguishes its paper in the system, that will be used to perform authorization.
 - Our use case diagram is still not much relevant for this since this feature does not have any dependencies, it is the main dependency for the rest of the system (a user must be logged in and have permission to perform most, if not all use cases).
 
 ## 4. Design

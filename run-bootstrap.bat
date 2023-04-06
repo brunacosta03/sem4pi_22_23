@@ -5,4 +5,4 @@ ecourse.app.bootstrap\target\dependency\*;
 
 
 REM call the java VM, e.g, 
-java -cp %ECOURSE_CP% org.bootstrap.Main
+java -cp %ECOURSE_CP% org.bootstrap.ECourseBootstrap

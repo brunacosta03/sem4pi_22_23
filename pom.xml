@@ -22,7 +22,12 @@
 	<modules>
         <module>ecourse.app.bootstrap</module>
 		<module>ecourse.app.user</module>
-	</modules>
+        <module>ecourse.persistence</module>
+		<module>ecourse.bootstrappers</module>
+		<module>ecourse.core</module>
+        <module>ecourse.infrastructure</module>
+        <module>ecourse.app.common.console</module>
+    </modules>
 
 	<dependencies>
 		<dependency>
@@ -69,6 +74,12 @@
 			<groupId>javax.xml.bind</groupId>
 			<artifactId>jaxb-api</artifactId>
 			<version>2.3.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.threeten</groupId>
+			<artifactId>threetenbp</artifactId>
+			<version>1.6.8</version>
 		</dependency>
 	</dependencies>
 

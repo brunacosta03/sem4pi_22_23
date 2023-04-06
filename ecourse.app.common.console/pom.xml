@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>ecourse.app.user</name>
+    <name>ecourse.app.common.console</name>
 
-    <artifactId>ecourse.app.user</artifactId>
+    <artifactId>ecourse.app.common.console</artifactId>
     <version>0.1.0</version>
     <packaging>jar</packaging>
 
@@ -16,12 +16,4 @@
         <version>0.1.0</version>
     </parent>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>ecourse.persistence</artifactId>
-            <version>0.1.0</version>
-            <scope>runtime</scope>
-        </dependency>
-    </dependencies>
 </project>
