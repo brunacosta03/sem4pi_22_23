@@ -74,6 +74,11 @@
 - New Programmers might not know how to use a specific database technology, but they will know how to use the repository pattern, so they can implement the repository pattern and use it in the system.
 - In our case, we will have a interface repository that shows us different functionalities we can use, and then we will have its own implementations with their own specific database technology.
 
+#### 4.3.5. Singleton Pattern
+
+- The authregistry is a singleton, since from that class we can only get one instance of the authentication service, the authorization service and the user management service.
+- This will help us since authentication and authorization are a single thing that we have for the whole application, so it doesn't make sense to have more than one instance.
+
 ### 4.4. Tests
 
 **Test 1:** *Verifies that it is not possible to create an instance of the Example class with null values.*
