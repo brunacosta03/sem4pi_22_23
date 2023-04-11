@@ -7,7 +7,10 @@ import org.bootstrappers.ECourseBootstrapper;
 import org.user.management.ECoursePasswordPolicy;
 import persistence.PersistenceContext;
 
-public class ECourseBootstrap extends ECourseBaseApplication {
+/**
+ * Call bootstrappers to initialize data in database
+ */
+public final class ECourseBootstrap extends ECourseBaseApplication {
     private ECourseBootstrap(){
     }
 
@@ -21,7 +24,7 @@ public class ECourseBootstrap extends ECourseBaseApplication {
 
         new ECourseBootstrapper().execute();
 
-        while(true){
+        while (true) {
         }
     }
 
