@@ -39,6 +39,14 @@ package "User Aggregate" {
     }
     card UserState <<Value Object>>{
     }
+    card MechanographicNumber <<Value Object>>{
+    }
+    card Acronym <<Value Object>> {
+    }
+    card BirthDate <<Value Object>> {
+    }
+    card TaxPayerNumber <<Value Object>> {
+    }
     enum Role <<Value Object>> {
         Teacher
         Student
@@ -51,6 +59,10 @@ package "User Aggregate" {
     User --> ShortName
     User --> Role
     User --> UserState
+    User --> MechanographicNumber
+    User --> Acronym
+    User --> BirthDate
+    User --> TaxPayerNumber
 
     note left of Role
         This is only used for purposes
