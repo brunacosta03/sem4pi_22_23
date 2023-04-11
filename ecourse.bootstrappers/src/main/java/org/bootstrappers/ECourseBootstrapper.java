@@ -35,7 +35,7 @@ public class ECourseBootstrapper implements Action {
     /**
      * The password for the manager user used during bootstrapping.
      */
-    private static final String MANAGERBOOTSTRAP_PASSWORD = "managerpassword";
+    private static final String MANAGERBOOTSTRAP_PASSWORD = "ManagerPassword1";
 
     /**
      * Executes the bootstrapping action by registering the manager user.

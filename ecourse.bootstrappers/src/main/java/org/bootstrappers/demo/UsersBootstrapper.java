@@ -12,15 +12,15 @@ public class UsersBootstrapper extends UsersBootstrapperBase implements Action {
     /**
      * Password for Manager.
      */
-    private static final String PASSWORD_M = "passwordmanager";
+    private static final String PASSWORD_M = "PasswordManager1";
     /**
      * Password for Teacher.
      */
-    private static final String PASSWORD_T = "passwordteacher";
+    private static final String PASSWORD_T = "PasswordTeacher1";
     /**
      * Password for Student.
      */
-    private static final String PASSWORD_S = "passwordstudent";
+    private static final String PASSWORD_S = "PasswordStudent1";
 
     /**
      * Bootstraping (Manager, Teacher, Student).
