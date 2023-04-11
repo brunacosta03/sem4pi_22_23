@@ -4,16 +4,30 @@ import eapli.framework.domain.model.ValueObject;
 import eapli.framework.validations.Preconditions;
 
 public class ShortName implements ValueObject {
-
+    /**
+     * Short name of Entity.
+     */
     private String value;
 
-    private ShortName(String value){
-        this.value = value;
+    /**
+     * Minimum number of characters for a short name.
+     */
+    private static final int MIN_NUMBER_OF_CHARACTERS = 3;
+    private ShortName(final String valuep) {
+        this.value = valuep;
     }
 
-    public static ShortName valueOf(String value){
-        Preconditions.nonEmpty(value, "Short Name can't be empty.");
-        Preconditions.ensure(value.length()>3, "Short name must have 3 characters or more");
-        return new ShortName(value);
+    /**
+     * Factory method to create a short name instance.
+     *
+     * @param valuep The value of the short name.
+     * @return ShortName instance.
+     */
+    public static ShortName valueOf(final String valuep) {
+        Preconditions.nonEmpty(valuep, "Short Name can't be empty.");
+        Preconditions.ensure(valuep.length() > MIN_NUMBER_OF_CHARACTERS,
+                    "Short name must have "
+                        + MIN_NUMBER_OF_CHARACTERS + " characters or more");
+        return new ShortName(valuep);
     }
 }

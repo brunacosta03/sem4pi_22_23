@@ -34,20 +34,20 @@ public class AuthenticationService {
     /**
      * Constructor for AuthenticationService.
      *
-     * @param repo UserRepository instance for managing User entities.
-     * @param authService AuthorizationService creating user sessions.
-     * @param policy PasswordPolicy instance for validating passwords.
-     * @param encoder PasswordEncoder encoding and decoding passwords.
+     * @param repop UserRepository instance for managing User entities.
+     * @param authServicep AuthorizationService creating user sessions.
+     * @param policyp PasswordPolicy instance for validating passwords.
+     * @param encoderp PasswordEncoder encoding and decoding passwords.
      */
-    public AuthenticationService(final UserRepository repo,
-                                 final AuthorizationService authService,
-                                 final PasswordPolicy policy,
-                                 final PasswordEncoder encoder) {
+    public AuthenticationService(final UserRepository repop,
+                                 final AuthorizationService authServicep,
+                                 final PasswordPolicy policyp,
+                                 final PasswordEncoder encoderp) {
         Preconditions.noneNull(repo, authorizationService, encoder);
-        this.repo = repo;
-        this.authorizationService = authService;
-        this.policy = policy;
-        this.encoder = encoder;
+        this.repo = repop;
+        this.authorizationService = authServicep;
+        this.policy = policyp;
+        this.encoder = encoderp;
     }
 
 

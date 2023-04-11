@@ -2,11 +2,13 @@ package domain.model;
 
 import java.util.Date;
 
-public class BirthDate {
+public final class BirthDate {
+    /**
+     * Date when someone born.
+     */
     private Date value;
-
-    private BirthDate(Date value){
-        this.value = value;
+    private BirthDate(final Date valuep) {
+        this.value = valuep;
     }
 
 }

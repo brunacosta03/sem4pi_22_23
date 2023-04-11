@@ -1,10 +1,14 @@
 package org.user;
 
 public class Main {
-    public static void main(String[] args) {
+    /**
+     * Start modulo user.
+     * @param args
+     */
+    public static void main(final String[] args) {
         System.out.println("Modulo User a correr!");
 
-        while(true) {
+        while (true) {
             //nothing happen atm
         }
     }
