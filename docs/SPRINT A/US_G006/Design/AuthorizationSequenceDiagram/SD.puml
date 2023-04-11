@@ -16,7 +16,7 @@ activate ui
 
 usr -> ui : want to perform use case
 ui -> ctrl** : creates
-ui -> ctrl : calls method
+ui -> ctrl : checkPermissions()
 deactivate ui
 activate ctrl
 ctrl -> reg : authorizationService()

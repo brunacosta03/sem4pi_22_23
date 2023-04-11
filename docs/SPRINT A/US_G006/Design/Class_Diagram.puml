@@ -42,7 +42,7 @@ class Email <<value>> {
 class Password <<value>> {
 }
 
-enum Role <<value>> {
+class Role <<value>> {
 }
 
 

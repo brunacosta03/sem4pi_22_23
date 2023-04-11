@@ -47,11 +47,9 @@ package "User Aggregate" {
     }
     card TaxPayerNumber <<Value Object>> {
     }
-    enum Role <<Value Object>> {
-        Teacher
-        Student
-        Manager
+    card Role <<Value Object>> {
     }
+    note right of Role: Can be Teacher, Student or Manager
 
     User --> Email
     User --> Password
