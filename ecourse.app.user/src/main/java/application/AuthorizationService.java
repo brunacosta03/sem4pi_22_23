@@ -6,7 +6,10 @@ import domain.model.UserSession;
 import java.util.Optional;
 
 public class AuthorizationService {
-    private UserSession session = null; // Current user session
+    /**
+     * Current user session
+     */
+    private UserSession session = null;
 
     /**
      * Create session for user.

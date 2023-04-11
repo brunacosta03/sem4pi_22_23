@@ -9,9 +9,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 public final class AuthzRegistry {
 
-    private static AuthorizationService authorizationService; // Authorization service instance
-    private static AuthenticationService authenticationService; // Authentication service instance
-    private static UserManagementService userManagementService; // User management service instance
+    /**
+     * Authorization service instance
+     */
+    private static AuthorizationService authorizationService;
+    /**
+     * Authentication service instance
+     */
+    private static AuthenticationService authenticationService;
+    /**
+     * User management service instance
+     */
+    private static UserManagementService userManagementService;
 
 
     /**
@@ -28,8 +37,8 @@ public final class AuthzRegistry {
      */
     public static AuthorizationService authorizationService() {
         if (authorizationService == null) {
-            throw new IllegalStateException("Authorization service not available." +
-                    "\nConfigure authzregistry first");
+            throw new IllegalStateException("Authorization service not available."
+                    + "\nConfigure authzregistry first");
         }
         return authorizationService;
     }
@@ -41,8 +50,8 @@ public final class AuthzRegistry {
      */
     public static AuthenticationService authenticationService() {
         if (authenticationService == null) {
-            throw new IllegalStateException("Authentication service not available." +
-                    "\nConfigure authzregistry first");
+            throw new IllegalStateException("Authentication service not available."
+                    + "\nConfigure authzregistry first");
         }
         return authenticationService;
     }
@@ -54,8 +63,8 @@ public final class AuthzRegistry {
      */
     public static UserManagementService userService() {
         if (userManagementService == null) {
-            throw new IllegalStateException("User service not available." +
-                    "\nConfigure authzregistry first.");
+            throw new IllegalStateException("User service not available."
+                    + "\nConfigure authzregistry first.");
         }
         return userManagementService;
     }
