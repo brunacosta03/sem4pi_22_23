@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public class AuthorizationService {
     /**
-     * Current user session
+     * Current user session.
      */
     private UserSession session = null;
 

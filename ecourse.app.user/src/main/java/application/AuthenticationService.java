@@ -22,7 +22,7 @@ public class AuthenticationService {
      */
     private AuthorizationService authorizationService;
     /**
-     * PasswordPolicy for validating passwords
+     * PasswordPolicy for validating passwords.
      */
     private PasswordPolicy policy;
     /**
@@ -35,17 +35,21 @@ public class AuthenticationService {
      * Constructor for AuthenticationService.
      *
      * @param repo UserRepository instance for managing User entities.
-     * @param authorizationService AuthorizationService instance for creating user sessions.
+     * @param authService AuthorizationService creating user sessions.
      * @param policy PasswordPolicy instance for validating passwords.
-     * @param encoder PasswordEncoder instance for encoding and decoding passwords.
+     * @param encoder PasswordEncoder encoding and decoding passwords.
      */
-    public AuthenticationService(final UserRepository repo, final AuthorizationService authorizationService, final PasswordPolicy policy, final PasswordEncoder encoder) {
+    public AuthenticationService(final UserRepository repo,
+                                 final AuthorizationService authService,
+                                 final PasswordPolicy policy,
+                                 final PasswordEncoder encoder) {
         Preconditions.noneNull(repo, authorizationService, encoder);
         this.repo = repo;
-        this.authorizationService = authorizationService;
+        this.authorizationService = authService;
         this.policy = policy;
         this.encoder = encoder;
     }
+
 
     /**
      * Authenticates a user.
@@ -53,27 +57,34 @@ public class AuthenticationService {
      * @param username Username of the user to be authenticated.
      * @param rawPassword Raw password of the user to be authenticated.
      * @param requiredRoles Optional required roles for the authenticated user.
-     * @return Optional UserSession if authentication is successful, else empty Optional.
+     * @return UserSession if authentication is successful, else empty Optional.
      */
-    public Optional<UserSession> authenticate(final String username, final String rawPassword,
+    public Optional<UserSession> authenticate(final String username,
+                                              final String rawPassword,
                                               final Role... requiredRoles) {
         Preconditions.nonEmpty(username, "A username must be provided");
         Preconditions.nonEmpty(rawPassword, "A password must be provided");
 
         final User newSession = retrieveUser(username)
-                .filter(u ->/* u.passwordMatches(rawPassword, encoder) && u.isActive()
-                        &&*/ (noRolesToValidate(requiredRoles) || u.hasAnyOf(requiredRoles)))
+                .filter(u -> /* u.passwordMatches(rawPassword, encoder)
+                             && u.isActive()
+                             && */ (noRolesToValidate(requiredRoles)
+                        || u.hasAnyOf(requiredRoles)))
                 .orElse(null);
 
         return authorizationService.createSessionForUser(newSession);
     }
+
+
+
+
 
     /**
      * Checks if there are no roles to validate.
      * @param roles Roles to be validated.
      * @return True if there are no roles to validate, else false.
      */
-    private boolean noRolesToValidate(final Role... roles){
+    private boolean noRolesToValidate(final Role... roles) {
         return roles.length == 0 || (roles.length == 1 && roles[0] == null);
     }
 
@@ -82,7 +93,7 @@ public class AuthenticationService {
      * @param username Username of the user to be retrieved.
      * @return Optional User entity if found, else empty Optional.
      */
-    private Optional<User> retrieveUser(final String username){
+    private Optional<User> retrieveUser(final String username) {
         return repo.ofIdentity((Comparable) FullName.valueOf(username));
     }
 
@@ -91,19 +102,26 @@ public class AuthenticationService {
      * @param user User entity for which the password needs to be changed.
      * @param oldPassword Old password of the user.
      * @param newPassword New password for the user.
-     * @return Optional User entity with the changed password if successful, else empty Optional.
+     * @return User with the changed password if successful, else empty.
      */
-    public Optional<User> changePassword(final User user, final String oldPassword, final String newPassword){
+    public Optional<User> changePassword(final User user,
+                                         final String oldPassword,
+                                         final String newPassword) {
         //if(user.passwordMatches(oldPassword, encoder)){
-            return Password.encodedAndValid(newPassword, policy, encoder).map(p-> {
-                user.changePassword(p);
-                return repo.save(user);
-            });
+        return Password.encodedAndValid(newPassword, policy, encoder)
+                .map(p -> {
+                    user.changePassword(p);
+                    return repo.save(user);
+                });
         //}
         //return Optional.empty();
     }
-//    public boolean changePassword(final String oldPassword, final String newPassword){
+
+
+//    public boolean changePassword(final String oldPassword,
+//                                  final String newPassword) {
  //       return authorizationService.session()
- //               .map(user -> changePassword(user.user(), oldPassword, newPassword));
+ //               .map(user ->
+    //               changePassword(user.user(), oldPassword, newPassword));
 
 }

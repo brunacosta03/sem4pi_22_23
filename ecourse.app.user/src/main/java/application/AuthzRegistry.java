@@ -10,15 +10,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public final class AuthzRegistry {
 
     /**
-     * Authorization service instance
+     * Authorization service instance.
      */
     private static AuthorizationService authorizationService;
     /**
-     * Authentication service instance
+     * Authentication service instance.
      */
     private static AuthenticationService authenticationService;
     /**
-     * User management service instance
+     * User management service instance.
      */
     private static UserManagementService userManagementService;
 
@@ -33,12 +33,12 @@ public final class AuthzRegistry {
     /**
      * Get the authorization service.
      * @return authorization service.
-     * @throws IllegalStateException if the authorization service is not configured.
+     * @throws IllegalStateException service is not configured.
      */
     public static AuthorizationService authorizationService() {
         if (authorizationService == null) {
-            throw new IllegalStateException("Authorization service not available."
-                    + "\nConfigure authzregistry first");
+            throw new IllegalStateException("Authorization service not "
+                    + "available.\nConfigure authzregistry first");
         }
         return authorizationService;
     }
@@ -46,12 +46,12 @@ public final class AuthzRegistry {
     /**
      * Get the authentication service.
      * @return authentication service.
-     * @throws IllegalStateException if the authentication service is not configured.
+     * @throws IllegalStateException service is not configured.
      */
     public static AuthenticationService authenticationService() {
         if (authenticationService == null) {
-            throw new IllegalStateException("Authentication service not available."
-                    + "\nConfigure authzregistry first");
+            throw new IllegalStateException("Authentication service not "
+                    + "available.\nConfigure authzregistry first");
         }
         return authenticationService;
     }
@@ -59,7 +59,7 @@ public final class AuthzRegistry {
     /**
      * Get the user management service.
      * @return user management service.
-     * @throws IllegalStateException if the user management service is not configured.
+     * @throws IllegalStateException service is not configured.
      */
     public static UserManagementService userService() {
         if (userManagementService == null) {
@@ -75,10 +75,15 @@ public final class AuthzRegistry {
      * @param encoder password encoder.
      * @param policy password policy.
      */
-    public static void configure(final UserRepository userRepo, final PasswordEncoder encoder, final PasswordPolicy policy) {
+    public static void configure(final UserRepository userRepo,
+                                 final PasswordEncoder encoder,
+                                 final PasswordPolicy policy) {
+
         authorizationService = new AuthorizationService();
-        authenticationService = new AuthenticationService(userRepo, authorizationService, policy, encoder);
-        // userManagementService = new UserManagementService(userRepo, policy, encoder)
+        authenticationService = new AuthenticationService(userRepo,
+                authorizationService, policy, encoder);
+        // userManagementService = new UserManagementService(userRepo,
+        //                      policy, encoder)
 
     }
 }
