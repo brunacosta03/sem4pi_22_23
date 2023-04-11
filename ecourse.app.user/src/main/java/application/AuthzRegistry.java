@@ -9,9 +9,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 public final class AuthzRegistry {
 
-    private static AuthorizationService authorizationService;
-    private static AuthenticationService authenticationService;
-    private static UserManagementService userManagementService;
+    private static AuthorizationService authorizationService; // Authorization service instance
+    private static AuthenticationService authenticationService; // Authentication service instance
+    private static UserManagementService userManagementService; // User management service instance
+
 
     /**
      * Private constructor to prevent instantiation.
@@ -26,8 +27,9 @@ public final class AuthzRegistry {
      * @throws IllegalStateException if the authorization service is not configured.
      */
     public static AuthorizationService authorizationService() {
-        if(authorizationService == null){
-            throw new IllegalStateException("Authorization service not available.\nConfigure authzregistry first");
+        if (authorizationService == null) {
+            throw new IllegalStateException("Authorization service not available." +
+                    "\nConfigure authzregistry first");
         }
         return authorizationService;
     }
@@ -38,8 +40,9 @@ public final class AuthzRegistry {
      * @throws IllegalStateException if the authentication service is not configured.
      */
     public static AuthenticationService authenticationService() {
-        if(authenticationService == null){
-            throw new IllegalStateException("Authentication service not available.\nConfigure authzregistry first");
+        if (authenticationService == null) {
+            throw new IllegalStateException("Authentication service not available." +
+                    "\nConfigure authzregistry first");
         }
         return authenticationService;
     }
@@ -50,8 +53,9 @@ public final class AuthzRegistry {
      * @throws IllegalStateException if the user management service is not configured.
      */
     public static UserManagementService userService() {
-        if(userManagementService==null){
-            throw new IllegalStateException("User service not available.\nConfigure authzregistry first.");
+        if (userManagementService == null) {
+            throw new IllegalStateException("User service not available." +
+                    "\nConfigure authzregistry first.");
         }
         return userManagementService;
     }
@@ -63,9 +67,8 @@ public final class AuthzRegistry {
      * @param policy password policy.
      */
     public static void configure(final UserRepository userRepo, final PasswordEncoder encoder, final PasswordPolicy policy) {
-
         authorizationService = new AuthorizationService();
-        authenticationService = new AuthenticationService(userRepo,authorizationService, policy, encoder);
+        authenticationService = new AuthenticationService(userRepo, authorizationService, policy, encoder);
         // userManagementService = new UserManagementService(userRepo, policy, encoder)
 
     }
