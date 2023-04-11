@@ -2,7 +2,7 @@ package org.authz.config;
 
 public abstract class ECourseBaseApplication {
     /**
-     * Make all methods implement run that will execute configure and doMain
+     * Make all methods implement run that will execute configure and doMain.
      * @param args
      */
     public void run(final String[] args) {
@@ -14,7 +14,7 @@ public abstract class ECourseBaseApplication {
     }
 
     /**
-     * Execute configuration of authentication
+     * Execute configuration of authentication.
      */
     protected void configure() {
         configureAuthz();
@@ -24,11 +24,11 @@ public abstract class ECourseBaseApplication {
      * Start module
      * @param args
      */
-    protected abstract void doMain(final String[] args);
+    protected abstract void doMain(String[] args);
 
     /**
-     * Put all necessary configurations about Authz running
-     * For example get dynamically PersistenceContext
+     * Put all necessary configurations about Authz running.
+     * For example get dynamically PersistenceContext.
      */
     protected abstract void configureAuthz();
 }

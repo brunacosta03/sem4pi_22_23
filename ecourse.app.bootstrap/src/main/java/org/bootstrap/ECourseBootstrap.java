@@ -8,29 +8,39 @@ import org.user.management.ECoursePasswordPolicy;
 import persistence.PersistenceContext;
 
 /**
- * Call bootstrappers to initialize data in database
+ * Call bootstrappers to initialize data in the database.
  */
 public final class ECourseBootstrap extends ECourseBaseApplication {
-    private ECourseBootstrap(){
+
+    private ECourseBootstrap() {
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         new ECourseBootstrap().run(args);
     }
 
+    /**
+     * Main method to run the bootstrap process.
+     * @param args Command line arguments.
+     */
     @Override
-    protected void doMain(String[] args) {
+    protected void doMain(final String[] args) {
         System.out.println("Modulo bootstrap a correr!");
 
         new ECourseBootstrapper().execute();
 
         while (true) {
+            //nothing happen atm
         }
     }
 
+    /**
+     * Configure the authorization settings.
+     */
     @Override
     protected void configureAuthz() {
-        AuthzRegistry.configure(PersistenceContext.repositories().users(), new ECoursePasswordPolicy(),
+        AuthzRegistry.configure(PersistenceContext.repositories().users(),
+                new ECoursePasswordPolicy(),
                 new PlainTextEncoder());
     }
 }

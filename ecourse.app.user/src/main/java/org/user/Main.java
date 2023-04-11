@@ -1,8 +1,5 @@
 package org.user;
 
-import domain.GrupoAutomovel;
-import persistence.GrupoAutomovelRepositorioJPAImpl;
-
 public class Main {
     public static void main(String[] args) {
         System.out.println("Modulo User a correr!");
