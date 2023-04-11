@@ -1,4 +1,4 @@
-@startuml "domain Model"
+@startuml "Domain Model"
 
 hide methods
 left to right direction
@@ -37,6 +37,14 @@ package "User Aggregate" {
     }
     card UserState <<Value Object>>{
     }
+    card MechanographicNumber <<Value Object>>{
+    }
+    card Acronym <<Value Object>> {
+    }
+    card BirthDate <<Value Object>> {
+    }
+    card TaxPayerNumber <<Value Object>> {
+    }
     enum Role <<Value Object>> {
         Teacher
         Student
@@ -49,6 +57,10 @@ package "User Aggregate" {
     User --> ShortName
     User --> Role
     User --> UserState
+    User --> MechanographicNumber
+    User --> Acronym
+    User --> BirthDate
+    User --> TaxPayerNumber
 
     note left of Role
         This is only used for purposes
@@ -106,21 +118,6 @@ package "Course Aggregate" {
     end note
 }
 
-package "Teacher Aggregate" {
-    entity Teacher <<entity>><<root>>
-    'Teacher value objects
-    card Acronym <<Value Object>> {
-    }
-    card TeacherBirthDate <<Value Object>> {
-    }
-    card TeacherTaxPayerNumber <<Value Object>> {
-    }
-
-    Teacher --> TeacherBirthDate
-    Teacher --> TeacherTaxPayerNumber
-    Teacher --> Acronym
-}
-
 package "Class Aggregate" {
     entity Class <<entity>><<root>>
 
@@ -164,25 +161,6 @@ package "Class Aggregate" {
             - Recurring
             - Extra
     end note
-}
-
-package "Manager Aggregate" {
-    entity Manager <<entity>><<root>>
-}
-
-package "Student Aggregate" {
-    entity Student <<entity>><<root>>
-    'Student value objects
-    card MechanographicNumber <<Value Object>>{
-    }
-    card StudentBirthDate <<Value Object>>{
-    }
-    card StudentTaxPayerNumber <<Value Object>>{
-    }
-
-    Student --> StudentBirthDate
-    Student --> StudentTaxPayerNumber
-    Student --> MechanographicNumber
 }
 
 package "Application Aggregate" {
@@ -453,32 +431,24 @@ package BoardAggregate {
 card UpdateEventPostIt <<Event>> {
 }
 
-'Every system actor has a user object associated (composition)
-    Teacher --> "1" User : has
-    Manager --> "1" User : has
-    Student --> "1" User : has
+    Course --> "1" User : is owned
+    Course --> "N" User : has
+    Course --> "N" User : teaches
 
-    Course --> "1" Teacher : is owned
-    Course --> "N" Teacher : has
-    Student --> "N" Course : enrolls
-
-    Application --> "1" Student : is of
+    Application --> "1" User : is of
     Application --> "1" Course : belongs to
 
-    'Teacher --> Class
     Class --> "1" Course : belongs to
-
-    'Class --> Student
 
     Calendar --> "N" Class : keeps track of
 
     User --> "1" Calendar : has
 
     Participant --> User : has
-    Teacher --> "N" ExamTemplate : creates
+    User --> "N" ExamTemplate : creates
     Course --> "N" ExamTemplate : has
     Exam --> "1" ExamTemplate : is based on
-    Student --> "N" Exam : takes
+    User --> "N" Exam : takes
 
     Calendar --> "N" Meeting : keeps track of
     Invite --> User : references
