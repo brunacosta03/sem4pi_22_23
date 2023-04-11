@@ -11,10 +11,16 @@ import persistence.PersistenceContext;
  * Call bootstrappers to initialize data in the database.
  */
 public final class ECourseBootstrap extends ECourseBaseApplication {
-
+    /**
+     * Private constructor to prevent instantiation.
+     */
     private ECourseBootstrap() {
     }
 
+    /**
+     * Main method to start the bootstrap process.
+     * @param args Command line arguments.
+     */
     public static void main(final String[] args) {
         new ECourseBootstrap().run(args);
     }

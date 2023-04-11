@@ -21,7 +21,7 @@ public abstract class ECourseBaseApplication {
     }
 
     /**
-     * Start module
+     * Start module.
      * @param args
      */
     protected abstract void doMain(String[] args);
