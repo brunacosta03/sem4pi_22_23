@@ -11,27 +11,70 @@ import eapli.framework.time.util.CurrentTimeCalendars;
 import java.util.Calendar;
 import java.util.Set;
 
+/**
+ * Controller class for adding a new user to the system.
+ */
 @UseCaseController
 public class AddUserController {
+    /**
+     * Authorization service instance.
+     */
     private final AuthorizationService authz = AuthzRegistry.authorizationService();
+    /**
+     * User management service instance.
+     */
     private final UserManagementService userSvc = AuthzRegistry.userService();
+
+    /**
+     * Get all available role types for a user.
+     * @return An array of all available role types.
+     */
     public Role[] getRoleTypes() {
         return CourseRoles.allRoles();
     }
 
-    public SystemUser addUser(final String username, final String password, final String firstName,
+    /**
+     * Add a new user to the system with the provided details.
+     * @param username  username of the new user.
+     * @param password  password of the new user.
+     * @param firstName first name of the new user.
+     * @param lastName  last name of the new user.
+     * @param email     email of the new user.
+     * @param roles     roles of the new user.
+     * @param createdOn creation date of the new user.
+     * @return SystemUser object.
+     */
+    public SystemUser addUser(final String username,
+                              final String password,
+                              final String firstName,
                               final String lastName,
-                              final String email, final Set<Role> roles, final Calendar createdOn) {
+                              final String email,
+                              final Set<Role> roles,
+                              final Calendar createdOn) {
         authz.ensureAuthenticatedUserHasAnyOf(CourseRoles.MANAGER);
 
-        return userSvc.registerNewUser(username, password, firstName, lastName, email, roles,
-                createdOn);
+        return userSvc.registerNewUser(username, password, firstName,
+                lastName, email, roles, createdOn);
     }
 
-    public SystemUser addUser(final String username, final String password, final String firstName,
+    /**
+     * Add a new user to the system with the provided details.
+     * @param username  username of the new user.
+     * @param password  password of the new user.
+     * @param firstName first name of the new user.
+     * @param lastName  last name of the new user.
+     * @param email     email of the new user.
+     * @param roles     roles of the new user.
+     * @return SystemUser.
+     */
+    public SystemUser addUser(final String username,
+                              final String password,
+                              final String firstName,
                               final String lastName,
-                              final String email, final Set<Role> roles) {
+                              final String email,
+                              final Set<Role> roles) {
 
-        return addUser(username, password, firstName, lastName, email, roles, CurrentTimeCalendars.now());
+        return addUser(username, password, firstName,
+                lastName, email, roles, CurrentTimeCalendars.now());
     }
 }
