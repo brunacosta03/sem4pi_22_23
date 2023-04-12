@@ -33,10 +33,15 @@ public class ShortName implements ValueObject {
      * @return ShortName instance.
      */
     public static ShortName valueOf(final String valuep) {
+        Preconditions.nonNull(valuep, "Short Name can't be null.");
         Preconditions.nonEmpty(valuep, "Short Name can't be empty.");
         Preconditions.ensure(valuep.length() > MIN_NUMBER_OF_CHARACTERS,
                     "Short name must have "
                         + MIN_NUMBER_OF_CHARACTERS + " characters or more");
         return new ShortName(valuep);
+    }
+
+    String value() {
+        return this.value;
     }
 }

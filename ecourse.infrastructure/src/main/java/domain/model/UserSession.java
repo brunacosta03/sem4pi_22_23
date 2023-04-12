@@ -46,11 +46,7 @@ public class UserSession  {
     /**
      * @return user that is authenticated.
      */
-    public User user() {
-        return authenticatedUser;
-    }
-
     public User authenticatedUser() {
-        return this.authenticatedUser;
+        return authenticatedUser;
     }
 }

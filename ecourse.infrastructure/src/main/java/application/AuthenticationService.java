@@ -7,7 +7,6 @@ import domain.repositories.UserRepository;
 import eapli.framework.general.domain.model.EmailAddress;
 import eapli.framework.infrastructure.authz.application.PasswordPolicy;
 import eapli.framework.infrastructure.authz.domain.model.Role;
-import eapli.framework.infrastructure.authz.domain.model.SystemUser;
 import eapli.framework.validations.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -114,21 +113,13 @@ public class AuthenticationService {
     public Optional<User> changePassword(final User user,
                                          final String oldPassword,
                                          final String newPassword) {
-        //if(user.passwordMatches(oldPassword, encoder)){
-        return Password.encodedAndValid(newPassword, policy, encoder)
+        if(user.passwordMatches(oldPassword, encoder)){
+            return Password.encodedAndValid(newPassword, policy, encoder)
                 .map(p -> {
                     user.changePassword(p);
                     return repo.save(user);
                 });
-        //}
-        //return Optional.empty();
+        }
+        return Optional.empty();
     }
-
-
-//    public boolean changePassword(final String oldPassword,
-//                                  final String newPassword) {
- //       return authorizationService.session()
- //               .map(user ->
-    //               changePassword(user.user(), oldPassword, newPassword));
-
 }

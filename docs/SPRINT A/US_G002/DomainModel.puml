@@ -27,7 +27,7 @@ package "User Aggregate" {
     entity User <<entity>><<root>>
 
 'User value objects
-    card Email <<Value Object>>{
+    card EmailAddress <<Value Object>>{
     }
     card Password <<Value Object>>{
     }
@@ -49,7 +49,7 @@ package "User Aggregate" {
     }
     note right of Role: Can be Teacher, Student or Manager
 
-    User --> Email
+    User --> EmailAddress
     User --> Password
     User --> FullName
     User --> ShortName

@@ -57,7 +57,7 @@ public class AuthorizationService {
             System.out.println("Unauthenticated access attempt");
             return new UnauthenticatedException();
         });
-        if (!us.user().hasAnyOf(actions)) {
+        if (!us.authenticatedUser().hasAnyOf(actions)) {
             System.out.println("Unauthorized access attempt by user" + us.authenticatedUser().emailAddress());
             throw new UnauthorizedException(us.authenticatedUser(), actions);
         }

@@ -45,7 +45,7 @@ authz -> session : authenticatedUser()
 activate session
 session --> authz : user
 deactivate session
-authz -> userClass : hasAny(roles)
+authz -> userClass : hasAnyOf(roles)
 activate userClass
 userClass --> authz : bool
 deactivate userClass

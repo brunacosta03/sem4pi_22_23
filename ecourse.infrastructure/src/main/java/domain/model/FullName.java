@@ -45,4 +45,8 @@ public class FullName implements ValueObject {
                         + MIN_NUMBER_OF_CHARACTERS + " characters or more");
         return new FullName(valuep);
     }
+
+    String value() {
+        return this.value;
+    }
 }
