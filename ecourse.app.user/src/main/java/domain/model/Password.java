@@ -12,10 +12,18 @@ import java.io.Serializable;
 import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Version;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Embeddable
 public final class Password implements ValueObject, Serializable {
+    /**
+     * Version to resolve conflicts
+     */
+    @Version
+    private Long version;
+
     private static final long serialVersionUID = 1L;
     @Column(
             name = "password"

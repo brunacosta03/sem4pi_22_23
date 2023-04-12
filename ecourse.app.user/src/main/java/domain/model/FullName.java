@@ -2,7 +2,14 @@ package domain.model;
 
 import eapli.framework.validations.Preconditions;
 
+import javax.persistence.Version;
+
 public class FullName {
+    /**
+     * Version to resolve conflicts
+     */
+    @Version
+    private Long version;
     /**
      * Complete name of entity.
      */

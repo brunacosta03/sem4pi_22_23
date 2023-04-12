@@ -3,7 +3,14 @@ package domain.model;
 import eapli.framework.domain.model.ValueObject;
 import eapli.framework.validations.Preconditions;
 
+import javax.persistence.Version;
+
 public class ShortName implements ValueObject {
+    /**
+     * Version to resolve conflicts
+     */
+    @Version
+    private Long version;
     /**
      * Short name of Entity.
      */

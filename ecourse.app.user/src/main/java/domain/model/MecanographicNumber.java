@@ -1,31 +1,39 @@
 package domain.model;
 
+import javax.persistence.Version;
 import java.time.LocalDateTime;
 
 public class MecanographicNumber {
-    private int value;
 
-    public MecanographicNumber(final int value){
-        if(confirmNumber(value)){
-            this.value = value;
-        }
+    /**
+     * Version to resolve conflicts
+     */
+    @Version
+    private Long version;
+
+    public static final String GENERATE_QUERY = "SELECT MAX(value) FROM USER WHERE YEAR:=" + LocalDateTime.now().getYear() + ";";
+
+    /**
+     * Year of the generated number
+     */
+    private Integer year;
+    /**
+     * Value to be added to the string of the number, generated automatically
+     */
+    private Integer value;
+
+    public MecanographicNumber(final Integer value){
+        this.year = LocalDateTime.now().getYear();
+        this.value = value;
     }
 
-    public boolean confirmNumber(final int value){
-        int yearSearcher = value;
-        while (yearSearcher >=1000 && yearSearcher < 10000){
-            yearSearcher = yearSearcher / 10;
-        }
-        if(yearSearcher >= LocalDateTime.now().getYear()){
-            throw new IllegalArgumentException("This number is not correct");
-        }
-        return true;
-    }
 
     public boolean equals(MecanographicNumber number){
-        if(this == number){
-            return true;
-        }
-        return false;
+        return this.year.equals(number.year) &&
+                this.value.equals(number.value);
+    }
+
+    public String value(){
+        return year.toString() + value.toString();
     }
 }
