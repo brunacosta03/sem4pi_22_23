@@ -1,13 +1,19 @@
 package domain.model;
 
 import eapli.framework.general.domain.model.EmailAddress;
-import eapli.framework.infrastructure.authz.domain.model.Password;
 import eapli.framework.infrastructure.authz.domain.model.Role;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.persistence.Version;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
 public class User {
+    /**
+     * Version to resolve conflicts
+     */
+    @Version
+    private Long version;
     /**
      * Short name of user.
      */
@@ -96,12 +102,11 @@ public class User {
         this.deactivatedOn = null;
         this.userState = true;
     }
-    /*
+
     public boolean passwordMatches(String rawPassword,
                                      PasswordEncoder encoder) {
         return encoder.matches(rawPassword, password.value());
     }
-*/
 
     /**
      * Get if user is Active.
@@ -135,4 +140,15 @@ public class User {
     public EmailAddress identity() {
         return email;
     }
+
+    /**
+     * Assigns a role to this user
+     * @param role, role to be turned;
+     */
+    public void assignRole(Role role) {
+        if (!this.role.equals(role)) {
+            this.role = role;
+        }
+    }
+
 }

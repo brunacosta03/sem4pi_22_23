@@ -1,5 +1,6 @@
 package domain.model;
 
+import eapli.framework.infrastructure.authz.domain.model.SystemUser;
 import eapli.framework.validations.Preconditions;
 
 import java.time.LocalDateTime;
@@ -49,4 +50,5 @@ public class UserSession {
     public User user() {
         return authenticatedUser;
     }
+
 }
