@@ -2,8 +2,11 @@ package domain.repositories;
 
 import domain.model.User;
 import eapli.framework.domain.repositories.DomainRepository;
+import eapli.framework.general.domain.model.EmailAddress;
 
-public interface UserRepository extends DomainRepository {
+import java.util.Optional;
+
+public interface UserRepository extends DomainRepository<EmailAddress, User> {
     /**
      * Find active users.
      * @param active
@@ -17,4 +20,11 @@ public interface UserRepository extends DomainRepository {
      * @return User
      */
     User save(User user);
+
+    Optional<User> ofIdentity(EmailAddress id);
+
+    default Optional<User> findByEmail(
+            final EmailAddress email) {
+        return ofIdentity(email);
+    }
 }

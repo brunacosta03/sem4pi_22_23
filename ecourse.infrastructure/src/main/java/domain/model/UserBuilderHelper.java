@@ -1,7 +1,6 @@
-package org.user.management;
+package domain.model;
 
 import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
-import eapli.framework.infrastructure.authz.domain.model.SystemUserBuilder;
 import eapli.framework.util.Utility;
 
 @Utility
@@ -12,8 +11,8 @@ public final class UserBuilderHelper {
     /**
      * @return SystemUserBuilder
      */
-    public static SystemUserBuilder builder() {
-        return new SystemUserBuilder(new ECoursePasswordPolicy(),
+    public static UserBuilder builder() {
+        return new UserBuilder(new ECoursePasswordPolicy(),
                 new PlainTextEncoder());
     }
 }

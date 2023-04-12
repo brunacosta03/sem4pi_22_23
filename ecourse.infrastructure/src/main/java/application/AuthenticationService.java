@@ -1,17 +1,21 @@
 package application;
 
-import domain.model.FullName;
+import domain.model.Password;
 import domain.model.User;
 import domain.model.UserSession;
 import domain.repositories.UserRepository;
+import eapli.framework.general.domain.model.EmailAddress;
 import eapli.framework.infrastructure.authz.application.PasswordPolicy;
-import eapli.framework.infrastructure.authz.domain.model.Password;
 import eapli.framework.infrastructure.authz.domain.model.Role;
+import eapli.framework.infrastructure.authz.domain.model.SystemUser;
 import eapli.framework.validations.Preconditions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+@Component
 public class AuthenticationService {
     /**
      * Repository for User entity.
@@ -39,11 +43,12 @@ public class AuthenticationService {
      * @param policyp PasswordPolicy instance for validating passwords.
      * @param encoderp PasswordEncoder encoding and decoding passwords.
      */
+    @Autowired
     public AuthenticationService(final UserRepository repop,
                                  final AuthorizationService authServicep,
                                  final PasswordPolicy policyp,
                                  final PasswordEncoder encoderp) {
-        Preconditions.noneNull(repo, authorizationService, encoder);
+        Preconditions.noneNull(repop, authServicep, encoderp);
         this.repo = repop;
         this.authorizationService = authServicep;
         this.policy = policyp;
@@ -54,25 +59,27 @@ public class AuthenticationService {
     /**
      * Authenticates a user.
      *
-     * @param username Username of the user to be authenticated.
+     * @param emailString Username of the user to be authenticated.
      * @param rawPassword Raw password of the user to be authenticated.
      * @param requiredRoles Optional required roles for the authenticated user.
      * @return UserSession if authentication is successful, else empty Optional.
      */
-    public Optional<UserSession> authenticate(final String username,
+    public Optional<UserSession> authenticate(final String emailString,
                                               final String rawPassword,
                                               final Role... requiredRoles) {
-        Preconditions.nonEmpty(username, "A username must be provided");
+        Preconditions.nonEmpty(emailString, "A email must be provided");
         Preconditions.nonEmpty(rawPassword, "A password must be provided");
 
-        final User newSession = retrieveUser(username)
-                .filter(u -> /* u.passwordMatches(rawPassword, encoder)
-                             && u.isActive()
-                             && */ (noRolesToValidate(requiredRoles)
+        final User user = retrieveUser(emailString)
+                .filter(u -> u.passwordMatches(rawPassword, encoder)
+                        && u.isActive()
+                        && (noRolesToValidate(requiredRoles)
                         || u.hasAnyOf(requiredRoles)))
                 .orElse(null);
 
-        return authorizationService.createSessionForUser(newSession);
+        System.out.println();
+
+        return authorizationService.createUserSession(user);
     }
 
 
@@ -90,11 +97,11 @@ public class AuthenticationService {
 
     /**
      * Retrieves a User entity from the UserRepository by username.
-     * @param username Username of the user to be retrieved.
+     * @param email Username of the user to be retrieved.
      * @return Optional User entity if found, else empty Optional.
      */
-    private Optional<User> retrieveUser(final String username) {
-        return repo.ofIdentity((Comparable) FullName.valueOf(username));
+    private Optional<User> retrieveUser(final String email) {
+        return repo.ofIdentity(EmailAddress.valueOf(email));
     }
 
     /**

@@ -1,18 +1,18 @@
 package org.bootstrappers;
 
+import application.AuthenticationService;
+import application.AuthorizationService;
+import application.AuthzRegistry;
+import domain.model.User;
+import domain.model.UserBuilder;
+import domain.repositories.UserRepository;
 import eapli.framework.actions.Action;
 import eapli.framework.domain.repositories.ConcurrencyException;
 import eapli.framework.domain.repositories.IntegrityViolationException;
-import eapli.framework.infrastructure.authz.application.AuthenticationService;
-import eapli.framework.infrastructure.authz.application.AuthorizationService;
-import eapli.framework.infrastructure.authz.application.AuthzRegistry;
-import eapli.framework.infrastructure.authz.domain.model.SystemUser;
-import eapli.framework.infrastructure.authz.domain.model.SystemUserBuilder;
-import eapli.framework.infrastructure.authz.domain.repositories.UserRepository;
 import eapli.framework.validations.Invariants;
 import org.bootstrappers.demo.UsersBootstrapper;
 import org.user.management.CourseRoles;
-import org.user.management.UserBuilderHelper;
+import domain.model.UserBuilderHelper;
 import persistence.PersistenceContext;
 
 public class ECourseBootstrapper implements Action {
@@ -28,10 +28,22 @@ public class ECourseBootstrapper implements Action {
      * The authentication service for managing user authentication.
      */
     private final AuthenticationService authenticationService = AuthzRegistry.authenticationService();
+
     /**
-     * The username for the manager user used during bootstrapping.
+     * The short name for the manager user used during bootstrapping.
      */
-    private static final String MANAGERBOOTSTRAP_USERNAME = "managerbootstrap";
+    private static final String MANAGERBOOTSTRAP_SHORT_NAME = "manager";
+
+    /**
+     * The full name for the manager user used during bootstrapping.
+     */
+    private static final String MANAGERBOOTSTRAP_FULL_NAME = "manager bootstrap";
+
+    /**
+     * The password for the manager user used during bootstrapping.
+     */
+    private static final String MANAGERBOOTSTRAP_EMAIL = "managerbootstrap@email.com";
+
     /**
      * The password for the manager user used during bootstrapping.
      */
@@ -61,18 +73,20 @@ public class ECourseBootstrapper implements Action {
      */
     public static boolean registerManagerUser(
                             final UserRepository userRepository) {
-        final SystemUserBuilder userBuilder = UserBuilderHelper.builder();
+        final UserBuilder userBuilder = UserBuilderHelper.builder();
 
         userBuilder
-                .withUsername(MANAGERBOOTSTRAP_USERNAME)
+                .withShortName(MANAGERBOOTSTRAP_SHORT_NAME)
+                .withFullName(MANAGERBOOTSTRAP_FULL_NAME)
                 .withPassword(MANAGERBOOTSTRAP_PASSWORD)
-                .withName("manager", "bootstrap")
-                .withEmail("managerbootstrap@email.com")
-                .withRoles(CourseRoles.MANAGER);
-        final SystemUser newUser = userBuilder.build();
+                .withEmail(MANAGERBOOTSTRAP_EMAIL)
+                .withRole(CourseRoles.MANAGER)
+                .withTaxPayerNumber("999999999")
+                .withBirthDate("16/11/2002");
+        final User newUser = userBuilder.build();
 
         try {
-            final SystemUser managerUser = userRepository.save(newUser);
+            final User managerUser = userRepository.save(newUser);
             assert managerUser != null;
             return true;
         } catch (ConcurrencyException | IntegrityViolationException e) {
@@ -84,7 +98,7 @@ public class ECourseBootstrapper implements Action {
      * Authenticates the manager user.
      */
     protected void authenticateForBootstrapping() {
-        authenticationService.authenticate(MANAGERBOOTSTRAP_USERNAME,
+        authenticationService.authenticate(MANAGERBOOTSTRAP_EMAIL,
                 MANAGERBOOTSTRAP_PASSWORD);
         Invariants.ensure(authz.hasSession());
     }

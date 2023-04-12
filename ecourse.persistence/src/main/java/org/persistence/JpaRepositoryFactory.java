@@ -1,10 +1,10 @@
 package org.persistence;
 
+import domain.repositories.UserRepository;
 import eapli.framework.domain.repositories.TransactionalContext;
-import eapli.framework.infrastructure.authz.domain.repositories.UserRepository;
-import eapli.framework.infrastructure.authz.repositories.impl.jpa.JpaAutoTxUserRepository;
 import eapli.framework.infrastructure.repositories.impl.jpa.JpaAutoTxRepository;
 import org.ecourse.Application;
+import persistence.JpaAutoTxUserRepository;
 import persistence.RepositoryFactory;
 
 /**

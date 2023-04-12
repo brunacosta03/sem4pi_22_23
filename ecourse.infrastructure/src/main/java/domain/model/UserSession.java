@@ -5,7 +5,7 @@ import eapli.framework.validations.Preconditions;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class UserSession {
+public class UserSession  {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -48,5 +48,9 @@ public class UserSession {
      */
     public User user() {
         return authenticatedUser;
+    }
+
+    public User authenticatedUser() {
+        return this.authenticatedUser;
     }
 }

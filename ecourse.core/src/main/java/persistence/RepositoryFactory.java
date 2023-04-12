@@ -1,7 +1,7 @@
 package persistence;
 
+import domain.repositories.UserRepository;
 import eapli.framework.domain.repositories.TransactionalContext;
-import eapli.framework.infrastructure.authz.domain.repositories.UserRepository;
 
 public interface RepositoryFactory {
     /**
@@ -14,5 +14,5 @@ public interface RepositoryFactory {
      * For configure persistence context.
      * @return UserRepository
      */
-    UserRepository users();
+     UserRepository users();
 }

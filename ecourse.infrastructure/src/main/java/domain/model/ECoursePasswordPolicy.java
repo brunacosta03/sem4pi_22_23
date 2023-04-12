@@ -1,4 +1,4 @@
-package org.user.management;
+package domain.model;
 
 import eapli.framework.infrastructure.authz.application.PasswordPolicy;
 import eapli.framework.strings.util.StringPredicates;

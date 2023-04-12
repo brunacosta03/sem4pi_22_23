@@ -3,11 +3,20 @@ package domain.model;
 import eapli.framework.domain.model.ValueObject;
 import eapli.framework.validations.Preconditions;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class ShortName implements ValueObject {
     /**
      * Short name of Entity.
      */
-    private String value;
+    @Column(name = "shortName")
+    private final String value;
+
+    protected ShortName() {
+        value = null;
+    }
 
     /**
      * Minimum number of characters for a short name.

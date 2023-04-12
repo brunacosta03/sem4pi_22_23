@@ -1,12 +1,9 @@
 package org.bootstrappers;
 
+import domain.model.User;
 import eapli.framework.domain.repositories.ConcurrencyException;
 import eapli.framework.domain.repositories.IntegrityViolationException;
-import eapli.framework.infrastructure.authz.domain.model.Role;
-import eapli.framework.infrastructure.authz.domain.model.SystemUser;
-import org.user.management.AddUserController;
-
-import java.util.Set;
+import org.user.management.controller.AddUserController;
 
 public class UsersBootstrapperBase {
     /**
@@ -23,25 +20,25 @@ public class UsersBootstrapperBase {
 
     /**
      * Register user for boostrap.
-     * @param username
-     * @param pwd
-     * @param firstName
-     * @param lastName
+     * @param shortName
+     * @param password
+     * @param fullName
      * @param email
-     * @param roles
-     * @return SystemUser
+     * @param role
+     * @param birthDate
+     * @return User
      */
-    protected SystemUser registerUser(final String username,
-                                      final String pwd,
-                                      final String firstName,
-                                      final String lastName,
-                                      final String email,
-                                      final Set<Role> roles) {
-        SystemUser u = null;
+    protected User registerUser(final String shortName, final String password,
+                                final String fullName, final String email,
+                                final String role, final String birthDate, final String mecNumber,
+                                final String taxPayerNumber, final String acronym) {
+        User u = null;
 
         try {
-            u = userController.addUser(username, pwd, firstName,
-                    lastName, email, roles);
+            u = userController.addUser(shortName, password, fullName,
+                     email, role, birthDate, mecNumber, taxPayerNumber, acronym);
+
+            System.out.println("[+] " + email);
         } catch (final IntegrityViolationException | ConcurrencyException e) {
             System.out.println(e.getMessage());
         }

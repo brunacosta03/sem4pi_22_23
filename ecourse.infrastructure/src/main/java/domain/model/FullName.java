@@ -1,12 +1,22 @@
 package domain.model;
 
+import eapli.framework.domain.model.ValueObject;
 import eapli.framework.validations.Preconditions;
 
-public class FullName {
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
+public class FullName implements ValueObject {
     /**
      * Complete name of entity.
      */
-    private String value;
+    @Column(name = "fullName")
+    private final String value;
+
+    protected FullName() {
+        value = null;
+    }
 
     /**
      * Minimum number of characters for a full name.

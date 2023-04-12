@@ -22,5 +22,10 @@
             <artifactId>ecourse.core</artifactId>
             <version>0.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>ecourse.app.user</artifactId>
+            <version>0.1.0</version>
+        </dependency>
     </dependencies>
 </project>

@@ -1,10 +1,10 @@
 package org.bootstrap;
 
-import eapli.framework.infrastructure.authz.application.AuthzRegistry;
+import application.AuthzRegistry;
 import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
 import org.authz.config.ECourseBaseApplication;
 import org.bootstrappers.ECourseBootstrapper;
-import org.user.management.ECoursePasswordPolicy;
+import domain.model.ECoursePasswordPolicy;
 import persistence.PersistenceContext;
 
 /**
@@ -46,7 +46,7 @@ public final class ECourseBootstrap extends ECourseBaseApplication {
     @Override
     protected void configureAuthz() {
         AuthzRegistry.configure(PersistenceContext.repositories().users(),
-                new ECoursePasswordPolicy(),
-                new PlainTextEncoder());
+                new PlainTextEncoder(),
+                new ECoursePasswordPolicy());
     }
 }

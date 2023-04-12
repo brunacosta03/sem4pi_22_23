@@ -82,8 +82,6 @@ public final class AuthzRegistry {
         authorizationService = new AuthorizationService();
         authenticationService = new AuthenticationService(userRepo,
                 authorizationService, policy, encoder);
-        // userManagementService = new UserManagementService(userRepo,
-        //                      policy, encoder)
-
+        userManagementService = new UserManagementService(userRepo, policy, encoder);
     }
 }

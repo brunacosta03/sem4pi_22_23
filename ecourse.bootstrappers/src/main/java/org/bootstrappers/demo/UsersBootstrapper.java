@@ -1,12 +1,8 @@
 package org.bootstrappers.demo;
 
-import eapli.framework.infrastructure.authz.domain.model.Role;
-import org.bootstrappers.UsersBootstrapperBase;
 import eapli.framework.actions.Action;
+import org.bootstrappers.UsersBootstrapperBase;
 import org.user.management.CourseRoles;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class UsersBootstrapper extends UsersBootstrapperBase implements Action {
     /**
@@ -28,69 +24,69 @@ public class UsersBootstrapper extends UsersBootstrapperBase implements Action {
      */
     @Override
     public boolean execute() {
-        registerManager("manager", PASSWORD_M, "Samuel",
-                "Dias", "manager@email.com");
-        registerTeacher("teacher", PASSWORD_T, "Henrique",
-                "Pinto", "teacher@email.com");
-        registerStudent("student1", PASSWORD_S, "Pedro",
-                "Alves", "student1@email.com");
-        registerStudent("student2", PASSWORD_S, "Bruna",
-                "Costa", "student2@email.com");
+        registerManager("manager", PASSWORD_M, "Samuel Dias",
+                "managerteste123@email.com", "10/07/2000", "111111111");
+        registerTeacher("teacher", PASSWORD_T, "Henrique Pinto",
+                "teacher@email.com", "23/04/2001", "222222222", "HRP");
+        registerStudent("student1", PASSWORD_S, "Pedro Alves",
+                 "student1@email.com", "09/12/1999", "123123123", "333333333");
+        registerStudent("student2", PASSWORD_S, "Bruna Costa",
+                "student2@email.com", "18/01/2001", "889988991", "444444444");
 
         return true;
     }
 
+
     /**
      * Bootstrap to register a Manager.
-     * @param username
+     * @param shortName
      * @param password
-     * @param firstName
-     * @param lastName
+     * @param fullName
      * @param email
+     * @param birthDate
      */
-    private void registerManager(final String username, final String password,
-                                 final String firstName, final String lastName,
-                                 final String email) {
-        final Set<Role> roles = new HashSet<>();
+    private void registerManager(final String shortName, final String password,
+                                 final String fullName, final String email,
+                                 final String birthDate, final String taxPayNumber) {
 
-        roles.add(CourseRoles.MANAGER);
-
-        registerUser(username, password, firstName, lastName, email, roles);
+        registerUser(shortName, password, fullName,
+                email, String.valueOf(CourseRoles.MANAGER),
+                birthDate, null, taxPayNumber, null);
     }
 
     /**
      * Bootstrap to register a Teacher.
-     * @param username
+     * @param shortName
      * @param password
-     * @param firstName
-     * @param lastName
+     * @param fullName
      * @param email
+     * @param birthDate
      */
-    private void registerTeacher(final String username, final String password,
-                                 final String firstName, final String lastName,
-                                 final String email) {
-        final Set<Role> roles = new HashSet<>();
+    private void registerTeacher(final String shortName, final String password,
+                                 final String fullName, final String email,
+                                 final String birthDate, final String taxPayNumber,
+                                 final String acronym) {
 
-        roles.add(CourseRoles.TEACHER);
-
-        registerUser(username, password, firstName, lastName, email, roles);
+        registerUser(shortName, password, fullName,
+                email, String.valueOf(CourseRoles.TEACHER),
+                birthDate, null, taxPayNumber, acronym);
     }
 
     /**
      * Bootstrap to register a Student.
-     * @param username
+     * @param shortName
      * @param password
-     * @param firstName
-     * @param lastName
+     * @param fullName
      * @param email
+     * @param birthDate
      */
-    private void registerStudent(final String username, final String password,
-                                 final String firstName, final String lastName,
-                                 final String email) {
-        final Set<Role> roles = new HashSet<>();
+    private void registerStudent(final String shortName, final String password,
+                                 final String fullName, final String email,
+                                 final String birthDate, final String mecNumber,
+                                 final String taxPayNumber) {
 
-        roles.add(CourseRoles.STUDENT);
-
-        registerUser(username, password, firstName, lastName, email, roles);
+        registerUser(shortName, password, fullName,
+                email, String.valueOf(CourseRoles.STUDENT),
+                birthDate, mecNumber, taxPayNumber, null);
     }
 }
