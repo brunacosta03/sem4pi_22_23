@@ -1,18 +1,11 @@
 package domain.model;
 
-import eapli.framework.infrastructure.authz.domain.model.SystemUser;
 import eapli.framework.validations.Preconditions;
 
-import javax.persistence.Version;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class UserSession {
-    /**
-     * Version to resolve conflicts
-     */
-    @Version
-    private Long version;
 
     private static final long serialVersionUID = 1L;
 
@@ -54,7 +47,7 @@ public class UserSession {
     /**
      * @return user that is authenticated.
      */
-    public User user() {
+    public User authenticatedUser() {
         return authenticatedUser;
     }
 

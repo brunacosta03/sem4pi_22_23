@@ -1,10 +1,9 @@
 package application;
 
-import domain.exceptions.UserUnauthorizedException;
+import domain.exceptions.UnauthorizedException;
 import domain.model.User;
 import domain.model.UserSession;
 import eapli.framework.infrastructure.authz.application.exceptions.UnauthenticatedException;
-import eapli.framework.infrastructure.authz.application.exceptions.UnauthorizedException;
 import eapli.framework.infrastructure.authz.domain.model.Role;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -53,13 +52,13 @@ public class AuthorizationService {
      */
 
     public void ensureUserHasOneOfRoles(Role... roles){
-        final UserSession us = session().orElseThrow(() -> {
+        final UserSession session = session().orElseThrow(() -> {
             LOGGER.info("Unauthenticated access attempt");
             return new UnauthenticatedException();
         });
-        if (!us.user().hasAnyOf(roles)) {
-            LOGGER.info("Unauthorized access attempt by user {}", us.user().identity());
-            throw new UserUnauthorizedException(us.user(), "", roles);
+        if (!session.authenticatedUser().hasAnyOf(roles)) {
+            LOGGER.info("Unauthorized access attempt by user {}", session.authenticatedUser().identity());
+            throw new UnauthorizedException(session.authenticatedUser(), "", roles);
         }
     }
 }

@@ -3,17 +3,15 @@ package domain.model;
 import eapli.framework.domain.model.ValueObject;
 import eapli.framework.validations.Preconditions;
 
-import javax.persistence.Version;
+import javax.persistence.Column;
+import java.io.Serializable;
 
-public class ShortName implements ValueObject {
-    /**
-     * Version to resolve conflicts
-     */
-    @Version
-    private Long version;
+public class ShortName implements ValueObject, Serializable {
+
     /**
      * Short name of Entity.
      */
+    @Column(name = "SHORT_NAME", nullable = false)
     private String value;
 
     /**
@@ -30,11 +28,16 @@ public class ShortName implements ValueObject {
      * @param valuep The value of the short name.
      * @return ShortName instance.
      */
-    public static ShortName valueOf(final String valuep) {
+    public static ShortName of(final String valuep) {
+        Preconditions.nonNull(valuep, "Short Name can't be null.");
         Preconditions.nonEmpty(valuep, "Short Name can't be empty.");
         Preconditions.ensure(valuep.length() > MIN_NUMBER_OF_CHARACTERS,
                     "Short name must have "
                         + MIN_NUMBER_OF_CHARACTERS + " characters or more");
         return new ShortName(valuep);
+    }
+
+    String value() {
+        return this.value;
     }
 }

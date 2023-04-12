@@ -54,22 +54,24 @@ public class AuthenticationService {
     /**
      * Authenticates a user.
      *
-     * @param emailString Username of the user to be authenticated.
+     * @param email Username of the user to be authenticated.
      * @param rawPassword Raw password of the user to be authenticated.
      * @param requiredRoles Optional required roles for the authenticated user.
      * @return UserSession if authentication is successful, else empty Optional.
      */
-    public Optional<UserSession> authenticate(final String emailString,
+    public Optional<UserSession> authenticate(final String email,
                                               final String rawPassword,
                                               final Role... requiredRoles) {
-        Preconditions.nonEmpty(emailString, "A email must be provided");
+        Preconditions.nonEmpty(email, "A email must be provided");
         Preconditions.nonEmpty(rawPassword, "A password must be provided");
 
-        final User user = retrieveUser(EmailAddress.valueOf(emailString))
-                .filter(u -> u.passwordMatches(rawPassword, encoder)
-                             && u.isActive()
-                             && (noRolesToValidate(requiredRoles)
-                        || u.hasAnyOf(requiredRoles)))
+        final User user = retrieveUser(email)
+                .filter(u -> u.passwordMatches(rawPassword, encoder) &&
+                        (
+                                noRolesToValidate(requiredRoles) ||
+                                u.hasAnyOf(requiredRoles)
+                        ) &&
+                        u.isActive())
                 .orElse(null);
 
         return authorizationService.createUserSession(user);
@@ -90,10 +92,11 @@ public class AuthenticationService {
 
     /**
      * Retrieves a User entity from the UserRepository by username.
-     * @param email Username of the user to be retrieved.
+     * @param emailString of the user to be retrieved.
      * @return Optional User entity if found, else empty Optional.
      */
-    private Optional<User> retrieveUser(final EmailAddress email) {
+    private Optional<User> retrieveUser(final String emailString) {
+        EmailAddress email = EmailAddress.valueOf(emailString);
         return repo.ofIdentity(email);
     }
 
@@ -121,7 +124,7 @@ public class AuthenticationService {
     public boolean changePassword(final String oldPassword,
                                  final String newPassword) {
         return authorizationService.session()
-                .map(user -> changePassword(user.user(), oldPassword, newPassword))
+                .map(user -> changePassword(user.authenticatedUser(), oldPassword, newPassword))
                 .map(u -> true)
                 .orElse(false);
     }

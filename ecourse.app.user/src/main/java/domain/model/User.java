@@ -4,10 +4,20 @@ import eapli.framework.general.domain.model.EmailAddress;
 import eapli.framework.infrastructure.authz.domain.model.Role;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.persistence.Version;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
+@Entity
+@Table(name = "USER", uniqueConstraints = {
+        @UniqueConstraint(
+                name = "MECANOGRAPHIC_NUMBER_UNIQUE",
+                columnNames = {
+                "YEAR_OF_ENROLLMENT",
+                        "MECANOGRAPHIC_NUMBER_VALUE"
+                }
+        )
+})
 public class User {
     /**
      * Version to resolve conflicts
@@ -29,6 +39,7 @@ public class User {
     /**
      * Email of user.
      */
+    @EmbeddedId
     private EmailAddress email;
     /**
      * Role of user.
@@ -52,11 +63,13 @@ public class User {
     /**
      * Date when user got created in app.
      */
+    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdOn;
 
     /**
      * Date when user got deactivated in app.
      */
+    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime deactivatedOn;
 
     protected User() {

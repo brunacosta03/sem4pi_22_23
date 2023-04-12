@@ -1,17 +1,15 @@
 package domain.exceptions;
 
 import domain.model.User;
-import eapli.framework.infrastructure.authz.application.exceptions.UnauthenticatedException;
 import eapli.framework.infrastructure.authz.domain.model.Role;
-import eapli.framework.infrastructure.authz.domain.model.SystemUser;
 
-public class UserUnauthorizedException extends RuntimeException {
+public class UnauthorizedException extends RuntimeException {
 
     private final User user;
     private final Role[] roles;
 
 
-    public UserUnauthorizedException(final User user, final String message, final Role... roles) {
+    public UnauthorizedException(final User user, final String message, final Role... roles) {
         super(buildMessage(message, user, roles));
         this.roles = roles;
         this.user = user;
