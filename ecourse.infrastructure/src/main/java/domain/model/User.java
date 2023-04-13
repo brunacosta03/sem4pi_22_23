@@ -243,4 +243,8 @@ public class User implements AggregateRoot<EmailAddress>, DTOable<GeneralDTO>, V
     public void accept(Visitor<GeneralDTO> visitor) {
         visitor.visit(toDTO());
     }
+
+    public String role() {
+        return role.toString();
+    }
 }
