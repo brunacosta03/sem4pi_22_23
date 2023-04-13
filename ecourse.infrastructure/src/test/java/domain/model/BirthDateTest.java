@@ -1,6 +1,5 @@
 package domain.model;
 
-import domain.model.BirthDate;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;

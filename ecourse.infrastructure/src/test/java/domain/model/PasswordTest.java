@@ -73,7 +73,7 @@ class PasswordTest {
         assertFalse(pass.equals(pass2));
 
         pass = Password.encodedAndValid("1234567X", policy, encoder).get();
-        Object any = new String("1234567X");
+        Object any = "1234567X";
 
         assertFalse(pass.equals(any));
     }

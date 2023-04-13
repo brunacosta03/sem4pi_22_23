@@ -2,15 +2,11 @@ package domain.model;
 
 import eapli.framework.domain.model.ValueObject;
 import eapli.framework.validations.Preconditions;
-import org.apache.commons.lang.time.FastDateFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 @Embeddable
 public final class BirthDate implements ValueObject {

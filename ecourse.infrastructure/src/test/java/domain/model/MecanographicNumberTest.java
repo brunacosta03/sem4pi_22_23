@@ -1,6 +1,5 @@
 package domain.model;
 
-import domain.model.MecanographicNumber;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
