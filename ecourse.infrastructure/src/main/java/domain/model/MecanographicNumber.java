@@ -5,6 +5,7 @@ import eapli.framework.validations.Preconditions;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -13,9 +14,9 @@ public class MecanographicNumber implements ValueObject, Comparable<Mecanographi
     @Column(name = "number_mec", unique = true)
     private String number;
 
-    @Column(name = "year_of_enrollment")
+    @Transient
     private Integer year;
-    @Column(name = "value_of_enrollment")
+    @Transient
     private Integer value;
 
     protected MecanographicNumber(final String mecanographicNumber) {
