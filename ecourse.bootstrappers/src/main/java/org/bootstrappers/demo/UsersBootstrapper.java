@@ -29,9 +29,9 @@ public class UsersBootstrapper extends UsersBootstrapperBase implements Action {
         registerTeacher("teacher", PASSWORD_T, "Henrique Pinto",
                 "teacher@email.com", "23/04/2001", "222222222", "HRP");
         registerStudent("student1", PASSWORD_S, "Pedro Alves",
-                 "student1@email.com", "09/12/1999", "123123123", "333333333");
+                 "student1@email.com", "09/12/1999", "202300001", "333333333");
         registerStudent("student2", PASSWORD_S, "Bruna Costa",
-                "student2@email.com", "18/01/2001", "889988991", "444444444");
+                "student2@email.com", "18/01/2001", "202300002", "444444444");
 
         return true;
     }

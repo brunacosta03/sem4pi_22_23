@@ -156,7 +156,8 @@ public class UserBuilder implements DomainFactory<User> {
     }
 
     public UserBuilder withMecanographicNumber(final String numberMecp) {
-        this.numberMec = MecanographicNumber.of(numberMecp);
+        if(numberMecp != null)
+            this.numberMec = MecanographicNumber.of(numberMecp);
         return this;
     }
 
@@ -171,7 +172,9 @@ public class UserBuilder implements DomainFactory<User> {
     }
 
     public UserBuilder withBirthDate(final String birthDatep) {
-        this.birthDate = BirthDate.of(birthDatep);
+        if(birthDatep != null)
+            this.birthDate = BirthDate.of(birthDatep);
+
         return this;
     }
 
@@ -181,7 +184,9 @@ public class UserBuilder implements DomainFactory<User> {
     }
 
     public UserBuilder withTaxPayerNumber(final String taxPayerNumberp) {
-        this.taxPayerNumber = TaxPayerNumber.of(taxPayerNumberp);
+        if(taxPayerNumberp != null)
+            this.taxPayerNumber = TaxPayerNumber.of(taxPayerNumberp);
+
         return this;
     }
 
@@ -191,7 +196,9 @@ public class UserBuilder implements DomainFactory<User> {
     }
 
     public UserBuilder withAcronym(final String acronymp) {
-        this.acronym = Acronym.of(acronymp);
+        if(acronymp != null)
+            this.acronym = Acronym.of(acronymp);
+
         return this;
     }
 

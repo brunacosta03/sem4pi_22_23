@@ -6,4 +6,4 @@ export ECAFETERIA_CP=ecourse.app.bootstrap/target/ecourse.app.bootstrap-0.1.0.ja
 
 
 #REM call the java VM, e.g,
-java -cp $ECAFETERIA_CP org.bootstrap.Main
+java -cp $ECAFETERIA_CP org.bootstrap.ECourseBootstrap
