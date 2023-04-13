@@ -23,8 +23,11 @@
       <property name="hibernate.c3p0.max_statements" value="50" />
       <property name="hibernate.c3p0.idle_test_period" value="120" />
 
-      <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
-      <property name="hibernate.hbm2ddl.auto" value="create" />
+      <!--<property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>-->
+
+      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+      <property name="hibernate.hbm2ddl.auto" value="update"/>
+      <!--<property name="hibernate.hbm2ddl.auto" value="create"/>-->
 
     </properties>
 
