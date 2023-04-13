@@ -2,6 +2,7 @@
 
 | **_TEA_** (EN)                    | **_TEA_** (PT)                         | **_Description_** (EN)                                                                                                |                                       
 |:----------------------------------|:---------------------------------------|:----------------------------------------------------------------------------------------------------------------------|
+| **Access Level**                  | **Permissões de acesso**               | Describes what can the user do with a certain board (read or write)                                                   |
 | **Acronym**                       | **Acrónimo**                           | A word formed from the initial letters of other words                                                                 |
 | **Administrator/Manager**         | **Administrador/Gestor**               | Manages everything within the system                                                                                  |
 | **AJAX**                          | **AJAX**                               | Set of web development techniques                                                                                     |
@@ -26,7 +27,7 @@
 | **Course Limit**                  | **Limite do Curso**                    | Maximum and minimum number of students that can be enrolled in a course                                               |
 | **Course State**                  | **Estado do Curso**                    | Defines the current state of the course (open, closed, enroll, in progress)                                           |
 | **eCourse**                       | **eCourse**                            | New remote learning platform                                                                                          |
-| **Email**                         | **Email**                              | User's email address used to log in the Application                                                                   |
+| **Email Address**                 | **Endereço de Email**                  | User's email address used to log in the Application                                                                   |
 | **Enrollment Application**        | **Candidatura de Matrícula**           | Application to enroll in a course                                                                                     |
 | **Exam**                          | **Exame**                              | Set of questions with various types that, in this context, is automatically graded                                    |
 | **Exam Answer**                   | **Resposta do Exame**                  | A student's answer to a question                                                                                      |
@@ -41,6 +42,7 @@
 | **Extra Class**                   | **Aula Extra**                         | A class which is not part of the course's workflow (not a recurring class)                                            |
 | **Feedback Type**                 | **Tipo de Feedback**                   | Defines how the feedback is delivered (none, on submission, after closing)                                            |
 | **Functional Requirement**        | **Requisito Funcional**                | Product functions developed to enable users to accomplish tasks                                                       |
+| **Full Name**                     | **Nome completo**                      | Complete name of the user in question                                                                                 |               
 | **GitHub**                        | **GitHub**                             | Platform used to save code and documents with version Control of this project                                         |
 | **Grade**                         | **Nota**                               | Automatically generated value of the student's exam                                                                   |
 | **Grade Type**                    | **Tipo de Nota**                       | Defines how the grade is delivered (none, on submission, after closing)                                               |
@@ -70,6 +72,7 @@
 | **Post-it State**                 | **Estado do Post-it**                  | The state of a post-it (deleted/active)                                                                               |
 | **Post-it Time Stamp**            | **Timestamp do Post-it**               | The time when a post-it was created or modified                                                                       |
 | **RDB**                           | **RDB**                                | Acronym for Relational Database                                                                                       |
+| **Response**                      | **Resposta**                           | Refers to the answer of a given invite                                                                                |
 | **Role**                          | **Função**                             | A set of User types                                                                                                   |
 | **Section**                       | **Secção**                             | A part of the exam which contains a description, title and the exam's questions                                       |
 | **Section Description**           | **Descrição da Secção**                | A description of the exam's section                                                                                   |
@@ -79,6 +82,7 @@
 | **Sequence of Sections**          | **Sequência de Secções**               | One or more section of questions within the exame                                                                     |
 | **Shared Board**                  | **Quadro partilhado**                  | Digital implementation of a post-it board                                                                             |
 | **Short Answer Question**         | **Questão de Resposta Curta**          | A question that has a set of options and a single answer to be written                                                |
+| **Short Name**                    | **Alcunha**                            | Short name for the user to be easily called                                                                           |
 | **Student**                       | **Estudante**                          | Enrolls in classes and takes exams                                                                                    |
 | **Tax Payer Number**              | **Número de Contribuinte**             | User's unique identifier                                                                                              |
 | **Teacher**                       | **Professor**                          | Teaches and schedules the classes enrolled to and creates exam                                                        |
