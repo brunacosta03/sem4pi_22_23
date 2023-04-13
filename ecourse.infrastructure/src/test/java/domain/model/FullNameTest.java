@@ -1,5 +1,6 @@
 package domain.model;
 
+import domain.model.FullName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

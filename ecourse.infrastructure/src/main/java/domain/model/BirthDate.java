@@ -1,11 +1,15 @@
 package domain.model;
 
 import eapli.framework.domain.model.ValueObject;
+import eapli.framework.validations.Preconditions;
+import org.apache.commons.lang.time.FastDateFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @Embeddable
@@ -13,27 +17,38 @@ public final class BirthDate implements ValueObject {
     /**
      * Date when someone born.
      */
-    @Column(name = "birthDate")
-    private Date value;
+    @Column(name = "birth_date")
+    private LocalDate value;
 
     protected BirthDate() {
         value = null;
     }
-    private BirthDate(final Date valuep) {
+    private BirthDate(final LocalDate valuep) {
         this.value = valuep;
     }
 
     private BirthDate(final String valuep) {
-        try {
-            Date date = new SimpleDateFormat("dd/MM/yyyy").parse(valuep);
-            this.value = date;
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate date = LocalDate.parse(valuep, formatter);
+        Preconditions.ensure(
+                date.isBefore(LocalDate.now()),
+                "Birthdate cannot be in the future"
+        );
+        Preconditions.ensure(
+                date.isAfter(LocalDate.now().minusYears(120)),
+                "Birthdate cannot be more than 120 years ago"
+        );
+
+
+        this.value = date;
     }
 
 
-    public static BirthDate valueOf(final String date) {
+    public static BirthDate of(final String date) {
         return new BirthDate(date);
+    }
+
+    public LocalDate value() {
+        return this.value;
     }
 }

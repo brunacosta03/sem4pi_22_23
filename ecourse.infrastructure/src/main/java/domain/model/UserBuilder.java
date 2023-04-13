@@ -105,7 +105,7 @@ public class UserBuilder implements DomainFactory<User> {
     }
 
     public UserBuilder withShortName(final String shortNamep) {
-        this.shortName = ShortName.valueOf(shortNamep);
+        this.shortName = ShortName.of(shortNamep);
         return this;
     }
 
@@ -127,7 +127,7 @@ public class UserBuilder implements DomainFactory<User> {
     }
 
     public UserBuilder withFullName(final String fullName) {
-        this.fullName = FullName.valueOf(fullName);
+        this.fullName = FullName.of(fullName);
         return this;
     }
 
@@ -156,7 +156,7 @@ public class UserBuilder implements DomainFactory<User> {
     }
 
     public UserBuilder withMecanographicNumber(final String numberMecp) {
-        this.numberMec = MecanographicNumber.valueOf(numberMecp);
+        this.numberMec = MecanographicNumber.of(numberMecp);
         return this;
     }
 
@@ -171,7 +171,7 @@ public class UserBuilder implements DomainFactory<User> {
     }
 
     public UserBuilder withBirthDate(final String birthDatep) {
-        this.birthDate = BirthDate.valueOf(birthDatep);
+        this.birthDate = BirthDate.of(birthDatep);
         return this;
     }
 
@@ -181,7 +181,7 @@ public class UserBuilder implements DomainFactory<User> {
     }
 
     public UserBuilder withTaxPayerNumber(final String taxPayerNumberp) {
-        this.taxPayerNumber = TaxPayerNumber.valueOf(taxPayerNumberp);
+        this.taxPayerNumber = TaxPayerNumber.of(taxPayerNumberp);
         return this;
     }
 
@@ -191,7 +191,7 @@ public class UserBuilder implements DomainFactory<User> {
     }
 
     public UserBuilder withAcronym(final String acronymp) {
-        this.acronym = Acronym.valueOf(acronymp);
+        this.acronym = Acronym.of(acronymp);
         return this;
     }
 

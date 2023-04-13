@@ -5,7 +5,7 @@ import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.user.management.ECoursePasswordPolicy;
+
 
 import java.util.Optional;
 

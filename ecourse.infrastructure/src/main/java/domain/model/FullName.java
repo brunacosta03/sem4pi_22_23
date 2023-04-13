@@ -11,7 +11,7 @@ public class FullName implements ValueObject {
     /**
      * Complete name of entity.
      */
-    @Column(name = "fullName")
+    @Column(name = "full_name")
     private final String value;
 
     protected FullName() {
@@ -38,7 +38,7 @@ public class FullName implements ValueObject {
      * @param valuep The value of the full name.
      * @return FullName instance.
      */
-    public static FullName valueOf(final String valuep) {
+    public static FullName of(final String valuep) {
         Preconditions.nonEmpty(valuep, "Full Name can't be empty.");
         Preconditions.ensure(valuep.length() > MIN_NUMBER_OF_CHARACTERS,
                     "Full name must have "

@@ -18,6 +18,13 @@ import java.util.Calendar;
 @Entity
 @Table(name = "T_COURSEUSER")
 public class User implements AggregateRoot<EmailAddress>, DTOable<GeneralDTO>, Visitable<GeneralDTO>, Serializable {
+
+    private static final long serialVersionUID = 1L;
+    /**
+     * Version of user.
+     */
+    @Version
+    private Long version;
     /**
      * Short name of user.
      */

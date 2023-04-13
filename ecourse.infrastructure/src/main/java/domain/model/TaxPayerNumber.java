@@ -11,7 +11,7 @@ public class TaxPayerNumber implements ValueObject {
     /**
      * Short name of Entity.
      */
-    @Column(name = "taxPayerNumber")
+    @Column(name = "tax_payer_number")
     private final String value;
 
     protected TaxPayerNumber() {
@@ -32,11 +32,17 @@ public class TaxPayerNumber implements ValueObject {
      * @param valuep The value of the short name.
      * @return ShortName instance.
      */
-    public static TaxPayerNumber valueOf(final String valuep) {
+    public static TaxPayerNumber of(final String valuep) {
+        String REGEX_PT = "[0-9]{9}";
         Preconditions.nonEmpty(valuep, "Tax payer number can't be empty.");
-        Preconditions.ensure(valuep.length() >= MIN_NUMBER_OF_CHARACTERS,
-                    "Tax payer number must have "
-                        + MIN_NUMBER_OF_CHARACTERS + " characters or more");
+        Preconditions.ensure(
+                valuep.matches(REGEX_PT),
+                "Tax payer number must follow portuguese format."
+        );
         return new TaxPayerNumber(valuep);
+    }
+
+    String value() {
+        return this.value;
     }
 }

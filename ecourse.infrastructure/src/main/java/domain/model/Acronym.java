@@ -1,7 +1,6 @@
 package domain.model;
 
 import eapli.framework.domain.model.ValueObject;
-import eapli.framework.validations.Preconditions;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -28,7 +27,7 @@ public class Acronym implements ValueObject {
      * @param valuep The value of the short name.
      * @return ShortName instance.
      */
-    public static Acronym valueOf(final String valuep) {
+    public static Acronym of(final String valuep) {
         return new Acronym(valuep);
     }
 }

@@ -1,5 +1,6 @@
 package domain.model;
 
+import domain.model.MecanographicNumber;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -68,7 +69,10 @@ class MecanographicNumberTest {
     void ensureStringIsBuildingCorrectly() {
         MecanographicNumber m = MecanographicNumber.of(1);
         String expected = LocalDate.now().getYear() + "00001";
+        assertEquals(expected, m.value());
 
+        m = MecanographicNumber.of("201900001");
+        expected = "201900001";
         assertEquals(expected, m.value());
     }
 

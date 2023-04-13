@@ -1,12 +1,16 @@
 package domain.model;
 
+import domain.model.BirthDate;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class BirthDateTest {
+
+    final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @Test
     void ensureBirthDateIsNotInTheFuture() {
@@ -15,7 +19,7 @@ class BirthDateTest {
                 () -> BirthDate.of(
                         LocalDate.
                                 now().
-                                plusDays(1)
+                                plusDays(1).format(formatter)
                 )
         );
 
@@ -29,7 +33,7 @@ class BirthDateTest {
                 () -> BirthDate.of(
                         LocalDate.
                                 now().
-                                minusYears(121)
+                                minusYears(121).format(formatter)
                 )
         );
 
@@ -40,7 +44,7 @@ class BirthDateTest {
     void ensureBirthDateCanBeCreatedWhenValueIsInThePast() {
         LocalDate expected = LocalDate.now().minusYears(16);
         BirthDate date = BirthDate.of(
-                LocalDate.now().minusYears(16)
+                LocalDate.now().minusYears(16).format(formatter)
         );
         assertEquals(expected, date.value());
     }

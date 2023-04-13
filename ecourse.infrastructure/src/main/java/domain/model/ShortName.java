@@ -11,7 +11,7 @@ public class ShortName implements ValueObject {
     /**
      * Short name of Entity.
      */
-    @Column(name = "shortName")
+    @Column(name = "short_name")
     private final String value;
 
     protected ShortName() {
@@ -32,7 +32,7 @@ public class ShortName implements ValueObject {
      * @param valuep The value of the short name.
      * @return ShortName instance.
      */
-    public static ShortName valueOf(final String valuep) {
+    public static ShortName of(final String valuep) {
         Preconditions.nonNull(valuep, "Short Name can't be null.");
         Preconditions.nonEmpty(valuep, "Short Name can't be empty.");
         Preconditions.ensure(valuep.length() > MIN_NUMBER_OF_CHARACTERS,
