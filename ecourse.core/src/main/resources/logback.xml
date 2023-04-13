@@ -30,9 +30,9 @@
     </appender>
 
     <!-- LOG everything at ERROR level -->
-    <root level="error">
-        <appender-ref ref="STDOUT" />
-    </root>
+<!--    <root level="error">-->
+<!--        <appender-ref ref="STDOUT" />-->
+<!--    </root>-->
 
     <!-- specific LOG level -->
 <!--    <logger name="eapli.framework" level="debug" additivity="false">-->

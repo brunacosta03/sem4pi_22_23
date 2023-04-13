@@ -4,7 +4,6 @@ import application.AuthenticationService;
 import application.AuthorizationService;
 import application.AuthzRegistry;
 import domain.model.UserSession;
-import eapli.framework.infrastructure.authz.domain.model.Role;
 import eapli.framework.presentation.console.AbstractUI;
 import org.user.management.CourseRoles;
 
@@ -12,19 +11,39 @@ import java.util.Optional;
 import java.util.Scanner;
 
 public class LoginUI extends AbstractUI {
+    /**
+     * Get AuthenticationService.
+     */
+    private final AuthenticationService authService = AuthzRegistry
+                                    .authenticationService();
 
-    final AuthenticationService authService = AuthzRegistry.authenticationService();
-    final AuthorizationService authzService = AuthzRegistry.authorizationService();
-    final static Scanner reader = new Scanner(System.in);
+    /**
+     * Get AuthorizationService.
+     */
+    private final AuthorizationService authzService = AuthzRegistry
+                                    .authorizationService();
 
+    /**
+     * Scanner for read lines.
+     */
+    private final Scanner reader = new Scanner(System.in);
+
+    /**
+     * Max attempts to login.
+     */
+    private static final int MAX_TRIES = 3;
+
+    /**
+     * Ask user Email and Password to authenticate.
+     * @return true or false
+     */
     @Override
     protected boolean doShow() {
-        int maxTries = 3;
         int tries = 0;
 
-        while (tries < maxTries) {
+        while (tries < MAX_TRIES) {
 
-            try{
+            try {
                 System.out.print("Email: ");
                 String username = reader.nextLine();
                 System.out.println();
@@ -33,16 +52,21 @@ public class LoginUI extends AbstractUI {
                 String password = reader.nextLine();
                 System.out.println();
 
-                Optional<UserSession> session = authService.authenticate(username, password, CourseRoles.allRoles());
+                Optional<UserSession> session = authService
+                        .authenticate(username, password,
+                                CourseRoles.allRoles());
 
-                if(session.isPresent())
+                if (session.isPresent()) {
                     return true;
+                }
 
                 tries++;
-                System.out.println("Invalid credentials, " + (maxTries - tries) + " tries left");
-            }catch (Exception e) {
+                System.out.println("Invalid credentials, "
+                        + (MAX_TRIES - tries) + " tries left");
+            } catch (Exception e) {
                 tries++;
-                System.out.println(e.getMessage() + ", " + (maxTries - tries) + " tries left");
+                System.out.println(e.getMessage()
+                        + ", " + (MAX_TRIES - tries) + " tries left");
             }
 
         }
@@ -50,11 +74,19 @@ public class LoginUI extends AbstractUI {
         return false;
     }
 
+    /**
+     * Title of UI.
+     * @return String with Title
+     */
     @Override
     public String headline() {
         return "Login";
     }
 
+    /**
+     * Get User role.
+     * @return String with user role
+     */
     public String getLoggedRole() {
         return authzService
                 .session()

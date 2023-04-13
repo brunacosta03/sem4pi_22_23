@@ -41,6 +41,10 @@ public class ShortName implements ValueObject {
         return new ShortName(valuep);
     }
 
+    /**
+     * Return Short Name value in String.
+     * @return String
+     */
     String value() {
         return this.value;
     }

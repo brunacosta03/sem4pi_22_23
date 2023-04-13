@@ -21,8 +21,18 @@ public interface UserRepository extends DomainRepository<EmailAddress, User> {
      */
     User save(User user);
 
+    /**
+     * Get User with Identity (Email Address).
+     * @param id EmailAddress
+     * @return User
+     */
     Optional<User> ofIdentity(EmailAddress id);
 
+    /**
+     * Get User with Email.
+     * @param email
+     * @return User
+     */
     default Optional<User> findByEmail(
             final EmailAddress email) {
         return ofIdentity(email);

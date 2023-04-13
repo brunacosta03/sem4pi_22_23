@@ -1,15 +1,11 @@
 package application;
 
 import domain.model.User;
-import domain.model.UserSession;
+import domain.model.UserBuilder;
 import domain.repositories.UserRepository;
 import eapli.framework.general.domain.model.EmailAddress;
 import eapli.framework.infrastructure.authz.application.PasswordPolicy;
-import eapli.framework.infrastructure.authz.application.exceptions.UnauthenticatedException;
-import eapli.framework.infrastructure.authz.domain.model.Role;
 import eapli.framework.time.util.CurrentTimeCalendars;
-import domain.model.UserBuilder;
-import exception.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,45 +16,64 @@ import java.util.Optional;
 
 @Service
 public class UserManagementService {
+    /**
+     * UserRepository.
+     */
     private final UserRepository userRepository;
+    /**
+     * PasswordEncoder.
+     */
     private final PasswordEncoder encoder;
+    /**
+     * PasswordPolicy with rules.
+     */
     private final PasswordPolicy policy;
 
     /**
      *
      * @param userRepo
-     * @param encoder
-     * @param policy
+     * @param encoderp
+     * @param policyp
      */
     @Autowired
-    public UserManagementService(final UserRepository userRepo, final PasswordPolicy policy,
-                                 final PasswordEncoder encoder) {
+    public UserManagementService(final UserRepository userRepo,
+                                 final PasswordPolicy policyp,
+                                 final PasswordEncoder encoderp) {
         userRepository = userRepo;
-        this.policy = policy;
-        this.encoder = encoder;
+        this.policy = policyp;
+        this.encoder = encoderp;
     }
 
     /**
-     * Registers a new user in the system allowing to specify when the user account
-     * was created.
-     *
+     * Registers a new user in the system allowing to
+     * specify when the user account was created.
      * @param username
      * @param rawPassword
      * @param firstName
      * @param email
      * @param role
+     * @param birthDate
+     * @param mecNumber
+     * @param taxPayerNumber
+     * @param acronym
      * @param createdOn
-     * @return the new user
+     * @return User
      */
-    public User registerNewUser(final String username, final String rawPassword, final String firstName,
-                                final String email, final String role, final String birthDate,
-                                final String mecNumber, final String taxPayerNumber,
-                                final String acronym, final Calendar createdOn) {
+    public User registerNewUser(final String username, final String rawPassword,
+                                final String firstName, final String email,
+                                final String role, final String birthDate,
+                                final String mecNumber,
+                                final String taxPayerNumber,
+                                final String acronym,
+                                final Calendar createdOn) {
 
         final var userBuilder = new UserBuilder(policy, encoder);
 
-        userBuilder.with(username, rawPassword, firstName, email, birthDate, role, taxPayerNumber)
-                .createdOn(createdOn).withMecanographicNumber(mecNumber).withAcronym(acronym);
+        userBuilder.with(username, rawPassword, firstName,
+                        email, birthDate, role, taxPayerNumber)
+                .createdOn(createdOn)
+                .withMecanographicNumber(mecNumber)
+                .withAcronym(acronym);
         final var newUser = userBuilder.build();
 
         return userRepository.save(newUser);
@@ -66,19 +81,26 @@ public class UserManagementService {
 
     /**
      * Registers a new user in the system.
-     *
      * @param username
      * @param rawPassword
      * @param firstName
      * @param email
      * @param role
-     * @return the new user
+     * @param birthDate
+     * @param mecNumber
+     * @param taxPayerNumber
+     * @param acronym
+     * @return User
      */
-    public User registerNewUser(final String username, final String rawPassword, final String firstName,
-                                final String email, final String role, final String birthDate,
-                                final String mecNumber, final String taxPayerNumber, final String acronym) {
+    public User registerNewUser(final String username, final String rawPassword,
+                                final String firstName, final String email,
+                                final String role, final String birthDate,
+                                final String mecNumber,
+                                final String taxPayerNumber,
+                                final String acronym) {
         return registerNewUser(username, rawPassword, firstName, email,
-                role, birthDate, mecNumber, taxPayerNumber, acronym, CurrentTimeCalendars.now());
+                role, birthDate, mecNumber, taxPayerNumber,
+                acronym, CurrentTimeCalendars.now());
     }
 
     /**
@@ -117,7 +139,8 @@ public class UserManagementService {
     }
 
     /**
-     * Deactivates a user. Client code must not reference the input parameter after
+     * Deactivates a user. Client code must not
+     * reference the input parameter after.
      * calling this method and must use the returned object instead.
      *
      * @param user

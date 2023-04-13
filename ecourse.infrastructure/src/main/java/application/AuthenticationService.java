@@ -113,7 +113,7 @@ public class AuthenticationService {
     public Optional<User> changePassword(final User user,
                                          final String oldPassword,
                                          final String newPassword) {
-        if(user.passwordMatches(oldPassword, encoder)){
+        if (user.passwordMatches(oldPassword, encoder)) {
             return Password.encodedAndValid(newPassword, policy, encoder)
                 .map(p -> {
                     user.changePassword(p);

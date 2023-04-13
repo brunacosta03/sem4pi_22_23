@@ -20,16 +20,16 @@ public class AuthorizationService {
      * @return user session, or empty if the session creation failed.
      */
     public Optional<UserSession> createUserSession(final User user) {
-        if(user != null) {
+        if (user != null) {
             this.session = new UserSession(user);
-        }else{
+        } else {
             clearSession();
         }
         return session();
     }
 
     /**
-     * Clear the current session
+     * Clear the current session.
      */
     private void clearSession() {
         this.session = null;
@@ -44,7 +44,7 @@ public class AuthorizationService {
     }
 
     /**
-     * checks if there is an authenticated user session
+     * checks if there is an authenticated user session.
      *
      * @return {@code true} if there is an authenticated user session
      */
@@ -52,13 +52,18 @@ public class AuthorizationService {
         return session != null;
     }
 
+    /**
+     * Check if authenticated user have some role.
+     * @param actions roles that have authorization to do something
+     */
     public void ensureAuthenticatedUserHasAnyOf(final Role... actions) {
         final UserSession us = session().orElseThrow(() -> {
             System.out.println("Unauthenticated access attempt");
             return new UnauthenticatedException();
         });
         if (!us.authenticatedUser().hasAnyOf(actions)) {
-            System.out.println("Unauthorized access attempt by user" + us.authenticatedUser().emailAddress());
+            System.out.println("Unauthorized access attempt by user"
+                    + us.authenticatedUser().emailAddress());
             throw new UnauthorizedException(us.authenticatedUser(), actions);
         }
     }

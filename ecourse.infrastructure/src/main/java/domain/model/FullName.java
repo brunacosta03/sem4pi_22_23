@@ -46,6 +46,10 @@ public class FullName implements ValueObject {
         return new FullName(valuep);
     }
 
+    /**
+     * Get fullName value.
+     * @return String with full name
+     */
     String value() {
         return this.value;
     }

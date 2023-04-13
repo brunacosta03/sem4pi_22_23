@@ -16,6 +16,11 @@ public final class BirthDate implements ValueObject {
     @Column(name = "birth_date")
     private LocalDate value;
 
+    /**
+     * Max years for birthdate.
+     */
+    private static final int MAX_YEARS = 120;
+
     protected BirthDate() {
         value = null;
     }
@@ -31,7 +36,7 @@ public final class BirthDate implements ValueObject {
                 "Birthdate cannot be in the future"
         );
         Preconditions.ensure(
-                date.isAfter(LocalDate.now().minusYears(120)),
+                date.isAfter(LocalDate.now().minusYears(MAX_YEARS)),
                 "Birthdate cannot be more than 120 years ago"
         );
 
@@ -39,11 +44,19 @@ public final class BirthDate implements ValueObject {
         this.value = date;
     }
 
-
+    /**
+     * Transform string in BirthDate object.
+     * @param date birthdate string
+     * @return BirthDate
+     */
     public static BirthDate of(final String date) {
         return new BirthDate(date);
     }
 
+    /**
+     * Get birthdate value.
+     * @return LocalDate
+     */
     public LocalDate value() {
         return this.value;
     }

@@ -18,7 +18,8 @@ public class AddUserController {
     /**
      * Authorization service instance.
      */
-    private final AuthorizationService authz = AuthzRegistry.authorizationService();
+    private final AuthorizationService authz = AuthzRegistry
+                                            .authorizationService();
     /**
      * User management service instance.
      */
@@ -27,41 +28,51 @@ public class AddUserController {
 
     /**
      * Add a new user to the system with the provided details.
-     * @param username  username of the new user.
+     * @param shortName  short name of the new user.
      * @param password  password of the new user.
-     * @param firstName first name of the new user.
+     * @param fullName full name of the new user.
      * @param email     email of the new user.
      * @param role     roles of the new user.
+     * @param birthDate     birthdate of the new user.
+     * @param mecNumber     mec number of the new user.
+     * @param taxPayerNumber     taxPayerNumber of the new user.
+     * @param acronym     acronym of the new user.
      * @param createdOn creation date of the new user.
      * @return SystemUser object.
      */
-    public User addUser(final String username, final String password,
-                        final String firstName, final String email,
+    public User addUser(final String shortName, final String password,
+                        final String fullName, final String email,
                         final String role, final String birthDate,
                         final String mecNumber, final String taxPayerNumber,
                         final String acronym, final Calendar createdOn) {
         authz.ensureAuthenticatedUserHasAnyOf(CourseRoles.MANAGER);
 
-        return userSvc.registerNewUser(username, password, firstName,
-                email, role, birthDate, mecNumber, taxPayerNumber, acronym, createdOn);
+        return userSvc.registerNewUser(shortName, password, fullName,
+                                    email, role, birthDate, mecNumber,
+                                    taxPayerNumber, acronym, createdOn);
     }
 
     /**
      * Add a new user to the system with the provided details.
-     * @param shortName
-     * @param password
-     * @param fullName
-     * @param email
-     * @param role
-     * @param birthDate
+     * @param shortName  short name of the new user.
+     * @param password  password of the new user.
+     * @param fullName full name of the new user.
+     * @param email     email of the new user.
+     * @param role     roles of the new user.
+     * @param birthDate     birthdate of the new user.
+     * @param mecNumber     mec number of the new user.
+     * @param taxPayerNumber     taxPayerNumber of the new user.
+     * @param acronym     acronym of the new user.
      * @return User
      */
     public User addUser(final String shortName, final String password,
                         final String fullName, final String email,
-                        final String role, final String birthDate, final String mecNumber,
+                        final String role, final String birthDate,
+                        final String mecNumber,
                         final String taxPayerNumber, final String acronym) {
 
         return addUser(shortName, password, fullName,
-                email, role, birthDate, mecNumber, taxPayerNumber, acronym, CurrentTimeCalendars.now());
+                        email, role, birthDate, mecNumber,
+                        taxPayerNumber, acronym, CurrentTimeCalendars.now());
     }
 }

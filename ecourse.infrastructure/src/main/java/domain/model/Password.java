@@ -8,16 +8,18 @@ package domain.model;
 import eapli.framework.domain.model.ValueObject;
 import eapli.framework.infrastructure.authz.application.PasswordPolicy;
 import eapli.framework.validations.Preconditions;
-import java.io.Serializable;
-import java.util.Optional;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Version;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
+import java.io.Serializable;
+import java.util.Optional;
 
 @Embeddable
 public final class Password implements ValueObject, Serializable {
+    /**
+     * Password value.
+     */
     @Column(
             name = "password"
     )
@@ -32,11 +34,19 @@ public final class Password implements ValueObject, Serializable {
         this.value = password;
     }
 
-    public static Optional<Password> encodedAndValid(final String rawPassword, final PasswordPolicy policy, final PasswordEncoder encoder) {
+    public static Optional<Password> encodedAndValid(final String rawPassword,
+                                                     final PasswordPolicy policy,
+                                                     final PasswordEncoder encoder) {
         Preconditions.noneNull(new Object[]{rawPassword, policy, encoder});
-        return policy.isSatisfiedBy(rawPassword) ? Optional.of(new Password(encoder.encode(rawPassword))) : Optional.empty();
+        return policy.isSatisfiedBy(rawPassword)
+                ? Optional.of(new Password(encoder.encode(rawPassword)))
+                : Optional.empty();
     }
 
+    /**
+     * Password never return with value.
+     * @return String
+     */
     public String toString() {
         return "************";
     }
@@ -45,13 +55,18 @@ public final class Password implements ValueObject, Serializable {
         return this.value;
     }
 
+    /**
+     * Check if password is equals to another.
+     * @param o password object
+     * @return true or false
+     */
     public boolean equals(final Object o) {
         if (o == this) {
             return true;
         } else if (!(o instanceof Password)) {
             return false;
         } else {
-            Password other = (Password)o;
+            Password other = (Password) o;
             Object this$value = this.value;
             Object other$value = other.value;
             if (this$value == null) {
@@ -66,6 +81,10 @@ public final class Password implements ValueObject, Serializable {
         }
     }
 
+    /**
+     * Hash Code function
+     * @return
+     */
     public int hashCode() {
         boolean PRIME = true;
         int result = 1;

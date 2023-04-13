@@ -19,35 +19,38 @@ public class ECourseBootstrapper implements Action {
     /**
      * The repository for managing user entities.
      */
-    private final UserRepository userRepository = PersistenceContext.repositories().users();
+    private final UserRepository userRepository = PersistenceContext
+                                                .repositories().users();
     /**
      * The authorization service for managing user authorization.
      */
-    private final AuthorizationService authz = AuthzRegistry.authorizationService();
+    private final AuthorizationService authz = AuthzRegistry
+                                                .authorizationService();
     /**
      * The authentication service for managing user authentication.
      */
-    private final AuthenticationService authenticationService = AuthzRegistry.authenticationService();
+    private final AuthenticationService authenticationService = AuthzRegistry
+                                                    .authenticationService();
 
     /**
      * The short name for the manager user used during bootstrapping.
      */
-    private static final String MANAGERBOOTSTRAP_SHORT_NAME = "manager";
+    private static final String M_BOOTSTRAP_SHORT_NAME = "manager";
 
     /**
      * The full name for the manager user used during bootstrapping.
      */
-    private static final String MANAGERBOOTSTRAP_FULL_NAME = "manager bootstrap";
+    private static final String M_BOOTSTRAP_FULL_NAME = "manager bootstrap";
 
     /**
      * The password for the manager user used during bootstrapping.
      */
-    private static final String MANAGERBOOTSTRAP_EMAIL = "managerbootstrap@email.com";
+    private static final String M_BOOTSTRAP_EMAIL = "managerbootstr@email.com";
 
     /**
      * The password for the manager user used during bootstrapping.
      */
-    private static final String MANAGERBOOTSTRAP_PASSWORD = "ManagerPassword1";
+    private static final String M_BOOTSTRAP_PASSWORD = "ManagerPassword1";
 
     /**
      * Executes the bootstrapping action by registering the manager user.
@@ -76,10 +79,10 @@ public class ECourseBootstrapper implements Action {
         final UserBuilder userBuilder = UserBuilderHelper.builder();
 
         userBuilder
-                .withShortName(MANAGERBOOTSTRAP_SHORT_NAME)
-                .withFullName(MANAGERBOOTSTRAP_FULL_NAME)
-                .withPassword(MANAGERBOOTSTRAP_PASSWORD)
-                .withEmail(MANAGERBOOTSTRAP_EMAIL)
+                .withShortName(M_BOOTSTRAP_SHORT_NAME)
+                .withFullName(M_BOOTSTRAP_FULL_NAME)
+                .withPassword(M_BOOTSTRAP_PASSWORD)
+                .withEmail(M_BOOTSTRAP_EMAIL)
                 .withRole(CourseRoles.MANAGER)
                 .withTaxPayerNumber("999999999")
                 .withBirthDate("16/11/2002");
@@ -98,8 +101,8 @@ public class ECourseBootstrapper implements Action {
      * Authenticates the manager user.
      */
     protected void authenticateForBootstrapping() {
-        authenticationService.authenticate(MANAGERBOOTSTRAP_EMAIL,
-                MANAGERBOOTSTRAP_PASSWORD);
+        authenticationService.authenticate(M_BOOTSTRAP_EMAIL,
+                M_BOOTSTRAP_PASSWORD);
         Invariants.ensure(authz.hasSession());
     }
 }

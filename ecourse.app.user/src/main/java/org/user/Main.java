@@ -2,23 +2,23 @@ package org.user;
 
 import application.AuthzRegistry;
 import domain.model.ECoursePasswordPolicy;
-import domain.model.UserSession;
 import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
-import eapli.framework.infrastructure.authz.domain.model.Role;
 import persistence.PersistenceContext;
 import presentation.LoginUI;
 
 public class Main {
 
-
-    static LoginUI login;
+    /**
+     * Initialize LoginUI.
+     */
+    private static LoginUI login;
     /**
      * Start modulo user.
      * @param args
      */
     public static void main(final String[] args) {
 
-        try{
+        try {
 
             System.out.println("Modulo User a correr!");
             AuthzRegistry.configure(
@@ -29,15 +29,16 @@ public class Main {
 
             login = new LoginUI();
 
-            if(login.show()){
+            if (login.show()) {
                 String loggedRole = login.getLoggedRole();
-                System.out.println("Login was successful as a " + loggedRole + "!");
+
+                System.out.println("Login was successful as a "
+                        + loggedRole + "!");
+            } else {
+                System.out.println("Login failed\nToo many tries");
             }
 
-            else
-                System.out.println("Login failed\nToo many tries");
-
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Database is down.");
         }
 

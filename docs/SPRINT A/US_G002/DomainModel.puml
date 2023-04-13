@@ -426,9 +426,6 @@ package BoardAggregate {
     BoardCreateConfig --> BoardMaxCol
 }
 
-card UpdateEventPostIt <<Event>> {
-}
-
     Course --> "1" User : is owned
     Course --> "N" User : has
     Course --> "N" User : teaches
@@ -455,8 +452,6 @@ card UpdateEventPostIt <<Event>> {
     SharedBoard --> "1" User :owner
     PostIt --> "1" SharedBoard :belongs
     BoardCreateConfig <-- SharedBoard
-    UpdateEventPostIt <-- User :interested in
-    UpdateEventPostIt <-- PostIt :notify
 
 
 

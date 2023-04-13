@@ -17,7 +17,10 @@ import java.util.Calendar;
 
 @Entity
 @Table(name = "T_COURSEUSER")
-public class User implements AggregateRoot<EmailAddress>, DTOable<GeneralDTO>, Visitable<GeneralDTO>, Serializable {
+public class User
+        implements AggregateRoot<EmailAddress>, DTOable<GeneralDTO>,
+        Visitable<GeneralDTO>,
+        Serializable {
 
     private static final long serialVersionUID = 1L;
     /**
@@ -85,6 +88,9 @@ public class User implements AggregateRoot<EmailAddress>, DTOable<GeneralDTO>, V
     @Temporal(TemporalType.DATE)
     private Calendar deactivatedOn;
 
+    /**
+     * Reset token to password.
+     */
     private String resetToken;
 
     protected User() {
@@ -122,7 +128,7 @@ public class User implements AggregateRoot<EmailAddress>, DTOable<GeneralDTO>, V
          final MecanographicNumber numberMecp,
          final TaxPayerNumber taxPayNumberp,
          final Acronym acronymp,
-         final Calendar createdOn) {
+         final Calendar createdOnp) {
         this.shortName = shortNamep;
         this.fullName = fullNamep;
         this.password = passwordp;
@@ -133,14 +139,15 @@ public class User implements AggregateRoot<EmailAddress>, DTOable<GeneralDTO>, V
         this.taxPayerNumber = taxPayNumberp;
         this.acronym = acronymp;
         this.userState = true;
-        this.createdOn = createdOn;
+        this.createdOn = createdOnp;
     }
 
     /**
      * Deactivates the user.
+     * @param now
      * @throws IllegalStateException user is already deactivated.
      */
-    public void deactivate(Calendar now) {
+    public void deactivate(final Calendar now) {
         if (!this.userState) {
             throw new IllegalStateException("Cannot deactivate "
                     + "an already deactivated user.");
@@ -162,8 +169,14 @@ public class User implements AggregateRoot<EmailAddress>, DTOable<GeneralDTO>, V
         this.userState = true;
     }
 
-    public boolean passwordMatches(String rawPassword,
-                                   PasswordEncoder encoder) {
+    /**
+     * Check if password match.
+     * @param rawPassword
+     * @param encoder
+     * @return true/false
+     */
+    public boolean passwordMatches(final String rawPassword,
+                                   final PasswordEncoder encoder) {
         return encoder.matches(rawPassword, password.value());
     }
 
@@ -200,12 +213,21 @@ public class User implements AggregateRoot<EmailAddress>, DTOable<GeneralDTO>, V
         return email;
     }
 
+    /**
+     * Get email address.
+     * @return EmailAddress
+     */
     public EmailAddress emailAddress() {
         return this.email;
     }
 
+    /**
+     * Check if some User is the same object then other.
+     * @param other
+     * @return true/false
+     */
     @Override
-    public boolean sameAs(Object other) {
+    public boolean sameAs(final Object other) {
         if (!(other instanceof User)) {
             return false;
         } else {
@@ -220,13 +242,19 @@ public class User implements AggregateRoot<EmailAddress>, DTOable<GeneralDTO>, V
                     && !this.role.equals(that.role)
                     && this.numberMec.equals(that.numberMec)
                     && this.birthDate.equals(that.birthDate)) {
-                return this.resetToken == null ? that.resetToken == null : this.resetToken.equals(that.resetToken);
+                return this.resetToken == null
+                        ? that.resetToken == null
+                        : this.resetToken.equals(that.resetToken);
             } else {
                 return false;
             }
         }
     }
 
+    /**
+     * Parse User to DTO.
+     * @return GeneralDTO
+     */
     @Override
     public GeneralDTO toDTO() {
         final GeneralDTO ret = new GeneralDTO("user");
@@ -239,11 +267,19 @@ public class User implements AggregateRoot<EmailAddress>, DTOable<GeneralDTO>, V
         return ret;
     }
 
+    /**
+     * Accept method.
+     * @param visitor
+     */
     @Override
-    public void accept(Visitor<GeneralDTO> visitor) {
+    public void accept(final Visitor<GeneralDTO> visitor) {
         visitor.visit(toDTO());
     }
 
+    /**
+     * Get role of User.
+     * @return String
+     */
     public String role() {
         return role.toString();
     }

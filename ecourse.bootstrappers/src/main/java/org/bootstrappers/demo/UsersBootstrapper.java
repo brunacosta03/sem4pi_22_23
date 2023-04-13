@@ -44,10 +44,12 @@ public class UsersBootstrapper extends UsersBootstrapperBase implements Action {
      * @param fullName
      * @param email
      * @param birthDate
+     * @param taxPayNumber
      */
     private void registerManager(final String shortName, final String password,
                                  final String fullName, final String email,
-                                 final String birthDate, final String taxPayNumber) {
+                                 final String birthDate,
+                                 final String taxPayNumber) {
 
         registerUser(shortName, password, fullName,
                 email, String.valueOf(CourseRoles.MANAGER),
@@ -61,10 +63,13 @@ public class UsersBootstrapper extends UsersBootstrapperBase implements Action {
      * @param fullName
      * @param email
      * @param birthDate
+     * @param taxPayNumber
+     * @param acronym
      */
     private void registerTeacher(final String shortName, final String password,
                                  final String fullName, final String email,
-                                 final String birthDate, final String taxPayNumber,
+                                 final String birthDate,
+                                 final String taxPayNumber,
                                  final String acronym) {
 
         registerUser(shortName, password, fullName,
@@ -79,6 +84,8 @@ public class UsersBootstrapper extends UsersBootstrapperBase implements Action {
      * @param fullName
      * @param email
      * @param birthDate
+     * @param mecNumber
+     * @param taxPayNumber
      */
     private void registerStudent(final String shortName, final String password,
                                  final String fullName, final String email,

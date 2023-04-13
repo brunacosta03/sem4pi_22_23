@@ -33,15 +33,19 @@ public class TaxPayerNumber implements ValueObject {
      * @return ShortName instance.
      */
     public static TaxPayerNumber of(final String valuep) {
-        String REGEX_PT = "[0-9]{9}";
+        String regexPT = "[0-9]{9}";
         Preconditions.nonEmpty(valuep, "Tax payer number can't be empty.");
         Preconditions.ensure(
-                valuep.matches(REGEX_PT),
+                valuep.matches(regexPT),
                 "Tax payer number must follow portuguese format."
         );
         return new TaxPayerNumber(valuep);
     }
 
+    /**
+     * Return TaxPayerNumber value in String.
+     * @return String
+     */
     String value() {
         return this.value;
     }
