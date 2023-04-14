@@ -30,7 +30,7 @@ public class Main {
             login = new LoginUI();
 
             if (login.show()) {
-                String loggedRole = login.getLoggedRole();
+                String loggedRole = login.getLoggedRole().toLowerCase();
 
                 System.out.println("Login was successful as a "
                         + loggedRole + "!");

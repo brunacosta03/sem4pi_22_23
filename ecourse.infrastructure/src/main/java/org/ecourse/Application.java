@@ -3,7 +3,7 @@ package org.ecourse;
 import eapli.framework.util.Utility;
 
 @Utility
-public class Application {
+public final class Application {
     /**
      * AppSettings instance.
      */

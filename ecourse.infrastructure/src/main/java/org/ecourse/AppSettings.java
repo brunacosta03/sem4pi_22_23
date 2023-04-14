@@ -8,15 +8,18 @@ public class AppSettings {
     /**
      * PERSISTENCE_UNIT_KEY.
      */
-    private static final String PERSISTENCE_UNIT_KEY = "persistence.persistenceUnit";
+    private static final String PERSISTENCE_UNIT_KEY =
+            "persistence.persistenceUnit";
     /**
      * REPOSITORY_FACTORY_KEY.
      */
-    private static final String REPOSITORY_FACTORY_KEY = "persistence.repositoryFactory";
+    private static final String REPOSITORY_FACTORY_KEY =
+            "persistence.repositoryFactory";
     /**
      * SCHEMA_GENERATION_KEY.
      */
-    private static final String SCHEMA_GENERATION_KEY = "javax.persistence.schema-generation.database.action";
+    private static final String SCHEMA_GENERATION_KEY =
+            "javax.persistence.schema-generation.database.action";
 
     /**
      * Application Properties.

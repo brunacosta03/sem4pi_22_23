@@ -5,7 +5,11 @@ import eapli.framework.validations.Preconditions;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.util.Objects;
 
+/**
+ * The type Short name.
+ */
 @Embeddable
 public class ShortName implements ValueObject {
     /**
@@ -14,6 +18,9 @@ public class ShortName implements ValueObject {
     @Column(name = "short_name")
     private final String value;
 
+    /**
+     * Instantiates a new Short name.
+     */
     protected ShortName() {
         value = null;
     }
@@ -43,9 +50,41 @@ public class ShortName implements ValueObject {
 
     /**
      * Return Short Name value in String.
-     * @return String
+     *
+     * @return String string
      */
     String value() {
         return this.value;
+    }
+
+
+    /**
+     * Equals boolean.
+     *
+     * @param o the o
+     * @return the boolean
+     */
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ShortName shortName = (ShortName) o;
+
+        return Objects.equals(value, shortName.value);
+    }
+
+    /**
+     * Hash code int.
+     *
+     * @return the int
+     */
+    @Override
+    public int hashCode() {
+        return value != null ? value.hashCode() : 0;
     }
 }

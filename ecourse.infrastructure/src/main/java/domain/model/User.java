@@ -6,6 +6,7 @@ import eapli.framework.infrastructure.authz.domain.model.Role;
 import eapli.framework.representations.dto.DTOable;
 import eapli.framework.representations.dto.GeneralDTO;
 import eapli.framework.time.util.CurrentTimeCalendars;
+import eapli.framework.validations.Preconditions;
 import eapli.framework.visitor.Visitable;
 import eapli.framework.visitor.Visitor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -106,6 +107,7 @@ public class User
          final MecanographicNumber numberMecp,
          final TaxPayerNumber taxPayNumberp,
          final Acronym acronymp) {
+        necessaryParameters(shortNamep, fullNamep, emailp, rolep, passwordp);
         this.shortName = shortNamep;
         this.fullName = fullNamep;
         this.password = passwordp;
@@ -119,6 +121,20 @@ public class User
         this.createdOn = CurrentTimeCalendars.now();
     }
 
+    private void necessaryParameters(
+            final ShortName shortNamep,
+            final FullName fullNamep,
+            final EmailAddress emailp,
+            final Role rolep,
+            final Password passwordp
+    ) {
+        Preconditions.nonNull(shortNamep, "Short name cannot be null");
+        Preconditions.nonNull(fullNamep, "Full name cannot be null");
+        Preconditions.nonNull(emailp, "Email cannot be null");
+        Preconditions.nonNull(rolep, "Role cannot be null");
+        Preconditions.nonNull(passwordp, "Password cannot be null");
+    }
+
     User(final ShortName shortNamep,
          final FullName fullNamep,
          final Password passwordp,
@@ -129,6 +145,14 @@ public class User
          final TaxPayerNumber taxPayNumberp,
          final Acronym acronymp,
          final Calendar createdOnp) {
+        necessaryParameters(
+                shortNamep,
+                fullNamep,
+                emailp,
+                rolep,
+                passwordp,
+                createdOnp
+        );
         this.shortName = shortNamep;
         this.fullName = fullNamep;
         this.password = passwordp;
@@ -141,6 +165,23 @@ public class User
         this.userState = true;
         this.createdOn = createdOnp;
     }
+
+    private void necessaryParameters(
+            final ShortName shortNamep,
+            final FullName fullNamep,
+            final EmailAddress emailp,
+            final Role rolep,
+            final Password passwordp,
+            final Calendar createdOnp
+    ) {
+        Preconditions.nonNull(shortNamep, "Short name cannot be null");
+        Preconditions.nonNull(fullNamep, "Full name cannot be null");
+        Preconditions.nonNull(emailp, "Email cannot be null");
+        Preconditions.nonNull(rolep, "Role cannot be null");
+        Preconditions.nonNull(passwordp, "Password cannot be null");
+        Preconditions.nonNull(createdOnp, "CreatedOn cannot be null");
+    }
+
 
     /**
      * Deactivates the user.
@@ -162,7 +203,7 @@ public class User
      */
     public void activate() {
         if (this.userState) {
-            throw new IllegalArgumentException("Cannot activate "
+            throw new IllegalStateException("Cannot activate "
                     + "an already active user.");
         }
         this.deactivatedOn = null;
@@ -202,6 +243,7 @@ public class User
      * @param newPasswordp new user password
      */
     public void changePassword(final Password newPasswordp) {
+        Preconditions.nonNull(newPasswordp, "Password cannot be null.");
         password = newPasswordp;
     }
 

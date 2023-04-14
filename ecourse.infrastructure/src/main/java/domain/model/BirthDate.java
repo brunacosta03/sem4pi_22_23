@@ -8,6 +8,9 @@ import javax.persistence.Embeddable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * The type Birth date.
+ */
 @Embeddable
 public final class BirthDate implements ValueObject {
     /**
@@ -21,10 +24,21 @@ public final class BirthDate implements ValueObject {
      */
     private static final int MAX_YEARS = 120;
 
+    /**
+     * Instantiates a new Birth date.
+     */
     protected BirthDate() {
         value = null;
     }
     private BirthDate(final LocalDate valuep) {
+        Preconditions.ensure(
+                valuep.isBefore(LocalDate.now()),
+                "Birthdate cannot be in the future"
+        );
+        Preconditions.ensure(
+                valuep.isAfter(LocalDate.now().minusYears(MAX_YEARS)),
+                "Birthdate cannot be more than 120 years ago"
+        );
         this.value = valuep;
     }
 
@@ -45,11 +59,23 @@ public final class BirthDate implements ValueObject {
     }
 
     /**
-     * Transform string in BirthDate object.
+     * Factory method for birthdate creation.
+     *
      * @param date birthdate string
-     * @return BirthDate
+     * @return BirthDate birthdate
      */
     public static BirthDate of(final String date) {
+        return new BirthDate(date);
+    }
+
+
+    /**
+     * Factory method for birthdate creation.
+     *
+     * @param date the date
+     * @return the birthdate
+     */
+    public static BirthDate of(final LocalDate date) {
         return new BirthDate(date);
     }
 

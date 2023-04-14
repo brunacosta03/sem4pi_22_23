@@ -15,6 +15,9 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Optional;
 
+/**
+ * The type Password.
+ */
 @Embeddable
 public final class Password implements ValueObject, Serializable {
     /**
@@ -25,18 +28,36 @@ public final class Password implements ValueObject, Serializable {
     )
     private final String value;
 
+    /**
+     * Instantiates a new Password.
+     */
     protected Password() {
         this.value = null;
     }
 
+    /**
+     * Instantiates a new Password.
+     *
+     * @param password the password
+     */
     Password(final String password) {
         Preconditions.nonNull(password);
         this.value = password;
     }
 
-    public static Optional<Password> encodedAndValid(final String rawPassword,
-                                                     final PasswordPolicy policy,
-                                                     final PasswordEncoder encoder) {
+    /**
+     * Encoded and valid optional.
+     *
+     * @param rawPassword the raw password
+     * @param policy      the policy
+     * @param encoder     the encoder
+     * @return the optional
+     */
+    public static Optional<Password> encodedAndValid(
+            final String rawPassword,
+            final PasswordPolicy policy,
+            final PasswordEncoder encoder
+    ) {
         Preconditions.noneNull(new Object[]{rawPassword, policy, encoder});
         return policy.isSatisfiedBy(rawPassword)
                 ? Optional.of(new Password(encoder.encode(rawPassword)))
@@ -51,6 +72,11 @@ public final class Password implements ValueObject, Serializable {
         return "************";
     }
 
+    /**
+     * Value string.
+     *
+     * @return the string
+     */
     String value() {
         return this.value;
     }
@@ -82,11 +108,11 @@ public final class Password implements ValueObject, Serializable {
     }
 
     /**
-     * Hash Code function
-     * @return
+     * Hash Code function.
+     * @return int
      */
     public int hashCode() {
-        boolean PRIME = true;
+        boolean prime = true;
         int result = 1;
         Object $value = this.value;
         result = result * 59 + ($value == null ? 43 : $value.hashCode());

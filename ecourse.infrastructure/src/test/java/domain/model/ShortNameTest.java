@@ -38,4 +38,18 @@ class ShortNameTest {
         ShortName.of("example");
     }
 
+    @Test
+    void ensureEqualsIsWorking() {
+        ShortName s1 = ShortName.of("example");
+        ShortName s2 = ShortName.of("example");
+        ShortName s3 = ShortName.of("example2");
+
+        assertEquals(s1, s2);
+        assertEquals(s1.hashCode(), s2.hashCode());
+        assertNotEquals(s1, s3);
+        assertNotEquals(s1.hashCode(), s3.hashCode());
+        assertEquals(s1.value(), s2.value());
+        assertNotEquals(s1.value(), s3.value());
+    }
+
 }

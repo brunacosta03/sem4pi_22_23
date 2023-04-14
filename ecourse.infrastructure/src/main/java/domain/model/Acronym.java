@@ -1,10 +1,14 @@
 package domain.model;
 
 import eapli.framework.domain.model.ValueObject;
+import eapli.framework.validations.Preconditions;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+/**
+ * The type Acronym.
+ */
 @Embeddable
 public class Acronym implements ValueObject {
     /**
@@ -13,11 +17,37 @@ public class Acronym implements ValueObject {
     @Column(name = "acronym")
     private final String value;
 
+    /**
+     * The constant MAX_LENGTH.
+     */
+    private static final Integer MAX_LENGTH = 5;
+
+
+    /**
+     * The constant MIN_LENGTH.
+     */
+    private static final Integer MIN_LENGTH = 2;
+
+    /**
+     * Instantiates a new Acronym.
+     */
     protected Acronym() {
-        value = null;
+        this.value = null;
     }
 
     private Acronym(final String valuep) {
+        Preconditions.nonEmpty(
+                valuep,
+                "Short name should neither be null nor empty"
+        );
+        Preconditions.nonNull(
+                valuep,
+                "Short name should neither be null nor empty"
+        );
+        Preconditions.ensure(
+                valuep.length() <= MAX_LENGTH && valuep.length() >= MIN_LENGTH,
+                "Short name should have between 2 and 5 characters"
+        );
         this.value = valuep;
     }
 
@@ -29,5 +59,14 @@ public class Acronym implements ValueObject {
      */
     public static Acronym of(final String valuep) {
         return new Acronym(valuep);
+    }
+
+    /**
+     * Value string.
+     *
+     * @return the string
+     */
+    String value() {
+        return value;
     }
 }

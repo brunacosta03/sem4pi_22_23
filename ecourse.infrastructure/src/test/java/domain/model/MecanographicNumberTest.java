@@ -61,7 +61,9 @@ class MecanographicNumberTest {
         MecanographicNumber m3 = MecanographicNumber.of(2);
 
         assertEquals(m1, m2);
+        assertEquals(m1, m1);
         assertNotEquals(m1, m3);
+        assertNotEquals(null, m1);
     }
 
     @Test
