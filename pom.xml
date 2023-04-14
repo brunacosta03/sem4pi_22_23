@@ -121,15 +121,17 @@
 					</execution>
 				</executions>
 			</plugin>
+
 <!--			<plugin>-->
-<!--  				<groupId>org.jacoco</groupId>-->
-<!--  				<artifactId>jacoco-maven-plugin</artifactId>-->
-<!--  				<version>0.8.6</version>-->
-<!--  				<executions>-->
-<!--  					<execution>-->
-<!--						<id>prepare-agent</id>-->
+<!--				<groupId>org.jacoco</groupId>-->
+<!--				<artifactId>jacoco-maven-plugin</artifactId>-->
+<!--				<version>0.8.6</version>-->
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						<id>prepare-and-report</id>-->
 <!--						<goals>-->
 <!--							<goal>prepare-agent</goal>-->
+<!--							<goal>report</goal>-->
 <!--						</goals>-->
 <!--						<configuration>-->
 <!--							<append>true</append>-->
@@ -137,39 +139,35 @@
 <!--						</configuration>-->
 <!--					</execution>-->
 <!--					<execution>-->
-<!--						<id>report</id>-->
+<!--						<id>report-aggregate</id>-->
 <!--						<phase>test</phase>-->
-<!--							<goals>-->
-<!--								<goal>report</goal>-->
-<!--							</goals>-->
+<!--						<goals>-->
+<!--							<goal>report-aggregate</goal>-->
+<!--						</goals>-->
+<!--						<configuration>-->
+<!--							<outputDirectory>${project.basedir}/../target/site/jacoco</outputDirectory>-->
+<!--						</configuration>-->
 <!--					</execution>-->
 <!--				</executions>-->
-<!-- 			</plugin>-->
+<!--			</plugin>-->
+
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.6</version>
 				<executions>
 					<execution>
-						<id>prepare-and-report</id>
+						<id>default-prepare-agent</id>
 						<goals>
 							<goal>prepare-agent</goal>
-							<goal>report</goal>
 						</goals>
-						<configuration>
-							<append>true</append>
-							<destFile>${jacoco.reportPath}</destFile>
-						</configuration>
 					</execution>
 					<execution>
-						<id>report-aggregate</id>
+						<id>jacoco-report</id>
 						<phase>test</phase>
 						<goals>
-							<goal>report-aggregate</goal>
+							<goal>report</goal>
 						</goals>
-						<configuration>
-							<outputDirectory>${project.basedir}/../target/site/jacoco</outputDirectory>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
