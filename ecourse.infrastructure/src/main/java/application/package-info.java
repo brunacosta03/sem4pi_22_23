@@ -1,1 +1,4 @@
+/**
+ * Javadoc comment.
+ */
 package application;
