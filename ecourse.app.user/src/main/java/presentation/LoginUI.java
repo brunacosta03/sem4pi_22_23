@@ -62,11 +62,11 @@ public class LoginUI extends AbstractUI {
 
                 tries++;
                 System.out.println("Invalid credentials, "
-                        + (MAX_TRIES - tries) + " tries left");
+                        + (MAX_TRIES - tries) + " tries left\n");
             } catch (Exception e) {
                 tries++;
                 System.out.println(e.getMessage()
-                        + ", " + (MAX_TRIES - tries) + " tries left");
+                        + ", " + (MAX_TRIES - tries) + " tries left\n");
             }
 
         }
