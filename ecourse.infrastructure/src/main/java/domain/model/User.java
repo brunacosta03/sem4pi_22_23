@@ -11,7 +11,13 @@ import eapli.framework.visitor.Visitable;
 import eapli.framework.visitor.Visitor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.persistence.*;
+
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Version;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Calendar;

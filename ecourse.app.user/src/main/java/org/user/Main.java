@@ -6,7 +6,14 @@ import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
 import persistence.PersistenceContext;
 import presentation.LoginUI;
 
-public class Main {
+public final class Main {
+
+    /**
+     * Ensure that this class cannot be instantiated.
+     */
+    private Main() {
+        // utility class. (entry point)
+    }
 
     /**
      * Initialize LoginUI.

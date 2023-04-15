@@ -6,6 +6,13 @@ import eapli.framework.infrastructure.authz.domain.model.Role;
  * All users can create and use boards as well as meetings.
  */
 public final class CourseRoles {
+
+    /**
+     * Ensures Utility class.
+     */
+    private CourseRoles() {
+        // utility class
+    }
     /**
      * Manages everything within the system.
      */
