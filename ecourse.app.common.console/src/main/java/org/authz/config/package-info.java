@@ -1,4 +1,4 @@
 /**
- * Authz Config package
+ * Authz Config package.
  */
 package org.authz.config;
