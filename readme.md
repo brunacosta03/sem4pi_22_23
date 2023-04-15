@@ -26,7 +26,7 @@ The duration of this project is 3 (three) months, starting on February 22th and 
 
 [Planning and Technical Documentation](docs/readme.md)
 
-## 3. How to Build
+## 3. How to Build (assuming you have maven and java installed)
 
 To build the project, run the files:
 
