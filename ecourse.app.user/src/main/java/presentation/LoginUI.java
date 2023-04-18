@@ -1,11 +1,11 @@
 package presentation;
 
-import application.AuthenticationService;
-import application.AuthorizationService;
-import application.AuthzRegistry;
-import domain.model.UserSession;
 import eapli.framework.presentation.console.AbstractUI;
+import org.authz.application.AuthenticationService;
+import org.authz.application.AuthorizationService;
+import org.authz.application.AuthzRegistry;
 import org.user.management.CourseRoles;
+import org.usermanagement.domain.model.UserSession;
 
 import java.util.Optional;
 import java.util.Scanner;

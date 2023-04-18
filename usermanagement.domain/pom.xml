@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>ecourse.infrastructure</name>
+    <name>usermanagement.domain</name>
 
-    <artifactId>ecourse.infrastructure</artifactId>
+    <artifactId>usermanagement.domain</artifactId>
     <version>0.1.0</version>
     <packaging>jar</packaging>
 
@@ -15,4 +15,13 @@
         <artifactId>gs-maven</artifactId>
         <version>0.1.0</version>
     </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>ecourse.core</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+    </dependencies>
+
 </project>

@@ -29,7 +29,10 @@
 		<module>ecourse.core</module>
         <module>ecourse.infrastructure</module>
         <module>ecourse.app.common.console</module>
-    </modules>
+        <module>usermanagement.application</module>
+		<module>usermanagement.domain</module>
+		<module>ecourse.infrastructure.authz</module>
+	</modules>
 
 	<dependencies>
 		<dependency>

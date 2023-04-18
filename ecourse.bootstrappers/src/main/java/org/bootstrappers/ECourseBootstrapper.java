@@ -1,19 +1,19 @@
 package org.bootstrappers;
 
-import application.AuthenticationService;
-import application.AuthorizationService;
-import application.AuthzRegistry;
-import domain.model.User;
-import domain.model.UserBuilder;
-import domain.repositories.UserRepository;
 import eapli.framework.actions.Action;
 import eapli.framework.domain.repositories.ConcurrencyException;
 import eapli.framework.domain.repositories.IntegrityViolationException;
 import eapli.framework.validations.Invariants;
+import org.authz.application.AuthenticationService;
+import org.authz.application.AuthorizationService;
+import org.authz.application.AuthzRegistry;
 import org.bootstrappers.demo.UsersBootstrapper;
+import org.persistence.PersistenceContext;
 import org.user.management.CourseRoles;
-import domain.model.UserBuilderHelper;
-import persistence.PersistenceContext;
+import org.usermanagement.domain.model.User;
+import org.usermanagement.domain.model.UserBuilder;
+import org.usermanagement.domain.model.UserBuilderHelper;
+import org.usermanagement.domain.repositories.UserRepository;
 
 public class ECourseBootstrapper implements Action {
     /**

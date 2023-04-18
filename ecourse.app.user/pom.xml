@@ -21,7 +21,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>ecourse.persistence</artifactId>
             <version>0.1.0</version>
-            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -37,7 +36,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>ecourse.infrastructure</artifactId>
+            <artifactId>ecourse.infrastructure.authz</artifactId>
             <version>0.1.0</version>
             <scope>compile</scope>
         </dependency>

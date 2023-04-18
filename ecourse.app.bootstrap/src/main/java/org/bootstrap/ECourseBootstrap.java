@@ -1,11 +1,11 @@
 package org.bootstrap;
 
-import application.AuthzRegistry;
 import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
+import org.authz.application.AuthzRegistry;
 import org.authz.config.ECourseBaseApplication;
 import org.bootstrappers.ECourseBootstrapper;
-import domain.model.ECoursePasswordPolicy;
-import persistence.PersistenceContext;
+import org.usermanagement.domain.model.ECoursePasswordPolicy;
+import org.persistence.PersistenceContext;
 
 /**
  * Call bootstrappers to initialize data in the database.

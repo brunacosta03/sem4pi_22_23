@@ -1,9 +1,9 @@
 package org.user;
 
-import application.AuthzRegistry;
-import domain.model.ECoursePasswordPolicy;
 import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
-import persistence.PersistenceContext;
+import org.authz.application.AuthzRegistry;
+import org.persistence.PersistenceContext;
+import org.usermanagement.domain.model.ECoursePasswordPolicy;
 import presentation.LoginUI;
 
 public final class Main {

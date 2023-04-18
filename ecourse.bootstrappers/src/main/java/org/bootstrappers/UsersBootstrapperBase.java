@@ -1,9 +1,9 @@
 package org.bootstrappers;
 
-import domain.model.User;
 import eapli.framework.domain.repositories.ConcurrencyException;
 import eapli.framework.domain.repositories.IntegrityViolationException;
-import org.user.management.controller.AddUserController;
+import org.usermanagement.controller.AddUserController;
+import org.usermanagement.domain.model.User;
 
 public class UsersBootstrapperBase {
     /**

@@ -1,11 +1,9 @@
 package org.persistence;
 
-import domain.repositories.UserRepository;
 import eapli.framework.domain.repositories.TransactionalContext;
 import eapli.framework.infrastructure.repositories.impl.jpa.JpaAutoTxRepository;
 import org.ecourse.Application;
-import persistence.JpaAutoTxUserRepository;
-import persistence.RepositoryFactory;
+import org.usermanagement.domain.repositories.UserRepository;
 
 /**
  * Factory class for creating JPA repositories.

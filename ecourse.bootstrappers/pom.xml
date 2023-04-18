@@ -24,7 +24,12 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>ecourse.app.user</artifactId>
+            <artifactId>usermanagement.application</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>ecourse.persistence</artifactId>
             <version>0.1.0</version>
         </dependency>
     </dependencies>
