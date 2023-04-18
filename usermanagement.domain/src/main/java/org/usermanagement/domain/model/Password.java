@@ -77,7 +77,7 @@ public final class Password implements ValueObject, Serializable {
      *
      * @return the string
      */
-    String value() {
+    public String value() {
         return this.value;
     }
 

@@ -46,7 +46,7 @@ public class TaxPayerNumber implements ValueObject {
      * Return TaxPayerNumber value in String.
      * @return String
      */
-    String value() {
+    public String value() {
         return this.value;
     }
 }

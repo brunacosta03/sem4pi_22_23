@@ -53,7 +53,7 @@ public class ShortName implements ValueObject {
      *
      * @return String string
      */
-    String value() {
+    public String value() {
         return this.value;
     }
 

@@ -2,6 +2,7 @@ package domain.model;
 
 import eapli.framework.infrastructure.authz.application.PasswordPolicy;
 import org.junit.jupiter.api.Test;
+import org.usermanagement.domain.model.ECoursePasswordPolicy;
 
 import static org.junit.jupiter.api.Assertions.*;
 

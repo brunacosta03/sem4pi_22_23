@@ -50,7 +50,7 @@ public class FullName implements ValueObject {
      * Get fullName value.
      * @return String with full name
      */
-    String value() {
+    public String value() {
         return this.value;
     }
 }

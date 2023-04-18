@@ -104,15 +104,15 @@ public class User
 
     }
 
-    User(final ShortName shortNamep,
-         final FullName fullNamep,
-         final Password passwordp,
-         final EmailAddress emailp,
-         final Role rolep,
-         final BirthDate birthDatep,
-         final MecanographicNumber numberMecp,
-         final TaxPayerNumber taxPayNumberp,
-         final Acronym acronymp) {
+    public User(final ShortName shortNamep,
+                final FullName fullNamep,
+                final Password passwordp,
+                final EmailAddress emailp,
+                final Role rolep,
+                final BirthDate birthDatep,
+                final MecanographicNumber numberMecp,
+                final TaxPayerNumber taxPayNumberp,
+                final Acronym acronymp) {
         necessaryParameters(shortNamep, fullNamep, emailp, rolep, passwordp);
         this.shortName = shortNamep;
         this.fullName = fullNamep;
@@ -141,16 +141,16 @@ public class User
         Preconditions.nonNull(passwordp, "Password cannot be null");
     }
 
-    User(final ShortName shortNamep,
-         final FullName fullNamep,
-         final Password passwordp,
-         final EmailAddress emailp,
-         final Role rolep,
-         final BirthDate birthDatep,
-         final MecanographicNumber numberMecp,
-         final TaxPayerNumber taxPayNumberp,
-         final Acronym acronymp,
-         final Calendar createdOnp) {
+    public User(final ShortName shortNamep,
+                final FullName fullNamep,
+                final Password passwordp,
+                final EmailAddress emailp,
+                final Role rolep,
+                final BirthDate birthDatep,
+                final MecanographicNumber numberMecp,
+                final TaxPayerNumber taxPayNumberp,
+                final Acronym acronymp,
+                final Calendar createdOnp) {
         necessaryParameters(
                 shortNamep,
                 fullNamep,

@@ -155,7 +155,7 @@ public class MecanographicNumber
      * Get MecanographicNumber.
      * @return String
      */
-    String value() {
+    public String value() {
         return this.number;
     }
 

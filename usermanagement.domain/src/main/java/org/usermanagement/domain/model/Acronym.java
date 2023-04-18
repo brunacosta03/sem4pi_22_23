@@ -66,7 +66,7 @@ public class Acronym implements ValueObject {
      *
      * @return the string
      */
-    String value() {
+    public String value() {
         return value;
     }
 }

@@ -3,9 +3,9 @@ package domain.model;
 import eapli.framework.infrastructure.authz.application.PasswordPolicy;
 import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
-
+import org.usermanagement.domain.model.ECoursePasswordPolicy;
+import org.usermanagement.domain.model.Password;
 
 import java.util.Optional;
 

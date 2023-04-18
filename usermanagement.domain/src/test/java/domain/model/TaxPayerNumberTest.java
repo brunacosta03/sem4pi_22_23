@@ -1,6 +1,7 @@
 package domain.model;
 
 import org.junit.jupiter.api.Test;
+import org.usermanagement.domain.model.TaxPayerNumber;
 
 import static org.junit.jupiter.api.Assertions.*;
 
