@@ -104,7 +104,7 @@ public class User
 
     }
 
-    public User(final ShortName shortNamep,
+     User(final ShortName shortNamep,
                 final FullName fullNamep,
                 final Password passwordp,
                 final EmailAddress emailp,
@@ -141,7 +141,7 @@ public class User
         Preconditions.nonNull(passwordp, "Password cannot be null");
     }
 
-    public User(final ShortName shortNamep,
+    User(final ShortName shortNamep,
                 final FullName fullNamep,
                 final Password passwordp,
                 final EmailAddress emailp,
