@@ -20,7 +20,7 @@ public class UsersBootstrapper extends UsersBootstrapperBase implements Action {
 
     /**
      * Bootstraping (Manager, Teacher, Student).
-     * @return
+     * @return true if all execute
      */
     @Override
     public boolean execute() {
@@ -29,9 +29,9 @@ public class UsersBootstrapper extends UsersBootstrapperBase implements Action {
         registerTeacher("teacher", PASSWORD_T, "Henrique Pinto",
                 "teacher@email.com", "23/04/2001", "222222222", "HRP");
         registerStudent("student1", PASSWORD_S, "Pedro Alves",
-                 "student1@email.com", "09/12/1999", "202300001", "333333333");
+                 "student1@email.com", "09/12/1999",  "333333333");
         registerStudent("student2", PASSWORD_S, "Bruna Costa",
-                "student2@email.com", "18/01/2001", "202300002", "444444444");
+                "student2@email.com", "18/01/2001",  "444444444");
 
         return true;
     }
@@ -53,7 +53,7 @@ public class UsersBootstrapper extends UsersBootstrapperBase implements Action {
 
         registerUser(shortName, password, fullName,
                 email, String.valueOf(CourseRoles.MANAGER),
-                birthDate, null, taxPayNumber, null);
+                birthDate, taxPayNumber, null);
     }
 
     /**
@@ -74,7 +74,7 @@ public class UsersBootstrapper extends UsersBootstrapperBase implements Action {
 
         registerUser(shortName, password, fullName,
                 email, String.valueOf(CourseRoles.TEACHER),
-                birthDate, null, taxPayNumber, acronym);
+                birthDate, taxPayNumber, acronym);
     }
 
     /**
@@ -84,16 +84,15 @@ public class UsersBootstrapper extends UsersBootstrapperBase implements Action {
      * @param fullName
      * @param email
      * @param birthDate
-     * @param mecNumber
      * @param taxPayNumber
      */
     private void registerStudent(final String shortName, final String password,
                                  final String fullName, final String email,
-                                 final String birthDate, final String mecNumber,
+                                 final String birthDate,
                                  final String taxPayNumber) {
 
         registerUser(shortName, password, fullName,
                 email, String.valueOf(CourseRoles.STUDENT),
-                birthDate, mecNumber, taxPayNumber, null);
+                birthDate, taxPayNumber, null);
     }
 }

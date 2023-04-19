@@ -34,7 +34,6 @@ public class AddUserController {
      * @param email     email of the new user.
      * @param role     roles of the new user.
      * @param birthDate     birthdate of the new user.
-     * @param mecNumber     mec number of the new user.
      * @param taxPayerNumber     taxPayerNumber of the new user.
      * @param acronym     acronym of the new user.
      * @param createdOn creation date of the new user.
@@ -43,12 +42,12 @@ public class AddUserController {
     public User addUser(final String shortName, final String password,
                         final String fullName, final String email,
                         final String role, final String birthDate,
-                        final String mecNumber, final String taxPayerNumber,
+                        final String taxPayerNumber,
                         final String acronym, final Calendar createdOn) {
         authz.ensureAuthenticatedUserHasAnyOf(CourseRoles.MANAGER);
 
         return userSvc.registerNewUser(shortName, password, fullName,
-                                    email, role, birthDate, mecNumber,
+                                    email, role, birthDate,
                                     taxPayerNumber, acronym, createdOn);
     }
 
@@ -60,7 +59,6 @@ public class AddUserController {
      * @param email     email of the new user.
      * @param role     roles of the new user.
      * @param birthDate     birthdate of the new user.
-     * @param mecNumber     mec number of the new user.
      * @param taxPayerNumber     taxPayerNumber of the new user.
      * @param acronym     acronym of the new user.
      * @return User
@@ -68,11 +66,10 @@ public class AddUserController {
     public User addUser(final String shortName, final String password,
                         final String fullName, final String email,
                         final String role, final String birthDate,
-                        final String mecNumber,
                         final String taxPayerNumber, final String acronym) {
 
         return addUser(shortName, password, fullName,
-                        email, role, birthDate, mecNumber,
+                        email, role, birthDate,
                         taxPayerNumber, acronym, CurrentTimeCalendars.now());
     }
 }

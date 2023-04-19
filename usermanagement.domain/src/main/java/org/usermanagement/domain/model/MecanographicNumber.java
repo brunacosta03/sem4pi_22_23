@@ -197,4 +197,8 @@ public class MecanographicNumber
         result = HASH_NUMBER * result + (value != null ? value.hashCode() : 0);
         return result;
     }
+
+    public void nextNumber() {
+        this.number = String.valueOf(Integer.parseInt(this.number) + 1);
+    }
 }

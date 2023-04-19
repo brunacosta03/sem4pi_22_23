@@ -67,4 +67,8 @@ public class AuthorizationService {
             throw new UnauthorizedException(us.authenticatedUser(), actions);
         }
     }
+
+    public boolean isAuthenticatedUserAuthorizedTo(final Role... actions) {
+        return session().map(us -> us.authenticatedUser().hasAnyOf(actions)).orElse(false);
+    }
 }

@@ -10,6 +10,7 @@ import eapli.framework.validations.Preconditions;
 import eapli.framework.visitor.Visitable;
 import eapli.framework.visitor.Visitor;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.user.management.CourseRoles;
 
 
 import javax.persistence.EmbeddedId;
@@ -113,7 +114,15 @@ public class User
                 final MecanographicNumber numberMecp,
                 final TaxPayerNumber taxPayNumberp,
                 final Acronym acronymp) {
-        necessaryParameters(shortNamep, fullNamep, emailp, rolep, passwordp);
+        validateParameters(
+                shortNamep,
+                fullNamep,
+                emailp,
+                rolep,
+                passwordp);
+        validateMecNumber(numberMecp, rolep);
+        validateAcronym(acronymp, rolep);
+
         this.shortName = shortNamep;
         this.fullName = fullNamep;
         this.password = passwordp;
@@ -127,7 +136,7 @@ public class User
         this.createdOn = CurrentTimeCalendars.now();
     }
 
-    private void necessaryParameters(
+    private void validateParameters(
             final ShortName shortNamep,
             final FullName fullNamep,
             final EmailAddress emailp,
@@ -151,7 +160,7 @@ public class User
                 final TaxPayerNumber taxPayNumberp,
                 final Acronym acronymp,
                 final Calendar createdOnp) {
-        necessaryParameters(
+        validateParameters(
                 shortNamep,
                 fullNamep,
                 emailp,
@@ -159,6 +168,9 @@ public class User
                 passwordp,
                 createdOnp
         );
+        validateMecNumber(numberMecp, rolep);
+        validateAcronym(acronymp, rolep);
+
         this.shortName = shortNamep;
         this.fullName = fullNamep;
         this.password = passwordp;
@@ -172,7 +184,7 @@ public class User
         this.createdOn = createdOnp;
     }
 
-    private void necessaryParameters(
+    private void validateParameters(
             final ShortName shortNamep,
             final FullName fullNamep,
             final EmailAddress emailp,
@@ -186,6 +198,30 @@ public class User
         Preconditions.nonNull(rolep, "Role cannot be null");
         Preconditions.nonNull(passwordp, "Password cannot be null");
         Preconditions.nonNull(createdOnp, "CreatedOn cannot be null");
+    }
+
+    private void validateMecNumber(MecanographicNumber numberMecp, Role rolep){
+        if(!rolep.equals(CourseRoles.STUDENT) && numberMecp != null){
+            throw new IllegalStateException("Only Users with role "
+                    + CourseRoles.STUDENT + " can have MecanographicNumber");
+        }
+
+        if(rolep.equals(CourseRoles.STUDENT) && numberMecp == null){
+            throw new IllegalStateException(CourseRoles.STUDENT
+                    + " have a null MecanographicNumber");
+        }
+    }
+
+    private void validateAcronym(Acronym acronymp, Role rolep){
+        if(!rolep.equals(CourseRoles.TEACHER) && acronymp != null){
+            throw new IllegalStateException("Only Users with role "
+                    + CourseRoles.TEACHER + " can have Acronym");
+        }
+
+        if(rolep.equals(CourseRoles.TEACHER) && acronymp == null){
+            throw new IllegalStateException(CourseRoles.TEACHER
+                    + " have a null Acronym");
+        }
     }
 
 

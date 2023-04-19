@@ -1,5 +1,6 @@
 package org.usermanagement.domain.repositories;
 
+import org.usermanagement.domain.model.MecanographicNumber;
 import org.usermanagement.domain.model.User;
 import eapli.framework.domain.repositories.DomainRepository;
 import eapli.framework.general.domain.model.EmailAddress;
@@ -37,4 +38,6 @@ public interface UserRepository extends DomainRepository<EmailAddress, User> {
             final EmailAddress email) {
         return ofIdentity(email);
     }
+
+    MecanographicNumber findMaxMecanographicNumber();
 }

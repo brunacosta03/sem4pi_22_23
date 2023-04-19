@@ -1,0 +1,48 @@
+@startuml
+'http://plantuml.com/skinparam.html
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+class AddUserUI <<presentation>>
+class AddUserController <<application>>
+class AuthorizationService <<service>>
+class UserManagementService <<service>>
+class UserBuilder <<builder>>
+class "user:User" <<domain>>
+class PersistenceContext  <<persistence>>
+class RepositoryFactory  <<factory>>
+class UserRepository <<repository>>
+
+AddUserUI --> AddUserController : theController
+AddUserController --> AuthorizationService:theAuthzService
+AddUserController --> UserManagementService:theService
+UserManagementService --> UserBuilder:theBuilder
+UserBuilder --> "user:User"
+UserManagementService --> PersistenceContext:persistence
+PersistenceContext --> RepositoryFactory:factory
+RepositoryFactory --> UserRepository:repo
+UserManagementService --> UserRepository:repo
+
+AddUserUI : doShow()
+UserRepository : save(User)
+AddUserController : addUser(String, String, String, String, String, String, String, String)
+AddUserController : addUser(String, String, String, String, String, String, String, String, String)
+AuthorizationService : ensureAuthenticatedUserHasAnyOf(Role...)
+UserManagementService : registerNewUser(String, String, String, String, String, String, String, String, Calendar)
+UserManagementService : generateMecNumber()
+UserBuilder : with(String, String, String, String, String, String, String)
+UserBuilder : createdOn(Calendar)
+UserBuilder : withAcronym(String)
+UserBuilder : withMecanographicNumber(String)
+UserBuilder : build()
+PersistenceContext : repositories()
+RepositoryFactory : users()
+"user:User" : User(ShortName, FullName, Password, EmailAddress, Role, BirthDate, MecanographicNumber, TaxPayerNumber, Acronym, Calendar)
+"user:User" : validateParameters(ShortName, FullName, EmailAddress, Role, Password, Calendar)
+"user:User" : validateMecNumber(MecanographicNumber, Role)
+"user:User" : validateMecNumber(Acronym, Role)
+
+@enduml

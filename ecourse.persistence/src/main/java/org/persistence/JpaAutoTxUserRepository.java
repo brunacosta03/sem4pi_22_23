@@ -3,9 +3,11 @@ package org.persistence;
 import eapli.framework.domain.repositories.TransactionalContext;
 import eapli.framework.general.domain.model.EmailAddress;
 import eapli.framework.infrastructure.repositories.impl.jpa.JpaAutoTxRepository;
+import org.usermanagement.domain.model.MecanographicNumber;
 import org.usermanagement.domain.model.User;
 import org.usermanagement.domain.repositories.UserRepository;
 
+import javax.persistence.TypedQuery;
 import java.util.Map;
 import java.util.Optional;
 
@@ -38,6 +40,16 @@ public class JpaAutoTxUserRepository
     public Iterable<User> findByActive(final boolean active) {
         return this.match("e.active=:active", new Object[]{"active", active});
     }
+
+    @Override
+    public MecanographicNumber findMaxMecanographicNumber() {
+        final TypedQuery<MecanographicNumber> query = createQuery(
+                "SELECT MAX(ce.numberMec) FROM User ce WHERE ce.numberMec > (YEAR(CURRENT_DATE()) * 100000)",
+                MecanographicNumber.class);
+
+        return query.getSingleResult();
+    }
+
 
     /**
      * Saves the given User entity to the repository.

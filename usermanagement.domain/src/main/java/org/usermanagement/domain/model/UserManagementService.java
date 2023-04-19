@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.user.management.CourseRoles;
 import org.usermanagement.domain.repositories.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Optional;
 
@@ -45,59 +47,76 @@ public class UserManagementService {
     /**
      * Registers a new user in the system allowing to
      * specify when the user account was created.
-     * @param username
+     * @param shortName
      * @param rawPassword
-     * @param firstName
+     * @param fullName
      * @param email
      * @param role
      * @param birthDate
-     * @param mecNumber
      * @param taxPayerNumber
      * @param acronym
      * @param createdOn
      * @return User
      */
-    public User registerNewUser(final String username, final String rawPassword,
-                                final String firstName, final String email,
+    public User registerNewUser(final String shortName, final String rawPassword,
+                                final String fullName, final String email,
                                 final String role, final String birthDate,
-                                final String mecNumber,
                                 final String taxPayerNumber,
                                 final String acronym,
                                 final Calendar createdOn) {
-
         final var userBuilder = new UserBuilder(policy, encoder);
 
-        userBuilder.with(username, rawPassword, firstName,
+        userBuilder.with(shortName, rawPassword, fullName,
                         email, birthDate, role, taxPayerNumber)
                 .createdOn(createdOn)
-                .withMecanographicNumber(mecNumber)
                 .withAcronym(acronym);
+
+        if(String.valueOf(CourseRoles.STUDENT)
+                .compareTo(role) == 0){
+
+            userBuilder.withMecanographicNumber(generateMecNumber());
+        }
+
         final var newUser = userBuilder.build();
 
         return userRepository.save(newUser);
     }
 
     /**
+     * Generate MecanographicNumber for users with role Student
+     * @return String for builder create MecanographicNumber
+     */
+    private String generateMecNumber(){
+        MecanographicNumber mecanographicNumber = userRepository.findMaxMecanographicNumber();
+
+        if(mecanographicNumber == null){
+            return String.valueOf(LocalDateTime.now().getYear() * 100000 + 1);
+        }
+
+        mecanographicNumber.nextNumber();
+
+        return mecanographicNumber.value();
+    }
+
+    /**
      * Registers a new user in the system.
-     * @param username
+     * @param shortName
      * @param rawPassword
-     * @param firstName
+     * @param fullName
      * @param email
      * @param role
      * @param birthDate
-     * @param mecNumber
      * @param taxPayerNumber
      * @param acronym
      * @return User
      */
-    public User registerNewUser(final String username, final String rawPassword,
-                                final String firstName, final String email,
+    public User registerNewUser(final String shortName, final String rawPassword,
+                                final String fullName, final String email,
                                 final String role, final String birthDate,
-                                final String mecNumber,
                                 final String taxPayerNumber,
                                 final String acronym) {
-        return registerNewUser(username, rawPassword, firstName, email,
-                role, birthDate, mecNumber, taxPayerNumber,
+        return registerNewUser(shortName, rawPassword, fullName, email,
+                role, birthDate, taxPayerNumber,
                 acronym, CurrentTimeCalendars.now());
     }
 

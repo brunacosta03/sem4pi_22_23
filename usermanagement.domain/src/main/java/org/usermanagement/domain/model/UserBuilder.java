@@ -6,7 +6,6 @@ import eapli.framework.infrastructure.authz.application.PasswordPolicy;
 import eapli.framework.infrastructure.authz.domain.model.Role;
 import eapli.framework.validations.Preconditions;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.user.management.CourseRoles;
 
 import java.util.Calendar;
 

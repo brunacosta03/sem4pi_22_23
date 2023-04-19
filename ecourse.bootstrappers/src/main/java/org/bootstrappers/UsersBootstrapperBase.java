@@ -26,7 +26,6 @@ public class UsersBootstrapperBase {
      * @param email
      * @param role
      * @param birthDate
-     * @param mecNumber
      * @param taxPayerNumber
      * @param acronym
      * @return User
@@ -34,14 +33,13 @@ public class UsersBootstrapperBase {
     protected User registerUser(final String shortName, final String password,
                                 final String fullName, final String email,
                                 final String role, final String birthDate,
-                                final String mecNumber,
                                 final String taxPayerNumber,
                                 final String acronym) {
         User u = null;
 
         try {
             u = userController.addUser(shortName, password, fullName,
-                    email, role, birthDate, mecNumber, taxPayerNumber, acronym);
+                    email, role, birthDate, taxPayerNumber, acronym);
 
             System.out.println("[+] " + email);
         } catch (final IntegrityViolationException | ConcurrencyException e) {
