@@ -1,0 +1,53 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor Manager
+
+Manager -> ManagerUI: starts the machine
+
+ManagerUI --> Manager: shows the options to be executed
+
+Manager -> CreateCourseUI: starts to create a course
+
+CreateCourseUI --> Manager: asks for the course's edition
+
+Manager -> CreateCourseUI: types the requested data
+
+CreateCourseUI -> CreateCourseController: verifyEdition(edition)
+
+CreateCourseController -> CourseRepository : getCourses()
+
+CreateCourseUI --> Manager : asks for the course's code
+
+Manager -> CreateCourseUI: types the requested data
+
+CreateCourseUI -> CreateCourseController: verifyCode(code)
+
+CreateCourseController -> CourseRepository : getCourses()
+
+CreateCourseUI --> Manager : asks for the course's name
+
+Manager -> CreateCourseUI: types the requested data
+
+CreateCourseUI --> Manager : asks for the course's description
+
+Manager -> CreateCourseUI: types the requested data
+
+CreateCourseUI --> Manager : asks for the course's maximum number of students
+
+Manager -> CreateCourseUI: types the requested data
+
+CreateCourseUI --> Manager : asks for the course's minimum number of students
+
+Manager -> CreateCourseUI: types the requested data
+
+CreateCourseUI -> CreateCourseController: verifyMaxMin(minimum, maximum)
+
+CreateCourseUI -> CreateCourseController: createCourse(edition, code, name, description, maximum, minimum)
+
+CreateCourseController -> CreateCourseFactory: createCourse(edition, code, name, description, maximum, minimum)
+
+CreateCourseUI --> Manager : shows operation's success
+@enduml
