@@ -306,6 +306,38 @@ public class User
     }
 
     /**
+     * Get mecanographic number.
+     * @return MecanographicNumber
+     */
+    public MecanographicNumber mecanographicNumber() {
+        return this.numberMec;
+    }
+
+    /**
+     * Get password.
+     * @return Password
+     */
+    public Password password() {
+        return this.password;
+    }
+
+    /**
+     * Get createdOn.
+     * @return Calendar
+     */
+    public Calendar createdOn() {
+        return this.createdOn;
+    }
+
+    /**
+     * Get acronym.
+     * @return Acronym
+     */
+    public Acronym acronym() {
+        return this.acronym;
+    }
+
+    /**
      * Check if some User is the same object then other.
      * @param other
      * @return true/false

@@ -42,7 +42,7 @@ public class JpaAutoTxUserRepository
     }
 
     @Override
-    public MecanographicNumber findMaxMecanographicNumber() {
+    public MecanographicNumber findMaxYearMecanographicNumber() {
         final TypedQuery<MecanographicNumber> query = createQuery(
                 "SELECT MAX(ce.numberMec) FROM User ce WHERE ce.numberMec > (YEAR(CURRENT_DATE()) * 100000)",
                 MecanographicNumber.class);

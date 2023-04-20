@@ -109,6 +109,28 @@ public class UserBuilder implements DomainFactory<User> {
     }
 
     /**
+     * Build basic user with value objects.
+     * @param shortNamep
+     * @param passwordp
+     * @param fullNamep
+     * @param emailp
+     * @param rolep
+     * @return UserBuilder
+     */
+    public UserBuilder with(final ShortName shortNamep,
+                            final Password passwordp,
+                            final FullName fullNamep,
+                            final EmailAddress emailp,
+                            final Role rolep) {
+        this.withShortName(shortNamep);
+        this.withPassword(passwordp);
+        this.withFullName(fullNamep);
+        this.withEmail(emailp);
+        this.withRole(rolep);
+        return this;
+    }
+
+    /**
      * Build basic a complex user.
      * @param shortNamep
      * @param passwordp

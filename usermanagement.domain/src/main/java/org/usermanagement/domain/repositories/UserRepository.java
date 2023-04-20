@@ -39,5 +39,5 @@ public interface UserRepository extends DomainRepository<EmailAddress, User> {
         return ofIdentity(email);
     }
 
-    MecanographicNumber findMaxMecanographicNumber();
+    MecanographicNumber findMaxYearMecanographicNumber();
 }

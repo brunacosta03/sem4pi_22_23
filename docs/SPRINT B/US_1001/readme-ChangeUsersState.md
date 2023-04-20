@@ -1,26 +1,21 @@
-# US 1001 - Register User
+# US 1001 - Change User State
 
 ## 1. Context
 
-*Explain the context for this task. It is the first time the task is assigned to be developed or this tasks was incomplete in a previous sprint and is to be completed in this sprint? Are we fixing some bug?*
+In Sprint B client wants us to develop a feature for our System. He wants that a Manager to be able to disable/enable, Teachers and Students, as well as Managers.
 
 ## 2. Requirements
 
-*In this section you should present the functionality that is being developed, how do you understand it, as well as possible correlations to other requirements (i.e., dependencies).*
-
-*Example*
-
-**US G002** As {Ator} I Want...
-
-- G002.1. Blá Blá Blá ...
-
-- G002.2. Blá Blá Blá ...
-
-*Regarding this requirement we understand that it relates to...*
+As Manager, I want to be able to disable/enable users of the system 
 
 ## 3. Analysis
 
-*In this section, the team should report the study/analysis/comparison that was done in order to take the best design decisions for the requirement. This section should also include supporting diagrams/artifacts (such as domain model; use case diagrams, etc.),*
+Information in System Specification
+	
+
+This is an excerpt of our domain Model, it provides the clear idea of how the User should be identified according to the information in System Specification.
+
+![Domain Model Excerpt](Analysis/DomainModelExcerpt.svg)
 
 ## 4. Design
 

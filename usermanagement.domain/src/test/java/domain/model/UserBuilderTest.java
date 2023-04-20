@@ -5,6 +5,7 @@ import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
 import eapli.framework.infrastructure.authz.domain.model.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.*;
 
 import java.util.Calendar;
@@ -23,14 +24,14 @@ class UserBuilderTest {
             new ECoursePasswordPolicy(),
             new PlainTextEncoder()
     ).get();
-    private String managerRoleString = "MANAGER";
-    private Role managerRole = Role.valueOf(managerRoleString);
+    private String managerRoleString = String.valueOf(CourseRoles.MANAGER);
+    private Role managerRole = CourseRoles.MANAGER;
 
-    private String teacherRoleString = "TEACHER";
-    private Role teacherRole = Role.valueOf(teacherRoleString);
+    private String teacherRoleString = String.valueOf(CourseRoles.TEACHER);
+    private Role teacherRole = CourseRoles.TEACHER;
 
-    private String studentRoleString = "STUDENT";
-    private Role studentRole = Role.valueOf(studentRoleString);
+    private String studentRoleString = String.valueOf(CourseRoles.STUDENT);
+    private Role studentRole = CourseRoles.STUDENT;
     private String numberMecString = "202010230";
     private MecanographicNumber numberMec = MecanographicNumber.of(numberMecString);
     private String birthDateString = "10/08/1990";
@@ -124,7 +125,7 @@ class UserBuilderTest {
                 .withShortName(shortNameString)
                 .withFullName(fullNameString)
                 .withPassword(passwordString)
-                .withRole(teacherRoleString)
+                .withRole(studentRoleString)
                 .withMecanographicNumber(numberMecString)
                 .withTaxPayerNumber(taxPayerNumberString)
                 .withBirthDate(birthDateString)

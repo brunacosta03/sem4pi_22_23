@@ -71,11 +71,3 @@ public void ensureNullIsNotAllowed() {
 *In this section the team should describe the efforts realized in order to integrate this functionality with the other parts/components of the system*
 
 *It is also important to explain any scripts or instructions required to execute an demonstrate this functionality*
-
-## 7. Observations
-
-*This section should be used to include any content that does not fit any of the previous sections.*
-
-*The team should present here, for instance, a critical prespective on the developed work including the analysis of alternative solutioons or related works*
-
-*The team should include in this section statements/references regarding third party works that were used in the development this work.*

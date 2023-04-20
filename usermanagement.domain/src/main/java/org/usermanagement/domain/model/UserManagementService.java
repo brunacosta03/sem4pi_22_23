@@ -87,7 +87,7 @@ public class UserManagementService {
      * @return String for builder create MecanographicNumber
      */
     private String generateMecNumber(){
-        MecanographicNumber mecanographicNumber = userRepository.findMaxMecanographicNumber();
+        MecanographicNumber mecanographicNumber = userRepository.findMaxYearMecanographicNumber();
 
         if(mecanographicNumber == null){
             return String.valueOf(LocalDateTime.now().getYear() * 100000 + 1);
