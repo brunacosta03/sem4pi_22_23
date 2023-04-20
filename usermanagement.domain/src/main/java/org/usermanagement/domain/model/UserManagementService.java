@@ -165,7 +165,7 @@ public class UserManagementService {
      */
     @Transactional
     public User deactivateUser(final User user) {
-        user.deactivate(CurrentTimeCalendars.now());
+        user.disable(CurrentTimeCalendars.now());
         return userRepository.save(user);
     }
 }

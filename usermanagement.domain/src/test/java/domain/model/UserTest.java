@@ -290,10 +290,10 @@ class UserTest {
                 .createdOn(CREATED_ON)
                 .build();
 
-        user.deactivate(DEACTIVATED_ON);
+        user.disable(DEACTIVATED_ON);
 
         assertThrows(IllegalStateException.class,
-                () -> user.deactivate(DEACTIVATED_ON));
+                () -> user.disable(DEACTIVATED_ON));
 
     }
 
@@ -309,7 +309,7 @@ class UserTest {
                 .build();
 
         assertThrows(IllegalStateException.class,
-                () -> user.activate());
+                () -> user.enable());
     }
 
     @Test
@@ -323,7 +323,7 @@ class UserTest {
                 .createdOn(CREATED_ON)
                 .build();
 
-        user.deactivate(DEACTIVATED_ON);
+        user.disable(DEACTIVATED_ON);
 
         assertFalse(user.isActive());
     }
@@ -339,8 +339,8 @@ class UserTest {
                 .createdOn(CREATED_ON)
                 .build();
 
-        user.deactivate(DEACTIVATED_ON);
-        user.activate();
+        user.disable(DEACTIVATED_ON);
+        user.enable();
 
         assertTrue(user.isActive());
     }

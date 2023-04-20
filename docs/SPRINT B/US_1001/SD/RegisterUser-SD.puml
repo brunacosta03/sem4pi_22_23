@@ -56,7 +56,7 @@ activate UI
         Service -> Builder: withAcronym(acronym)
 
         alt Role == CourseRoles.STUDENT
-            Service -> Repository: findMaxMecanographicNumber()
+            Service -> Repository: findMaxYearMecanographicNumber()
             activate Repository
             Repository -> Service: mecNumber
             Service -> Service: generateMecNumber()

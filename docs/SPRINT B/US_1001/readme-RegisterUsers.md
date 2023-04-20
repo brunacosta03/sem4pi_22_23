@@ -45,15 +45,43 @@ Students should have Mechanographic Number
 
 ### 4.2. Class Diagram Register User
 
-![a class diagram](CD/RegisterUser-CD.svg)
+![Register User CD](CD/RegisterUser-CD.svg)
 
 ### 4.3. Applied Patterns
+
+#### 4.3.1. Factory
+
+- Our PersistenceContext will create aRepositoryFactory based on theconfiguration file then theRepositoryFactory will create the repositorythat we needin order topersist our domain entity.
+
+#### 4.3.2 Service
+
+- Services are operations or functions thatarenot naturallyin line with the responsibility of an entity or value object. They are used to model operations that involve multiple objects or complexbehaviour.
+
+#### 4.3.3 Single Responsibility Principle (SRP)
+
+- Ensure that each object has a clear and well-defined responsibility within the domain.
+
+#### 4.3.4 Tell, Don't Ask
+
+- Ensure that objects do not expose their internal state or behaviour to the outside world. On the contrary, objects should receive commands telling them what they should do, rather than being asked for information about their current state.
+
+#### 4.3.5 Singleton Pattern
+
+- Only one instance, and provides a global point of access to that instance. 
+- The Authentication Registry is a singleton, since from thisclass we can only get aninstance of the authentication service, the authorization service and the user management service. 
+
+#### 4.3.6 Model-View-Controller (MVC)
+
+- Model is responsible for managing the data and business logic of the application. (UserManagementService, AuthorizationService)
+- View is responsible for presenting the data to the user in a human-readable format. (AddUserUI)
+- Controller is responsible for handling the user input and updating the model and the view accordingly. (AddUserController)
+
 
 ### 4.4. Tests
 
 **Test 1:** *Verifies that it is not possible to create an instance of the Example class with null values.*
 
-```
+```Java
 @Test(expected = IllegalArgumentException.class)
 public void ensureNullIsNotAllowed() {
 	Example instance = new Example(null, null);

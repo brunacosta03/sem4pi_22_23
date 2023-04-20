@@ -226,11 +226,11 @@ public class User
 
 
     /**
-     * Deactivates the user.
+     * Disable the user.
      * @param now
      * @throws IllegalStateException user is already deactivated.
      */
-    public void deactivate(final Calendar now) {
+    public void disable(final Calendar now) {
         if (!this.userState) {
             throw new IllegalStateException("Cannot deactivate "
                     + "an already deactivated user.");
@@ -240,10 +240,10 @@ public class User
     }
 
     /**
-     * Activates the user.
+     * Enable the user.
      * @throws IllegalArgumentException user is already active.
      */
-    public void activate() {
+    public void enable() {
         if (this.userState) {
             throw new IllegalStateException("Cannot activate "
                     + "an already active user.");

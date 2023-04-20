@@ -1,0 +1,63 @@
+@startuml
+'http://plantuml.com/skinparam.html
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor Manager as Actor
+participant ChangeUserStateUI as UI <<presentation>>
+participant ChangeUserStateController as Controller <<application>>
+participant AuthorizationService as AuthzService <<service>>
+participant "user:User" as Domain <<domain>>
+participant PersistenceContext as Persistence <<persistence>>
+participant RepositoryFactory as Factory <<factory>>
+database UserRepository as Repository <<repository>>
+
+
+Actor --> UI: Disable User
+activate UI
+    UI -> Controller: create()
+    UI --> Actor: Ask user information
+
+    Actor --> UI: email
+        
+    UI -> Controller: disableUserByEmail(email)
+    activate Controller
+
+        Controller -> Persistence: repositories()
+        activate Persistence
+        Persistence -> Factory: create()
+        Persistence -> Controller: factory
+        deactivate Persistence
+
+        Controller -> Factory: users()
+        activate Factory
+        Factory -> Repository: create()
+        Factory -> Controller: userRepository
+        deactivate Factory
+
+        Controller -> AuthzService: create()
+        activate AuthzService
+        Controller -> AuthzService: ensureAuthenticatedUserHasAnyOf(CourseRoles.MANAGER)
+        deactivate AuthzService
+
+        Controller -> Repository: findUserByEmail(email)
+        activate Repository
+        Repository -> Controller: user
+        deactivate Repository
+
+        Controller -> Domain: disable()
+
+        Controller -> Repository: save(user)
+        activate Repository
+        Repository -> Controller: user
+        deactivate Repository
+
+        Controller -> UI:user
+        deactivate Controller
+        UI --> Actor: displayUserDisable
+
+deactivate UI
+@enduml
