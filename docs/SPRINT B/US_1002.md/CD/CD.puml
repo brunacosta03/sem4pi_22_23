@@ -1,0 +1,61 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+class CreateCourseUI <<presentation>>
+class CreateCourseController<<application>>
+class CreateCourseBuilder<<builder>>
+class Course<<course>>
+class PersistenceContext<<persistence>>
+class RepositoryFactory<<factory>>
+class UserRepository <<repository>>
+class CourseRepository <<repository>>
+class Course <<course>>
+
+class CreateCourseUI{
+show()
+}
+
+class CreateCourseController{
+createCourse(String, String, String, String, Integer, Integer, String)
+}
+
+class CreateCourseBuilder{
+create(String, String, String, String, Integer, Integer, String)
+}
+
+class Course{
+Course(CourseEdition, CourseCode, CourseName, CourseDescription, CourseMaxNumberLimit, CourseMinNumberLimit, CourseState, User)
+validateEdition(CourseEdition)
+validateCode(CourseCode)
+validateMaxMin(CourseMaxNumberLimit, CourseMinNumberLimit)
+validateTeacher(User)
+}
+
+class PersistenceContext{
+repositories()
+}
+
+class RepositoryFactory{
+users()
+courses()
+}
+CreateCourseUI --> CreateCourseController
+
+CreateCourseController --> CreateCourseBuilder
+CreateCourseController --> PersistenceContext
+CreateCourseController --> RepositoryFactory
+
+CreateCourseBuilder --> Course
+
+Course --> PersistenceContext
+Course --> RepositoryFactory
+
+RepositoryFactory --> UserRepository
+RepositoryFactory --> CourseRepository
+@enduml

@@ -78,7 +78,9 @@ package "Course Aggregate" {
     }
     card Description <<Value Object>>{
     }
-    card Limit <<Value Object>>{
+    card MaxStudents <<Value Object>>{
+    }
+    card MinStudents <<Value Object>>{
     }
     card Edition <<Value Object>>{
     }
@@ -86,7 +88,8 @@ package "Course Aggregate" {
     Course --> Name
     Course --> State
     Course --> Description
-    Course --> Limit
+    Course --> MaxStudents
+    Course --> MinStudents
     Course --> Code
     Course --> Edition
 
@@ -96,12 +99,6 @@ package "Course Aggregate" {
             - Closed
             - Enroll
             - InProgress
-    end note
-
-    note left of Limit
-        Each course as a lower
-        and higher limit
-        number of students
     end note
 
     note right of Code
