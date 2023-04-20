@@ -48,6 +48,7 @@ public class Acronym implements ValueObject {
                 valuep.length() <= MAX_LENGTH && valuep.length() >= MIN_LENGTH,
                 "Acronym should have between 2 and 5 characters"
         );
+        
         this.value = valuep;
     }
 

@@ -108,7 +108,7 @@ public class UserBuilder implements DomainFactory<User> {
         return this;
     }
 
-    /**
+        /**
      * Build basic user with value objects.
      * @param shortNamep
      * @param passwordp
@@ -129,7 +129,7 @@ public class UserBuilder implements DomainFactory<User> {
         this.withRole(rolep);
         return this;
     }
-
+    
     /**
      * Build basic a complex user.
      * @param shortNamep

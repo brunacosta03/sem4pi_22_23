@@ -305,7 +305,7 @@ public class User
         return this.email;
     }
 
-    /**
+        /**
      * Get mecanographic number.
      * @return MecanographicNumber
      */
@@ -336,7 +336,7 @@ public class User
     public Acronym acronym() {
         return this.acronym;
     }
-
+    
     /**
      * Check if some User is the same object then other.
      * @param other

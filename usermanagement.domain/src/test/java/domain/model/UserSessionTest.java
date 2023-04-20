@@ -2,7 +2,6 @@
 package domain.model;
 
 import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.user.management.CourseRoles;

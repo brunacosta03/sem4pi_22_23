@@ -11,7 +11,8 @@ As Manager, I want to be able to disable/enable users of the system
 ## 3. Analysis
 
 Information in System Specification
-	 FRU01 - Management of Users Create, disable/enable, and list users of the system(Teachers and Students, as well as Managers)
+
+	FRU01 - Management of Users Create, disable/enable, and list users of the system(Teachers and Students, as well as Managers)
 
 
 This is an excerpt of our domain Model, it provides the clear idea of how the User should be identified according to the information in System Specification.
