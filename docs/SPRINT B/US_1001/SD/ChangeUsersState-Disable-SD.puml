@@ -9,6 +9,7 @@ skinparam shadowing false
 actor Manager as Actor
 participant ChangeUserStateUI as UI <<presentation>>
 participant ChangeUserStateController as Controller <<application>>
+participant AuthzRegistry as Registry <<util>>
 participant AuthorizationService as AuthzService <<service>>
 participant "user:User" as Domain <<domain>>
 participant PersistenceContext as Persistence <<persistence>>
@@ -38,10 +39,13 @@ activate UI
         Factory -> Controller: userRepository
         deactivate Factory
 
-        Controller -> AuthzService: create()
-        activate AuthzService
+        Controller -> Registry: authorizationService()
+        activate Registry
+        Registry -> Controller: authz
+        deactivate Registry
+
         Controller -> AuthzService: ensureAuthenticatedUserHasAnyOf(CourseRoles.MANAGER)
-        deactivate AuthzService
+
 
         Controller -> Repository: findUserByEmail(email)
         activate Repository

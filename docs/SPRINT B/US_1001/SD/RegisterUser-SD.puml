@@ -9,6 +9,7 @@ skinparam shadowing false
 actor Manager as Actor
 participant AddUserUI as UI <<presentation>>
 participant AddUserController as Controller <<application>>
+participant AuthzRegistry as Registry <<util>>
 participant AuthorizationService as AuthzService <<service>>
 participant UserManagementService as Service <<service>>
 participant UserBuilder as Builder <<builder>>
@@ -20,12 +21,13 @@ database UserRepository as Repository <<repository>>
 
 Actor --> UI: Add User
 activate UI
+    UI -> Controller: create()
+    
     loop option != 0
         UI --> Actor: Show List\nof Role Types
         Actor --> UI: Role Type
     end
 
-    UI -> Controller: create()
     UI --> Actor: Ask user information
 
     Actor --> UI: ShortName, FullName,\nPassword,\nE-Mail, BirthDate, TaxPayerNumber
@@ -40,15 +42,20 @@ activate UI
     UI -> Controller: addUser(shortName, password, fullName,\n email, role, birthDate, taxPayerNumber, acronym)
     activate Controller
 
-        Controller -> AuthzService: create()
-        activate AuthzService
-        Controller -> AuthzService: ensureAuthenticatedUserHasAnyOf(CourseRoles.MANAGER)
-        deactivate AuthzService
+        Controller -> Registry: authorizationService()
+        activate Registry
+        Registry -> Controller: authz
+        Controller -> Registry: userService()
+        Registry -> Controller: userSvc
+        deactivate Registry
 
-    Controller -> Service: create()
-    activate Service
+
+        Controller -> AuthzService: ensureAuthenticatedUserHasAnyOf(CourseRoles.MANAGER)
+
+
     Controller -> Service: registerNewUser(shortName, password, fullName,\n email, role, birthDate, taxPayerNumber, acronym, createdOn);
-    
+    activate Service
+
     Service -> Builder: create()
         activate Builder
         Service -> Builder: with(shortName, rawPassword, fullName,\n email, birthDate, role, taxPayerNumber)

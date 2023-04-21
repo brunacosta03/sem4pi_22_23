@@ -8,6 +8,7 @@ skinparam shadowing false
 
 class ListUsersUI <<presentation>>
 class ListUsersController <<application>>
+class AuthzRegistry <<util>>
 class AuthorizationService <<service>>
 class UserManagementService <<service>>
 class PersistenceContext  <<persistence>>
@@ -21,10 +22,13 @@ UserManagementService --> PersistenceContext: persistence
 PersistenceContext --> RepositoryFactory: factory
 RepositoryFactory --> UserRepository: repo
 UserManagementService --> UserRepository: repo
+ListUsersController --> AuthzRegistry: registry
 
 ListUsersUI : doShow()
 ListUsersUI : show()
 ListUsersController : listAllUsers()
+AuthzRegistry : authorizationService()
+AuthzRegistry : userService()
 AuthorizationService : ensureAuthenticatedUserHasAnyOf(Role...)
 UserManagementService : allUsers()
 PersistenceContext : repositories()

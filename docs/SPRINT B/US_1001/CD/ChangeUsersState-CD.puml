@@ -8,6 +8,7 @@ skinparam shadowing false
 
 class ChangeUserStateUI <<presentation>>
 class ChangeUserStateController <<application>>
+class AuthzRegistry <<util>>
 class AuthorizationService <<service>>
 class "user:User" <<domain>>
 class PersistenceContext  <<persistence>>
@@ -21,9 +22,11 @@ ChangeUserStateController --> PersistenceContext: persistence
 ChangeUserStateController --> "user:User"
 PersistenceContext --> RepositoryFactory: factory
 RepositoryFactory --> UserRepository: repo
+ChangeUserStateController --> AuthzRegistry: registry
 
 ChangeUserStateUI : doShow()
 ChangeUserStateController : enableUserByEmail(String)
+AuthzRegistry : authorizationService()
 AuthorizationService : ensureAuthenticatedUserHasAnyOf(Role...))
 PersistenceContext : repositories()
 RepositoryFactory : users()
