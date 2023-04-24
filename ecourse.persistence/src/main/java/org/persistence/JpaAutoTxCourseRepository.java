@@ -1,13 +1,10 @@
 package org.persistence;
 
-import eapli.framework.general.domain.model.EmailAddress;
+
 import eapli.framework.infrastructure.repositories.impl.jpa.JpaAutoTxRepository;
 import org.domain.model.Course;
 import org.domain.model.CourseCode;
-import org.domain.model.CourseEdition;
 import org.domain.repositories.CourseRepository;
-import org.usermanagement.domain.model.User;
-import org.usermanagement.domain.repositories.UserRepository;
 
 import java.util.Map;
 import java.util.Optional;

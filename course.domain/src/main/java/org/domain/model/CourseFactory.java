@@ -1,6 +1,5 @@
 package org.domain.model;
 
-import eapli.framework.general.domain.model.EmailAddress;
 import org.usermanagement.domain.model.User;
 
 public class CourseFactory {
@@ -15,7 +14,7 @@ public class CourseFactory {
                                final Integer max,
                                final Integer min,
                                final User headTeacher){
-        Course course = new Course(CourseName.of(name),
+        return new Course(CourseName.of(name),
                 CourseCode.of(code),
                 CourseEdition.of(edition),
                 CourseDescription.of(description),
@@ -24,7 +23,5 @@ public class CourseFactory {
                 CourseMinNumberLimit.of(min),
                 headTeacher
                 );
-
-        return course;
     }
 }

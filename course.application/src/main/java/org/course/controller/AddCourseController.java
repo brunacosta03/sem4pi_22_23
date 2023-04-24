@@ -30,7 +30,7 @@ public class AddCourseController {
 
         authz.ensureAuthenticatedUserHasAnyOf(CourseRoles.MANAGER);
 
-        User teacher = userRepo.findByEmail(EmailAddress.valueOf(headTeacher))
+        User teacher = userRepo.findUserByEmail(EmailAddress.valueOf(headTeacher))
                 .orElse(null);
 
         final Course course = factory.createCourse(name, code, edition,
