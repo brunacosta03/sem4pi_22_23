@@ -1,4 +1,4 @@
-package org.usermanagement.domain.model;
+package org.domain.model;
 
 import eapli.framework.domain.model.ValueObject;
 
@@ -13,13 +13,13 @@ public class CourseMinNumberLimit implements ValueObject {
     /**
      * Minimum number of students than can be enrolled in a course
      */
-    @Column(name = "maximum_students")
+    @Column(name = "minimum_students")
     private Integer value;
 
     /**
-     * Instantiates a new Course max number limit.
+     * Instantiates a new Course min number limit.
      */
-    protected CourseMinNumberLimit(){ value = 1;}
+    protected CourseMinNumberLimit(){ value = null;}
 
     private CourseMinNumberLimit(final Integer value){
         // Preconditions ensurrance

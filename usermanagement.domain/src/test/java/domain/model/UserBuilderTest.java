@@ -124,7 +124,7 @@ class UserBuilderTest {
                 .withShortName(shortNameString)
                 .withFullName(fullNameString)
                 .withPassword(passwordString)
-                .withRole(teacherRoleString)
+                .withRole(studentRoleString)
                 .withMecanographicNumber(numberMecString)
                 .withTaxPayerNumber(taxPayerNumberString)
                 .withBirthDate(birthDateString)

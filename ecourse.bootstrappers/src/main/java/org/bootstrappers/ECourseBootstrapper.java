@@ -7,6 +7,7 @@ import eapli.framework.validations.Invariants;
 import org.authz.application.AuthenticationService;
 import org.authz.application.AuthorizationService;
 import org.authz.application.AuthzRegistry;
+import org.bootstrappers.demo.CoursesBootstrapper;
 import org.bootstrappers.demo.UsersBootstrapper;
 import org.persistence.PersistenceContext;
 import org.user.management.CourseRoles;
@@ -69,6 +70,14 @@ public class ECourseBootstrapper implements Action {
         return usersBootstrapper.execute();
     }
 
+    public boolean executeCourses(){
+        authenticateForBootstrapping();
+
+        CoursesBootstrapper bootstrapper = new CoursesBootstrapper();
+        System.out.println("Bootstrapper --> " + bootstrapper.getClass().getSimpleName());
+
+        return bootstrapper.execute();
+    }
     /**
      * Registers the manager user in the system during bootstrapping.
      * @param userRepository the repository for managing user entities.

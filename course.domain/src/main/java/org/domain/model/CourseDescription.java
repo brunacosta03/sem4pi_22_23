@@ -1,4 +1,4 @@
-package org.usermanagement.domain.model;
+package org.domain.model;
 
 
 import eapli.framework.domain.model.ValueObject;

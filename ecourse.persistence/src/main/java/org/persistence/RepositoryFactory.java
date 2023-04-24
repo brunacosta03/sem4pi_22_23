@@ -1,6 +1,7 @@
 package org.persistence;
 
 import eapli.framework.domain.repositories.TransactionalContext;
+import org.domain.repositories.CourseRepository;
 import org.usermanagement.domain.repositories.UserRepository;
 
 public interface RepositoryFactory {
@@ -15,4 +16,10 @@ public interface RepositoryFactory {
      * @return UserRepository
      */
      UserRepository users();
+
+    /**
+     * For configure persistence context.
+     * @return CourseRepository
+     */
+    CourseRepository courses();
 }

@@ -1,4 +1,4 @@
-package org.usermanagement.domain.model;
+package org.domain.model;
 
 
 import eapli.framework.domain.model.ValueObject;
@@ -10,7 +10,7 @@ import javax.persistence.Embeddable;
  * The type CourseCode
  */
 @Embeddable
-public class CourseCode implements ValueObject {
+public class CourseCode implements ValueObject, Comparable<CourseCode> {
     /**
      * Unique code for the course
      */
@@ -40,4 +40,12 @@ public class CourseCode implements ValueObject {
      * @return String
      */
     public String value(){return this.value;}
+
+    @Override
+    public int compareTo(CourseCode o) {
+        if(this.value.equals(o.value)){
+            return 1;
+        }
+        return 0;
+    }
 }

@@ -2,6 +2,7 @@ package org.persistence;
 
 import eapli.framework.domain.repositories.TransactionalContext;
 import eapli.framework.infrastructure.repositories.impl.jpa.JpaAutoTxRepository;
+import org.domain.repositories.CourseRepository;
 import org.ecourse.Application;
 import org.usermanagement.domain.repositories.UserRepository;
 
@@ -29,5 +30,13 @@ public class JpaRepositoryFactory implements RepositoryFactory {
         return new JpaAutoTxUserRepository(
                 Application.settings().persistenceUnitName(),
                 Application.settings().extendedPersistenceProperties());
+    }
+
+    @Override
+    public CourseRepository courses() {
+        return new JpaAutoTxCourseRepository(
+                Application.settings().persistenceUnitName(),
+                Application.settings().extendedPersistenceProperties()
+        );
     }
 }
