@@ -19,7 +19,7 @@ public class CourseFactory {
                 CourseCode.of(code),
                 CourseEdition.of(edition),
                 CourseDescription.of(description),
-                CourseState.of("Open"),
+                CourseStateConstants.CLOSED,
                 CourseMaxNumberLimit.of(max),
                 CourseMinNumberLimit.of(min),
                 headTeacher
