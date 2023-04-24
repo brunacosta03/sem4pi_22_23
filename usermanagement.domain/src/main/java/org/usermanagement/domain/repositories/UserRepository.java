@@ -34,10 +34,10 @@ public interface UserRepository extends DomainRepository<EmailAddress, User> {
      * @param email
      * @return User
      */
-    default Optional<User> findByEmail(
+    default Optional<User> findUserByEmail(
             final EmailAddress email) {
         return ofIdentity(email);
     }
 
-    MecanographicNumber findMaxMecanographicNumber();
+    MecanographicNumber findMaxYearMecanographicNumber();
 }

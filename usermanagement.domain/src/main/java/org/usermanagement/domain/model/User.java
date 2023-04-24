@@ -226,11 +226,11 @@ public class User
 
 
     /**
-     * Deactivates the user.
+     * Disable the user.
      * @param now
      * @throws IllegalStateException user is already deactivated.
      */
-    public void deactivate(final Calendar now) {
+    public void disable(final Calendar now) {
         if (!this.userState) {
             throw new IllegalStateException("Cannot deactivate "
                     + "an already deactivated user.");
@@ -240,10 +240,10 @@ public class User
     }
 
     /**
-     * Activates the user.
+     * Enable the user.
      * @throws IllegalArgumentException user is already active.
      */
-    public void activate() {
+    public void enable() {
         if (this.userState) {
             throw new IllegalStateException("Cannot activate "
                     + "an already active user.");
@@ -305,6 +305,38 @@ public class User
         return this.email;
     }
 
+        /**
+     * Get mecanographic number.
+     * @return MecanographicNumber
+     */
+    public MecanographicNumber mecanographicNumber() {
+        return this.numberMec;
+    }
+
+    /**
+     * Get password.
+     * @return Password
+     */
+    public Password password() {
+        return this.password;
+    }
+
+    /**
+     * Get createdOn.
+     * @return Calendar
+     */
+    public Calendar createdOn() {
+        return this.createdOn;
+    }
+
+    /**
+     * Get acronym.
+     * @return Acronym
+     */
+    public Acronym acronym() {
+        return this.acronym;
+    }
+    
     /**
      * Check if some User is the same object then other.
      * @param other

@@ -1,4 +1,3 @@
-/*
 package domain.model;
 
 import eapli.framework.general.domain.model.EmailAddress;
@@ -7,6 +6,7 @@ import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
 import eapli.framework.infrastructure.authz.domain.model.Role;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.*;
 
 import java.util.Calendar;
@@ -27,13 +27,15 @@ class UserTest {
     private static final String STRING_EMAIL = "email@email.com";
 
     private static final EmailAddress EMAIL = EmailAddress.valueOf(STRING_EMAIL);
-    private static final String STRING_ROLE = "role";
-    private static final Role ROLE = Role.valueOf(STRING_ROLE);
+    private static final String STRING_ROLE = String.valueOf(CourseRoles.MANAGER);
+    private static final Role ROLE = CourseRoles.MANAGER;
 
 
     private static final String STRING_PASS = "Correct5";
+    private static final String STRING_PASS2 = "CorrectPass2";
     private static final Password PASSWORD = Password.encodedAndValid(STRING_PASS, POLICY, ENCODER).get();
 
+    private static final Password PASSWORD2 = Password.encodedAndValid(STRING_PASS2, POLICY, ENCODER).get();
     private static final Calendar CREATED_ON = Calendar.getInstance();
     private static final Calendar DEACTIVATED_ON = Calendar.getInstance();
 
@@ -44,26 +46,31 @@ class UserTest {
             ROLE_TWO
     };
 
+    UserBuilder builder = new UserBuilder(POLICY, ENCODER);
+
     @Test
     void ensureUserHasShortNameWhenCreated() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new User(
+                () -> builder.with(
                         null,
-                        FULLNAME,
                         PASSWORD,
+                        FULLNAME,
                         EMAIL,
-                        ROLE,
-                        null,
-                        null,
-                        null,
-                        null
-                )
+                        ROLE
+                ).build()
         );
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new User(null, FULLNAME, PASSWORD, EMAIL, ROLE, null, null, null, null, CREATED_ON)
+                () -> builder.with(
+                        null,
+                        PASSWORD,
+                        FULLNAME,
+                        EMAIL,
+                        ROLE)
+                        .createdOn(CREATED_ON)
+                        .build()
         );
     }
 
@@ -71,12 +78,25 @@ class UserTest {
     void ensureUserHasFullNameWhenCreated() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new User(SHORTNAME, null, PASSWORD, EMAIL, ROLE, null, null, null, null)
+                () -> builder.with(
+                                SHORTNAME,
+                                PASSWORD,
+                                null,
+                                EMAIL,
+                                ROLE)
+                        .build()
         );
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new User(SHORTNAME, null, PASSWORD, EMAIL, ROLE, null, null, null, null, CREATED_ON)
+                () -> builder.with(
+                                SHORTNAME,
+                                PASSWORD,
+                                null,
+                                EMAIL,
+                                ROLE)
+                        .createdOn(CREATED_ON)
+                        .build()
         );
     }
 
@@ -84,12 +104,25 @@ class UserTest {
     void ensureUserHasPasswordWhenCreated() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new User(SHORTNAME, FULLNAME, null, EMAIL, ROLE, null, null, null, null)
+                () -> builder.with(
+                                SHORTNAME,
+                                null,
+                                FULLNAME,
+                                EMAIL,
+                                ROLE)
+                        .build()
         );
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new User(SHORTNAME, FULLNAME, null, EMAIL, ROLE, null, null, null, null, CREATED_ON)
+                () -> builder.with(
+                                SHORTNAME,
+                                null,
+                                FULLNAME,
+                                EMAIL,
+                                ROLE)
+                        .createdOn(CREATED_ON)
+                        .build()
         );
     }
 
@@ -97,12 +130,25 @@ class UserTest {
     void ensureUserHasEmailWhenCreated() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new User(SHORTNAME, FULLNAME, PASSWORD, null, ROLE, null, null, null, null)
+                () -> builder.with(
+                                SHORTNAME,
+                                PASSWORD,
+                                FULLNAME,
+                                null,
+                                ROLE)
+                        .build()
         );
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new User(SHORTNAME, FULLNAME, PASSWORD, null, ROLE, null, null, null, null, CREATED_ON)
+                () -> builder.with(
+                                SHORTNAME,
+                                PASSWORD,
+                                FULLNAME,
+                                null,
+                                ROLE)
+                        .createdOn(CREATED_ON)
+                        .build()
         );
     }
 
@@ -110,32 +156,51 @@ class UserTest {
     void ensureUserHasRoleWhenCreated() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new User(SHORTNAME, FULLNAME, PASSWORD, EMAIL, null, null, null, null, null)
+                () -> builder.with(
+                                SHORTNAME,
+                                PASSWORD,
+                                FULLNAME,
+                                EMAIL,
+                                null)
+                        .build()
         );
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new User(SHORTNAME, FULLNAME, PASSWORD, EMAIL, null, null, null, null, null, CREATED_ON)
+                () -> builder.with(
+                                SHORTNAME,
+                                PASSWORD,
+                                FULLNAME,
+                                EMAIL,
+                                null)
+                        .createdOn(CREATED_ON)
+                        .build()
         );
     }
 
     @Test
     void ensureUserHasCreatedOnWhenCreated() {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new User(SHORTNAME, FULLNAME, PASSWORD, EMAIL, ROLE, null, null, null, null, null)
-        );
+        User user = builder.with(
+                        SHORTNAME,
+                        PASSWORD,
+                        FULLNAME,
+                        EMAIL,
+                        ROLE)
+                .build();
+
+        assertEquals(Calendar.getInstance(), user.createdOn());
     }
 
     @Test
     void ensureUserCanBeCreatedWhenValid() {
-        User user = new User(SHORTNAME, FULLNAME, PASSWORD, EMAIL, ROLE, null, null, null, null, CREATED_ON);
-
-        assertTrue(user.isActive());
-        assertTrue(user.passwordMatches(STRING_PASS, ENCODER));
-        assertTrue(user.hasAnyOf(ROLES));
-
-        user = new User(SHORTNAME, FULLNAME, PASSWORD, EMAIL, ROLE, null, null, null, null);
+        User user = builder.with(
+                        SHORTNAME,
+                        PASSWORD,
+                        FULLNAME,
+                        EMAIL,
+                        ROLE)
+                .createdOn(CREATED_ON)
+                .build();
 
         assertTrue(user.isActive());
         assertTrue(user.passwordMatches(STRING_PASS, ENCODER));
@@ -144,69 +209,153 @@ class UserTest {
 
     @Test
     void ensureCantChangeToNullPassword(){
-        final User user = new User(SHORTNAME, FULLNAME, PASSWORD, EMAIL, ROLE, null, null, null, null, CREATED_ON);
-        assertThrows(IllegalArgumentException.class, () -> user.changePassword(null));
+        final User user = builder.with(
+                        SHORTNAME,
+                        PASSWORD,
+                        FULLNAME,
+                        EMAIL,
+                        ROLE)
+                .createdOn(CREATED_ON)
+                .build();
+
+        assertThrows(IllegalArgumentException.class,
+                () -> user.changePassword(null));
     }
 
     @Test
     void ensureCanChangeToValidPassword(){
-        final User user = new User(SHORTNAME, FULLNAME, PASSWORD, EMAIL, ROLE, null, null, null, null, CREATED_ON);
-        user.changePassword(PASSWORD);
+        final User user = builder.with(
+                        SHORTNAME,
+                        PASSWORD,
+                        FULLNAME,
+                        EMAIL,
+                        ROLE)
+                .createdOn(CREATED_ON)
+                .build();
+
+        user.changePassword(PASSWORD2);
+
+        assertEquals(PASSWORD2, user.password());
     }
 
     @Test
     void ensureReturnsCorrectIdentity(){
-        final User user = new User(SHORTNAME, FULLNAME, PASSWORD, EMAIL, ROLE, null, null, null, null, CREATED_ON);
+        final User user = builder.with(
+                        SHORTNAME,
+                        PASSWORD,
+                        FULLNAME,
+                        EMAIL,
+                        ROLE)
+                .createdOn(CREATED_ON)
+                .build();
+
         assertEquals(EMAIL, user.identity());
         assertEquals(EMAIL, user.emailAddress());
     }
 
     @Test
     void testSameAs() {
-        final User user = new User(SHORTNAME, FULLNAME, PASSWORD, EMAIL, ROLE, null, null, null, null, CREATED_ON);
+        final User user = builder.with(
+                        SHORTNAME,
+                        PASSWORD,
+                        FULLNAME,
+                        EMAIL,
+                        ROLE)
+                .createdOn(CREATED_ON)
+                .build();
         final User user2 = user;
+
         assertTrue(user.sameAs(user2));
 
-        final User user3 = new User(SHORTNAME, FULLNAME, PASSWORD, EMAIL, ROLE, null, null, null, null, CREATED_ON);
+        final User user3 = builder.with(
+                        SHORTNAME,
+                        PASSWORD,
+                        FULLNAME,
+                        EMAIL,
+                        ROLE)
+                .createdOn(CREATED_ON)
+                .build();
 
         assertFalse(user.sameAs(user3));
     }
 
     @Test
     void ensureNotPossibleToDeactivateDeactivetedUser() {
-        final User user = new User(SHORTNAME, FULLNAME, PASSWORD, EMAIL, ROLE, null, null, null, null, CREATED_ON);
-        user.deactivate(DEACTIVATED_ON);
+        final User user = builder.with(
+                        SHORTNAME,
+                        PASSWORD,
+                        FULLNAME,
+                        EMAIL,
+                        ROLE)
+                .createdOn(CREATED_ON)
+                .build();
 
-        assertThrows(IllegalStateException.class, () -> user.deactivate(DEACTIVATED_ON));
+        user.disable(DEACTIVATED_ON);
+
+        assertThrows(IllegalStateException.class,
+                () -> user.disable(DEACTIVATED_ON));
 
     }
 
     @Test
     void ensureNotPossibleToActivateActiveUser() {
-        final User user = new User(SHORTNAME, FULLNAME, PASSWORD, EMAIL, ROLE, null, null, null, null, CREATED_ON);
-        assertThrows(IllegalStateException.class, () -> user.activate());
+        final User user = builder.with(
+                        SHORTNAME,
+                        PASSWORD,
+                        FULLNAME,
+                        EMAIL,
+                        ROLE)
+                .createdOn(CREATED_ON)
+                .build();
+
+        assertThrows(IllegalStateException.class,
+                () -> user.enable());
     }
 
     @Test
     void ensureUserCanBeDeactivated() {
-        final User user = new User(SHORTNAME, FULLNAME, PASSWORD, EMAIL, ROLE, null, null, null, null, CREATED_ON);
-        user.deactivate(DEACTIVATED_ON);
+        final User user = builder.with(
+                        SHORTNAME,
+                        PASSWORD,
+                        FULLNAME,
+                        EMAIL,
+                        ROLE)
+                .createdOn(CREATED_ON)
+                .build();
+
+        user.disable(DEACTIVATED_ON);
+
         assertFalse(user.isActive());
     }
 
     @Test
     void ensureUserCanBeActivated() {
-        final User user = new User(SHORTNAME, FULLNAME, PASSWORD, EMAIL, ROLE, null, null, null, null, CREATED_ON);
-        user.deactivate(DEACTIVATED_ON);
-        user.activate();
+        final User user = builder.with(
+                        SHORTNAME,
+                        PASSWORD,
+                        FULLNAME,
+                        EMAIL,
+                        ROLE)
+                .createdOn(CREATED_ON)
+                .build();
+
+        user.disable(DEACTIVATED_ON);
+        user.enable();
+
         assertTrue(user.isActive());
     }
 
     @Test
     void ensureUserHasCorrectRoles() {
-        final User user = new User(SHORTNAME, FULLNAME, PASSWORD, EMAIL, ROLE, null, null, null, null, CREATED_ON);
+        final User user = builder.with(
+                        SHORTNAME,
+                        PASSWORD,
+                        FULLNAME,
+                        EMAIL,
+                        ROLE)
+                .createdOn(CREATED_ON)
+                .build();
+
         assertEquals(STRING_ROLE, user.role());
     }
 }
-
-*/

@@ -8,6 +8,7 @@ skinparam shadowing false
 
 class AddUserUI <<presentation>>
 class AddUserController <<application>>
+class AuthzRegistry <<util>>
 class AuthorizationService <<service>>
 class UserManagementService <<service>>
 class UserBuilder <<builder>>
@@ -17,19 +18,22 @@ class RepositoryFactory  <<factory>>
 class UserRepository <<repository>>
 
 AddUserUI --> AddUserController : theController
-AddUserController --> AuthorizationService:theAuthzService
-AddUserController --> UserManagementService:theService
-UserManagementService --> UserBuilder:theBuilder
+AddUserController --> AuthorizationService: theAuthzService
+AddUserController --> UserManagementService: theService
+UserManagementService --> UserBuilder: theBuilder
 UserBuilder --> "user:User"
-UserManagementService --> PersistenceContext:persistence
-PersistenceContext --> RepositoryFactory:factory
-RepositoryFactory --> UserRepository:repo
-UserManagementService --> UserRepository:repo
+UserManagementService --> PersistenceContext: persistence
+PersistenceContext --> RepositoryFactory: factory
+RepositoryFactory --> UserRepository: repo
+UserManagementService --> UserRepository: repo
+AddUserController --> AuthzRegistry: registry
 
 AddUserUI : doShow()
 UserRepository : save(User)
 AddUserController : addUser(String, String, String, String, String, String, String, String)
 AddUserController : addUser(String, String, String, String, String, String, String, String, String)
+AuthzRegistry : authorizationService()
+AuthzRegistry : userService()
 AuthorizationService : ensureAuthenticatedUserHasAnyOf(Role...)
 UserManagementService : registerNewUser(String, String, String, String, String, String, String, String, Calendar)
 UserManagementService : generateMecNumber()

@@ -1,44 +1,73 @@
-# US 1001 - Register User
+# US 1001 - List Users
 
 ## 1. Context
 
-*Explain the context for this task. It is the first time the task is assigned to be developed or this tasks was incomplete in a previous sprint and is to be completed in this sprint? Are we fixing some bug?*
+In Sprint B client wants us to develop a feature for our System. He wants that a Manager to be able to list Teachers and Students, as well as Managers.
 
 ## 2. Requirements
 
-*In this section you should present the functionality that is being developed, how do you understand it, as well as possible correlations to other requirements (i.e., dependencies).*
-
-*Example*
-
-**US G002** As {Ator} I Want...
-
-- G002.1. Blá Blá Blá ...
-
-- G002.2. Blá Blá Blá ...
-
-*Regarding this requirement we understand that it relates to...*
+As Manager, I want to be able to list users of the system
 
 ## 3. Analysis
 
-*In this section, the team should report the study/analysis/comparison that was done in order to take the best design decisions for the requirement. This section should also include supporting diagrams/artifacts (such as domain model; use case diagrams, etc.),*
+Information in System Specification
+
+	FRU01 - Management of Users Create, disable/enable, and list users of the system(Teachers and Students, as well as Managers)~
+
+Information in Forum
+
+	"Is it necessary to know who created a specific user? There is no requirement specific to all these questions. However, I do not know if the system must support "something" related to these questions. I think this is something related to the design of the solution, that you and your team must decide when designing the solution in order to meet the existing requirements."
 
 ## 4. Design
 
-*In this sections, the team should present the solution design that was adopted to solve the requirement. This should include, at least, a diagram of the realization of the functionality (e.g., sequence diagram), a class diagram (presenting the classes that support the functionality), the identification and rational behind the applied design patterns and the specification of the main tests used to validade the functionality.*
-
 ### 4.1. Realization
 
-### 4.2. Class Diagram
+#### 4.1.1. Sequence Diagram List Users
 
-![a class diagram](class-diagram-01.svg "A Class Diagram")
+![List Users SD](SD/ListUsers-SD.svg)
+
+### 4.2. Class Diagram List Users
+
+![List Users CD](CD/ListUsers-CD.svg)
 
 ### 4.3. Applied Patterns
+
+#### 4.3.1. Factory
+
+- Our PersistenceContext will create aRepositoryFactory based on theconfiguration file then theRepositoryFactory will create the repositorythat we needin order topersist our domain entity.
+
+
+#### 4.3.2 Service
+
+- Services are operations or functions thatarenot naturallyin line with the responsibility of an entity or value object. They are used to model operations that involve multiple objects or complexbehaviour.
+
+
+#### 4.3.3 Single Responsibility Principle (SRP)
+
+- Ensure that each object has a clear and well-defined responsibility within the domain.
+
+#### 4.3.4 Tell, Don't Ask
+
+- Ensure that objects do not expose their internal state or behaviour to the outside world. On the contrary, objects should receive commands telling them what they should do, rather than being asked for information about their current state.
+
+#### 4.3.5 Singleton Pattern
+
+- Only one instance, and provides a global point of access to that instance. 
+- The Authentication Registry is a singleton, since from thisclass we can only get aninstance of the authentication service, the authorization service and the user management service.
+
+
+#### 4.3.6 Model-View-Controller (MVC)
+
+- Model is responsible for managing the data and business logic of the application. (UserManagementService, AuthorizationService)
+- View is responsible for presenting the data to the user in a human-readable format. (ListUsersUI)
+- Controller is responsible for handling the user input and updating the model and the view accordingly. (ListUsersController)
+
 
 ### 4.4. Tests
 
 **Test 1:** *Verifies that it is not possible to create an instance of the Example class with null values.*
 
-```
+```Java
 @Test(expected = IllegalArgumentException.class)
 public void ensureNullIsNotAllowed() {
 	Example instance = new Example(null, null);
@@ -56,11 +85,3 @@ public void ensureNullIsNotAllowed() {
 *In this section the team should describe the efforts realized in order to integrate this functionality with the other parts/components of the system*
 
 *It is also important to explain any scripts or instructions required to execute an demonstrate this functionality*
-
-## 7. Observations
-
-*This section should be used to include any content that does not fit any of the previous sections.*
-
-*The team should present here, for instance, a critical prespective on the developed work including the analysis of alternative solutioons or related works*
-
-*The team should include in this section statements/references regarding third party works that were used in the development this work.*

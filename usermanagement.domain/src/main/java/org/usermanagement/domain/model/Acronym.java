@@ -38,16 +38,17 @@ public class Acronym implements ValueObject {
     private Acronym(final String valuep) {
         Preconditions.nonEmpty(
                 valuep,
-                "Short name should neither be null nor empty"
+                "Acronym should neither be null nor empty"
         );
         Preconditions.nonNull(
                 valuep,
-                "Short name should neither be null nor empty"
+                "Acronym should neither be null nor empty"
         );
         Preconditions.ensure(
                 valuep.length() <= MAX_LENGTH && valuep.length() >= MIN_LENGTH,
-                "Short name should have between 2 and 5 characters"
+                "Acronym should have between 2 and 5 characters"
         );
+        
         this.value = valuep;
     }
 

@@ -1,0 +1,66 @@
+@startuml
+'http://plantuml.com/skinparam.html
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor Manager as Actor
+participant ListUsersUI as UI <<presentation>>
+participant ListUsersController as Controller <<application>>
+participant AuthzRegistry as Registry <<util>>
+participant AuthorizationService as AuthzService <<service>>
+participant UserManagementService as Service <<service>>
+participant PersistenceContext as Persistence <<persistence>>
+participant RepositoryFactory as Factory <<factory>>
+database UserRepository as Repository <<repository>>
+
+
+Actor --> UI: List Users
+activate UI
+    UI -> Controller: create()
+
+    UI -> Controller: listAllUsers()
+    activate Controller
+
+    Controller -> Registry: authorizationService()
+    activate Registry
+    Registry -> Controller: authz
+    Controller -> Registry: userService()
+    Registry -> Controller: userSvc
+    deactivate Registry
+
+    Controller -> AuthzService: ensureAuthenticatedUserHasAnyOf(CourseRoles.MANAGER)
+
+
+    Controller -> Service: allUsers()
+    activate Service
+
+        Service -> Persistence: repositories()
+        activate Persistence
+        Persistence -> Factory: create()
+        Persistence -> Service: factory
+        deactivate Persistence
+
+        Service -> Factory: users()
+        activate Factory
+        Factory -> Repository: create()
+        Factory -> Service: userRepository
+        deactivate Factory
+
+        Service -> Repository: findAll()
+        activate Repository
+        Repository -> Service: allUsers
+        deactivate Repository
+
+        Service -> Controller: allUsers
+        deactivate Service
+        Controller -> UI: allUsers
+        deactivate Controller
+        
+        UI -> UI: show()
+        UI -> Actor: back to menu
+
+deactivate UI
+@enduml
