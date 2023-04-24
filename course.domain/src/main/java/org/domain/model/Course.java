@@ -2,12 +2,9 @@ package org.domain.model;
 
 
 import eapli.framework.domain.model.AggregateRoot;
-import eapli.framework.general.domain.model.EmailAddress;
-import eapli.framework.infrastructure.authz.domain.model.Role;
 import eapli.framework.validations.Preconditions;
 import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.User;
-import org.usermanagement.domain.repositories.UserRepository;
 
 import javax.persistence.*;
 
@@ -15,7 +12,7 @@ import javax.persistence.*;
 @Table(name = "T_COURSE")
 public class Course implements AggregateRoot<CourseCode> {
     /**
-     * Version of course;
+     * Version of course.
      */
     @Version
     private Long version;
@@ -43,7 +40,7 @@ public class Course implements AggregateRoot<CourseCode> {
     private CourseDescription description;
 
     /**
-     * State of the course(Open, closed, enroll or in progress)
+     * State of the course(Open, closed, enroll or in progress).
      */
     private CourseState state;
 
@@ -58,14 +55,25 @@ public class Course implements AggregateRoot<CourseCode> {
     private CourseMinNumberLimit min;
 
     /**
-     * The head teacher for the course
+     * The head teacher for the course.
      */
     @ManyToOne(fetch = FetchType.LAZY)
     private User headTeacher;
 
-    protected Course(){
+    protected Course() {
     }
 
+    /**
+     * Instantiates a new Course.
+     * @param name
+     * @param code
+     * @param edition
+     * @param description
+     * @param state
+     * @param max
+     * @param min
+     * @param headTeacher
+     */
     public Course(final CourseName name,
            final CourseCode code,
            final CourseEdition edition,
@@ -73,7 +81,7 @@ public class Course implements AggregateRoot<CourseCode> {
            final CourseState state,
            final CourseMaxNumberLimit max,
            final CourseMinNumberLimit min,
-           final User headTeacher){
+           final User headTeacher) {
 
         necessaryParameters(name, code, edition, max, headTeacher);
         validateMaxMin(max, min);
@@ -93,7 +101,7 @@ public class Course implements AggregateRoot<CourseCode> {
             final CourseCode code,
             final CourseEdition edition,
             final CourseMaxNumberLimit max,
-            final User headTeacher){
+            final User headTeacher) {
         Preconditions.nonNull(name, "Name of te course cannot be null.");
         Preconditions.nonNull(code, "Code of the course can't be null.");
         Preconditions.nonNull(edition, "Edition of the course can't be null.");

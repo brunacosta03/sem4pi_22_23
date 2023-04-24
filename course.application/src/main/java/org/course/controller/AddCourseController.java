@@ -11,26 +11,59 @@ import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.User;
 import org.usermanagement.domain.repositories.UserRepository;
 
+/**
+ * The type Add course controller.
+ */
 @UseCaseController
 public class AddCourseController {
 
-    private final AuthorizationService authz = AuthzRegistry.authorizationService();
-    private final CourseRepository repo = PersistenceContext.repositories().courses();
+    /**
+     * The authorization service for managing user authorization.
+     */
+    private final AuthorizationService authz =
+            AuthzRegistry.authorizationService();
+    /**
+     * The repository for managing course entities.
+     */
+    private final CourseRepository repo =
+            PersistenceContext.repositories().courses();
 
-    private final UserRepository userRepo = PersistenceContext.repositories().users();
+    /**
+     * The repository for managing user entities.
+     */
+    private final UserRepository userRepo =
+            PersistenceContext.repositories().users();
 
+    /**
+     * The factory for creating course entities.
+     */
     private final CourseFactory factory = new CourseFactory();
+
+    /**
+     * Add course course.
+     *
+     * @param name        the name
+     * @param code        the code
+     * @param edition     the edition
+     * @param description the description
+     * @param max         the max
+     * @param min         the min
+     * @param headTeacher the head teacher
+     * @return the course
+     */
     public Course addCourse(final String name,
                             final String code,
                             final String edition,
                             final String description,
                             final Integer max,
                             final Integer min,
-                            final String headTeacher){
+                            final String headTeacher) {
 
         authz.ensureAuthenticatedUserHasAnyOf(CourseRoles.MANAGER);
 
-        User teacher = userRepo.findUserByEmail(EmailAddress.valueOf(headTeacher))
+        User teacher = userRepo.findUserByEmail(
+                EmailAddress.valueOf(headTeacher)
+                )
                 .orElse(null);
 
         final Course course = factory.createCourse(name, code, edition,

@@ -11,13 +11,14 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class CourseState implements ValueObject {
     /**
-     * The state of the current course. Can be open, closed, enroll and in progress
+     * The state of the current course.
+     * Can be open, closed, enroll and in progress.
      */
     @Column(name = "state")
     private String value;
 
     /**
-     * Instatiates a new State for the course
+     * Instatiates a new State for the course.
      */
     protected CourseState(){value = "Open";}
 
@@ -27,7 +28,7 @@ public class CourseState implements ValueObject {
     }
 
     /**
-     * Factory method for coursestate creation
+     * Factory method for coursestate creation.
      *
      * @param state, the state of the course
      * @return CourseState
