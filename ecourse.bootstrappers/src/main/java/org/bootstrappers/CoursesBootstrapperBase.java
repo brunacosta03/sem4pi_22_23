@@ -34,7 +34,7 @@ public class CoursesBootstrapperBase {
 
         try{
             course = ctrl.addCourse(name, code, edition, description, max, min, headTeacher);
-            System.out.println("Course " + name + " added.");
+            System.out.println("[+] " + name);
         }catch (final IllegalArgumentException e){
             System.out.println(e.getMessage());
         }catch (final IntegrityViolationException | ConcurrencyException e){

@@ -10,7 +10,8 @@ import java.util.Map;
 import java.util.Optional;
 
 public class JpaAutoTxCourseRepository
-        extends JpaAutoTxRepository<Course, CourseCode, CourseCode> implements CourseRepository {
+        extends JpaAutoTxRepository<Course, CourseCode, CourseCode>
+        implements CourseRepository {
     public JpaAutoTxCourseRepository(final String puname, final Map properties) {
         super(puname, properties, "code");
     }

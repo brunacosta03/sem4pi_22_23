@@ -68,7 +68,14 @@ public class AuthorizationService {
         }
     }
 
+    /**
+     * Check if authenticated user have some role.
+     * @param actions roles that have authorization to do something
+     * @return true if authenticated user have some role
+     */
     public boolean isAuthenticatedUserAuthorizedTo(final Role... actions) {
-        return session().map(us -> us.authenticatedUser().hasAnyOf(actions)).orElse(false);
+        return session()
+                .map(us -> us.authenticatedUser().hasAnyOf(actions))
+                .orElse(false);
     }
 }
