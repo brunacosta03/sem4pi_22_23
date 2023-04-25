@@ -47,7 +47,7 @@ public class MainMenu extends AbstractUI {
     private Menu buildMainMenu() {
         final Menu mainMenu = new Menu();
 
-        if (authz.isAuthenticatedUserAuthorizedTo(CourseRoles.MANAGER)) {;
+        if (authz.isAuthenticatedUserAuthorizedTo(CourseRoles.MANAGER)) {
             final Menu managerMenu = buildManagerMenu();
             mainMenu.addSubMenu(SET_MANAGER_MANAGE_USERS_OPTION, managerMenu);
         }

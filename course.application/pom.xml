@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>ecourse.persistence</name>
+    <name>course.application</name>
 
-    <artifactId>ecourse.persistence</artifactId>
+    <artifactId>course.application</artifactId>
     <version>0.1.0</version>
     <packaging>jar</packaging>
 
@@ -15,11 +15,15 @@
         <artifactId>gs-maven</artifactId>
         <version>0.1.0</version>
     </parent>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>ecourse.core</artifactId>
+            <artifactId>course.domain</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>ecourse.persistence</artifactId>
             <version>0.1.0</version>
         </dependency>
         <dependency>
@@ -29,14 +33,10 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>course.domain</artifactId>
+            <artifactId>ecourse.infrastructure.authz</artifactId>
             <version>0.1.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-c3p0</artifactId>
-            <version>5.6.7.Final</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
+
 </project>

@@ -32,6 +32,8 @@
         <module>usermanagement.application</module>
 		<module>usermanagement.domain</module>
 		<module>ecourse.infrastructure.authz</module>
+        <module>course.application</module>
+        <module>course.domain</module>
     </modules>
 
 	<dependencies>

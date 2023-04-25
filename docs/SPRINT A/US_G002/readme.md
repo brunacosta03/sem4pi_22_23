@@ -1,3 +1,3 @@
 # Domain model #
 
-![Domain model](Domain%20Model.svg)
+![Domain model](../../Domain%20Model.svg)

@@ -1,0 +1,129 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+
+actor Manager
+participant CreateCourseUI <<presentation>>
+participant CreateCourseController<<application>>
+participant CreateCourseBuilder<<builder>>
+participant Course<<course>>
+participant PersistenceContext<<persistence>>
+participant RepositoryFactory<<factory>>
+database UserRepository <<repository>>
+database CourseRepository <<repository>>
+
+activate Manager
+
+
+Manager -> CreateCourseUI: Add course
+
+activate CreateCourseUI
+
+CreateCourseUI --> Manager: asks for the course's information
+
+deactivate CreateCourseUI
+
+Manager -> CreateCourseUI : Edition, Code, Name, Description,\nMaximum, Minimum, UserEmail
+
+activate CreateCourseUI
+
+CreateCourseUI -> CreateCourseController: createCourse(edition, code, name,\n description, maximum, minimum, userEmail)
+
+activate CreateCourseController
+
+CreateCourseController -> CreateCourseBuilder: create
+
+CreateCourseController -> CreateCourseBuilder: setEdition(edition)
+
+CreateCourseController -> CreateCourseBuilder: setCode(code)
+
+CreateCourseController -> CreateCourseBuilder: setName(name)
+
+CreateCourseController -> CreateCourseBuilder: setDescription(description)
+
+CreateCourseController -> CreateCourseBuilder: setMaximum(maximum)
+
+CreateCourseController -> CreateCourseBuilder: setMinimum(minimum)
+
+CreateCourseController -> CreateCourseBuilder: setHeadTeacher(userEmail)
+
+CreateCourseController -> CreateCourseBuilder: createCourse()
+
+activate CreateCourseBuilder
+
+CreateCourseBuilder -> Course : create(edition, code, name, description,\nmaximum, minimum, userEmail)
+
+activate Course
+
+Course -> Course : validateEdition(edition)
+
+Course -> Course : validateCode(code)
+
+Course -> Course : validateMaxMin(maximum, minimum)
+
+Course -> Course : validateTeacher(userEmail)
+
+Course -> PersistenceContext : repositories()
+
+activate PersistenceContext
+
+PersistenceContext -> RepositoryFactory : get
+
+PersistenceContext -> Course : factory
+
+deactivate PersistenceContext
+
+Course -> RepositoryFactory : users()
+
+activate RepositoryFactory
+
+RepositoryFactory -> UserRepository : get
+
+RepositoryFactory -> Course : user
+
+deactivate RepositoryFactory
+
+
+Course -> CreateCourseBuilder : course
+
+deactivate Course
+
+CreateCourseBuilder ->CreateCourseController : course
+
+deactivate CreateCourseBuilder
+
+CreateCourseController -> PersistenceContext : repositories()
+
+activate PersistenceContext
+
+PersistenceContext -> RepositoryFactory : create
+
+PersistenceContext -> CreateCourseController : factory
+
+deactivate PersistenceContext
+
+CreateCourseController -> RepositoryFactory : courses()
+
+activate RepositoryFactory
+
+RepositoryFactory -> CourseRepository : create
+
+RepositoryFactory -> CreateCourseController : courseRepository
+
+deactivate RepositoryFactory
+
+CreateCourseController -> CourseRepository : save(course)
+
+CreateCourseController -> CreateCourseUI : course
+
+deactivate CreateCourseController
+
+CreateCourseUI --> Manager : shows operation's success
+
+deactivate CreateCourseUI
+
+deactivate Manager
+
+@enduml
