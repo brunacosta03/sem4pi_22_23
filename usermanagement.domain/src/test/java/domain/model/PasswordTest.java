@@ -33,9 +33,8 @@ class PasswordTest {
 
     @Test
     void ensureEmptyStringIsNotValid(){
-        Optional<Password> pass = Password.encodedAndValid("", policy, encoder);
-
-        assertFalse(pass.isPresent());
+        assertThrows(IllegalArgumentException.class,
+                () -> Password.encodedAndValid("", policy, encoder));
     }
 
     @Test

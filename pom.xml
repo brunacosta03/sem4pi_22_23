@@ -32,7 +32,7 @@
         <module>usermanagement.application</module>
 		<module>usermanagement.domain</module>
 		<module>ecourse.infrastructure.authz</module>
-	</modules>
+    </modules>
 
 	<dependencies>
 		<dependency>

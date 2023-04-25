@@ -13,12 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.user.management.CourseRoles;
 
 
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Version;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -200,25 +195,38 @@ public class User
         Preconditions.nonNull(createdOnp, "CreatedOn cannot be null");
     }
 
-    private void validateMecNumber(MecanographicNumber numberMecp, Role rolep){
-        if(!rolep.equals(CourseRoles.STUDENT) && numberMecp != null){
+    /**
+     * Student always need to have MecanographicNumber.
+     * Only Student can have mecanographic number
+     * @param numberMecp user mecanographic number
+     * @param rolep role of user
+     */
+    private void validateMecNumber(final MecanographicNumber numberMecp,
+                                   final Role rolep) {
+        if (!rolep.equals(CourseRoles.STUDENT) && numberMecp != null) {
             throw new IllegalStateException("Only Users with role "
                     + CourseRoles.STUDENT + " can have MecanographicNumber");
         }
 
-        if(rolep.equals(CourseRoles.STUDENT) && numberMecp == null){
+        if (rolep.equals(CourseRoles.STUDENT) && numberMecp == null) {
             throw new IllegalStateException(CourseRoles.STUDENT
                     + " have a null MecanographicNumber");
         }
     }
 
-    private void validateAcronym(Acronym acronymp, Role rolep){
-        if(!rolep.equals(CourseRoles.TEACHER) && acronymp != null){
+    /**
+     * Teacher always need to have Acronym.
+     * Only Teacher can have acronym
+     * @param acronymp user acronym
+     * @param rolep role of user
+     */
+    private void validateAcronym(final Acronym acronymp, final Role rolep) {
+        if (!rolep.equals(CourseRoles.TEACHER) && acronymp != null) {
             throw new IllegalStateException("Only Users with role "
                     + CourseRoles.TEACHER + " can have Acronym");
         }
 
-        if(rolep.equals(CourseRoles.TEACHER) && acronymp == null){
+        if (rolep.equals(CourseRoles.TEACHER) && acronymp == null) {
             throw new IllegalStateException(CourseRoles.TEACHER
                     + " have a null Acronym");
         }
@@ -336,7 +344,6 @@ public class User
     public Acronym acronym() {
         return this.acronym;
     }
-    
     /**
      * Check if some User is the same object then other.
      * @param other

@@ -198,6 +198,9 @@ public class MecanographicNumber
         return result;
     }
 
+    /**
+     * Generate next number.
+     */
     public void nextNumber() {
         this.number = String.valueOf(Integer.parseInt(this.number) + 1);
     }

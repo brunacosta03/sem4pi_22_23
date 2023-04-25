@@ -42,7 +42,8 @@ We added the UserState as a Value Object of the User so that it is easy to know 
 
 #### 4.3.1. Factory
 
-- Our PersistenceContext will create aRepositoryFactory based on theconfiguration file then theRepositoryFactory will create the repositorythat we needin order topersist our domain entity.
+- Our PersistenceContext will create a RepositoryFactory based on the configuration file then the RepositoryFactory will create the repository that we need in order to persist our domain entity.
+
 
 #### 4.3.2 Single Responsibility Principle (SRP)
 

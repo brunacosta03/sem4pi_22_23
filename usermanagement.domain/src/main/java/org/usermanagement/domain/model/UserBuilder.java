@@ -99,7 +99,7 @@ public class UserBuilder implements DomainFactory<User> {
                             final String passwordp,
                             final String fullNamep,
                             final String emailp,
-                            final String rolep) {
+                            final Role rolep) {
         this.withShortName(shortNamep);
         this.withPassword(passwordp);
         this.withFullName(fullNamep);
@@ -129,7 +129,6 @@ public class UserBuilder implements DomainFactory<User> {
         this.withRole(rolep);
         return this;
     }
-    
     /**
      * Build basic a complex user.
      * @param shortNamep
@@ -146,7 +145,7 @@ public class UserBuilder implements DomainFactory<User> {
                             final String fullNamep,
                             final String emailp,
                             final String birthDatep,
-                            final String rolep,
+                            final Role rolep,
                             final String taxPayerNumberp) {
         this.withShortName(shortNamep);
         this.withPassword(passwordp);
@@ -186,7 +185,12 @@ public class UserBuilder implements DomainFactory<User> {
     public UserBuilder withPassword(final String rawPassword) {
         this.password = (Password) Password.encodedAndValid(rawPassword,
                 this.policy, this.encoder)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Password not valid"
+                        + "\n* At least 6 characters long"
+                        + "\n* At least one digit"
+                        + "\n* At least one capital letter"));
+
         return this;
     }
 

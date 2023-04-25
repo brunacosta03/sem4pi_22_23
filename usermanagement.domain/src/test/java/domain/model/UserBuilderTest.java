@@ -24,7 +24,6 @@ class UserBuilderTest {
             new ECoursePasswordPolicy(),
             new PlainTextEncoder()
     ).get();
-    private String managerRoleString = String.valueOf(CourseRoles.MANAGER);
     private Role managerRole = CourseRoles.MANAGER;
 
     private String teacherRoleString = String.valueOf(CourseRoles.TEACHER);
@@ -57,7 +56,7 @@ class UserBuilderTest {
                 .withShortName(shortNameString)
                 .withFullName(fullNameString)
                 .withPassword(passwordString)
-                .withRole(managerRoleString)
+                .withRole(managerRole)
                 .build();
 
         User managerValueObjects = builder
@@ -74,7 +73,7 @@ class UserBuilderTest {
                         passwordString,
                         fullNameString,
                         emailString,
-                        managerRoleString
+                        managerRole
                 )
                 .build();
 
@@ -85,7 +84,7 @@ class UserBuilderTest {
                         fullNameString,
                         emailString,
                         birthDateString,
-                        managerRoleString,
+                        managerRole,
                         taxPayerNumberString
                 )
                 .build();

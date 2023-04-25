@@ -61,7 +61,7 @@ public class MainMenu extends AbstractUI {
         final Menu menu = new Menu("Manage eCourse Users");
 
         menu.addItem(SET_MANAGER_CREATE_USERS_OPTION, "Create Users",
-                new ShowMessageAction("Not implemented yet"));
+                new RegisterUserUI()::show);
         menu.addItem(EXIT_OPTION, RETURN_LABEL, Actions.SUCCESS);
 
         return menu;
