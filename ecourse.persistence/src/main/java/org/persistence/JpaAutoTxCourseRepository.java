@@ -22,7 +22,7 @@ public class JpaAutoTxCourseRepository
 
     @Override
     public Optional<Course> findByCode(final CourseCode code) {
-        return this.repo.findById(code);
+        return this.repo.ofIdentity(code);
     }
 
     @Override
@@ -31,8 +31,8 @@ public class JpaAutoTxCourseRepository
     }
 
     @Override
-    public Optional<Course> ofIdentity(CourseCode id) {
-        return Optional.empty();
+    public Optional<Course> ofIdentity(CourseCode code) {
+        return this.repo.ofIdentity(code);
     }
 
     @Override

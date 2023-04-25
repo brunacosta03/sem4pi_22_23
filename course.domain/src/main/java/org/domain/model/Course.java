@@ -2,14 +2,12 @@ package org.domain.model;
 
 
 import eapli.framework.domain.model.AggregateRoot;
-import eapli.framework.general.domain.model.EmailAddress;
-import eapli.framework.infrastructure.authz.domain.model.Role;
 import eapli.framework.validations.Preconditions;
 import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.User;
-import org.usermanagement.domain.repositories.UserRepository;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "T_COURSE")
@@ -63,8 +61,17 @@ public class Course implements AggregateRoot<CourseCode> {
     @ManyToOne(fetch = FetchType.LAZY)
     private User headTeacher;
 
-    protected Course(){
-    }
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "t_course_teacher",joinColumns =
+    @JoinColumn(name = "course_code"), inverseJoinColumns =
+    @JoinColumn(name = "teacher_email"))
+    private Set<User> teachers;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "t_course_student",joinColumns =
+    @JoinColumn(name = "course_code"), inverseJoinColumns =
+    @JoinColumn(name = "student_email"))
+    private Set<User> students;
 
     public Course(final CourseName name,
            final CourseCode code,
@@ -73,7 +80,9 @@ public class Course implements AggregateRoot<CourseCode> {
            final CourseState state,
            final CourseMaxNumberLimit max,
            final CourseMinNumberLimit min,
-           final User headTeacher){
+           final User headTeacher,
+                  final Set<User> teachers,
+                  final Set<User> students){
 
         necessaryParameters(name, code, edition, max, headTeacher);
         validateMaxMin(max, min);
@@ -86,6 +95,11 @@ public class Course implements AggregateRoot<CourseCode> {
         this.max = max;
         this.min = min;
         this.headTeacher = headTeacher;
+        this.teachers = teachers;
+        this.students = students;
+    }
+
+    protected Course() {
     }
 
     private void necessaryParameters(
@@ -126,5 +140,33 @@ public class Course implements AggregateRoot<CourseCode> {
     @Override
     public CourseCode identity() {
         return code;
+    }
+
+    public void addStudent(User student){
+        Preconditions.ensure(
+                student.role().equals(CourseRoles.STUDENT.toString()),
+                "Only students can be assigned through this option");
+        students.add(student);
+    }
+
+    public void removeStudent(User student){
+        Preconditions.ensure(
+                students.contains(student),
+                "This student is not enrolled in this course");
+        students.remove(student);
+    }
+
+    public void addTeacher(User teacher){
+        Preconditions.ensure(
+                teacher.role().equals(CourseRoles.TEACHER.toString()),
+                "Only teachers can be assigned through this option");
+        teachers.add(teacher);
+    }
+
+    public void removeTeacher(User teacher){
+        Preconditions.ensure(
+                teachers.contains(teacher),
+                "This teacher is not enrolled in this course");
+        teachers.remove(teacher);
     }
 }

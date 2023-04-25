@@ -42,10 +42,19 @@ public class CourseCode implements ValueObject, Comparable<CourseCode> {
     public String value(){return this.value;}
 
     @Override
-    public int compareTo(CourseCode o) {
-        if(this.value.equals(o.value)){
-            return 1;
+    public int compareTo(final CourseCode o) {
+        return value.compareTo(String.valueOf(o));
+    }
+
+    @Override
+    public boolean equals(final Object o){
+        if(!(o instanceof CourseCode)){
+            return false;
         }
-        return 0;
+        String value = ((CourseCode) o).value;
+        if(this.value.equals(value)){
+            return true;
+        }
+        return false;
     }
 }

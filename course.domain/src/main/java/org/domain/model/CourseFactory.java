@@ -1,6 +1,12 @@
 package org.domain.model;
 
+import org.domain.repositories.CourseRepository;
 import org.usermanagement.domain.model.User;
+import org.usermanagement.domain.repositories.UserRepository;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CourseFactory {
 
@@ -21,7 +27,9 @@ public class CourseFactory {
                 CourseStateConstants.CLOSED,
                 CourseMaxNumberLimit.of(max),
                 CourseMinNumberLimit.of(min),
-                headTeacher
-                );
+                headTeacher,
+                new HashSet<>(),
+                new HashSet<>()
+        );
     }
 }

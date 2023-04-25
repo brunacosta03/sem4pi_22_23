@@ -4,7 +4,6 @@ package org.domain.repositories;
 import eapli.framework.domain.repositories.DomainRepository;
 import org.domain.model.Course;
 import org.domain.model.CourseCode;
-import org.domain.model.CourseEdition;
 
 import java.util.Optional;
 
@@ -22,6 +21,7 @@ public interface CourseRepository extends DomainRepository<CourseCode, Course> {
      * @param id CourseEdition
      * @return Course
      */
+
     Optional<Course> ofIdentity(CourseCode id);
 
     /**
