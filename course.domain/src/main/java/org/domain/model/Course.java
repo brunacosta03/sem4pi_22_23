@@ -146,6 +146,10 @@ public class Course implements AggregateRoot<CourseCode> {
         Preconditions.ensure(
                 student.role().equals(CourseRoles.STUDENT.toString()),
                 "Only students can be assigned through this option");
+        Preconditions.ensure(
+                this.state.equals(CourseStateConstants.ENROLL),
+                "A student can only be added to this course if the state is Enrolled"
+        );
         students.add(student);
     }
 
@@ -168,5 +172,13 @@ public class Course implements AggregateRoot<CourseCode> {
                 teachers.contains(teacher),
                 "This teacher is not enrolled in this course");
         teachers.remove(teacher);
+    }
+
+    public void changeState(CourseState state){
+        this.state = state;
+    }
+
+    public CourseState state(){
+        return this.state;
     }
 }

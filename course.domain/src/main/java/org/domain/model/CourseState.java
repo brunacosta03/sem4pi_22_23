@@ -1,6 +1,7 @@
 package org.domain.model;
 
 import eapli.framework.domain.model.ValueObject;
+import eapli.framework.validations.Preconditions;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -23,7 +24,7 @@ public class CourseState implements ValueObject {
     protected CourseState(){value = "Open";}
 
     private CourseState(final String value){
-        // Precondition ensurrance
+        Preconditions.nonNull(value);
         this.value = value;
     }
 
@@ -41,6 +42,5 @@ public class CourseState implements ValueObject {
      * @return String
      */
     public String value(){ return this.value;}
-
 }
 
