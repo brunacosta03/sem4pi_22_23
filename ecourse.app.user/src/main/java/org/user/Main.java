@@ -36,7 +36,7 @@ public final class Main {
 
             if (login.show()) {
                 MainMenu menu = new MainMenu();
-                menu.doShow();
+                menu.mainLoop();
             } else {
                 System.out.println("Login failed\nToo many tries");
             }

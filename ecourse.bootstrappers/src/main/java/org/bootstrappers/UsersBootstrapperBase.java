@@ -2,6 +2,7 @@ package org.bootstrappers;
 
 import eapli.framework.domain.repositories.ConcurrencyException;
 import eapli.framework.domain.repositories.IntegrityViolationException;
+import eapli.framework.infrastructure.authz.domain.model.Role;
 import org.usermanagement.controller.AddUserController;
 import org.usermanagement.domain.model.User;
 
@@ -32,7 +33,7 @@ public class UsersBootstrapperBase {
      */
     protected User registerUser(final String shortName, final String password,
                                 final String fullName, final String email,
-                                final String role, final String birthDate,
+                                final Role role, final String birthDate,
                                 final String taxPayerNumber,
                                 final String acronym) {
         User u = null;

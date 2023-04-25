@@ -43,6 +43,11 @@ public final class BirthDate implements ValueObject {
     }
 
     private BirthDate(final String valuep) {
+        Preconditions.ensure(
+                isValidFormat(valuep),
+                "Invalid date format. Expected format: dd/MM/yyyy"
+        );
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate date = LocalDate.parse(valuep, formatter);
         Preconditions.ensure(
@@ -56,6 +61,16 @@ public final class BirthDate implements ValueObject {
 
 
         this.value = date;
+    }
+
+    /**
+     * Regex for validate date format.
+     * @param valuep
+     * @return true/false
+     */
+    private boolean isValidFormat(final String valuep) {
+        String regex = "^\\d{2}/\\d{2}/\\d{4}$";
+        return valuep.matches(regex);
     }
 
     /**

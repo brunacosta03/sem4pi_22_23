@@ -3,6 +3,7 @@ package org.usermanagement.controller;
 import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
 import org.authz.application.AuthzRegistry;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -15,11 +16,13 @@ import org.usermanagement.domain.model.UserManagementService;
 import org.usermanagement.domain.repositories.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 class UserManagementServiceTest {
@@ -61,12 +64,13 @@ class UserManagementServiceTest {
                 STRING_PASSWORD,
                 STRING_FULLNAME,
                 STRING_EMAIL,
-                String.valueOf(CourseRoles.MANAGER),
+                CourseRoles.MANAGER,
                 STRING_BIRTHDATE,
                 STRING_TAXPAYERNUMBER,
                 null);
 
         assertEquals(managerUser().identity(), newUser.identity());
+        verify(userRepository, times(1)).save(any(User.class));
     }
 
     @Test
@@ -77,7 +81,7 @@ class UserManagementServiceTest {
                 STRING_PASSWORD,
                 STRING_FULLNAME,
                 STRING_EMAIL,
-                String.valueOf(CourseRoles.TEACHER),
+                CourseRoles.TEACHER,
                 STRING_BIRTHDATE,
                 STRING_TAXPAYERNUMBER,
                 STRING_ACRONYM);
@@ -85,6 +89,7 @@ class UserManagementServiceTest {
         assertNull(newUser.mecanographicNumber());
         assertNotNull(newUser.acronym());
         assertEquals(STRING_ACRONYM, newUser.acronym().value());
+        verify(userRepository, times(1)).save(any(User.class));
     }
 
     @Test
@@ -95,7 +100,7 @@ class UserManagementServiceTest {
                 STRING_PASSWORD,
                 STRING_FULLNAME,
                 STRING_EMAIL,
-                String.valueOf(CourseRoles.STUDENT),
+                CourseRoles.STUDENT,
                 STRING_BIRTHDATE,
                 STRING_TAXPAYERNUMBER,
                 null);
@@ -103,6 +108,8 @@ class UserManagementServiceTest {
         assertNull(newUser.acronym());
         assertNotNull(newUser.mecanographicNumber());
         assertEquals(String.valueOf(LocalDateTime.now().getYear() * 100000 + 1), newUser.mecanographicNumber().value());
+        verify(userRepository, times(1)).save(any(User.class));
+        verify(userRepository, times(1)).findMaxYearMecanographicNumber();
     }
 
     @Test
@@ -112,10 +119,12 @@ class UserManagementServiceTest {
                         STRING_PASSWORD,
                         STRING_FULLNAME,
                         STRING_EMAIL,
-                        String.valueOf(CourseRoles.STUDENT),
+                        CourseRoles.STUDENT,
                         STRING_BIRTHDATE,
                         STRING_TAXPAYERNUMBER,
                         STRING_ACRONYM));
+
+        verify(userRepository, never()).save(any(User.class));
     }
 
     @Test
@@ -125,10 +134,12 @@ class UserManagementServiceTest {
                         STRING_PASSWORD,
                         STRING_FULLNAME,
                         STRING_EMAIL,
-                        String.valueOf(CourseRoles.MANAGER),
+                        CourseRoles.MANAGER,
                         STRING_BIRTHDATE,
                         STRING_TAXPAYERNUMBER,
                         STRING_ACRONYM));
+
+        verify(userRepository, never()).save(any(User.class));
     }
 
     @Test
@@ -143,6 +154,46 @@ class UserManagementServiceTest {
                 () -> managerUserWithMecanographicNumber());
     }
 
+    @Test
+    void registerNewUserWithInvalidEmailThenThrowException() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        userSvc.registerNewUser(
+                                STRING_SHORTNAME,
+                                STRING_PASSWORD,
+                                STRING_FULLNAME,
+                                "invalid_email",
+                                CourseRoles.TEACHER,
+                                STRING_BIRTHDATE,
+                                STRING_TAXPAYERNUMBER,
+                                STRING_ACRONYM,
+                                Calendar.getInstance()));
+
+        verify(userRepository, never()).save(any(User.class));
+    }
+
+    @Test
+    void registerNewUserWithInvalidPasswordThenThrowException() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        userSvc.registerNewUser(
+                                STRING_SHORTNAME,
+                                "invalid",
+                                STRING_FULLNAME,
+                                STRING_EMAIL,
+                                CourseRoles.TEACHER,
+                                STRING_BIRTHDATE,
+                                STRING_TAXPAYERNUMBER,
+                                STRING_ACRONYM,
+                                Calendar.getInstance()));
+
+        verify(userRepository, never()).save(any(User.class));
+    }
+
+
+
     private User managerUser(){
         UserBuilder userBuilder = new UserBuilder(passwordPolicy, new PlainTextEncoder());
 
@@ -150,7 +201,7 @@ class UserManagementServiceTest {
                         STRING_PASSWORD,
                         STRING_FULLNAME,
                         STRING_EMAIL,
-                        String.valueOf(CourseRoles.MANAGER))
+                        CourseRoles.MANAGER)
                 .build();
     }
 
@@ -161,7 +212,7 @@ class UserManagementServiceTest {
                         STRING_PASSWORD,
                         STRING_FULLNAME,
                         STRING_EMAIL,
-                        String.valueOf(CourseRoles.MANAGER))
+                        CourseRoles.MANAGER)
                 .withMecanographicNumber(MEC_NUMBER)
                 .build();
     }
@@ -173,7 +224,7 @@ class UserManagementServiceTest {
                         STRING_PASSWORD,
                         STRING_FULLNAME,
                         STRING_EMAIL,
-                        String.valueOf(CourseRoles.TEACHER))
+                        CourseRoles.TEACHER)
                 .withAcronym(STRING_ACRONYM)
                 .build();
     }
@@ -185,7 +236,7 @@ class UserManagementServiceTest {
                         STRING_PASSWORD,
                         STRING_FULLNAME,
                         STRING_EMAIL,
-                        String.valueOf(CourseRoles.TEACHER))
+                        CourseRoles.TEACHER)
                 .withAcronym(STRING_ACRONYM)
                 .withMecanographicNumber(MEC_NUMBER)
                 .build();
@@ -198,7 +249,7 @@ class UserManagementServiceTest {
                         STRING_PASSWORD,
                         STRING_FULLNAME,
                         STRING_EMAIL,
-                        String.valueOf(CourseRoles.STUDENT))
+                        CourseRoles.STUDENT)
                 .withMecanographicNumber(MEC_NUMBER)
                 .build();
     }

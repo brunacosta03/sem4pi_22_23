@@ -7,11 +7,12 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class TaxPayerNumber implements ValueObject {
+public class TaxPayerNumber
+        implements ValueObject, Comparable<TaxPayerNumber> {
     /**
      * Short name of Entity.
      */
-    @Column(name = "tax_payer_number")
+    @Column(name = "tax_payer_number", unique = true)
     private final String value;
 
     protected TaxPayerNumber() {
@@ -48,5 +49,15 @@ public class TaxPayerNumber implements ValueObject {
      */
     public String value() {
         return this.value;
+    }
+
+    /**
+     * TaxPayerNumber should be unique.
+     * @param o the object to be compared.
+     * @return equals or not
+     */
+    @Override
+    public int compareTo(final TaxPayerNumber o) {
+        return this.value.compareTo(o.value);
     }
 }

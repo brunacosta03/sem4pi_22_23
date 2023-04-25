@@ -1,6 +1,7 @@
 package org.usermanagement.controller;
 
 import eapli.framework.application.UseCaseController;
+import eapli.framework.infrastructure.authz.domain.model.Role;
 import eapli.framework.time.util.CurrentTimeCalendars;
 import org.authz.application.AuthorizationService;
 import org.authz.application.AuthzRegistry;
@@ -41,7 +42,7 @@ public class AddUserController {
      */
     public User addUser(final String shortName, final String password,
                         final String fullName, final String email,
-                        final String role, final String birthDate,
+                        final Role role, final String birthDate,
                         final String taxPayerNumber,
                         final String acronym, final Calendar createdOn) {
         authz.ensureAuthenticatedUserHasAnyOf(CourseRoles.MANAGER);
@@ -65,7 +66,7 @@ public class AddUserController {
      */
     public User addUser(final String shortName, final String password,
                         final String fullName, final String email,
-                        final String role, final String birthDate,
+                        final Role role, final String birthDate,
                         final String taxPayerNumber, final String acronym) {
 
         return addUser(shortName, password, fullName,

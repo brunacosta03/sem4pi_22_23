@@ -2,6 +2,7 @@
 package domain.model;
 
 import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
+import eapli.framework.infrastructure.authz.domain.model.Role;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.user.management.CourseRoles;
@@ -23,7 +24,7 @@ class UserSessionTest {
     private static final String STRING_PASSWORD = "Correct5";
     private static final String STRING_FULLNAME = "fullName";
     private static final String STRING_EMAIL = "email@email.com";
-    private static final String ROLE = String.valueOf(CourseRoles.MANAGER);
+    private static final Role ROLE = CourseRoles.MANAGER;
 
     @Mock
     User user = builder.with(STRING_SHORTNAME,

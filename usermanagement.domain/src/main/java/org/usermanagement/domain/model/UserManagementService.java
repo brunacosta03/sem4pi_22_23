@@ -2,6 +2,7 @@ package org.usermanagement.domain.model;
 
 import eapli.framework.general.domain.model.EmailAddress;
 import eapli.framework.infrastructure.authz.application.PasswordPolicy;
+import eapli.framework.infrastructure.authz.domain.model.Role;
 import eapli.framework.time.util.CurrentTimeCalendars;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,6 +29,11 @@ public class UserManagementService {
      * PasswordPolicy with rules.
      */
     private final PasswordPolicy policy;
+
+    /**
+     * Generate MecanographicNumber Multiplier.
+     */
+    private static final int GENERATE_MUL = 100000;
 
     /**
      *
@@ -58,9 +64,10 @@ public class UserManagementService {
      * @param createdOn
      * @return User
      */
-    public User registerNewUser(final String shortName, final String rawPassword,
+    public User registerNewUser(final String shortName,
+                                final String rawPassword,
                                 final String fullName, final String email,
-                                final String role, final String birthDate,
+                                final Role role, final String birthDate,
                                 final String taxPayerNumber,
                                 final String acronym,
                                 final Calendar createdOn) {
@@ -71,9 +78,7 @@ public class UserManagementService {
                 .createdOn(createdOn)
                 .withAcronym(acronym);
 
-        if(String.valueOf(CourseRoles.STUDENT)
-                .compareTo(role) == 0){
-
+        if (CourseRoles.STUDENT.equals(role)) {
             userBuilder.withMecanographicNumber(generateMecNumber());
         }
 
@@ -83,14 +88,16 @@ public class UserManagementService {
     }
 
     /**
-     * Generate MecanographicNumber for users with role Student
+     * Generate MecanographicNumber for users with role Student.
      * @return String for builder create MecanographicNumber
      */
-    private String generateMecNumber(){
-        MecanographicNumber mecanographicNumber = userRepository.findMaxYearMecanographicNumber();
+    private String generateMecNumber() {
+        MecanographicNumber mecanographicNumber = userRepository
+                                .findMaxYearMecanographicNumber();
 
-        if(mecanographicNumber == null){
-            return String.valueOf(LocalDateTime.now().getYear() * 100000 + 1);
+        if (mecanographicNumber == null) {
+            return String.valueOf(
+                    LocalDateTime.now().getYear() * GENERATE_MUL + 1);
         }
 
         mecanographicNumber.nextNumber();
@@ -110,9 +117,10 @@ public class UserManagementService {
      * @param acronym
      * @return User
      */
-    public User registerNewUser(final String shortName, final String rawPassword,
+    public User registerNewUser(final String shortName,
+                                final String rawPassword,
                                 final String fullName, final String email,
-                                final String role, final String birthDate,
+                                final Role role, final String birthDate,
                                 final String taxPayerNumber,
                                 final String acronym) {
         return registerNewUser(shortName, rawPassword, fullName, email,

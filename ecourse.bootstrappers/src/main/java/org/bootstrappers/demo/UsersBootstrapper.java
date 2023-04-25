@@ -54,7 +54,7 @@ public class UsersBootstrapper extends UsersBootstrapperBase implements Action {
                                  final String taxPayNumber) {
 
         registerUser(shortName, password, fullName,
-                email, String.valueOf(CourseRoles.MANAGER),
+                email, CourseRoles.MANAGER,
                 birthDate, taxPayNumber, null);
     }
 
@@ -75,7 +75,7 @@ public class UsersBootstrapper extends UsersBootstrapperBase implements Action {
                                  final String acronym) {
 
         registerUser(shortName, password, fullName,
-                email, String.valueOf(CourseRoles.TEACHER),
+                email, CourseRoles.TEACHER,
                 birthDate, taxPayNumber, acronym);
     }
 
@@ -94,7 +94,7 @@ public class UsersBootstrapper extends UsersBootstrapperBase implements Action {
                                  final String taxPayNumber) {
 
         registerUser(shortName, password, fullName,
-                email, String.valueOf(CourseRoles.STUDENT),
+                email, CourseRoles.STUDENT,
                 birthDate, taxPayNumber, null);
     }
 }

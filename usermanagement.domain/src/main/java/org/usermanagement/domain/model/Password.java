@@ -58,7 +58,9 @@ public final class Password implements ValueObject, Serializable {
             final PasswordPolicy policy,
             final PasswordEncoder encoder
     ) {
-        Preconditions.noneNull(new Object[]{rawPassword, policy, encoder});
+        Preconditions.nonEmpty(rawPassword,
+                "password should neither be null nor empty");
+        Preconditions.noneNull(new Object[]{policy, encoder});
         return policy.isSatisfiedBy(rawPassword)
                 ? Optional.of(new Password(encoder.encode(rawPassword)))
                 : Optional.empty();
