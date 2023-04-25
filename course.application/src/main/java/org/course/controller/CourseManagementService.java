@@ -69,7 +69,7 @@ public class CourseManagementService{
         return courseRepo.save(course);
     }
 
-    public void changeState(Course c){
+/*    public void changeState(Course c){
         CourseState state = c.state();
 
         if(state.equals(CourseStateConstants.CLOSED)){
@@ -91,4 +91,5 @@ public class CourseManagementService{
 
         courseRepo.save(c);
     }
+*/
 }
