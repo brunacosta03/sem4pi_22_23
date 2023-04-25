@@ -7,10 +7,11 @@ import org.authz.application.AuthorizationService;
 import org.authz.application.AuthzRegistry;
 import org.domain.model.Course;
 import org.domain.model.CourseCode;
+import org.domain.model.CourseState;
+import org.domain.model.CourseStateConstants;
 import org.domain.repositories.CourseRepository;
 import org.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.User;
 import org.usermanagement.domain.repositories.UserRepository;
@@ -66,5 +67,28 @@ public class CourseManagementService{
         txt.commit();
 
         return courseRepo.save(course);
+    }
+
+    public void changeState(Course c){
+        CourseState state = c.state();
+
+        if(state.equals(CourseStateConstants.CLOSED)){
+
+            c.changeState(CourseStateConstants.OPEN);
+
+        }else if(state.equals(CourseStateConstants.OPEN)){
+
+            c.changeState(CourseStateConstants.ENROLL);
+
+        }else if(state.equals(CourseStateConstants.ENROLL)){
+
+            c.changeState(CourseStateConstants.IN_PROGRESS);
+
+        }else{
+
+            c.changeState(CourseStateConstants.CLOSED);
+        }
+
+        courseRepo.save(c);
     }
 }
