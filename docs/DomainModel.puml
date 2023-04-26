@@ -158,13 +158,22 @@ package "Class Aggregate" {
     end note
 }
 
-package "Application Aggregate" {
-    entity Application <<entity>><<root>>
+package "EnrollmentRequest Aggregate" {
+    entity EnrollmentRequest <<entity>><<root>>
 
-    note right of Application
-        An application is a request
-        to enroll in a course.
-    end note
+    card RequestedDate <<Value Object>> {
+    }
+
+    card AnsweredDate <<Value Object>> {
+    }
+
+    card RequestState <<Value Object>>{
+    }
+
+    EnrollmentRequest --> RequestedDate
+    EnrollmentRequest --> AnsweredDate
+    EnrollmentRequest --> RequestState
+
 }
 
 package "Calendar Aggregate" {
@@ -427,8 +436,8 @@ package BoardAggregate {
     Course --> "N" User : has
     Course --> "N" User : teaches
 
-    Application --> "1" User : is of
-    Application --> "1" Course : belongs to
+    EnrollmentRequest --> "1" User : is of
+    EnrollmentRequest --> "1" Course : belongs to
 
     Class --> "1" Course : belongs to
 
