@@ -7,13 +7,11 @@ import eapli.framework.time.util.CurrentTimeCalendars;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.user.management.CourseRoles;
 import org.usermanagement.domain.repositories.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.Calendar;
-import java.util.Optional;
 
 @Service
 public class UserManagementService {
@@ -130,22 +128,6 @@ public class UserManagementService {
 
     /**
      *
-     * @return all active users
-     */
-    public Iterable<User> activeUsers() {
-        return userRepository.findByActive(true);
-    }
-
-    /**
-     *
-     * @return all deactivated users
-     */
-    public Iterable<User> deactivatedUsers() {
-        return userRepository.findByActive(false);
-    }
-
-    /**
-     *
      * @return all users no matter their status
      */
     public Iterable<User> allUsers() {
@@ -153,27 +135,30 @@ public class UserManagementService {
     }
 
     /**
-     * Looks up a user by its username.
-     *
-     * @param id
-     * @return an Optional which value is the user with the desired identify. an
-     *         empty Optional if there is no user with that username
+     * Find user by email and enable.
+     * @param userEmail EmailAddress of user
+     * @return the user enabled.
      */
-    public Optional<User> userOfIdentity(final EmailAddress id) {
-        return userRepository.ofIdentity(id);
+    public User enableUser(final EmailAddress userEmail) {
+        final User userToEnable = userRepository
+                .findUserByEmail(userEmail).get();
+
+        userToEnable.enable();
+
+        return userRepository.save(userToEnable);
     }
 
     /**
-     * Deactivates a user. Client code must not
-     * reference the input parameter after.
-     * calling this method and must use the returned object instead.
-     *
-     * @param user
-     * @return the updated user.
+     * Find user by email and disable.
+     * @param userEmail EmailAddress of user
+     * @return the user disabled.
      */
-    @Transactional
-    public User deactivateUser(final User user) {
-        user.disable(CurrentTimeCalendars.now());
-        return userRepository.save(user);
+    public User disableUser(final EmailAddress userEmail) {
+        final User userToDisable = userRepository
+                .findUserByEmail(userEmail).get();
+
+        userToDisable.disable(CurrentTimeCalendars.now());
+
+        return userRepository.save(userToDisable);
     }
 }

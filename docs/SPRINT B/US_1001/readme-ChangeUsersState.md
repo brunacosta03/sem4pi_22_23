@@ -33,9 +33,13 @@ We added the UserState as a Value Object of the User so that it is easy to know 
 
 ### 4.2. Class Diagram
 
-#### 4.2.1 Class Diagram Change User State Enable/Disable
+#### 4.2.1 Class Diagram Change User State Enable
 
-![Change User State CD](CD/ChangeUsersState-CD.svg)
+![Change User State CD](CD/ChangeUsersState-Disable-CD.svg)
+
+#### 4.2.2 Class Diagram Change User State Disable
+
+![Change User State CD](CD/ChangeUsersState-Enable-CD.svg)
 
 
 ### 4.3. Applied Patterns
@@ -78,20 +82,407 @@ public void ensureNullIsNotAllowed() {
 
 ## 5. Implementation
 
-*In this section the team should present, if necessary, some evidencies that the implementation is according to the design. It should also describe and explain other important artifacts necessary to fully understand the implementation like, for instance, configuration files.*
+**EnableUserUI**
 
-*It is also a best practice to include a listing (with a brief summary) of the major commits regarding this requirement.*
+```Java
+package presentation.usermanagement;
+
+import eapli.framework.general.domain.model.EmailAddress;
+import eapli.framework.io.util.Console;
+import eapli.framework.presentation.console.AbstractUI;
+import org.usermanagement.controller.ChangeUserStateController;
+
+import java.util.NoSuchElementException;
+
+public class EnableUserUI extends AbstractUI {
+    private final ChangeUserStateController theController = new ChangeUserStateController();
+
+    /**
+     * Manager want to enable a user.
+     * Ask Manager email of user to enable.
+     * @return false
+     */
+    @Override
+    protected boolean doShow() {
+        try{
+            final String email = Console.readLine("E-Mail:");
+
+            EmailAddress emailAddress = EmailAddress.valueOf(email);
+
+            theController.enableUserByEmail(emailAddress);
+
+            System.out.println("User enabled with success!");
+        } catch (NoSuchElementException | IllegalArgumentException e){
+            System.out.println("This user doesn't exist");
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return false;
+    }
+
+    @Override
+    public String headline() {
+        return "Activate User";
+    }
+}
+````
+
+**DisableUserUI**
+
+```Java
+package presentation.usermanagement;
+
+import eapli.framework.general.domain.model.EmailAddress;
+import eapli.framework.io.util.Console;
+import eapli.framework.presentation.console.AbstractUI;
+import org.usermanagement.controller.ChangeUserStateController;
+
+import java.util.NoSuchElementException;
+
+public class DisableUserUI extends AbstractUI {
+    private final ChangeUserStateController theController = new ChangeUserStateController();
+
+    /**
+     * Manager want to enable a user.
+     * Ask Manager email of user to enable.
+     * @return false
+     */
+    @Override
+    protected boolean doShow() {
+        try{
+            final String email = Console.readLine("E-Mail:");
+
+            EmailAddress emailAddress = EmailAddress.valueOf(email);
+
+            theController.disableUserByEmail(emailAddress);
+
+            System.out.println("User disabled with success!");
+        } catch (NoSuchElementException | IllegalArgumentException e){
+            System.out.println("This user doesn't exist");
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return false;
+    }
+
+    @Override
+    public String headline() {
+        return "Disable User";
+    }
+}
+````
+
+**ChangeUserStateController**
+
+```Java
+package org.usermanagement.controller;
+
+import eapli.framework.general.domain.model.EmailAddress;
+import org.authz.application.AuthorizationService;
+import org.authz.application.AuthzRegistry;
+import org.user.management.CourseRoles;
+import org.usermanagement.domain.model.User;
+import org.usermanagement.domain.model.UserManagementService;
+
+public class ChangeUserStateController {
+    /**
+     * Authorization service instance.
+     */
+    private final AuthorizationService authz = AuthzRegistry
+                                    .authorizationService();
+
+    /**
+     * User management service instance.
+     */
+    private final UserManagementService userSvc = AuthzRegistry.userService();
+
+    /**
+     * Enable user.
+     * @param userEmail user email to enable
+     * @return User enabled
+     */
+    public User enableUserByEmail(final EmailAddress userEmail){
+        authz.ensureAuthenticatedUserHasAnyOf(CourseRoles.MANAGER);
+
+        return userSvc.enableUser(userEmail);
+    }
+
+    /**
+     * Disable user.
+     * @param userEmail user email to disable
+     * @return User disabled
+     */
+    public User disableUserByEmail(final EmailAddress userEmail){
+        authz.ensureAuthenticatedUserHasAnyOf(CourseRoles.MANAGER);
+
+        return userSvc.disableUser(userEmail);
+    }
+}
+````
+
+**UserManagementService**
+
+```Java
+package org.usermanagement.domain.model;
+
+import eapli.framework.general.domain.model.EmailAddress;
+import eapli.framework.infrastructure.authz.application.PasswordPolicy;
+import eapli.framework.infrastructure.authz.domain.model.Role;
+import eapli.framework.time.util.CurrentTimeCalendars;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.user.management.CourseRoles;
+import org.usermanagement.domain.repositories.UserRepository;
+
+import java.time.LocalDateTime;
+import java.util.Calendar;
+
+@Service
+public class UserManagementService {
+    /**
+     * UserRepository.
+     */
+    private final UserRepository userRepository;
+    /**
+     * PasswordEncoder.
+     */
+    private final PasswordEncoder encoder;
+    /**
+     * PasswordPolicy with rules.
+     */
+    private final PasswordPolicy policy;
+
+    /**
+     * Generate MecanographicNumber Multiplier.
+     */
+    private static final int GENERATE_MUL = 100000;
+
+    /**
+     *
+     * @param userRepo
+     * @param encoderp
+     * @param policyp
+     */
+    @Autowired
+    public UserManagementService(final UserRepository userRepo,
+                                 final PasswordPolicy policyp,
+                                 final PasswordEncoder encoderp) {
+        userRepository = userRepo;
+        this.policy = policyp;
+        this.encoder = encoderp;
+    }
+
+    /**
+     * Registers a new user in the system allowing to
+     * specify when the user account was created.
+     * @param shortName
+     * @param rawPassword
+     * @param fullName
+     * @param email
+     * @param role
+     * @param birthDate
+     * @param taxPayerNumber
+     * @param acronym
+     * @param createdOn
+     * @return User
+     */
+    public User registerNewUser(final String shortName,
+                                final String rawPassword,
+                                final String fullName, final String email,
+                                final Role role, final String birthDate,
+                                final String taxPayerNumber,
+                                final String acronym,
+                                final Calendar createdOn) {
+        final var userBuilder = new UserBuilder(policy, encoder);
+
+        userBuilder.with(shortName, rawPassword, fullName,
+                        email, birthDate, role, taxPayerNumber)
+                .createdOn(createdOn)
+                .withAcronym(acronym);
+
+        if (CourseRoles.STUDENT.equals(role)) {
+            userBuilder.withMecanographicNumber(generateMecNumber());
+        }
+
+        final var newUser = userBuilder.build();
+
+        return userRepository.save(newUser);
+    }
+
+    /**
+     * Generate MecanographicNumber for users with role Student.
+     * @return String for builder create MecanographicNumber
+     */
+    private String generateMecNumber() {
+        MecanographicNumber mecanographicNumber = userRepository
+                                .findMaxYearMecanographicNumber();
+
+        if (mecanographicNumber == null) {
+            return String.valueOf(
+                    LocalDateTime.now().getYear() * GENERATE_MUL + 1);
+        }
+
+        mecanographicNumber.nextNumber();
+
+        return mecanographicNumber.value();
+    }
+
+    /**
+     * Registers a new user in the system.
+     * @param shortName
+     * @param rawPassword
+     * @param fullName
+     * @param email
+     * @param role
+     * @param birthDate
+     * @param taxPayerNumber
+     * @param acronym
+     * @return User
+     */
+    public User registerNewUser(final String shortName,
+                                final String rawPassword,
+                                final String fullName, final String email,
+                                final Role role, final String birthDate,
+                                final String taxPayerNumber,
+                                final String acronym) {
+        return registerNewUser(shortName, rawPassword, fullName, email,
+                role, birthDate, taxPayerNumber,
+                acronym, CurrentTimeCalendars.now());
+    }
+
+    /**
+     *
+     * @return all users no matter their status
+     */
+    public Iterable<User> allUsers() {
+        return userRepository.findAll();
+    }
+
+    /**
+     * Find user by email and enable.
+     * @param userEmail EmailAddress of user
+     * @return the user enabled.
+     */
+    public User enableUser(final EmailAddress userEmail) {
+        final User userToEnable = userRepository
+                .findUserByEmail(userEmail).get();
+
+        userToEnable.enable();
+
+        return userRepository.save(userToEnable);
+    }
+
+    /**
+     * Find user by email and disable.
+     * @param userEmail EmailAddress of user
+     * @return the user disabled.
+     */
+    public User disableUser(final EmailAddress userEmail) {
+        final User userToDisable = userRepository
+                .findUserByEmail(userEmail).get();
+
+        userToDisable.disable(CurrentTimeCalendars.now());
+
+        return userRepository.save(userToDisable);
+    }
+}
+````
 
 ## 6. Integration/Demonstration
 
-*In this section the team should describe the efforts realized in order to integrate this functionality with the other parts/components of the system*
+## Enable User
 
-*It is also important to explain any scripts or instructions required to execute an demonstrate this functionality*
+Login as a Manager
 
-## 7. Observations
+```txt
++= Login ======================================================================+
 
-*This section should be used to include any content that does not fit any of the previous sections.*
+Email: managerteste123@email.com
 
-*The team should present here, for instance, a critical prespective on the developed work including the analysis of alternative solutioons or related works*
+Password: PasswordManager1
 
-*The team should include in this section statements/references regarding third party works that were used in the development this work.*
+
++==============================================================================+
+```
+
+Menu Manager choose "Activate User"
+
+```txt
++= eCourse ====================================================================+
+
+1. Manage eCourse Users
+0. Exit
+
+Please choose an option
+1
+
+>> Manage eCourse Users
+1. Create Users
+2. Activate User
+3. Disable User
+0. Return 
+
+Please choose an option
+```
+
+Input email of user to be enabled
+
+```txt
++= Activate User ==============================================================+
+
+E-Mail:
+student1@email.com
+User enabled with success!
++==============================================================================+
+```
+
+---------------------------------------------------------------
+
+## Disable User
+
+Login as a Manager
+
+```txt
++= Login ======================================================================+
+
+Email: managerteste123@email.com
+
+Password: PasswordManager1
+
+
++==============================================================================+
+```
+
+Menu Manager choose "Disable User"
+
+```txt
++= eCourse ====================================================================+
+
+1. Manage eCourse Users
+0. Exit
+
+Please choose an option
+1
+
+>> Manage eCourse Users
+1. Create Users
+2. Activate User
+3. Disable User
+0. Return 
+
+Please choose an option
+```
+
+Input email of user to be disabled
+
+```txt
++= Disable User ===============================================================+
+
+E-Mail:
+student1@email.com
+User disabled with success!
++==============================================================================+
+```

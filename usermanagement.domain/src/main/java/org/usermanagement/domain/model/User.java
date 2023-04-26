@@ -338,6 +338,14 @@ public class User
     }
 
     /**
+     * Get deactivatedOn.
+     * @return Calendar
+     */
+    public Calendar deactivatedOn() {
+        return this.deactivatedOn;
+    }
+
+    /**
      * Get acronym.
      * @return Acronym
      */

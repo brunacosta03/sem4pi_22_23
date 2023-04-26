@@ -1,9 +1,10 @@
 package org.usermanagement.controller;
 
+import eapli.framework.general.domain.model.EmailAddress;
 import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
+import eapli.framework.time.util.CurrentTimeCalendars;
 import org.authz.application.AuthzRegistry;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -17,9 +18,12 @@ import org.usermanagement.domain.repositories.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.Calendar;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -191,6 +195,93 @@ class UserManagementServiceTest {
 
         verify(userRepository, never()).save(any(User.class));
     }
+
+    @Test
+    void enableUserWhenEmailAddressNotFoundThenThrowException() {
+        EmailAddress userEmail = EmailAddress.valueOf(STRING_EMAIL);
+        when(userRepository.findUserByEmail(userEmail)).thenReturn(Optional.empty());
+
+        assertThrows(
+                NoSuchElementException.class,
+                () -> {
+                    userSvc.enableUser(userEmail);
+                });
+
+        verify(userRepository, times(1)).findUserByEmail(userEmail);
+    }
+
+    @Test
+    void enableUserThatIsAlreadyEnableThenThrowException() {
+        EmailAddress userEmail = EmailAddress.valueOf(STRING_EMAIL);
+        User user = managerUser();
+        when(userRepository.findUserByEmail(userEmail)).thenReturn(Optional.of(user));
+
+        assertThrows(IllegalStateException.class,
+                () ->userSvc.enableUser(userEmail));
+    }
+
+    @Test
+    void inputInvalidEmailThenThrowException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> EmailAddress.valueOf("invalid_email"));
+    }
+
+    @Test
+    void enableUserWhenValidEmailAddressProvided() {
+        EmailAddress userEmail = EmailAddress.valueOf(STRING_EMAIL);
+        User user = mock(User.class);
+        when(userRepository.findUserByEmail(userEmail)).thenReturn(Optional.of(user));
+        when(userRepository.save(eq(user))).thenReturn(user);
+
+        User enabledUser = userSvc.enableUser(userEmail);
+
+        verify(userRepository, times(1)).findUserByEmail(userEmail);
+        verify(user, times(1)).enable();
+        verify(userRepository, times(1)).save(user);
+        assertEquals(user, enabledUser);
+    }
+
+    @Test
+    void disableUserWhenEmailAddressNotFoundThenThrowException() {
+        EmailAddress userEmail = EmailAddress.valueOf(STRING_EMAIL);
+        when(userRepository.findUserByEmail(userEmail)).thenReturn(Optional.empty());
+
+        assertThrows(
+                NoSuchElementException.class,
+                () -> {
+                    userSvc.disableUser(userEmail);
+                });
+
+        verify(userRepository, times(1)).findUserByEmail(userEmail);
+    }
+
+    @Test
+    void disableUserThatIsAlreadyDisableThenThrowException() {
+        EmailAddress userEmail = EmailAddress.valueOf(STRING_EMAIL);
+        User user = managerUser();
+        when(userRepository.findUserByEmail(userEmail)).thenReturn(Optional.of(user));
+
+        user.disable(CurrentTimeCalendars.now());
+
+        assertThrows(IllegalStateException.class,
+                () ->userSvc.disableUser(userEmail));
+    }
+
+    @Test
+    void disableUserWhenValidEmailAddressProvided() {
+        EmailAddress userEmail = EmailAddress.valueOf(STRING_EMAIL);
+        User user = mock(User.class);
+        when(userRepository.findUserByEmail(userEmail)).thenReturn(Optional.of(user));
+        when(userRepository.save(eq(user))).thenReturn(user);
+
+        User disabledUser = userSvc.disableUser(userEmail);
+
+        verify(userRepository, times(1)).findUserByEmail(userEmail);
+        verify(user, times(1)).disable(any());
+        verify(userRepository, times(1)).save(user);
+        assertEquals(user, disabledUser);
+    }
+
 
 
 

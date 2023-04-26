@@ -1,4 +1,4 @@
-package presentation;
+package presentation.usermanagement;
 
 import eapli.framework.domain.repositories.IntegrityViolationException;
 import eapli.framework.infrastructure.authz.domain.model.Role;

@@ -7,9 +7,8 @@ skinparam defaultFontName FG Virgil
 skinparam shadowing false
 
 actor Manager as Actor
-participant AddUserUI as UI <<presentation>>
+participant RegisterUserUI as UI <<presentation>>
 participant AddUserController as Controller <<application>>
-participant AuthzRegistry as Registry <<util>>
 participant AuthorizationService as AuthzService <<service>>
 participant UserManagementService as Service <<service>>
 participant UserBuilder as Builder <<builder>>
@@ -23,10 +22,8 @@ Actor --> UI: Add User
 activate UI
     UI -> Controller: create()
     
-    loop option != 0
-        UI --> Actor: Show List\nof Role Types
-        Actor --> UI: Role Type
-    end
+    UI --> Actor: Show List\nof Role Types
+    Actor --> UI: Role Type
 
     UI --> Actor: Ask user information
 
@@ -42,19 +39,15 @@ activate UI
     UI -> Controller: addUser(shortName, password, fullName,\n email, role, birthDate, taxPayerNumber, acronym)
     activate Controller
 
-        Controller -> Registry: authorizationService()
-        activate Registry
-        Registry -> Controller: authz
-        Controller -> Registry: userService()
-        Registry -> Controller: userSvc
-        deactivate Registry
 
+    Controller -> AuthzService: create()
+    activate AuthzService
+    Controller -> AuthzService: ensureAuthenticatedUserHasAnyOf(CourseRoles.MANAGER)
+    deactivate AuthzService
 
-        Controller -> AuthzService: ensureAuthenticatedUserHasAnyOf(CourseRoles.MANAGER)
-
-
-    Controller -> Service: registerNewUser(shortName, password, fullName,\n email, role, birthDate, taxPayerNumber, acronym, createdOn);
+    Controller -> Service: create()
     activate Service
+    Controller -> Service: registerNewUser(shortName, password, fullName,\n email, role, birthDate, taxPayerNumber, acronym, createdOn);
 
     Service -> Builder: create()
         activate Builder
@@ -66,8 +59,8 @@ activate UI
             Service -> Repository: findMaxYearMecanographicNumber()
             activate Repository
             Repository -> Service: mecNumber
-            Service -> Service: generateMecNumber()
             deactivate Repository
+            Service -> Service: generateMecNumber()
             Service -> Builder: withMecanographicNumber(mecNumber)
         end
 

@@ -6,34 +6,35 @@ skinparam packageStyle rect
 skinparam defaultFontName FG Virgil
 skinparam shadowing false
 
-class AddUserUI <<presentation>>
+class RegisterUserUI <<presentation>>
 class AddUserController <<application>>
-class AuthzRegistry <<util>>
 class AuthorizationService <<service>>
 class UserManagementService <<service>>
+class AuthzRegistry <<util>>
 class UserBuilder <<builder>>
 class "user:User" <<domain>>
 class PersistenceContext  <<persistence>>
 class RepositoryFactory  <<factory>>
 class UserRepository <<repository>>
 
-AddUserUI --> AddUserController : theController
-AddUserController --> AuthorizationService: theAuthzService
-AddUserController --> UserManagementService: theService
-UserManagementService --> UserBuilder: theBuilder
+RegisterUserUI --> AddUserController : theController
+AddUserController --> AuthorizationService : authz
+AddUserController --> UserManagementService : userSvc
+AddUserController ..> AuthzRegistry
+AuthzRegistry ..> AuthorizationService
+AuthzRegistry ..> UserManagementService
+UserManagementService --> UserBuilder : userBuilder
 UserBuilder --> "user:User"
-UserManagementService --> PersistenceContext: persistence
-PersistenceContext --> RepositoryFactory: factory
-RepositoryFactory --> UserRepository: repo
-UserManagementService --> UserRepository: repo
-AddUserController --> AuthzRegistry: registry
+UserManagementService --> PersistenceContext : persistence
+PersistenceContext --> RepositoryFactory : factory
+RepositoryFactory --> UserRepository : userRepository
+UserManagementService --> UserRepository : userRepository
 
-AddUserUI : doShow()
+RegisterUserUI : doShow()
+RegisterUserUI : chooseRole()
 UserRepository : save(User)
 AddUserController : addUser(String, String, String, String, Role, String, String, String)
 AddUserController : addUser(String, String, String, String, Role, String, String, String, Calendar)
-AuthzRegistry : authorizationService()
-AuthzRegistry : userService()
 AuthorizationService : ensureAuthenticatedUserHasAnyOf(Role...)
 UserManagementService : registerNewUser(String, String, String, String, Role, String, String, String, Calendar)
 UserManagementService : generateMecNumber()
@@ -48,5 +49,8 @@ RepositoryFactory : users()
 "user:User" : validateParameters(ShortName, FullName, EmailAddress, Role, Password, Calendar)
 "user:User" : validateMecNumber(MecanographicNumber, Role)
 "user:User" : validateMecNumber(Acronym, Role)
+AuthzRegistry : authorizationService()
+AuthzRegistry : userService()
+
 
 @enduml

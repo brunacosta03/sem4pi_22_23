@@ -6,34 +6,37 @@ skinparam packageStyle rect
 skinparam defaultFontName FG Virgil
 skinparam shadowing false
 
-class ListUsersUI <<presentation>>
-class ListUsersController <<application>>
+class EnableUserUI <<presentation>>
+class ChangeUserStateController <<application>>
 class AuthorizationService <<service>>
 class UserManagementService <<service>>
 class AuthzRegistry <<util>>
+class "user:User" <<domain>>
 class PersistenceContext  <<persistence>>
 class RepositoryFactory  <<factory>>
 class UserRepository <<repository>>
 
-ListUsersUI --> ListUsersController : theController
-ListUsersController --> AuthorizationService: authz
-ListUsersController --> UserManagementService: userSvc
-ListUsersController ..> AuthzRegistry
+EnableUserUI --> ChangeUserStateController : theController
+ChangeUserStateController --> AuthorizationService: authz
+ChangeUserStateController --> UserManagementService: userSvc
+ChangeUserStateController ..> AuthzRegistry
 AuthzRegistry ..> AuthorizationService
 AuthzRegistry ..> UserManagementService
 UserManagementService --> PersistenceContext: persistence
+UserManagementService --> UserRepository: userRepository
+UserManagementService --> "user:User" : userToEnable
 PersistenceContext --> RepositoryFactory: factory
 RepositoryFactory --> UserRepository: userRepository
-UserManagementService --> UserRepository: userRepository
 
-ListUsersUI : doShow()
-ListUsersUI : show()
-ListUsersController : listAllUsers()
+EnableUserUI : doShow()
+ChangeUserStateController : enableUserByEmail(EmailAddress)
 AuthorizationService : ensureAuthenticatedUserHasAnyOf(Role...)
-UserManagementService : allUsers()
+UserManagementService : enableUser(EmailAddress)
 PersistenceContext : repositories()
 RepositoryFactory : users()
-UserRepository : findAll()
+"user:User" : enable()
+UserRepository : findUserByEmail(EmailAddress)
+UserRepository : save(User)
 AuthzRegistry : authorizationService()
 AuthzRegistry : userService()
 

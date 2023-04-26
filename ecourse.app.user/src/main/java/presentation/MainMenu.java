@@ -4,13 +4,15 @@ import eapli.framework.actions.Actions;
 import eapli.framework.actions.menu.Menu;
 import eapli.framework.presentation.console.AbstractUI;
 import eapli.framework.presentation.console.ExitWithMessageAction;
-import eapli.framework.presentation.console.ShowMessageAction;
 import eapli.framework.presentation.console.menu.MenuItemRenderer;
 import eapli.framework.presentation.console.menu.MenuRenderer;
 import eapli.framework.presentation.console.menu.VerticalMenuRenderer;
 import org.authz.application.AuthorizationService;
 import org.authz.application.AuthzRegistry;
 import org.user.management.CourseRoles;
+import presentation.usermanagement.DisableUserUI;
+import presentation.usermanagement.EnableUserUI;
+import presentation.usermanagement.RegisterUserUI;
 
 public class MainMenu extends AbstractUI {
     private static final String RETURN_LABEL = "Return ";
@@ -22,6 +24,8 @@ public class MainMenu extends AbstractUI {
 
     //MANAGER MANAGE USER's
     private static final int SET_MANAGER_CREATE_USERS_OPTION = 1;
+    private static final int SET_MANAGER_ENABLE_USER_OPTION = 2;
+    private static final int SET_MANAGER_DISABLE_USER_OPTION = 3;
 
     private final AuthorizationService authz = AuthzRegistry.authorizationService();
 
@@ -62,6 +66,10 @@ public class MainMenu extends AbstractUI {
 
         menu.addItem(SET_MANAGER_CREATE_USERS_OPTION, "Create Users",
                 new RegisterUserUI()::show);
+        menu.addItem(SET_MANAGER_ENABLE_USER_OPTION, "Activate User",
+                new EnableUserUI()::show);
+        menu.addItem(SET_MANAGER_DISABLE_USER_OPTION, "Disable User",
+                new DisableUserUI()::show);
         menu.addItem(EXIT_OPTION, RETURN_LABEL, Actions.SUCCESS);
 
         return menu;

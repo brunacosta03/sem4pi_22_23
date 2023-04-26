@@ -1,10 +1,18 @@
 package org.ecourse;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
 public class AppSettings {
+    /**
+     * Properties File
+     */
+    private static final String PROPERTIES_RESOURCE = "application.properties";
+
     /**
      * PERSISTENCE_UNIT_KEY.
      */
@@ -27,12 +35,36 @@ public class AppSettings {
     private final Properties applicationProperties = new Properties();
 
     /**
+     * Load Properties
+     */
+    public AppSettings() {
+        loadProperties();
+    }
+
+    private void loadProperties() {
+        try (InputStream propertiesStream = this.getClass().getClassLoader().getResourceAsStream(PROPERTIES_RESOURCE)) {
+            if (propertiesStream == null) {
+                throw new FileNotFoundException(
+                        "Property file '" + PROPERTIES_RESOURCE + "' not found in the classpath");
+            }
+            applicationProperties.load(propertiesStream);
+        } catch (final IOException exio) {
+            setDefaultProperties();
+            System.out.println("Load default properties");
+        }
+    }
+
+    private void setDefaultProperties() {
+        applicationProperties.setProperty(REPOSITORY_FACTORY_KEY,
+                "org.persistence.JpaRepositoryFactory");
+        applicationProperties.setProperty(PERSISTENCE_UNIT_KEY, "DEMO_ORMPU");
+    }
+
+    /**
      * DEMO_ORMPU is in persistence.xml.
      * @return String
      */
     public String persistenceUnitName() {
-        applicationProperties.setProperty(PERSISTENCE_UNIT_KEY, "DEMO_ORMPU");
-
         return applicationProperties.getProperty(PERSISTENCE_UNIT_KEY);
     }
 
@@ -54,9 +86,6 @@ public class AppSettings {
      * @return String
      */
     public String repositoryFactory() {
-        applicationProperties.setProperty(REPOSITORY_FACTORY_KEY,
-                "org.persistence.JpaRepositoryFactory");
-
         return applicationProperties.getProperty(REPOSITORY_FACTORY_KEY);
     }
 }

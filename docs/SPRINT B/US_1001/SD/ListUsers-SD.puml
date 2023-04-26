@@ -9,7 +9,6 @@ skinparam shadowing false
 actor Manager as Actor
 participant ListUsersUI as UI <<presentation>>
 participant ListUsersController as Controller <<application>>
-participant AuthzRegistry as Registry <<util>>
 participant AuthorizationService as AuthzService <<service>>
 participant UserManagementService as Service <<service>>
 participant PersistenceContext as Persistence <<persistence>>
@@ -24,18 +23,15 @@ activate UI
     UI -> Controller: listAllUsers()
     activate Controller
 
-    Controller -> Registry: authorizationService()
-    activate Registry
-    Registry -> Controller: authz
-    Controller -> Registry: userService()
-    Registry -> Controller: userSvc
-    deactivate Registry
-
+    Controller -> AuthzService: create()
+    activate AuthzService
     Controller -> AuthzService: ensureAuthenticatedUserHasAnyOf(CourseRoles.MANAGER)
+    deactivate AuthzService
 
-
-    Controller -> Service: allUsers()
+    Controller -> Service: create()
     activate Service
+    Controller -> Service: allUsers()
+
 
         Service -> Persistence: repositories()
         activate Persistence
@@ -58,7 +54,7 @@ activate UI
         deactivate Service
         Controller -> UI: allUsers
         deactivate Controller
-        
+
         UI -> UI: show()
         UI -> Actor: back to menu
 
