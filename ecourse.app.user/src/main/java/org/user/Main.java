@@ -43,6 +43,7 @@ public final class Main {
 
         } catch (Exception e) {
             System.out.println("Database is down.");
+            System.out.println(e.getMessage());
         }
     }
 }

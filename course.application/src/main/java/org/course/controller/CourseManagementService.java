@@ -92,4 +92,20 @@ public class CourseManagementService{
         courseRepo.save(c);
     }
 */
+
+    public void changeState(CourseCode courseCode, CourseState state) {
+        txt.beginTransaction();
+
+        Course course = courseRepo.findByCode(courseCode).orElse(null);
+        Preconditions.ensure(
+                course != null,
+                "Course with code " + courseCode + " does not exist"
+        );
+
+    	course.forceChangeState(state);
+
+        txt.commit();
+
+    	courseRepo.save(course);
+    }
 }

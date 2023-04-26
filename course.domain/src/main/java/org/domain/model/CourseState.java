@@ -5,6 +5,7 @@ import eapli.framework.validations.Preconditions;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.util.Objects;
 
 /**
  * The type CourseState.
@@ -42,5 +43,20 @@ public class CourseState implements ValueObject {
      * @return String
      */
     public String value(){ return this.value;}
+
+    /**
+     * Verifies if the state is the same as the one passed as parameter.
+     * @param o
+     * @return isEqual boolean
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CourseState that = (CourseState) o;
+
+        return Objects.equals(value, that.value);
+    }
 }
 
