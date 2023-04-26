@@ -71,14 +71,77 @@ We added the UserState as a Value Object of the User so that it is easy to know 
 
 ### 4.4. Tests
 
-**Test 1:** *Verifies that it is not possible to create an instance of the Example class with null values.*
+**Test 1:** *Verifies that it is not possible to enable User that is already enabled.*
 
 ```Java
-@Test(expected = IllegalArgumentException.class)
-public void ensureNullIsNotAllowed() {
-	Example instance = new Example(null, null);
+@Test
+void enableUserThatIsAlreadyEnableThenThrowException() {
+    EmailAddress userEmail = EmailAddress.valueOf(STRING_EMAIL);
+    User user = managerUser();
+    when(userRepository.findUserByEmail(userEmail)).thenReturn(Optional.of(user));
+
+    assertThrows(IllegalStateException.class,
+                () ->userSvc.enableUser(userEmail));
+    }
+````
+
+**Test 2:** *Verifies that it is possible to enable User that is disabled.*
+
+```Java
+@Test
+void enableUserWhenValidEmailAddressProvided() {
+    EmailAddress userEmail = EmailAddress.valueOf(STRING_EMAIL);
+    User user = mock(User.class);
+    when(userRepository.findUserByEmail(userEmail)).thenReturn(Optional.of(user));
+    when(userRepository.save(eq(user))).thenReturn(user);
+
+    User enabledUser = userSvc.enableUser(userEmail);
+
+    verify(userRepository, times(1)).findUserByEmail(userEmail);
+    verify(user, times(1)).enable();
+    verify(userRepository, times(1)).save(user);
+    assertEquals(user, enabledUser);
 }
 ````
+
+**Test 3:** *Verifies that when email address is not found will thow Exception.*
+
+```Java
+@Test
+void disableUserWhenEmailAddressNotFoundThenThrowException() {
+    EmailAddress userEmail = EmailAddress.valueOf(STRING_EMAIL);
+    when(userRepository.findUserByEmail(userEmail)).thenReturn(Optional.empty());
+
+    assertThrows(
+            NoSuchElementException.class,
+            () -> {
+                userSvc.disableUser(userEmail);
+            });
+
+    verify(userRepository, times(1)).findUserByEmail(userEmail);
+}
+````
+
+**Test 4:** *Verifies that it is possible to disable User that is enabled.*
+
+```Java
+@Test
+void disableUserWhenValidEmailAddressProvided() {
+    EmailAddress userEmail = EmailAddress.valueOf(STRING_EMAIL);
+    User user = mock(User.class);
+    when(userRepository.findUserByEmail(userEmail)).thenReturn(Optional.of(user));
+    when(userRepository.save(eq(user))).thenReturn(user);
+
+    User disabledUser = userSvc.disableUser(userEmail);
+
+    verify(userRepository, times(1)).findUserByEmail(userEmail);
+    verify(user, times(1)).disable(any());
+    verify(userRepository, times(1)).save(user);
+    assertEquals(user, disabledUser);
+}
+````
+
+
 
 ## 5. Implementation
 
@@ -144,8 +207,8 @@ public class DisableUserUI extends AbstractUI {
     private final ChangeUserStateController theController = new ChangeUserStateController();
 
     /**
-     * Manager want to enable a user.
-     * Ask Manager email of user to enable.
+     * Manager want to disable a user.
+     * Ask Manager email of user to disale.
      * @return false
      */
     @Override
@@ -408,12 +471,13 @@ Password: PasswordManager1
 +==============================================================================+
 ```
 
-Menu Manager choose "Activate User"
+Menu Manager choose "Enable User"
 
 ```txt
 += eCourse ====================================================================+
 
 1. Manage eCourse Users
+2. Manage eCourse Courses
 0. Exit
 
 Please choose an option
@@ -421,8 +485,9 @@ Please choose an option
 
 >> Manage eCourse Users
 1. Create Users
-2. Activate User
+2. Enable User
 3. Disable User
+4. List Users
 0. Return 
 
 Please choose an option
@@ -462,6 +527,7 @@ Menu Manager choose "Disable User"
 += eCourse ====================================================================+
 
 1. Manage eCourse Users
+2. Manage eCourse Courses
 0. Exit
 
 Please choose an option
@@ -469,8 +535,9 @@ Please choose an option
 
 >> Manage eCourse Users
 1. Create Users
-2. Activate User
+2. Enable User
 3. Disable User
+4. List Users
 0. Return 
 
 Please choose an option

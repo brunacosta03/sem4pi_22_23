@@ -17,14 +17,11 @@ import org.usermanagement.domain.model.UserManagementService;
 import org.usermanagement.domain.repositories.UserRepository;
 
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -282,7 +279,31 @@ class UserManagementServiceTest {
         assertEquals(user, disabledUser);
     }
 
+    @Test
+    void testAllUsersReturnsEmptyList() {
+        when(userRepository.findAll()).thenReturn(new ArrayList<>());
 
+        Iterable<User> allUsers = userSvc.allUsers();
+
+        assertTrue(((List<User>) allUsers).isEmpty());
+        verify(userRepository, times(1)).findAll();
+    }
+
+    @Test
+    void testAllUsersReturnsNonEmptyList() {
+        List<User> users = new ArrayList<>();
+        User user1 = managerUser();
+        User user2 = studentUser();
+        users.add(user1);
+        users.add(user2);
+
+        when(userRepository.findAll()).thenReturn(users);
+
+        Iterable<User> allUsers = userSvc.allUsers();
+
+        assertEquals(users, allUsers);
+        verify(userRepository, times(1)).findAll();
+    }
 
 
     private User managerUser(){

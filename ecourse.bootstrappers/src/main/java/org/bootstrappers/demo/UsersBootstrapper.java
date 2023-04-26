@@ -24,15 +24,15 @@ public class UsersBootstrapper extends UsersBootstrapperBase implements Action {
      */
     @Override
     public boolean execute() {
-        registerManager("manager", PASSWORD_M, "Samuel Dias",
+        registerManager("Samuel", PASSWORD_M, "Samuel Dias",
                 "managerteste123@email.com", "10/07/2000", "111111111");
-        registerTeacher("teacher", PASSWORD_T, "Henrique Pinto",
+        registerTeacher("Henrique", PASSWORD_T, "Henrique Pinto",
                 "teacher@email.com", "23/04/2001", "222222222", "HRP");
-        registerTeacher("teacher2", PASSWORD_T, "Maria Albertina",
+        registerTeacher("Maria", PASSWORD_T, "Maria Albertina",
                 "teacher2@email.com", "25/05/1998", "123123123", "MAB");
-        registerStudent("student1", PASSWORD_S, "Pedro Alves",
+        registerStudent("Pedro", PASSWORD_S, "Pedro Alves",
                  "student1@email.com", "09/12/1999",  "333333333");
-        registerStudent("student2", PASSWORD_S, "Bruna Costa",
+        registerStudent("Bruna", PASSWORD_S, "Bruna Costa",
                 "student2@email.com", "18/01/2001",  "444444444");
 
         return true;

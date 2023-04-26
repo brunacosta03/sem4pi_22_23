@@ -12,6 +12,7 @@ import org.authz.application.AuthzRegistry;
 import org.user.management.CourseRoles;
 import presentation.usermanagement.DisableUserUI;
 import presentation.usermanagement.EnableUserUI;
+import presentation.usermanagement.ListUsersUI;
 import presentation.usermanagement.RegisterUserUI;
 
 public class MainMenu extends AbstractUI {
@@ -33,6 +34,7 @@ public class MainMenu extends AbstractUI {
     private static final int SET_MANAGER_CREATE_USERS_OPTION = 1;
     private static final int SET_MANAGER_ENABLE_USER_OPTION = 2;
     private static final int SET_MANAGER_DISABLE_USER_OPTION = 3;
+    private static final int SET_MANAGER_LIST_USERS_OPTION = 4;
 
     // MANAGER MANAGE COURSES
     private static final int SET_MANAGER_LIST_AVAILABLE_COURSES_OPTION = 1;
@@ -111,10 +113,12 @@ public class MainMenu extends AbstractUI {
 
         menu.addItem(SET_MANAGER_CREATE_USERS_OPTION, "Create Users",
                 new RegisterUserUI()::show);
-        menu.addItem(SET_MANAGER_ENABLE_USER_OPTION, "Activate User",
+        menu.addItem(SET_MANAGER_ENABLE_USER_OPTION, "Enable User",
                 new EnableUserUI()::show);
         menu.addItem(SET_MANAGER_DISABLE_USER_OPTION, "Disable User",
                 new DisableUserUI()::show);
+        menu.addItem(SET_MANAGER_LIST_USERS_OPTION, "List Users",
+                new ListUsersUI()::show);
         menu.addItem(EXIT_OPTION, RETURN_LABEL, Actions.SUCCESS);
 
         return menu;

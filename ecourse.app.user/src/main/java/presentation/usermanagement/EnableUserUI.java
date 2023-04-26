@@ -36,6 +36,6 @@ public class EnableUserUI extends AbstractUI {
 
     @Override
     public String headline() {
-        return "Activate User";
+        return "Enable User";
     }
 }

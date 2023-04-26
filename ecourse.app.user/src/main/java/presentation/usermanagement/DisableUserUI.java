@@ -11,8 +11,8 @@ public class DisableUserUI extends AbstractUI {
     private final ChangeUserStateController theController = new ChangeUserStateController();
 
     /**
-     * Manager want to enable a user.
-     * Ask Manager email of user to enable.
+     * Manager want to disable a user.
+     * Ask Manager email of user to disale.
      * @return false
      */
     @Override

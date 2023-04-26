@@ -470,6 +470,6 @@ class UserTest {
 
         GeneralDTO dto = user.toDTO();
 
-        assertEquals(4, dto.values().size());
+        assertEquals(5, dto.values().size());
     }
 }

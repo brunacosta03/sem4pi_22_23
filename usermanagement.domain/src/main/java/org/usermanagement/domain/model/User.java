@@ -338,6 +338,14 @@ public class User
     }
 
     /**
+     * Get Short Name.
+     * @return ShortName
+     */
+    public ShortName shortName() {
+        return this.shortName;
+    }
+
+    /**
      * Get deactivatedOn.
      * @return Calendar
      */
@@ -394,6 +402,7 @@ public class User
         ret.put("fullName", fullName.toString());
         ret.put("email", email.toString());
         ret.put("role", role.toString());
+        ret.put("userState", isActive());
 
         return ret;
     }

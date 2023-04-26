@@ -547,12 +547,13 @@ Password: PasswordManager1
 +==============================================================================+
 ```
 
-Menu Manager choose create Users
+Menu Manager choose "Create Users"
 
 ```txt
 += eCourse ====================================================================+
 
 1. Manage eCourse Users
+2. Manage eCourse Courses
 0. Exit
 
 Please choose an option
@@ -560,8 +561,9 @@ Please choose an option
 
 >> Manage eCourse Users
 1. Create Users
-2. Activate User
+2. Enable User
 3. Disable User
+4. List Users
 0. Return 
 
 Please choose an option
