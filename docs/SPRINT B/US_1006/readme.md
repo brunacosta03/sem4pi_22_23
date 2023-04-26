@@ -296,6 +296,129 @@ public class JpaAutoTxCourseRepository
 
 ## 6. Integration/Demonstration
 
-*In this section the team should describe the efforts realized in order to integrate this functionality with the other parts/components of the system*
+#### For this functionality, we need to login, and the results will depend on the UserSession ####
 
-*It is also important to explain any scripts or instructions required to execute an demonstrate this functionality*
+### Manager example
+
+```text
+All Courses existent
+
+Course MAT-1
+Name: Matemática
+Edition: INTRO-MAT-SEM01
+Description: Mathematics from the begining of time
+State: Enroll
+Max students: 100
+Minimun students: 10
+Head Teacher: teacher@email.com
+
+Course PT-1
+Name: Português
+Edition: INTRO-PT-01
+Description: Portuguese for every ERASMUS student
+State: Enroll
+Max students: 200
+Minimun students: 20
+Head Teacher: teacher2@email.com
+
+Course APROG-3
+Name: Algoritmia e Programação
+Edition: APROG-SEM01
+Description: Basics and fundamentals for java
+State: Enroll
+Max students: 400
+Minimun students: 30
+Head Teacher: teacher@email.com
+
+Course APROG-5
+Name: Algoritmia e Programação
+Edition: APROG-SEM03
+Description: Basics and fundamentals for java
+State: Closed
+Max students: 400
+Minimun students: 30
+Head Teacher: teacher2@email.com
+```
+
+### Teacher example
+
+```text
+Courses that I lead
+
+Course MAT-1
+Name: Matemática
+Edition: INTRO-MAT-SEM01
+Description: Mathematics from the begining of time
+State: Enroll
+Max students: 100
+Minimun students: 10
+Head Teacher: teacher@email.com
+
+Course APROG-3
+Name: Algoritmia e Programação
+Edition: APROG-SEM01
+Description: Basics and fundamentals for java
+State: Enroll
+Max students: 400
+Minimun students: 30
+Head Teacher: teacher@email.com
+
+
+
+Courses that I teach
+
+Course MAT-1
+Name: Matemática
+Edition: INTRO-MAT-SEM01
+Description: Mathematics from the begining of time
+State: Enroll
+Max students: 100
+Minimun students: 10
+Head Teacher: teacher@email.com
+
+Course APROG-5
+Name: Algoritmia e Programação
+Edition: APROG-SEM03
+Description: Basics and fundamentals for java
+State: Closed
+Max students: 400
+Minimun students: 30
+Head Teacher: teacher2@email.com
+```
+
+### Student example
+
+```text
+Courses available for me
+
+Course APROG-3
+Name: Algoritmia e Programação
+Edition: APROG-SEM01
+Description: Basics and fundamentals for java
+State: Enroll
+Max students: 400
+Minimun students: 30
+Head Teacher: teacher@email.com
+
+
+
+Courses that I am taking or took
+
+Course MAT-1
+Name: Matemática
+Edition: INTRO-MAT-SEM01
+Description: Mathematics from the begining of time
+State: Enroll
+Max students: 100
+Minimun students: 10
+Head Teacher: teacher@email.com
+
+Course PT-1
+Name: Português
+Edition: INTRO-PT-01
+Description: Portuguese for every ERASMUS student
+State: Enroll
+Max students: 200
+Minimun students: 20
+Head Teacher: teacher2@email.com
+```
