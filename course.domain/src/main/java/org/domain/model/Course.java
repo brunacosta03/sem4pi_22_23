@@ -59,6 +59,7 @@ public class Course implements AggregateRoot<CourseCode> {
      * The head teacher for the course
      */
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "head_teacher_email")
     private User headTeacher;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
@@ -173,15 +174,20 @@ public class Course implements AggregateRoot<CourseCode> {
                 "This teacher is not enrolled in this course");
         teachers.remove(teacher);
     }
+
+    public void forceChangeState(CourseState state){
+        this.state = state;
+    }
+
     @Override
     public String toString() {
-        return "Course " + code + "\n" +
-        "Name: " + name + "\n" +
-        "Edition: " + edition + "\n" +
-        "Description: " + description + "\n" +
-        "State: " + state + "\n" +
-        "Max students: " + max + "\n" +
-        "Minimun students: " + min + "\n" +
-        "Head Teacher: " + headTeacher.emailAddress() + "\n";
+        return "Course " + code.value() + "\n" +
+                "Name: " + name.value() + "\n" +
+                "Edition: " + edition.value() + "\n" +
+                "Description: " + description.value() + "\n" +
+                "State: " + state.value() + "\n" +
+                "Max students: " + max.value() + "\n" +
+                "Minimun students: " + min.value() + "\n" +
+                "Head Teacher: " + headTeacher.emailAddress() + "\n";
     }
 }

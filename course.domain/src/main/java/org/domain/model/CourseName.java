@@ -32,4 +32,8 @@ public class CourseName implements ValueObject {
      * @return CourseName
      */
     public static CourseName of(final String name){return new CourseName(name);}
+
+    public String value(){
+        return this.value;
+    }
 }
