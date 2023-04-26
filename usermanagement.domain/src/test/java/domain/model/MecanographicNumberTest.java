@@ -78,4 +78,12 @@ class MecanographicNumberTest {
         assertEquals(expected, m.value());
     }
 
+    @Test
+    void testEquals() {
+        MecanographicNumber mecanographicNumber = MecanographicNumber.of("201900001");
+        assertEquals(mecanographicNumber, mecanographicNumber);
+
+        int expectedHashCodeResult = mecanographicNumber.hashCode();
+        assertEquals(expectedHashCodeResult, mecanographicNumber.hashCode());
+    }
 }

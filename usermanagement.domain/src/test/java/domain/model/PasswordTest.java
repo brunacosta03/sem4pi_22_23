@@ -91,7 +91,5 @@ class PasswordTest {
         Password pass = Password.encodedAndValid("1234567X", policy, encoder).get();
 
         assertEquals("1234567X", pass.value()); // this encoder is used for tests and does not encode(change) the password
-
     }
-
 }

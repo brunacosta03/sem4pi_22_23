@@ -4,6 +4,8 @@ import eapli.framework.general.domain.model.EmailAddress;
 import eapli.framework.infrastructure.authz.application.PasswordPolicy;
 import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
 import eapli.framework.infrastructure.authz.domain.model.Role;
+import eapli.framework.representations.dto.GeneralDTO;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.user.management.CourseRoles;
@@ -12,6 +14,9 @@ import org.usermanagement.domain.model.*;
 import java.util.Calendar;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 class UserTest {
     private static final PasswordEncoder ENCODER = new PlainTextEncoder();
@@ -30,6 +35,10 @@ class UserTest {
     private static final String STRING_ROLE = String.valueOf(CourseRoles.MANAGER);
     private static final Role ROLE = CourseRoles.MANAGER;
 
+    private static final Role ROLE_TEACHER = CourseRoles.TEACHER;
+
+    private static final Role ROLE_STUDENT = CourseRoles.STUDENT;
+
 
     private static final String STRING_PASS = "Correct5";
     private static final String STRING_PASS2 = "CorrectPass2";
@@ -38,6 +47,10 @@ class UserTest {
     private static final Password PASSWORD2 = Password.encodedAndValid(STRING_PASS2, POLICY, ENCODER).get();
     private static final Calendar CREATED_ON = Calendar.getInstance();
     private static final Calendar DEACTIVATED_ON = Calendar.getInstance();
+
+    private static final String STRING_ACRONYM = "TST";
+
+    private static final String STRING_NUMBER_MEC = "202300001";
 
     private static final String STRING_ROLE_TWO = "ROLE_TWO";
     private static final Role ROLE_TWO = Role.valueOf(STRING_ROLE_TWO);
@@ -357,5 +370,106 @@ class UserTest {
                 .build();
 
         assertEquals(STRING_ROLE, user.role());
+    }
+
+    @Test
+    void ensureAcronymIsWorking() {
+        final User user = builder.with(
+                        SHORTNAME,
+                        PASSWORD,
+                        FULLNAME,
+                        EMAIL,
+                        ROLE_TEACHER)
+                .withAcronym(STRING_ACRONYM)
+                .createdOn(CREATED_ON)
+                .build();
+
+        assertEquals(STRING_ACRONYM, user.acronym().value());
+    }
+
+    @Test
+    void ensureTeacherAllwaysHaveAcronym() {
+        assertThrows(IllegalStateException.class,
+                () -> builder.with(
+                                SHORTNAME,
+                                PASSWORD,
+                                FULLNAME,
+                                EMAIL,
+                                ROLE_TEACHER)
+                        .createdOn(CREATED_ON)
+                        .build());
+    }
+
+    @Test
+    void failRegisterManagerWithAcronym() {
+        assertThrows(IllegalStateException.class,
+                () -> builder.with(
+                        SHORTNAME,
+                        PASSWORD,
+                        FULLNAME,
+                        EMAIL,
+                        ROLE)
+                .withAcronym(STRING_ACRONYM)
+                .createdOn(CREATED_ON)
+                .build());
+    }
+
+    @Test
+    void ensureMecNumberIsWorking() {
+        final User user = builder.with(
+                        SHORTNAME,
+                        PASSWORD,
+                        FULLNAME,
+                        EMAIL,
+                        ROLE_STUDENT)
+                .withMecanographicNumber(STRING_NUMBER_MEC)
+                .createdOn(CREATED_ON)
+                .build();
+
+        assertEquals(STRING_NUMBER_MEC, user.mecanographicNumber().toString());
+    }
+
+    @Test
+    void ensureStudentAllwaysHaveMecNumber() {
+        assertThrows(IllegalStateException.class,
+                () -> builder.with(
+                                SHORTNAME,
+                                PASSWORD,
+                                FULLNAME,
+                                EMAIL,
+                                ROLE_STUDENT)
+                        .createdOn(CREATED_ON)
+                        .build());
+    }
+
+    @Test
+    void failRegisterManagerWithMecNumber() {
+        assertThrows(IllegalStateException.class,
+                () -> builder.with(
+                                SHORTNAME,
+                                PASSWORD,
+                                FULLNAME,
+                                EMAIL,
+                                ROLE)
+                        .withMecanographicNumber(STRING_NUMBER_MEC)
+                        .createdOn(CREATED_ON)
+                        .build());
+    }
+
+    @Test
+    void testToDTO() {
+        final User user = builder.with(
+                        SHORTNAME,
+                        PASSWORD,
+                        FULLNAME,
+                        EMAIL,
+                        ROLE_STUDENT)
+                .withMecanographicNumber(STRING_NUMBER_MEC)
+                .createdOn(CREATED_ON)
+                .build();
+
+        GeneralDTO dto = user.toDTO();
+
+        assertEquals(4, dto.values().size());
     }
 }
