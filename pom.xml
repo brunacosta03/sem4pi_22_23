@@ -34,6 +34,7 @@
 		<module>ecourse.infrastructure.authz</module>
         <module>course.application</module>
         <module>course.domain</module>
+        <module>enrollment.request.domain</module>
     </modules>
 
 	<dependencies>
