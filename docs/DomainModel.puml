@@ -111,10 +111,8 @@ package "Course Aggregate" {
         are to be considered different
         courses
     end note
-}
 
-package "Class Aggregate" {
-    entity Class <<entity>><<root>>
+    entity Class <<entity>>
 
     card ClassDate <<Value Object>>{
     }
@@ -143,13 +141,11 @@ package "Class Aggregate" {
             A class must have a unique title
         end note
 
-    entity Participant <<entity>>
-
     Class --> ClassDate
     Class --> ClassDuration
     Class --> ClassTitle
     Class --> ClassType
-    Class --> Participant
+    Course --> "*" Class : contains
 
     note right of ClassType
         Can be one of the following:
@@ -401,10 +397,8 @@ package BoardAggregate {
     BoardEntry <-- SharedBoard
     BoardRow <-- BoardEntry
     BoardCol <-- BoardEntry
-    EntryNumber <-- BoardRow
-    EntryTitle <-- BoardCol
-    EntryNumber <-- BoardCol
-    EntryTitle <-- BoardRow
+    EntryNumber <-- BoardEntry
+    EntryTitle <-- BoardEntry
 
 
     entity BoardPermissions <<Entity>>
@@ -415,7 +409,7 @@ package BoardAggregate {
     BoardPermissions --> User
     BoardPermissions --> AccessLevel
 
-    class BoardCreateConfig <<Util>><<Transient>>
+    class BoardCreateConfig <<Util>>
 
     note left of BoardCreateConfig
         This will be extracted from a config file,
@@ -439,13 +433,11 @@ package BoardAggregate {
     EnrollmentRequest --> "1" User : is of
     EnrollmentRequest --> "1" Course : belongs to
 
-    Class --> "1" Course : belongs to
-
-    Calendar --> "N" Class : keeps track of
+    Calendar --> "N" Course : keeps track of
 
     User --> "1" Calendar : has
 
-    Participant --> User : has
+    Class --> User : has participant
     User --> "N" ExamTemplate : creates
     Course --> "N" ExamTemplate : has
     Exam --> "1" ExamTemplate : is based on
@@ -457,7 +449,6 @@ package BoardAggregate {
     PostIt --> "1" User :owner
     SharedBoard --> "1" User :owner
     PostIt --> "1" SharedBoard :belongs
-    BoardCreateConfig <-- SharedBoard
 
 
 
