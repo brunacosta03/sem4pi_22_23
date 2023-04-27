@@ -4,11 +4,11 @@
 
 The members of the group:
 
-| Student Nr.	                   | Name	     |
+| Student Nr.	                     | Name	     |
 |----------------------------------|-------------|
 | **[1201205](1201205/readme.md)** | Samuel Dias |
 | **[1201416](1201416/readme.md)** | Pedro Alves |
-| **[1211136](121113y/readme.md)** | Bruna Costa |
+| **[1211136](1211136/readme.md)** | Bruna Costa |
 | **[1211201](1211201/readme.md)** | Henrique Pinto |
 
 
