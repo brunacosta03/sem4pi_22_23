@@ -69,31 +69,33 @@ public class CourseManagementService{
         return courseRepo.save(course);
     }
 
-/*    public void changeState(Course c){
+   public Course changeState(Course c){
+        txt.beginTransaction();
         CourseState state = c.state();
 
-        if(state.equals(CourseStateConstants.CLOSED)){
+        if(state.equals(CourseStateConstants.CLOSED)) {
 
             c.changeState(CourseStateConstants.OPEN);
 
-        }else if(state.equals(CourseStateConstants.OPEN)){
+        } else if(state.equals(CourseStateConstants.OPEN)) {
 
             c.changeState(CourseStateConstants.ENROLL);
 
-        }else if(state.equals(CourseStateConstants.ENROLL)){
+        } else if(state.equals(CourseStateConstants.ENROLL)) {
 
             c.changeState(CourseStateConstants.IN_PROGRESS);
 
-        }else{
-
+        } else {
             c.changeState(CourseStateConstants.CLOSED);
         }
 
-        courseRepo.save(c);
-    }
-*/
+        txt.commit();
 
-    public void changeState(CourseCode courseCode, CourseState state) {
+        return courseRepo.save(c);
+    }
+
+
+    public Course changeState(CourseCode courseCode, CourseState state) {
         txt.beginTransaction();
 
         Course course = courseRepo.findByCode(courseCode).orElse(null);
@@ -102,10 +104,10 @@ public class CourseManagementService{
                 "Course with code " + courseCode + " does not exist"
         );
 
-    	course.forceChangeState(state);
+    	course.changeState(state);
 
         txt.commit();
 
-    	courseRepo.save(course);
+    	return courseRepo.save(course);
     }
 }

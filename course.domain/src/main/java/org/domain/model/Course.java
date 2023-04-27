@@ -143,6 +143,10 @@ public class Course implements AggregateRoot<CourseCode> {
         return code;
     }
 
+    public CourseState state(){
+        return state;
+    }
+
     public void addStudent(User student){
         Preconditions.ensure(
                 student.role().equals(CourseRoles.STUDENT.toString()),
@@ -175,7 +179,7 @@ public class Course implements AggregateRoot<CourseCode> {
         teachers.remove(teacher);
     }
 
-    public void forceChangeState(CourseState state){
+    public void changeState(CourseState state){
         this.state = state;
     }
 
@@ -190,4 +194,6 @@ public class Course implements AggregateRoot<CourseCode> {
                 "Minimun students: " + min.value() + "\n" +
                 "Head Teacher: " + headTeacher.emailAddress() + "\n";
     }
+
+
 }
