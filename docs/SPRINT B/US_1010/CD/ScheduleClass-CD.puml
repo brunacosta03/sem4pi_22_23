@@ -1,0 +1,46 @@
+@startuml
+
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+class ScheduleClassUI <<presentation>> {
+    doShow()
+}
+class ScheduleClassController <<application>> {
+    scheduleClass(String, Date, Integer)
+}
+
+class ClassManagementService <<service>> {
+    scheduleNewClass(String, Date, Integer)
+}
+
+class ClassBuilder <<builder>> {
+    with(String, Date, Integer)
+    build()
+}
+class "class:Class" <<domain>> {
+    Class(Title, Date, Duration)
+    validateParameters(Title, Date, Duration)
+}
+class PersistenceContext <<persistence>> {
+    repositories()
+}
+class RepositoryFactory <<factory>> {
+    classes()
+}
+class ClassRepository <<repository>> {
+    save(Class)
+}
+
+ScheduleClassUI --> ScheduleClassController : theController
+ScheduleClassController --> ClassManagementService : theService
+ClassManagementService --> ClassBuilder : theBuilder
+ClassBuilder --> "class:Class"
+ClassManagementService --> PersistenceContext : persistence
+PersistenceContext --> RepositoryFactory : factory
+RepositoryFactory --> ClassRepository : repository
+ClassManagementService --> ClassRepository : repository
+
+@enduml

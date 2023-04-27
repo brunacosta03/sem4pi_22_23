@@ -1,0 +1,72 @@
+@startuml
+
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor Teacher as Actor
+participant ScheduleClassUI as UI <<presentation>>
+participant ScheduleClassController as Controller <<application>>
+participant ClassManagementService as Service <<service>>
+participant PersistenceContext as Context <<persistence>>
+participant ClassBuilder as Builder <<builder>>
+participant "class:Class" as Domain <<domain>>
+participant RepositoryFactory as Factory <<factory>>
+database ClassRepository as Repository <<repository>>
+
+Actor --> UI : schedule class
+
+activate UI
+UI -> Controller : create()
+
+UI -> Actor : ask class details
+Actor -> UI : title, date, duration
+
+UI -> Controller : scheduleClass(title, date, duration)
+activate Controller
+
+Controller -> Service : scheduleNewClass(title, date, duration)
+activate Service
+
+Service -> Builder : create()
+activate Builder
+Service -> Builder : with(title, date, duration)
+Service -> Builder : build()
+Builder -> Domain : Class(title, date, duration)
+
+activate Domain
+Domain -> Domain : validateParameters(title, date, duration)
+Domain -> Builder : class
+deactivate Domain
+
+Builder -> Service : class
+deactivate Builder
+
+Service -> Context : repositories()
+activate Context
+Context -> Factory : create()
+Context -> Service : factory
+deactivate Context
+
+Factory -> Repository : create()
+activate Factory
+Factory -> Service : classRepository
+deactivate Factory
+
+Service -> Repository : save(class)
+
+activate Repository
+Repository -> Service : class
+deactivate Repository
+
+Service -> Controller : class
+deactivate Service
+
+Controller -> UI : class
+deactivate Controller
+
+UI --> Actor : show class details
+deactivate UI
+
+@enduml
