@@ -45,7 +45,7 @@ class RepositoryFactory{
 users()
 courses()
 }
-CreateCourseUI --> CreateCourseController
+CreateCourseUI -.-> CreateCourseController
 
 CreateCourseController --> CreateCourseBuilder
 CreateCourseController --> PersistenceContext

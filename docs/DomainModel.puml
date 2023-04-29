@@ -145,6 +145,7 @@ package "Course Aggregate" {
     Class --> ClassDuration
     Class --> ClassTitle
     Class --> ClassType
+    Course --> "*" Class : contains
 
     note right of ClassType
         Can be one of the following:
@@ -431,8 +432,6 @@ package BoardAggregate {
 
     EnrollmentRequest --> "1" User : is of
     EnrollmentRequest --> "1" Course : belongs to
-
-    Course --> "*" Class : contains
 
     Calendar --> "N" Course : keeps track of
 

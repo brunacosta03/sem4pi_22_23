@@ -1,0 +1,53 @@
+@startuml
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+
+class AddCourseTeacherUI <<presentation>>{
+show()
+}
+
+class AddCourseTeacherController<<application>>{
+verifyCourse(code)
+addTeacherToCourse(email, course)
+}
+
+class CourseManagementService<<service>>{
+addTeacherToCourse(user, course)
+}
+
+class Course<<course>>{
+addTeacher(user)
+}
+
+class PersistenceContext<<persistence>>{
+repositories()
+}
+
+class RepositoryFactory<<factory>>{
+users()
+courses()
+}
+
+class CourseRepository <<repository>>{
+findByCode(code)
+}
+
+class UserRepository <<repository>>{
+findUserByEmail(email)
+}
+
+AddCourseTeacherUI -.-> AddCourseTeacherController
+
+AddCourseTeacherController --> PersistenceContext
+AddCourseTeacherController --> RepositoryFactory
+AddCourseTeacherController --> CourseManagementService
+
+RepositoryFactory --> UserRepository
+RepositoryFactory --> CourseRepository
+
+CourseManagementService --> Course
+@enduml
