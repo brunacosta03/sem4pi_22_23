@@ -1,4 +1,4 @@
-package org.springframework.domain;
+package org.domain.domain;
 
 import org.junit.jupiter.api.Test;
 

@@ -1,6 +1,7 @@
 package org.persistence;
 
 import eapli.framework.domain.repositories.TransactionalContext;
+import org.domain.repositories.BoardRepository;
 import org.domain.repositories.CourseRepository;
 import org.usermanagement.domain.repositories.UserRepository;
 
@@ -22,4 +23,10 @@ public interface RepositoryFactory {
      * @return CourseRepository
      */
     CourseRepository courses();
+
+    /**
+     * For configure persistence context.
+     * @return BoardRepository
+     */
+    BoardRepository boards();
 }

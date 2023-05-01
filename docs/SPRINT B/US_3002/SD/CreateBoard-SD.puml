@@ -36,11 +36,11 @@ activate UI
                         
             Actor -> UI: EntryTitle
 
-            UI --> Controller: createEntry(boardRow, boardCol,\nentryTitle, entryNumber)
+            UI --> Controller: createBoardEntry(entryNumber, boardRow,\nboardCol, entryTitle, boardNRow, boardNCol)
             activate Controller
-            Controller -> BEFactory: createEntry(boardRow, boardCol,\nentryTitle, entryNumber)
+            Controller -> BEFactory: createBoardEntry(entryNumber, boardRow,\nboardCol, entryTitle, boardNRow, boardNCol)
             activate BEFactory
-            BEFactory -> BEDomain: BoardEntry(boardRow, boardCol,\nentryTitle, entryNumber)
+            BEFactory -> BEDomain: BoardEntry(entryNumber, boardRow,\nboardCol, entryTitle)
             activate BEDomain
             BEDomain -> BEFactory: boardEntry
             deactivate BEDomain
@@ -87,10 +87,10 @@ activate UI
         deactivate Factory
 
         Service -> BFactory: create()
-        Service -> BFactory: create(boardTitle, boardNRow, boardNCol, allBoardEntrys, user, true)
+        Service -> BFactory: create(boardTitle, boardNRow, boardNCol, allBoardEntrys, user)
         activate BFactory
 
-        BFactory -> Domain: Board(boardTitle, boardNRow, boardNCol, allBoardEntrys, user, true)
+        BFactory -> Domain: Board(boardTitle, boardNRow, boardNCol, allBoardEntrys, user)
         activate Domain
             Domain -> BFactory: board
         deactivate Domain
@@ -99,7 +99,7 @@ activate UI
 
 
         Service -> BPFactory: create()
-        Service -> BPFactory: create(user, AccessLevel.WRITE)
+        Service -> BPFactory: create(user, AccessLevelType.WRITE)
         activate BPFactory
         BPFactory -> BPDomain: BoardPermission(user, accesLevel)
         activate BPDomain
