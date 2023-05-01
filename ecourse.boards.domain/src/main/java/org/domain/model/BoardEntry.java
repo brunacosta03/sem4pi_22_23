@@ -62,6 +62,37 @@ public class BoardEntry
         this.entryTitle = entryTitlep;
     }
 
+    /**
+     * Board row position get.
+     * @return BoardRow
+     */
+    public BoardRow boardRow() {
+        return boardRow;
+    }
+
+    /**
+     * Board column position get.
+     * @return BoardCol
+     */
+    public BoardCol boardCol() {
+        return boardCol;
+    }
+
+    /**
+     * Board entry title get.
+     * @return EntryTitle
+     */
+    public EntryTitle entryTitle() {
+        return entryTitle;
+    }
+
+    /**
+     * Board entry number get.
+     * @return EntryNumber
+     */
+    public EntryNumber entryNumber() {
+        return entryNumber;
+    }
 
     /**
      * Check if some BoardEntry is the same object then other.
@@ -69,7 +100,7 @@ public class BoardEntry
      * @return true/false
      */
     @Override
-    public boolean sameAs(Object other) {
+    public boolean sameAs(final Object other) {
         if (this == other) {
             return true;
         }
@@ -87,6 +118,9 @@ public class BoardEntry
                 && Objects.equals(this.entryTitle, that.entryTitle);
     }
 
+    /**
+     * @return entryId
+     */
     @Override
     public Long identity() {
         return entryId;

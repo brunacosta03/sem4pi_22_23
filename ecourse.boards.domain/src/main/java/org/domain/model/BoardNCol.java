@@ -6,6 +6,7 @@ import org.ecourse.Application;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.util.Objects;
 
 /**
  * The type Acronym.
@@ -52,7 +53,7 @@ public class BoardNCol implements ValueObject {
         Preconditions.ensure(
                 nColumns >= MIN_COLUMNS && nColumns <= MAX_COLUMNS,
                 "The number of Columns should have between 1 and "
-                        +  + MAX_COLUMNS
+                        + MAX_COLUMNS
         );
 
         this.value = nColumns;
@@ -74,4 +75,22 @@ public class BoardNCol implements ValueObject {
     public int value() {
         return value;
     }
+
+    /**
+     * Compare if BoardNCol is same then another object.
+     * @param obj
+     * @return true/false
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        BoardNCol other = (BoardNCol) obj;
+        return Objects.equals(value, other.value);
+    }
+
 }

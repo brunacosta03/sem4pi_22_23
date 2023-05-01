@@ -5,6 +5,7 @@ import eapli.framework.validations.Preconditions;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.util.Objects;
 
 /**
  * The type Acronym.
@@ -51,9 +52,9 @@ public class EntryNumber implements ValueObject {
 
         Preconditions.ensure(
                 (entryNumber >= MIN_ROWS_COL && entryNumber <= MAX_ROWS
-                && boardColPos == MIN_ROWS_COL || boardColPos > MIN_ROWS_COL)
+                && boardColPos == MIN_ROWS_COL)
                 || (entryNumber >= MIN_ROWS_COL && entryNumber <= MAX_COLUMNS
-                        && boardRowPos == MIN_ROWS_COL || boardRowPos > MIN_ROWS_COL),
+                        && boardRowPos == MIN_ROWS_COL),
                 "The Entry Number should be on Board Grid"
         );
 
@@ -63,6 +64,10 @@ public class EntryNumber implements ValueObject {
     /**
      * Factory method to create a EntryNumber instance.
      * @param valuep The value of the entry.
+     * @param boardColPosp
+     * @param boardRowPosp
+     * @param boardNRowp
+     * @param boardNColp
      * @return EntryNumber instance.
      */
     public static EntryNumber of(final String valuep,
@@ -81,4 +86,22 @@ public class EntryNumber implements ValueObject {
     public int value() {
         return value;
     }
+
+    /**
+     * Compare if EntryNumber is equals to another object.
+     * @param obj
+     * @return true/false
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        EntryNumber other = (EntryNumber) obj;
+        return Objects.equals(value, other.value);
+    }
+
 }

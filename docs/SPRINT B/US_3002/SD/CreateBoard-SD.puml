@@ -30,7 +30,7 @@ activate UI
     UI --> Actor: Ask board information
     Actor --> UI: BoardTitle, BoardNRow, BoardNCol
 
-        loop BoardNCol + BoardNRow times 
+        loop BoardNCol + (BoardNRow - 1) times 
             UI -> Actor: Ask user EntryTitle
                         note right: this is two different loops\none for for BoardNCol and\n another for BoardNRow
                         

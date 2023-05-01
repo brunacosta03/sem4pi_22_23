@@ -5,6 +5,7 @@ import eapli.framework.validations.Preconditions;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.util.Objects;
 
 /**
  * The type Acronym.
@@ -71,5 +72,22 @@ public class BoardTitle implements ValueObject {
      */
     public String value() {
         return value;
+    }
+
+    /**
+     * Compare if BoardTitle is equals to another object.
+     * @param obj
+     * @return true/false
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        BoardTitle other = (BoardTitle) obj;
+        return Objects.equals(value, other.value);
     }
 }

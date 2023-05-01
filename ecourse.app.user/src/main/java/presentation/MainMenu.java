@@ -10,6 +10,7 @@ import eapli.framework.presentation.console.menu.VerticalMenuRenderer;
 import org.authz.application.AuthorizationService;
 import org.authz.application.AuthzRegistry;
 import org.user.management.CourseRoles;
+import presentation.boards.CreateBoardUI;
 import presentation.usermanagement.DisableUserUI;
 import presentation.usermanagement.EnableUserUI;
 import presentation.usermanagement.ListUsersUI;
@@ -44,6 +45,10 @@ public class MainMenu extends AbstractUI {
 
     // STUDENT MANAGE COURSES
     private static final int SET_STUDENT_LIST_AVAILABLE_COURSES_OPTION = 1;
+
+    //SHARED BOARD
+    private static final int SET_USER_BOARD_OPTION = 9;
+    private static final int SET_USER_CREATE_BOARD_OPTION = 1;
 
     private final AuthorizationService authz = AuthzRegistry.authorizationService();
 
@@ -82,6 +87,9 @@ public class MainMenu extends AbstractUI {
             final Menu studentMenu = buildStudentMenu();
             mainMenu.addSubMenu(SET_STUDENT_MANAGE_COURSES_OPTION, studentMenu);
         }
+
+        final Menu boardMenu = buildBoardMenu();
+        mainMenu.addSubMenu(SET_USER_BOARD_OPTION, boardMenu);
 
         mainMenu.addItem(EXIT_OPTION, "Exit", new ExitWithMessageAction("Bye, Bye"));
 
@@ -129,6 +137,17 @@ public class MainMenu extends AbstractUI {
 
         menu.addItem(SET_TEACHER_LIST_AVAILABLE_COURSES_OPTION,
                 "List Available Courses", new ListCoursesUI()::doShow);
+        menu.addItem(EXIT_OPTION, RETURN_LABEL, Actions.SUCCESS);
+
+        return menu;
+    }
+
+    private Menu buildBoardMenu() {
+        final Menu menu = new Menu("Shared Boards");
+
+        menu.addItem(SET_USER_CREATE_BOARD_OPTION, "Create Board",
+                new CreateBoardUI()::show);
+
         menu.addItem(EXIT_OPTION, RETURN_LABEL, Actions.SUCCESS);
 
         return menu;

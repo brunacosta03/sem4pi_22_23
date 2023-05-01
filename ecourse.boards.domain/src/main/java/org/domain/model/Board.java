@@ -99,9 +99,42 @@ public class Board
     }
 
     /**
-     * Add Permissions to board.
+     * Get board title.
+     * @return BoardTitle
      */
-    public void addPermission(BoardPermission boardPermissionp) {
+    public BoardTitle boardTitle() {
+        return boardTitle;
+    }
+
+    /**
+     * Get board number of columns.
+     * @return BoardNCol
+     */
+    public BoardNCol boardNCol() {
+        return boardNCol;
+    }
+
+    /**
+     * Get board number of rows.
+     * @return BoardNCol
+     */
+    public BoardNRow boardNRow() {
+        return boardNRow;
+    }
+
+    /**
+     * Get board owner of rows.
+     * @return User
+     */
+    public User boardOwner() {
+        return boardOwner;
+    }
+
+    /**
+     * Add Permissions to board.
+     * @param boardPermissionp board permission.
+     */
+    public void addPermission(final BoardPermission boardPermissionp) {
         this.boardPermissions.add(boardPermissionp);
     }
 
@@ -111,7 +144,7 @@ public class Board
      * @return true/false
      */
     @Override
-    public boolean sameAs(Object other) {
+    public boolean sameAs(final Object other) {
         if (this == other) {
             return true;
         }
@@ -130,6 +163,10 @@ public class Board
                 && Objects.equals(boardOwner, that.boardOwner);
     }
 
+    /**
+     * Get boardId.
+     * @return boardId
+     */
     @Override
     public Long identity() {
         return boardId;

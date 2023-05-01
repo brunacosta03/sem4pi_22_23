@@ -39,4 +39,20 @@ class BoardNRowTest {
         assertThrows(IllegalArgumentException.class,
                 () -> BoardNRow.of(invalidValue));
     }
+
+    @Test
+    void BoardNRowEquals() {
+        BoardNRow boardNRow = BoardNRow.of("5");
+        assertTrue(boardNRow.equals(boardNRow));
+
+        BoardNRow boardNRow2 = BoardNRow.of("5");
+        assertTrue(boardNRow.equals(boardNRow2));
+
+        BoardNRow boardNRow3 = BoardNRow.of("1");
+        assertFalse(boardNRow.equals(boardNRow3));
+
+        assertFalse(boardNRow.equals(null));
+
+        assertFalse(boardNRow.equals(new Object()));
+    }
 }

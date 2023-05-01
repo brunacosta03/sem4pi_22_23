@@ -1,7 +1,5 @@
 package org.domain.model;
 
-import eapli.framework.infrastructure.authz.domain.model.Role;
-
 /**
  * All users can create and use boards as well as meetings.
  */

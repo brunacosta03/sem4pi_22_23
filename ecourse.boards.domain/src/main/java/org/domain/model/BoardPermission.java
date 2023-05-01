@@ -73,7 +73,7 @@ public class BoardPermission
      * @return true/false
      */
     @Override
-    public boolean sameAs(Object other) {
+    public boolean sameAs(final Object other) {
         if (this == other) {
             return true;
         }
@@ -89,6 +89,9 @@ public class BoardPermission
                 && this.accessLevel == that.accessLevel;
     }
 
+    /**
+     * @return boardPermissionId
+     */
     @Override
     public Long identity() {
         return boardPermissionId;

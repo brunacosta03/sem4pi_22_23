@@ -97,24 +97,24 @@ public class BoardsBootstrapper implements Action {
     private List<BoardEntry> getBoardEntries(String boardRows, String boardColumns) {
         List<BoardEntry> allBoardEntrys = new ArrayList<>();
 
-        for(int i = 1; i <= Integer.parseInt(boardRows); i++){
-            BoardEntry boardEntry = theController.createBoardEntry(
-                    String.valueOf(i),
-                    String.valueOf(i),
-                    MIN_ROWS_COLS,
-                    "Title Row " + i,
-                    boardRows,
-                    boardColumns);
-
-            allBoardEntrys.add(boardEntry);
-        }
-
         for(int i = 1; i <= Integer.parseInt(boardColumns); i++){
             BoardEntry boardEntry = theController.createBoardEntry(
                     String.valueOf(i),
                     MIN_ROWS_COLS,
                     String.valueOf(i),
                     "Title Column " + i,
+                    boardRows,
+                    boardColumns);
+
+            allBoardEntrys.add(boardEntry);
+        }
+
+        for(int i = 2; i <= Integer.parseInt(boardRows); i++){
+            BoardEntry boardEntry = theController.createBoardEntry(
+                    String.valueOf(i),
+                    String.valueOf(i),
+                    MIN_ROWS_COLS,
+                    "Title Row " + i,
                     boardRows,
                     boardColumns);
 

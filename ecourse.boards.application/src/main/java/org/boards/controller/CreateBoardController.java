@@ -23,9 +23,20 @@ public class CreateBoardController {
     private final AuthorizationService authz = AuthzRegistry
                                             .authorizationService();
 
+    /**
+     * Create a board service with repository injection.
+     */
     private final BoardService boardSvc = new BoardService(
             PersistenceContext.repositories().boards());
 
+    /**
+     * Create shared board.
+     * @param boardTitlep Board Title
+     * @param boardNRowp Board number of rows
+     * @param boardNColp Board number of columns
+     * @param allBoardEntrys Board entrys
+     * @return Board
+     */
     public Board createBoard(final String boardTitlep,
                              final String boardNRowp,
                              final String boardNColp,
@@ -36,6 +47,16 @@ public class CreateBoardController {
                 allBoardEntrys, authz.session().get().authenticatedUser());
     }
 
+    /**
+     * Create board entry.
+     * @param entryNumberp Entry number
+     * @param boardRowp Row position
+     * @param boardColp Column position
+     * @param entryTitlep Entry Title
+     * @param boardNRowp Board number of rows
+     * @param boardNColps Board number of columns
+     * @return BoardEntry
+     */
     public BoardEntry createBoardEntry(final String entryNumberp,
                                        final String boardRowp,
                                        final String boardColp,

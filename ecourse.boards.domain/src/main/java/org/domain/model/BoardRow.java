@@ -2,10 +2,10 @@ package org.domain.model;
 
 import eapli.framework.domain.model.ValueObject;
 import eapli.framework.validations.Preconditions;
-import org.ecourse.Application;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.util.Objects;
 
 /**
  * The type Acronym.
@@ -56,6 +56,7 @@ public class BoardRow implements ValueObject {
     /**
      * Factory method to create a BoardRow instance.
      * @param valuep The value of the board row position.
+     * @param boardNRowp
      * @return BoardRow instance.
      */
     public static BoardRow of(final String valuep,
@@ -70,4 +71,22 @@ public class BoardRow implements ValueObject {
     public int value() {
         return value;
     }
+
+    /**
+     * Compare BoardRow with another object.
+     * @param obj
+     * @return true/false
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        BoardRow other = (BoardRow) obj;
+        return Objects.equals(value, other.value);
+    }
+
 }

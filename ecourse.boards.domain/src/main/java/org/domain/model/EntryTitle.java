@@ -5,6 +5,7 @@ import eapli.framework.validations.Preconditions;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.util.Objects;
 
 /**
  * The type Acronym.
@@ -24,11 +25,6 @@ public class EntryTitle implements ValueObject {
 
 
     /**
-     * The constant MIN_LENGTH.
-     */
-    private static final Integer MIN_LENGTH = 5;
-
-    /**
      * Instantiates a new EntryTitle.
      */
     protected EntryTitle() {
@@ -36,18 +32,13 @@ public class EntryTitle implements ValueObject {
     }
 
     private EntryTitle(final String valuep) {
-        Preconditions.nonEmpty(
-                valuep,
-                "Board Entry Title should neither be null nor empty"
-        );
         Preconditions.nonNull(
                 valuep,
                 "Board Entry Title should neither be null nor empty"
         );
         Preconditions.ensure(
-                valuep.length() <= MAX_LENGTH && valuep.length() >= MIN_LENGTH,
-                "Board Entry Title should have between "
-                        + MIN_LENGTH + " and "
+                valuep.length() <= MAX_LENGTH,
+                "Board Entry Title should have max "
                         + MAX_LENGTH + " characters"
         );
 
@@ -70,4 +61,22 @@ public class EntryTitle implements ValueObject {
     public String value() {
         return value;
     }
+
+    /**
+     * Compare if is EntryTitle is equals to another object.
+     * @param obj
+     * @return true/false
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        EntryTitle other = (EntryTitle) obj;
+        return Objects.equals(value, other.value);
+    }
+
 }

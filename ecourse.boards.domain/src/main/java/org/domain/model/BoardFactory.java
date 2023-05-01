@@ -2,14 +2,25 @@ package org.domain.model;
 
 import org.usermanagement.domain.model.User;
 
-import java.util.HashSet;
 import java.util.List;
 
 public class BoardFactory {
-
-    public BoardFactory(){
+    /**
+     * BoardFactory constructor.
+     */
+    public BoardFactory() {
 
     }
+
+    /**
+     * Create BoardFactory.
+     * @param boardTitlep
+     * @param boardNRowp
+     * @param boardNColp
+     * @param allBoardEntrys
+     * @param boardOwnerp
+     * @return Board
+     */
     public Board create(final String boardTitlep,
                         final String boardNRowp,
                         final String boardNColp,

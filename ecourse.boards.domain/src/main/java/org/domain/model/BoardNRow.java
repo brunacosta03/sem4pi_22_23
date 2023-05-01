@@ -6,6 +6,7 @@ import org.ecourse.Application;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.util.Objects;
 
 /**
  * The type Acronym.
@@ -31,7 +32,7 @@ public class BoardNRow implements ValueObject {
     private static final Integer MIN_ROWS = 1;
 
     /**
-     * Instantiates a new BoardNRow.
+     * Instantiates a new BoardTitle.
      */
     protected BoardNRow() {
         this.value = null;
@@ -74,4 +75,22 @@ public class BoardNRow implements ValueObject {
     public int value() {
         return value;
     }
+
+    /**
+     * Compare if BoardNRow is same then another object.
+     * @param obj
+     * @return true/false
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        BoardNRow other = (BoardNRow) obj;
+        return Objects.equals(value, other.value);
+    }
+
 }

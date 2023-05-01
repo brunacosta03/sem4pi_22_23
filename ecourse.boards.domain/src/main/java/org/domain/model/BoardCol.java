@@ -5,6 +5,7 @@ import eapli.framework.validations.Preconditions;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.util.Objects;
 
 /**
  * The type Acronym.
@@ -55,6 +56,7 @@ public class BoardCol implements ValueObject {
     /**
      * Factory method to create a BoardCol instance.
      * @param valuep The value of the board column position.
+     * @param boardNColp
      * @return BoardCol instance.
      */
     public static BoardCol of(final String valuep,
@@ -69,4 +71,22 @@ public class BoardCol implements ValueObject {
     public int value() {
         return value;
     }
+
+    /**
+     * Compare two BoardCol.
+     * @param obj
+     * @return true/false
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        BoardCol other = (BoardCol) obj;
+        return Objects.equals(value, other.value);
+    }
+
 }

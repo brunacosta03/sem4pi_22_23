@@ -39,4 +39,20 @@ class BoardNColTest {
         assertThrows(IllegalArgumentException.class,
                 () -> BoardNCol.of(invalidValue));
     }
+
+    @Test
+    void BoardNColEquals() {
+        BoardNCol boardNCol = BoardNCol.of("5");
+        assertTrue(boardNCol.equals(boardNCol));
+
+        BoardNCol boardNCol2 = BoardNCol.of("5");
+        assertTrue(boardNCol.equals(boardNCol2));
+
+        BoardNCol boardNCol3 = BoardNCol.of("1");
+        assertFalse(boardNCol.equals(boardNCol3));
+
+        assertFalse(boardNCol.equals(null));
+
+        assertFalse(boardNCol.equals(new Object()));
+    }
 }
