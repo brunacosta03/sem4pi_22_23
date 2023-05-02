@@ -35,6 +35,7 @@
         <module>course.application</module>
         <module>course.domain</module>
         <module>enrollment.request.domain</module>
+        <module>enrollment.request.application</module>
     </modules>
 
 	<dependencies>
