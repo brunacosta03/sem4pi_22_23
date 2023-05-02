@@ -37,8 +37,6 @@ This is an excerpt of our domain Model, it provides the clear idea of how the Sh
 
 ## 4. Design
 
-*In this sections, the team should present the solution design that was adopted to solve the requirement. This should include, at least, a diagram of the realization of the functionality (e.g., sequence diagram), a class diagram (presenting the classes that support the functionality), the identification and rational behind the applied design patterns and the specification of the main tests used to validade the functionality.*
-
 ### 4.1. Realization
 
 #### 4.1.1. Sequence Diagram
@@ -53,31 +51,384 @@ This is an excerpt of our domain Model, it provides the clear idea of how the Sh
 
 ### 4.4. Tests
 
-**Test 1:** *Verifies that it is not possible to create an instance of the Example class with null values.*
+**Test 1:** *Create a valid board*
 
-```
-@Test(expected = IllegalArgumentException.class)
-public void ensureNullIsNotAllowed() {
-	Example instance = new Example(null, null);
+```java
+@Test
+void testCreateBoardValid() {
+    List<BoardEntry> allBoardEntrys = new ArrayList<>();
+    User boardOwner = managerUser();
+
+    BoardFactory factory = new BoardFactory();
+    Board board = factory.create(boardTitle, boardNRow, boardNCol, allBoardEntrys, boardOwner);
+
+    when(boardRepositoryMock.save(any(Board.class))).thenReturn(board);
+
+    Board result = boardService.createBoard(
+                boardTitle, boardNRow, boardNCol,
+                allBoardEntrys, boardOwner);
+
+    assertEquals(boardTitle, result.boardTitle().value());
+    assertEquals(Integer.parseInt(boardNRow), result.boardNRow().value());
+    assertEquals(Integer.parseInt(boardNCol), result.boardNCol().value());
+    assertEquals(boardOwner, result.boardOwner());
+    verify(boardRepositoryMock, times(1)).save(any(Board.class));
+}
+````
+
+**Test 2:** *Create a board with invalid number of columns should throw exception.*
+
+```java
+@Test
+void testCreateBoardWithInvalidBoardNColumn() {
+    List<BoardEntry> allBoardEntrys = new ArrayList<>();
+    User boardOwner = managerUser();
+
+    BoardFactory factory = new BoardFactory();
+
+    assertThrows(IllegalArgumentException.class,
+                () -> factory.create(boardTitle, boardNRow, "-1", allBoardEntrys, boardOwner));
+
+    verify(boardRepositoryMock, times(0)).save(any(Board.class));
+}
+````
+
+**Test 3:** *Create a board with invalid number of rows should throw exception.*
+
+```java
+@Test
+void testCreateBoardWithInvalidBoardNColumn() {
+    List<BoardEntry> allBoardEntrys = new ArrayList<>();
+    User boardOwner = managerUser();
+
+    BoardFactory factory = new BoardFactory();
+
+    assertThrows(IllegalArgumentException.class,
+                () -> factory.create(boardTitle, boardNRow, "-1", allBoardEntrys, boardOwner));
+
+    verify(boardRepositoryMock, times(0)).save(any(Board.class));
 }
 ````
 
 ## 5. Implementation
 
-*In this section the team should present, if necessary, some evidencies that the implementation is according to the design. It should also describe and explain other important artifacts necessary to fully understand the implementation like, for instance, configuration files.*
+**CreateBoardUI**
 
-*It is also a best practice to include a listing (with a brief summary) of the major commits regarding this requirement.*
+```java
+package presentation.boards;
+
+import eapli.framework.io.util.Console;
+import eapli.framework.presentation.console.AbstractUI;
+import org.boards.controller.CreateBoardController;
+import org.domain.model.BoardEntry;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class CreateBoardUI extends AbstractUI {
+    private final CreateBoardController theController = new CreateBoardController();
+
+    /**
+     * The constant MIN_ROWS_COLUMNS.
+     */
+    private static final String MIN_ROWS_COLS = "1";
+
+    /**
+     * User want to create a new Board.
+     * Ask User fields.
+     * BoardTitle, BoardNRow, BoardNCol,
+     * @return false
+     */
+    @Override
+    protected boolean doShow() {
+        final String boardTitle = Console.readLine("Board Title:");
+        final String boardNCol = Console.readLine("Board Number of Columns:");
+        final String boardNRow = Console.readLine("Board Number of Rows:");
+
+        List<BoardEntry> allBoardEntrys = new ArrayList<>();
+
+
+        try{
+            //Board Entrys for columns
+            System.out.println("----COLUMNS ENTRYS----");
+            for(int i = 1; i <= Integer.parseInt(boardNCol); i++){
+                System.out.println("Board Row position -> " + MIN_ROWS_COLS);
+                System.out.println("Board Column position -> " + i);
+
+                final String entryTitle = Console.readLine("Entry Title:");
+
+                BoardEntry boardEntry = theController.createBoardEntry(
+                        String.valueOf(i),
+                        MIN_ROWS_COLS,
+                        String.valueOf(i),
+                        entryTitle,
+                        boardNRow,
+                        boardNCol
+                );
+
+                allBoardEntrys.add(boardEntry);
+            }
+
+            //Board Entrys for rows
+            System.out.println("----ROWS ENTRYS----");
+            for(int i = 2; i <= Integer.parseInt(boardNRow); i++){
+                System.out.println("Board Row position -> " + i);
+                System.out.println("Board Column position -> " + MIN_ROWS_COLS);
+
+                final String entryTitle = Console.readLine("Entry Title:");
+
+                BoardEntry boardEntry = theController.createBoardEntry(
+                        String.valueOf(i),
+                        String.valueOf(i),
+                        MIN_ROWS_COLS,
+                        entryTitle,
+                        boardNRow,
+                        boardNCol
+                );
+
+                allBoardEntrys.add(boardEntry);
+            }
+
+            theController.createBoard(boardTitle, boardNRow, boardNCol, allBoardEntrys);
+
+            System.out.println("Board Successfully created!");
+        } catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+        }
+
+        return true;
+    }
+
+    /**
+     * @return String to headline
+     */
+    @Override
+    public String headline() {
+        return "Create Board";
+    }
+}
+````
+
+**CreateBoardController**
+
+```Java
+package org.boards.controller;
+
+import eapli.framework.application.UseCaseController;
+import org.authz.application.AuthorizationService;
+import org.authz.application.AuthzRegistry;
+import org.boards.service.BoardService;
+import org.domain.model.Board;
+import org.domain.model.BoardEntry;
+import org.domain.model.BoardEntryFactory;
+import org.persistence.PersistenceContext;
+import org.user.management.CourseRoles;
+
+import java.util.List;
+
+/**
+ * Controller class for adding a new user to the system.
+ */
+@UseCaseController
+public class CreateBoardController {
+    /**
+     * Authorization service instance.
+     */
+    private final AuthorizationService authz = AuthzRegistry
+                                            .authorizationService();
+
+    /**
+     * Create a board service with repository injection.
+     */
+    private final BoardService boardSvc = new BoardService(
+            PersistenceContext.repositories().boards());
+
+    /**
+     * Create shared board.
+     * @param boardTitlep Board Title
+     * @param boardNRowp Board number of rows
+     * @param boardNColp Board number of columns
+     * @param allBoardEntrys Board entrys
+     * @return Board
+     */
+    public Board createBoard(final String boardTitlep,
+                             final String boardNRowp,
+                             final String boardNColp,
+                             final List<BoardEntry> allBoardEntrys) {
+        authz.ensureAuthenticatedUserHasAnyOf(CourseRoles.allRoles());
+
+        return boardSvc.createBoard(boardTitlep, boardNRowp, boardNColp,
+                allBoardEntrys, authz.session().get().authenticatedUser());
+    }
+
+    /**
+     * Create board entry.
+     * @param entryNumberp Entry number
+     * @param boardRowp Row position
+     * @param boardColp Column position
+     * @param entryTitlep Entry Title
+     * @param boardNRowp Board number of rows
+     * @param boardNColps Board number of columns
+     * @return BoardEntry
+     */
+    public BoardEntry createBoardEntry(final String entryNumberp,
+                                       final String boardRowp,
+                                       final String boardColp,
+                                       final String entryTitlep,
+                                       final String boardNRowp,
+                                       final String boardNColps) {
+        authz.ensureAuthenticatedUserHasAnyOf(CourseRoles.allRoles());
+
+        return new BoardEntryFactory().create(
+                entryNumberp,
+                boardRowp,
+                boardColp,
+                entryTitlep,
+                boardNRowp,
+                boardNColps
+        );
+    }
+}
+````
+
+**BoardService**
+
+```Java
+package org.boards.service;
+
+import org.domain.model.*;
+import org.domain.repositories.BoardRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.usermanagement.domain.model.User;
+
+import java.util.List;
+
+@Service
+public class BoardService {
+    /**
+     * UserRepository.
+     */
+    private final BoardRepository boardRepository;
+
+    /**
+     * @param boardRepo
+     */
+    @Autowired
+    public BoardService(final BoardRepository boardRepo) {
+        boardRepository = boardRepo;
+    }
+
+    /**
+     * Create board.
+     * @param boardTitlep
+     * @param boardNRowp
+     * @param boardNColp
+     * @param allBoardEntrys
+     * @param boardOwner
+     * @return Board
+     */
+    public Board createBoard(final String boardTitlep,
+                            final String boardNRowp,
+                            final String boardNColp,
+                            final List<BoardEntry> allBoardEntrys,
+                            final User boardOwner) {
+        BoardFactory boardFactory = new BoardFactory();
+        BoardPermissionFactory boardPerFactory = new BoardPermissionFactory();
+
+        Board newBoard = boardFactory.create(boardTitlep, boardNRowp,
+                boardNColp, allBoardEntrys, boardOwner);
+
+        BoardPermission boardPermission = boardPerFactory.create(
+                boardOwner, AccessLevelType.WRITE);
+
+        newBoard.addPermission(boardPermission);
+
+        return boardRepository.save(newBoard);
+    }
+}
+````
 
 ## 6. Integration/Demonstration
 
-*In this section the team should describe the efforts realized in order to integrate this functionality with the other parts/components of the system*
+Login as a User
 
-*It is also important to explain any scripts or instructions required to execute an demonstrate this functionality*
+```txt
++= Login ======================================================================+
+
+Email: student1@email.com
+
+Password: PasswordStudent1
+
+
++==============================================================================+
+```
+
+Choose option "Shared Boards"
+
+```txt
++= eCourse ====================================================================+
+
+1. Manage eCourse Courses
+9. Shared Boards
+0. Exit
+
+Please choose an option
+```
+
+Choose option "Create Board"
+
+```txt
+>> Shared Boards
+1. Create Board
+0. Return 
+
+Please choose an option
+```
+
+Form to Create board
+
+```txt
++= Create Board ===============================================================+
+
+Board Title:
+Board Title Test
+Board Number of Columns:
+3
+Board Number of Rows:
+3
+----COLUMNS ENTRYS----
+Board Row position -> 1
+Board Column position -> 1
+Entry Title:
+Coluna 1
+Board Row position -> 1
+Board Column position -> 2
+Entry Title:
+Coluna 2
+Board Row position -> 1
+Board Column position -> 3
+Entry Title:
+Coluna 3
+----ROWS ENTRYS----
+Board Row position -> 2
+Board Column position -> 1
+Entry Title:
+Row 2
+Board Row position -> 3
+Board Column position -> 1
+Entry Title:
+Row 3
+Board Successfully created!
++==============================================================================+
+```
 
 ## 7. Observations
 
-*This section should be used to include any content that does not fit any of the previous sections.*
+Example of BoardEntry:
 
-*The team should present here, for instance, a critical prespective on the developed work including the analysis of alternative solutioons or related works*
-
-*The team should include in this section statements/references regarding third party works that were used in the development this work.*
+| Coluna 1 & Linha 1 | Coluna 2 & Linha 1 | Coluna 3 & Linha 1 |
+|:------------------:|:------------------:|:------------------:|
+| Coluna 1 & Linha 2 |                    |                    |
+| Coluna 1 & Linha 3 |                    |                    |
+|                    |                    |                    |
