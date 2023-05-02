@@ -49,6 +49,8 @@ class PersistenceContext <<persistence>>{
 
 class RepositoryFactory <<factory>> {
     courses()
+    enrollmentRequests()
+    users()
 }
 
 class CourseRepository <<repository>>{
@@ -57,6 +59,10 @@ class CourseRepository <<repository>>{
 
 class EnrollmentRequestRepository <<repository>> {
     save(EnrollmentRequest request)
+}
+
+class UserRepository <<repository>> {
+    findUserByEmail(EmailAddress email)
 }
 
 ' service
@@ -83,16 +89,21 @@ EnrollmentRequestRepository --> EnrollmentRequest : knows >
 RequestEnrollmentUI ..> RequestEnrollmentController
 
 RequestEnrollmentController ..> EnrollmentRequestManagementService
+RequestEnrollmentController ..> AuthzRegistry
+RequestEnrollmentController --> AuthorizationService
 
 EnrollmentRequestManagementService ..> PersistenceContext
 EnrollmentRequestManagementService --> EnrollmentRequestRepository
 EnrollmentRequestManagementService --> CourseRepository
+EnrollmentRequestManagementService --> UserRepository
 
 PersistenceContext ..> RepositoryFactory
 
 
 RepositoryFactory ..> EnrollmentRequestRepository
 RepositoryFactory ..> CourseRepository
+RepositoryFactory ..> UserRepository
+
 
 
 AuthzRegistry ..> AuthorizationService

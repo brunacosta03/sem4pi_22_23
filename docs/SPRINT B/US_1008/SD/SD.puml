@@ -3,9 +3,148 @@
 
 autonumber
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+actor Student as student
 
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+participant RequestEnrollmentUI as ui
+
+participant RequestEnrollmentController as ctrl
+
+participant EnrollmentRequestManagementService as svc
+participant AuthzRegistry as registry
+participant AuthorizationService as authz
+participant UserSession as userSession
+
+participant PersistenceContext as ctx
+participant RepositoryFactory as repoFactory
+
+database CourseRepository as courseRepo
+database EnrollmentRequestRepository as requestRepo
+participant EnrollmentRequest as enrollmentRequest
+
+participant CourseCode as courseCode
+participant Optional as opt
+
+
+student -> ui: request enrollment
+activate ui
+ui --> student: asks for course code
+deactivate ui
+
+student -> ui: enter course code
+activate ui
+
+ui -> registry: authorizationService()
+activate registry
+registry --> ui: authzService
+deactivate registry
+ui -> ctrl: create(authzService)
+activate ctrl
+ctrl -> ctx: repositories()
+activate ctx
+ctx --> ctrl: repositoryFactory
+deactivate ctx
+ctrl -> repoFactory: courses()
+activate repoFactory
+repoFactory --> ctrl: courseRepo
+deactivate repoFactory
+
+ctrl -> repoFactory: enrollmentRequests()
+activate repoFactory
+repoFactory --> ctrl: enrollmentRequestRepo
+deactivate repoFactory
+
+ctrl -> repoFactory: users()
+activate repoFactory
+repoFactory --> ctrl: userRepo
+deactivate repoFactory
+
+ctrl -> repoFactory: newTransationalContext()
+activate repoFactory
+repoFactory --> ctrl: txt
+deactivate repoFactory
+ctrl -> svc: create(courseRepo, enrollmentRequestRepo, userRepo, txt)
+deactivate ctrl
+
+ui -> ctrl: createRequest(courseCode)
+activate ctrl
+
+ctrl -> authz: ensureAuthenticatedUserHasAnyOf(CourseRoles.STUDENT)
+ref over authz
+    Implementation of authorization
+end ref
+
+ctrl -> courseCode**: of(courseCodeString)
+activate courseCode
+courseCode --> ctrl: courseCode
+deactivate courseCode
+ctrl -> authz: session()
+activate authz
+authz --> ctrl: sessionOptional
+deactivate authz
+ctrl -> opt: orElseThrow()
+activate opt
+
+alt user is not logged
+    opt --> ui: throw new IllegalArgumentException("There is no user Logged.")
+    ui --> student: user is not logged
+else user is logged
+    opt --> ctrl: session
+    deactivate opt
+end alt
+
+ctrl -> userSession: authenticatedUser()
+activate userSession
+userSession --> ctrl: user
+deactivate userSession
+
+ctrl -> svc: createRequest(courseCode, user)
+activate svc
+
+svc -> courseRepo: findByCode(courseCode)
+activate courseRepo
+courseRepo --> svc: courseOptional
+deactivate courseRepo
+svc -> opt: orElseThrow()
+activate opt
+
+alt course does not exist
+    opt --> ui: throw new IllegalArgumentException("Course does not exist.")
+    ui --> student: no such course exists
+else course exists
+    opt --> svc: course
+    deactivate opt
+end alt
+
+svc -> enrollmentRequestRepo: findByCourseAndUser(course, user)
+activate enrollmentRequestRepo
+enrollmentRequestRepo --> svc: request
+deactivate enrollmentRequestRepo
+
+alt request != null
+    svc --> ui : throw new IllegalArgumentException("Request already exists.")
+    ui --> student: enrollment request already exists
+end alt
+
+svc -> enrollmentRequest**: create(student, course)
+activate enrollmentRequest
+enrollmentRequest --> svc: request
+deactivate enrollmentRequest
+
+svc -> enrollmentRequestRepo: save(request)
+activate enrollmentRequestRepo
+enrollmentRequestRepo --> svc: request(mirrored)
+deactivate enrollmentRequestRepo
+
+svc --> ctrl: request
+deactivate svc
+
+ctrl --> ui: request
+deactivate ctrl
+
+ui --> student: informs request was created with success
+deactivate ui
+
+
+
+
 @enduml
