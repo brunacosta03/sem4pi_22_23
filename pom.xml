@@ -39,6 +39,7 @@
         <module>ecourse.app.manager</module>
 		<module>ecourse.app.teacher</module>
 		<module>ecourse.app.student</module>
+		<module>enrollment.request.application</module>
 	</modules>
 
 	<dependencies>

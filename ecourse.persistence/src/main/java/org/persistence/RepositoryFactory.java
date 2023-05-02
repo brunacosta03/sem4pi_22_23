@@ -3,6 +3,7 @@ package org.persistence;
 import eapli.framework.domain.repositories.TransactionalContext;
 import org.domain.repositories.BoardRepository;
 import org.domain.repositories.CourseRepository;
+import org.springframework.repositories.EnrollmentRequestRepository;
 import org.usermanagement.domain.repositories.UserRepository;
 
 public interface RepositoryFactory {
@@ -29,4 +30,11 @@ public interface RepositoryFactory {
      * @return BoardRepository
      */
     BoardRepository boards();
+
+    /**
+     * For configure persistence context.
+     * @return EnrollmentRequestRepository
+     */
+    EnrollmentRequestRepository enrollmentRequests();
+
 }

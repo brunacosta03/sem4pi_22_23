@@ -149,6 +149,10 @@ public class Course implements AggregateRoot<CourseCode> {
 
     public void addStudent(User student){
         Preconditions.ensure(
+                !students.contains(student),
+                "This student is already enrolled in this course"
+        );
+        Preconditions.ensure(
                 student.role().equals(CourseRoles.STUDENT.toString()),
                 "Only students can be assigned through this option");
         Preconditions.ensure(
@@ -194,6 +198,4 @@ public class Course implements AggregateRoot<CourseCode> {
                 "Minimun students: " + min.value() + "\n" +
                 "Head Teacher: " + headTeacher.emailAddress() + "\n";
     }
-
-
 }
