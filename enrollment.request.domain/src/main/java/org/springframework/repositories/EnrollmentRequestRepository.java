@@ -1,6 +1,7 @@
 package org.springframework.repositories;
 
 import eapli.framework.domain.repositories.DomainRepository;
+
 import org.domain.model.Course;
 import org.springframework.domain.EnrollmentRequest;
 import org.usermanagement.domain.model.User;

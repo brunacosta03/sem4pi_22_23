@@ -45,6 +45,7 @@ public class MainMenu extends AbstractUI {
 
     // STUDENT MANAGE COURSES
     private static final int SET_STUDENT_LIST_AVAILABLE_COURSES_OPTION = 1;
+    private static final int SET_STUDENT_ENROLL_COURSE_OPTION = 2;
 
     //SHARED BOARD
     private static final int SET_USER_BOARD_OPTION = 9;
@@ -111,6 +112,11 @@ public class MainMenu extends AbstractUI {
 
         menu.addItem(SET_STUDENT_LIST_AVAILABLE_COURSES_OPTION,
                 "List Available Courses", new ListCoursesUI()::doShow);
+        menu.addItem(
+                SET_STUDENT_ENROLL_COURSE_OPTION,
+                "Request Enrollment in a Course",
+                new RequestEnrollmentUI()::doShow
+        );
         menu.addItem(EXIT_OPTION, RETURN_LABEL, Actions.SUCCESS);
 
         return menu;

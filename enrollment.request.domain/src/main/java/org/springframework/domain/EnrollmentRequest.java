@@ -1,5 +1,4 @@
-package org.domain.domain;
-
+package org.springframework.domain;
 
 import eapli.framework.domain.model.AggregateRoot;
 import eapli.framework.validations.Preconditions;

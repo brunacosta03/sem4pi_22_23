@@ -59,7 +59,7 @@ However, I can only enroll in a course if I am not already enrolled in it and th
 #### 4.4.1. Domain Unit Tests
 
 ```java
-class EnrollmentRequestTest {
+class org.springframework.domain.EnrollmentRequestTest {
     // Some examples... might want to see actual class for tests in detail
     @Test
     void create() {
