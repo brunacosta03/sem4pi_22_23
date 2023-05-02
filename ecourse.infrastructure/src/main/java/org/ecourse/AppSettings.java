@@ -30,6 +30,18 @@ public class AppSettings {
             "javax.persistence.schema-generation.database.action";
 
     /**
+     * Shared boards have a max number of columns.
+     */
+    private static final String SHARED_BOARD_MAX_COLUMNS =
+            "shared.boards.max.columns";
+
+    /**
+     * Shared boards have a max number of rows.
+     */
+    private static final String SHARED_BOARD_MAX_ROWS =
+            "shared.boards.max.rows";
+
+    /**
      * Application Properties.
      */
     private final Properties applicationProperties = new Properties();
@@ -58,6 +70,8 @@ public class AppSettings {
         applicationProperties.setProperty(REPOSITORY_FACTORY_KEY,
                 "org.persistence.JpaRepositoryFactory");
         applicationProperties.setProperty(PERSISTENCE_UNIT_KEY, "DEMO_ORMPU");
+        applicationProperties.setProperty(SHARED_BOARD_MAX_COLUMNS, "10");
+        applicationProperties.setProperty(SHARED_BOARD_MAX_ROWS, "20");
     }
 
     /**
@@ -87,5 +101,21 @@ public class AppSettings {
      */
     public String repositoryFactory() {
         return applicationProperties.getProperty(REPOSITORY_FACTORY_KEY);
+    }
+
+    /**
+     * Max columns.
+     * @return String
+     */
+    public String maxColumns() {
+        return applicationProperties.getProperty(SHARED_BOARD_MAX_COLUMNS);
+    }
+
+    /**
+     * Max rows.
+     * @return String
+     */
+    public String maxRows() {
+        return applicationProperties.getProperty(SHARED_BOARD_MAX_ROWS);
     }
 }

@@ -7,6 +7,7 @@ import eapli.framework.validations.Invariants;
 import org.authz.application.AuthenticationService;
 import org.authz.application.AuthorizationService;
 import org.authz.application.AuthzRegistry;
+import org.bootstrappers.demo.BoardsBootstrapper;
 import org.bootstrappers.demo.CoursesBootstrapper;
 import org.bootstrappers.demo.UsersBootstrapper;
 import org.persistence.PersistenceContext;
@@ -63,21 +64,47 @@ public class ECourseBootstrapper implements Action {
         registerManagerUser(userRepository);
         authenticateForBootstrapping();
 
+        executeUsers();
+        executeCourses();
+        executeBoards();
+
+        return true;
+    }
+
+    /**
+     * Boostrap for Users.
+     * @return true/false
+     */
+    public boolean executeUsers(){
         UsersBootstrapper usersBootstrapper = new UsersBootstrapper();
         System.out.println("Bootstrapper --> "
-                            + usersBootstrapper.getClass().getSimpleName());
+                + usersBootstrapper.getClass().getSimpleName());
 
         return usersBootstrapper.execute();
     }
 
+    /**
+     * Boostrap for Courses.
+     * @return true/false
+     */
     public boolean executeCourses(){
-        authenticateForBootstrapping();
-
         CoursesBootstrapper bootstrapper = new CoursesBootstrapper();
         System.out.println("Bootstrapper --> " + bootstrapper.getClass().getSimpleName());
 
         return bootstrapper.execute();
     }
+
+    /**
+     * Boostrap for Boards.
+     * @return true/false
+     */
+    public boolean executeBoards(){
+        BoardsBootstrapper bootstrapper = new BoardsBootstrapper();
+        System.out.println("Bootstrapper --> " + bootstrapper.getClass().getSimpleName());
+
+        return bootstrapper.execute();
+    }
+
     /**
      * Registers the manager user in the system during bootstrapping.
      * @param userRepository the repository for managing user entities.

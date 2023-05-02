@@ -34,7 +34,6 @@ public final class ECourseBootstrap extends ECourseBaseApplication {
         System.out.println("Modulo bootstrap a correr!");
 
         new ECourseBootstrapper().execute();
-        new ECourseBootstrapper().executeCourses();
 
         while (true) {
             //nothing happen atm
