@@ -23,7 +23,6 @@
 
 	<modules>
         <module>ecourse.app.bootstrap</module>
-		<module>ecourse.app.user</module>
         <module>ecourse.persistence</module>
 		<module>ecourse.bootstrappers</module>
 		<module>ecourse.core</module>
@@ -37,7 +36,10 @@
         <module>enrollment.request.domain</module>
         <module>ecourse.boards.domain</module>
         <module>ecourse.boards.application</module>
-    </modules>
+        <module>ecourse.app.manager</module>
+		<module>ecourse.app.teacher</module>
+		<module>ecourse.app.student</module>
+	</modules>
 
 	<dependencies>
 		<dependency>
