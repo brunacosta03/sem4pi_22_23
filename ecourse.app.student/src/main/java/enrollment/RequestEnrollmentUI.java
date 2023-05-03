@@ -15,7 +15,7 @@ public class RequestEnrollmentUI extends AbstractUI {
 
 
         try{
-            System.out.print("Course Code of course to enroll:");
+            System.out.print("Course Code of course to enroll: ");
             String courseCode = sc.nextLine();
             System.out.println();
 
