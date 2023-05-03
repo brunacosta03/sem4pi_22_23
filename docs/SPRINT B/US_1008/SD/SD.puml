@@ -5,24 +5,24 @@ autonumber
 
 actor Student as student
 
-participant RequestEnrollmentUI as ui
+participant RequestEnrollmentUI as ui <<presentation>>
 
-participant RequestEnrollmentController as ctrl
+participant RequestEnrollmentController as ctrl <<application>>
 
-participant EnrollmentRequestManagementService as svc
-participant AuthzRegistry as registry
-participant AuthorizationService as authz
+participant EnrollmentRequestManagementService as svc <<service>>
+participant AuthzRegistry as registry <<util>>
+participant AuthorizationService as authz <<service>>
 participant UserSession as userSession
 
-participant PersistenceContext as ctx
-participant RepositoryFactory as repoFactory
+participant PersistenceContext as ctx <<persistence>>
+participant RepositoryFactory as repoFactory <<factory>>
 
-database CourseRepository as courseRepo
-database EnrollmentRequestRepository as requestRepo
-participant EnrollmentRequest as enrollmentRequest
+database CourseRepository as courseRepo <<repository>>
+database EnrollmentRequestRepository as requestRepo <<repository>>
+participant EnrollmentRequest as enrollmentRequest <<entity>>
 
-participant CourseCode as courseCode
-participant Optional as opt
+participant CourseCode as courseCode <<value object>>
+participant Optional as opt <<util>>
 
 
 student -> ui: request enrollment
