@@ -1,4 +1,4 @@
-package org.springframework.domain;
+package org.enrollment.request.domain;
 
 import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
 import org.domain.model.Course;

@@ -10,6 +10,7 @@
       <class>org.domain.model.Board</class>
       <class>org.domain.model.BoardPermission</class>
       <class>org.domain.model.BoardEntry</class>
+      <class>org.enrollment.request.domain.EnrollmentRequest</class>
 
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost:9092/./ecourse"/>

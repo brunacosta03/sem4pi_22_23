@@ -5,7 +5,7 @@ import eapli.framework.infrastructure.repositories.impl.jpa.JpaAutoTxRepository;
 import org.domain.repositories.BoardRepository;
 import org.domain.repositories.CourseRepository;
 import org.ecourse.Application;
-import org.springframework.repositories.EnrollmentRequestRepository;
+import org.enrollment.request.repositories.EnrollmentRequestRepository;
 import org.usermanagement.domain.repositories.UserRepository;
 
 /**

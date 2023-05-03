@@ -1,4 +1,4 @@
-package org.springframework.domain;
+package org.enrollment.request.domain;
 
 public enum RequestState {
     PENDING,

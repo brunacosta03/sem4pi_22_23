@@ -2,7 +2,7 @@ package enrollment;
 
 import eapli.framework.presentation.console.AbstractUI;
 import org.authz.application.AuthzRegistry;
-import org.springframework.application.RequestEnrollmentController;
+import org.enrollment.request.application.RequestEnrollmentController;
 
 import java.util.Scanner;
 

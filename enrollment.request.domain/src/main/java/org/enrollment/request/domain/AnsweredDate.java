@@ -1,4 +1,4 @@
-package org.springframework.domain;
+package org.enrollment.request.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

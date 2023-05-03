@@ -1,11 +1,10 @@
-package org.springframework.application;
+package org.enrollment.request.application;
 
 import eapli.framework.application.UseCaseController;
 import eapli.framework.general.domain.model.EmailAddress;
 import org.domain.model.CourseCode;
+import org.enrollment.request.domain.EnrollmentRequest;
 import org.persistence.PersistenceContext;
-import org.springframework.domain.EnrollmentRequest;
-
 
 
 @UseCaseController

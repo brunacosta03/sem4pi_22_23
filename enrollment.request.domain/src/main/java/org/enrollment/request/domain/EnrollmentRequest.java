@@ -1,4 +1,4 @@
-package org.springframework.domain;
+package org.enrollment.request.domain;
 
 import eapli.framework.domain.model.AggregateRoot;
 import eapli.framework.validations.Preconditions;

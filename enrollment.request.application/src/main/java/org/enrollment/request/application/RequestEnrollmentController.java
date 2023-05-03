@@ -1,10 +1,10 @@
-package org.springframework.application;
+package org.enrollment.request.application;
 
 import eapli.framework.application.UseCaseController;
 import org.authz.application.AuthorizationService;
 import org.domain.model.CourseCode;
 import org.persistence.PersistenceContext;
-import org.springframework.domain.EnrollmentRequest;
+import org.enrollment.request.domain.EnrollmentRequest;
 import org.user.management.CourseRoles;
 
 @UseCaseController

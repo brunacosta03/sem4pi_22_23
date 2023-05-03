@@ -1,28 +1,25 @@
-package org.springframework.application;
+package org.enrollment.request.application;
 
 import eapli.framework.domain.repositories.TransactionalContext;
 import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
-import org.authz.application.AuthorizationService;
 import org.domain.model.Course;
 import org.domain.model.CourseCode;
 import org.domain.model.CourseFactory;
 import org.domain.model.CourseStateConstants;
 import org.domain.repositories.CourseRepository;
+import org.enrollment.request.repositories.EnrollmentRequestRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.springframework.domain.EnrollmentRequest;
-import org.springframework.repositories.EnrollmentRequestRepository;
+import org.enrollment.request.domain.EnrollmentRequest;
 import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.ECoursePasswordPolicy;
 import org.usermanagement.domain.model.User;
 import org.usermanagement.domain.model.UserBuilder;
-import org.usermanagement.domain.model.UserSession;
 import org.usermanagement.domain.repositories.UserRepository;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -30,7 +27,8 @@ class EnrollmentRequestManagementServiceTest {
 
 
     @Mock CourseRepository courseRepo;
-    @Mock EnrollmentRequestRepository enrollmentRequestRepo;
+    @Mock
+    EnrollmentRequestRepository enrollmentRequestRepo;
     @Mock UserRepository userRepo;
 
 

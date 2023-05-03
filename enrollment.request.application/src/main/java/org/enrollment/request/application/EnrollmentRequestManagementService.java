@@ -1,4 +1,4 @@
-package org.springframework.application;
+package org.enrollment.request.application;
 
 import eapli.framework.domain.repositories.TransactionalContext;
 import eapli.framework.general.domain.model.EmailAddress;
@@ -6,8 +6,8 @@ import eapli.framework.validations.Preconditions;
 import org.domain.model.Course;
 import org.domain.model.CourseCode;
 import org.domain.repositories.CourseRepository;
-import org.springframework.domain.EnrollmentRequest;
-import org.springframework.repositories.EnrollmentRequestRepository;
+import org.enrollment.request.repositories.EnrollmentRequestRepository;
+import org.enrollment.request.domain.EnrollmentRequest;
 import org.springframework.stereotype.Service;
 import org.usermanagement.domain.model.User;
 import org.usermanagement.domain.repositories.UserRepository;

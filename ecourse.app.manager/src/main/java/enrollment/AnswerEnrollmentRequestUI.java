@@ -1,7 +1,7 @@
 package enrollment;
 
 import eapli.framework.presentation.console.AbstractUI;
-import org.springframework.application.AnswerEnrollmentRequestController;
+import org.enrollment.request.application.AnswerEnrollmentRequestController;
 
 import java.util.Scanner;
 

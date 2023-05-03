@@ -3,8 +3,8 @@ package org.persistence;
 import eapli.framework.domain.repositories.TransactionalContext;
 import eapli.framework.infrastructure.repositories.impl.jpa.JpaAutoTxRepository;
 import org.domain.model.Course;
-import org.springframework.domain.EnrollmentRequest;
-import org.springframework.repositories.EnrollmentRequestRepository;
+import org.enrollment.request.domain.EnrollmentRequest;
+import org.enrollment.request.repositories.EnrollmentRequestRepository;
 import org.usermanagement.domain.model.User;
 
 import javax.persistence.NoResultException;
