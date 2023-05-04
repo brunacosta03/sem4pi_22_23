@@ -1,5 +1,6 @@
 package boards;
 
+import eapli.framework.domain.repositories.IntegrityViolationException;
 import eapli.framework.io.util.Console;
 import eapli.framework.presentation.console.AbstractUI;
 import org.boards.controller.CreateBoardController;
@@ -77,6 +78,8 @@ public class CreateBoardUI extends AbstractUI {
             System.out.println("Board Successfully created!");
         } catch (IllegalArgumentException e){
             System.out.println(e.getMessage());
+        } catch (IntegrityViolationException e){
+            System.out.println("A board with that name already exists");
         }
 
         return true;
