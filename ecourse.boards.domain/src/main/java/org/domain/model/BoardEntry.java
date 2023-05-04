@@ -1,7 +1,5 @@
 package org.domain.model;
 
-import eapli.framework.domain.model.AggregateRoot;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -9,8 +7,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "T_BOARD_ENTRY")
 public class BoardEntry
-        implements AggregateRoot<Long>,
-        Serializable {
+        implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -99,7 +96,6 @@ public class BoardEntry
      * @param other
      * @return true/false
      */
-    @Override
     public boolean sameAs(final Object other) {
         if (this == other) {
             return true;
@@ -121,7 +117,6 @@ public class BoardEntry
     /**
      * @return entryId
      */
-    @Override
     public Long identity() {
         return entryId;
     }
