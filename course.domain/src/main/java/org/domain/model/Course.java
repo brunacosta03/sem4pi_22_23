@@ -159,6 +159,10 @@ public class Course implements AggregateRoot<CourseCode> {
                 this.state.equals(CourseStateConstants.ENROLL),
                 "A student can only be added to this course if the state is Enrolled"
         );
+        Preconditions.ensure(
+                students.size() < max.value(),
+                "The maximum number of students has been reached"
+        );
         students.add(student);
     }
 
