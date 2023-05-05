@@ -15,7 +15,7 @@ public class BoardTitle implements ValueObject {
     /**
      * Board Title of Entity.
      */
-    @Column(name = "BOARD_TITLE")
+    @Column(name = "BOARD_TITLE", unique = true)
     private final String value;
 
     /**

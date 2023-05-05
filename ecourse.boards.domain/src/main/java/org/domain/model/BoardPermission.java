@@ -1,6 +1,5 @@
 package org.domain.model;
 
-import eapli.framework.domain.model.AggregateRoot;
 import org.usermanagement.domain.model.User;
 
 import javax.persistence.*;
@@ -10,8 +9,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "T_BOARD_PERMISSION")
 public class BoardPermission
-        implements AggregateRoot<Long>,
-        Serializable {
+        implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -72,7 +70,6 @@ public class BoardPermission
      * @param other
      * @return true/false
      */
-    @Override
     public boolean sameAs(final Object other) {
         if (this == other) {
             return true;
@@ -92,7 +89,6 @@ public class BoardPermission
     /**
      * @return boardPermissionId
      */
-    @Override
     public Long identity() {
         return boardPermissionId;
     }
