@@ -53,16 +53,7 @@ activate repoFactory
 repoFactory --> ctrl: enrollmentRequestRepo
 deactivate repoFactory
 
-ctrl -> repoFactory: users()
-activate repoFactory
-repoFactory --> ctrl: userRepo
-deactivate repoFactory
-
-ctrl -> repoFactory: newTransationalContext()
-activate repoFactory
-repoFactory --> ctrl: txt
-deactivate repoFactory
-ctrl -> svc: create(courseRepo, enrollmentRequestRepo, userRepo, txt)
+ctrl -> svc: create(courseRepo, enrollmentRequestRepo)
 deactivate ctrl
 
 ui -> ctrl: createRequest(courseCode)
