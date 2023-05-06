@@ -45,21 +45,33 @@ If you want to run tests for all modules just run in command line:
 Assuming the build was done, we can run the application through the files:
 
 
-eCourse - User
+eCourse - Manager
     
-    run-user.bat
+    run-manager.bat
     or
-    run-user.sh
+    run-manager.sh
+
+eCourse - Teacher
+    
+    run-teacher.bat
+    or
+    run-teacher.sh
+
+eCourse - Student
+    
+    run-student.bat
+    or
+    run-student.sh
 
 ## 6. How to Install/Deploy into Another Machine (or Virtual Machine)
 
-For example if you want to deploy into another machine eCourse - User you need to:
+For example if you want to deploy into another machine eCourse - Manager you need to:
 
     rebuild-all.bat
-    run-user.bat
+    run-manager.bat
     or
     rebuild-all.sh
-    run-user.sh    
+    run-manager.sh    
 
 ## 7. How to Generate PlantUML Diagrams
 
