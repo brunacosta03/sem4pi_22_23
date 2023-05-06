@@ -1,7 +1,5 @@
 package org.enrollment.request.application;
 
-import eapli.framework.domain.repositories.TransactionalContext;
-import eapli.framework.general.domain.model.EmailAddress;
 import eapli.framework.validations.Preconditions;
 import org.domain.model.Course;
 import org.domain.model.CourseCode;
@@ -10,35 +8,55 @@ import org.enrollment.request.repositories.EnrollmentRequestRepository;
 import org.enrollment.request.domain.EnrollmentRequest;
 import org.springframework.stereotype.Service;
 import org.usermanagement.domain.model.User;
-import org.usermanagement.domain.repositories.UserRepository;
 
+/**
+ * The type Enrollment request management service.
+ */
 @Service
 public class EnrollmentRequestManagementService {
-    final CourseRepository courseRepo;
+    /**
+     * The Course repo.
+     */
+    private final CourseRepository courseRepo;
+    /**
+     * The Enrollment request repo.
+     */
 
-    final EnrollmentRequestRepository enrollmentRequestRepo;
+    private final EnrollmentRequestRepository enrollmentRequestRepo;
 
-    final UserRepository userRepo;
-
-    private final TransactionalContext txt;
-
-    public EnrollmentRequestManagementService(CourseRepository courseRepo, EnrollmentRequestRepository enrollmentRequestRepo, UserRepository userRepo, TransactionalContext txt) {
-        // dependency injection
-        this.courseRepo = courseRepo;
-        this.enrollmentRequestRepo = enrollmentRequestRepo;
-        this.userRepo = userRepo;
-        this.txt = txt;
+    /**
+     * Instantiates a new Enrollment request management service.
+     *
+     * @param courseRepop            the course repo
+     * @param enrollmentRequestRepop the enrollment request repo
+     */
+    public EnrollmentRequestManagementService(
+            final CourseRepository courseRepop,
+            final EnrollmentRequestRepository enrollmentRequestRepop
+    ) {
+        this.courseRepo = courseRepop;
+        this.enrollmentRequestRepo = enrollmentRequestRepop;
     }
 
-    public EnrollmentRequest createRequest(CourseCode courseCode, User student){
+    /**
+     * Create enrollment request.
+     *
+     * @param courseCode the course code
+     * @param student    the student
+     * @return the enrollment request
+     */
+    public EnrollmentRequest createRequest(
+            final CourseCode courseCode,
+            final User student
+    ) {
 
         Course course = this.courseRepo
                 .findByCode(courseCode)
                 .orElseThrow(
                         () -> new IllegalArgumentException(
-                                "Course with code " +
-                                        courseCode.value() +
-                                        " does not exist"
+                                "Course with code "
+                                        + courseCode.value()
+                                        + " does not exist"
                         )
                 );
 
@@ -46,106 +64,43 @@ public class EnrollmentRequestManagementService {
                 this
                         .enrollmentRequestRepo
                         .findByCourseAndStudent(course, student) == null,
-                "Student " +
-                        student.identity() +
-                        " already requested to enroll in " +
-                        courseCode.value() +
-                        " course."
-        ); ;
+                "Student "
+                        + student.identity()
+                        + " already requested to enroll in "
+                        + courseCode.value()
+                        + " course."
+        );
 
         EnrollmentRequest request = EnrollmentRequest.create(student, course);
 
         return this.enrollmentRequestRepo.save(request);
     }
 
-    public EnrollmentRequest acceptRequest(CourseCode courseCode, EmailAddress studentEmail){
-
-
-        txt.beginTransaction();
-
-        User student = userRepo
-                .findUserByEmail(studentEmail)
-                .orElseThrow(
-                        () ->
-                                new IllegalArgumentException(
-                                        "User with email " +
-                                                studentEmail.toString() +
-                                                " not found."
-                                )
-                );
-
-        Course course = this.courseRepo
-                .findByCode(courseCode)
-                .orElseThrow(
-                        () -> new IllegalArgumentException(
-                                "Course with code " +
-                                        courseCode.value() +
-                                        " does not exist"
-                        )
-                );
-
-        EnrollmentRequest request = this.enrollmentRequestRepo.findByCourseAndStudent(course, student);
-
-        Preconditions.nonNull(
-                request,
-                "Student " +
-                        studentEmail +
-                        " did not request to enroll in " +
-                        courseCode.value() +
-                        " course."
-        );
+    /**
+     * Accept enrollment request.
+     *
+     * @param request the request
+     * @return the enrollment request
+     */
+    public EnrollmentRequest acceptRequest(final EnrollmentRequest request) {
 
         request.accept();
 
-        course.addStudent(student);
+        EnrollmentRequest reflection = this.enrollmentRequestRepo.save(request);
 
-        txt.commit();
+        this.courseRepo.save(request.course());
 
-        this.courseRepo.save(course);
-
-        return this.enrollmentRequestRepo.save(request);
+        return reflection;
     }
 
-    public EnrollmentRequest rejectRequest(CourseCode courseCode, EmailAddress studentEmail){
-
-
-        txt.beginTransaction();
-
-        User student = userRepo
-                .findUserByEmail(studentEmail)
-                .orElseThrow(
-                        () ->
-                                new IllegalArgumentException(
-                                        "User with email " +
-                                                studentEmail.toString() +
-                                                " not found."
-                                )
-                );
-
-        Course course = this.courseRepo
-                .findByCode(courseCode)
-                .orElseThrow(
-                        () -> new IllegalArgumentException(
-                                "Course with code " +
-                                        courseCode.value() +
-                                        " does not exist"
-                        )
-                );
-
-        EnrollmentRequest request = this.enrollmentRequestRepo.findByCourseAndStudent(course, student);
-
-        Preconditions.nonNull(
-                request,
-                "Student " +
-                        studentEmail +
-                        " did not request to enroll in " +
-                        courseCode.value() +
-                        " course."
-        );
-
+    /**
+     * Reject enrollment request.
+     *
+     * @param request the request
+     * @return the enrollment request
+     */
+    public EnrollmentRequest rejectRequest(final EnrollmentRequest request) {
         request.reject();
-
-        txt.commit();
 
         return this.enrollmentRequestRepo.save(request);
     }

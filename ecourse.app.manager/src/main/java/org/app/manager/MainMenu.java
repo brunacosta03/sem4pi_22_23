@@ -9,6 +9,7 @@ import eapli.framework.presentation.console.ExitWithMessageAction;
 import eapli.framework.presentation.console.menu.MenuItemRenderer;
 import eapli.framework.presentation.console.menu.MenuRenderer;
 import eapli.framework.presentation.console.menu.VerticalMenuRenderer;
+import enrollment.AnswerEnrollmentRequestUI;
 import org.authz.application.AuthorizationService;
 import org.authz.application.AuthzRegistry;
 import org.user.management.CourseRoles;
@@ -34,6 +35,7 @@ public class MainMenu extends AbstractUI {
 
     // MANAGER MANAGE COURSES
     private static final int SET_MANAGER_LIST_AVAILABLE_COURSES_OPTION = 1;
+    private static final int SET_MANAGER_ANSWER_ENROLLMENT_REQUEST_OPTION = 2;
 
     //SHARED BOARD
     private static final int SET_USER_BOARD_OPTION = 9;
@@ -83,6 +85,11 @@ public class MainMenu extends AbstractUI {
 
         menu.addItem(SET_MANAGER_LIST_AVAILABLE_COURSES_OPTION,
                 "List Available Courses", new ListCoursesUI()::show);
+        menu.addItem(
+                SET_MANAGER_ANSWER_ENROLLMENT_REQUEST_OPTION,
+                "Accept or Reject a Enrollment Request",
+                new AnswerEnrollmentRequestUI()::show
+        );
         menu.addItem(EXIT_OPTION, RETURN_LABEL, Actions.SUCCESS);
 
         return menu;

@@ -1,45 +1,52 @@
 package enrollment;
 
 import eapli.framework.presentation.console.AbstractUI;
+import eapli.framework.validations.Preconditions;
+import org.authz.application.AuthzRegistry;
 import org.enrollment.request.application.AnswerEnrollmentRequestController;
+import org.enrollment.request.domain.EnrollmentRequest;
+import org.persistence.PersistenceContext;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class AnswerEnrollmentRequestUI extends AbstractUI {
 
     private final Scanner sc = new Scanner(System.in);
-    private final AnswerEnrollmentRequestController ctrl = new AnswerEnrollmentRequestController();
+    private final AnswerEnrollmentRequestController ctrl =
+            new AnswerEnrollmentRequestController(
+                    PersistenceContext
+                            .repositories()
+                            .enrollmentRequests(),
+                    AuthzRegistry
+                            .authorizationService()
+            );
     @Override
     protected boolean doShow() {
 
         try{
-            System.out.print("Course code of enrollment: ");
-            String courseCode = sc.nextLine();
-            System.out.println();
 
-            System.out.print("Email address of User: ");
-            String emailAddress = sc.nextLine();
-            System.out.println();
+            List<EnrollmentRequest> pendingRequests = this.ctrl.getPendingRequests();
 
-            System.out.println("Accept or decline? (1/2)");
-            Integer opt = Integer.parseInt(sc.nextLine());
+            EnrollmentRequest selected = showAndSelect(pendingRequests, "Pending Requests");
 
-            if(opt.equals(1)){
-                ctrl.acceptEnrollmentRequest(courseCode, emailAddress);
-                System.out.println("Enrollment Request accepted with success!\n");
-            }else if(opt.equals(2)){
-                ctrl.rejectEnrollmentRequest(courseCode, emailAddress);
-                System.out.println("Enrollment Request rejected with success!\n");
+            boolean accept = acceptOrReject();
+
+            if(accept) {
+                this.ctrl.acceptRequest(selected);
+
+                System.out.println("Enrollment Request accepted with success!");
             }else {
-                throw new IllegalArgumentException("Invalid option.\nTry again.\n");
+                this.ctrl.rejectRequest(selected);
+
+                System.out.println("Enrollment Request rejected with success!");
             }
 
-        } catch (NumberFormatException nfe){
-            System.out.println("Invalid option.\nTry again.\n");
-        } catch (IllegalArgumentException iae){
-            System.out.println(iae.getMessage() + "\n");
-        }
+        }catch (IllegalArgumentException iae){
+            System.out.println(iae.getMessage());
 
+            return false;
+        }
 
         return true;
     }
@@ -47,5 +54,42 @@ public class AnswerEnrollmentRequestUI extends AbstractUI {
     @Override
     public String headline() {
         return "Answer Request";
+    }
+
+    public EnrollmentRequest showAndSelect(List<EnrollmentRequest> requests, String message){
+        int i = 0;
+
+        System.out.println(message);
+
+        for(EnrollmentRequest request : requests){
+            System.out.println(i+1 + " - " + request.toString());
+            i++;
+        }
+
+        int option;
+        try{
+            System.out.print("Select an option: ");
+            option = Integer.parseInt(sc.nextLine());
+            System.out.println();
+        }catch(NumberFormatException nfe){
+            throw new IllegalArgumentException("Invalid option, try again.");
+        }
+
+
+        Preconditions.ensure(option > 0 && option <= requests.size(), "Invalid option, try again.");
+
+        return requests.get(option-1);
+    }
+
+    public boolean acceptOrReject(){
+        System.out.println("1 - Accept");
+        System.out.println("2 - Reject");
+        System.out.print("Select an option: ");
+        int option = Integer.parseInt(sc.nextLine());
+        System.out.println();
+
+        Preconditions.ensure(option == 1 || option == 2, "Invalid option, try again.");
+
+        return option == 1;
     }
 }

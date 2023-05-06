@@ -4,37 +4,89 @@ import eapli.framework.domain.repositories.TransactionalContext;
 import eapli.framework.infrastructure.repositories.impl.jpa.JpaAutoTxRepository;
 import org.domain.model.Course;
 import org.enrollment.request.domain.EnrollmentRequest;
+import org.enrollment.request.domain.RequestState;
 import org.enrollment.request.repositories.EnrollmentRequestRepository;
 import org.usermanagement.domain.model.User;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The type Jpa auto tx enrollment request repository.
+ */
 public class JpaAutoTxEnrollmentRequestRepository
         extends JpaAutoTxRepository<EnrollmentRequest, Long, Long>
         implements EnrollmentRequestRepository {
 
 
-    public JpaAutoTxEnrollmentRequestRepository(String persistenceUnitName, String identityFieldName) {
+    /**
+     * Instantiates a new Jpa auto tx enrollment request repository.
+     *
+     * @param persistenceUnitName the persistence unit name
+     * @param identityFieldName   the identity field name
+     */
+    public JpaAutoTxEnrollmentRequestRepository(
+            final String persistenceUnitName,
+            final String identityFieldName
+    ) {
         super(persistenceUnitName, identityFieldName);
     }
 
-    public JpaAutoTxEnrollmentRequestRepository(String persistenceUnitName, Map properties, String identityFieldName) {
+    /**
+     * Instantiates a new Jpa auto tx enrollment request repository.
+     *
+     * @param persistenceUnitName the persistence unit name
+     * @param properties          the properties
+     * @param identityFieldName   the identity field name
+     */
+    public JpaAutoTxEnrollmentRequestRepository(
+            final String persistenceUnitName,
+            final Map properties,
+            final String identityFieldName
+    ) {
         super(persistenceUnitName, properties, identityFieldName);
     }
 
-    public JpaAutoTxEnrollmentRequestRepository(TransactionalContext tx, String identityFieldName) {
+    /**
+     * Instantiates a new Jpa auto tx enrollment request repository.
+     *
+     * @param tx                the tx
+     * @param identityFieldName the identity field name
+     */
+    public JpaAutoTxEnrollmentRequestRepository(
+            final TransactionalContext tx,
+            final String identityFieldName
+    ) {
         super(tx, identityFieldName);
     }
 
-    public JpaAutoTxEnrollmentRequestRepository(String persistenceUnitName, Map properties) {
+    /**
+     * Instantiates a new Jpa auto tx enrollment request repository.
+     *
+     * @param persistenceUnitName the persistence unit name
+     * @param properties          the properties
+     */
+    public JpaAutoTxEnrollmentRequestRepository(
+            final String persistenceUnitName,
+            final Map properties
+    ) {
         super(persistenceUnitName, properties, "id");
     }
 
+    /**
+     * find enrollment request by course and student.
+     * @param course  the course
+     * @param student the student
+     * @return
+     */
     @Override
-    public EnrollmentRequest findByCourseAndStudent(Course course, User student) {
+    public EnrollmentRequest findByCourseAndStudent(
+            final Course course,
+            final User student
+    ) {
         TypedQuery<EnrollmentRequest> query = createQuery(
                 "SELECT er FROM EnrollmentRequest er WHERE er.student = :student AND er.course = :course",
                 EnrollmentRequest.class
@@ -43,43 +95,90 @@ public class JpaAutoTxEnrollmentRequestRepository
         query.setParameter("student", student);
         query.setParameter("course", course);
 
-        try{
+        try {
             return query.getSingleResult();
-        }catch(NoResultException e){
+        } catch (NoResultException e) {
             return null;
         }
     }
 
+    /**
+     * find enrollment request by id.
+     * @param id the id
+     * @return
+     */
     @Override
-    public Optional<EnrollmentRequest> findById(Long Id) {
-        return this.repo.findById(Id);
+    public Optional<EnrollmentRequest> findById(final Long id) {
+        return this.repo.findById(id);
     }
 
+    /**
+     * save enrollment request.
+     * @param request
+     * @return
+     */
     @Override
-    public EnrollmentRequest save(EnrollmentRequest request) {
+    public EnrollmentRequest save(final EnrollmentRequest request) {
         return this.repo.save(request);
     }
 
+    /**
+     * find pending requests.
+     * @return
+     */
+    @Override
+    public List<EnrollmentRequest> findPendingRequests() {
+        TypedQuery<EnrollmentRequest> query = createQuery(
+                "SELECT er FROM EnrollmentRequest er WHERE er.state = :state",
+                EnrollmentRequest.class
+        );
+
+        query.setParameter("state", RequestState.PENDING);
+
+        return query.getResultList();
+    }
+
+    /**
+     * find all enrollment requests.
+     * @return
+     */
     @Override
     public Iterable<EnrollmentRequest> findAll() {
         return this.repo.findAll();
     }
 
+    /**
+     * find enrollment request by identity.
+     * @param id
+     * @return
+     */
     @Override
-    public Optional<EnrollmentRequest> ofIdentity(Long id) {
+    public Optional<EnrollmentRequest> ofIdentity(final Long id) {
         return this.repo.ofIdentity(id);
     }
 
+    /**
+     * delete enrollment request.
+     * @param entity
+     */
     @Override
-    public void delete(EnrollmentRequest entity) {
+    public void delete(final EnrollmentRequest entity) {
         this.repo.delete(entity);
     }
 
+    /**
+     * delete enrollment request by identity.
+     * @param entityId
+     */
     @Override
-    public void deleteOfIdentity(Long entityId) {
+    public void deleteOfIdentity(final Long entityId) {
         this.repo.deleteOfIdentity(entityId);
     }
 
+    /**
+     * count enrollment requests.
+     * @return
+     */
     @Override
     public long count() {
         return this.repo.count();

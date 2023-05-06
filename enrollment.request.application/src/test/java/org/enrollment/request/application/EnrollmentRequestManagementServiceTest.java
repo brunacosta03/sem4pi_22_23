@@ -1,6 +1,5 @@
 package org.enrollment.request.application;
 
-import eapli.framework.domain.repositories.TransactionalContext;
 import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
 import org.domain.model.Course;
 import org.domain.model.CourseCode;
@@ -16,7 +15,6 @@ import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.ECoursePasswordPolicy;
 import org.usermanagement.domain.model.User;
 import org.usermanagement.domain.model.UserBuilder;
-import org.usermanagement.domain.repositories.UserRepository;
 
 import java.util.Optional;
 
@@ -29,11 +27,9 @@ class EnrollmentRequestManagementServiceTest {
     @Mock CourseRepository courseRepo;
     @Mock
     EnrollmentRequestRepository enrollmentRequestRepo;
-    @Mock UserRepository userRepo;
 
 
     @Mock CourseCode courseCode;
-    @Mock TransactionalContext txt;
 
     @Mock EnrollmentRequest request;
 
@@ -61,14 +57,10 @@ class EnrollmentRequestManagementServiceTest {
 
         courseRepo = mock(CourseRepository.class);
         enrollmentRequestRepo = mock(EnrollmentRequestRepository.class);
-        userRepo = mock(UserRepository.class);
-        txt = mock(TransactionalContext.class);
 
         service = new EnrollmentRequestManagementService(
                 courseRepo,
-                enrollmentRequestRepo,
-                userRepo,
-                txt
+                enrollmentRequestRepo
         );
     }
 
@@ -91,40 +83,28 @@ class EnrollmentRequestManagementServiceTest {
 
     @Test
     void acceptRequest() {
-        user = buildStudent();
-        course = createValidCourse();
-        EnrollmentRequest req = EnrollmentRequest.create(user, course);
+        EnrollmentRequest request = mock(EnrollmentRequest.class);
 
-        when(userRepo.findUserByEmail(user.emailAddress())).thenReturn(Optional.of(user));
-        when(courseRepo.findByCode(courseCode)).thenReturn(Optional.of(course));
-        when(enrollmentRequestRepo.findByCourseAndStudent(course, user)).thenReturn(req);
+        when(enrollmentRequestRepo.save(request)).thenReturn(request);
 
-        service.acceptRequest(courseCode, user.emailAddress());
+        service.acceptRequest(request);
 
-        verify(userRepo).findUserByEmail(user.emailAddress());
-        verify(courseRepo).findByCode(courseCode);
-        verify(enrollmentRequestRepo).findByCourseAndStudent(course, user);
-        verify(courseRepo).save(course);
-        verify(enrollmentRequestRepo).save(req);
-
+        verify(request).accept();
+        verify(enrollmentRequestRepo).save(request);
+        verify(courseRepo).save(request.course());
     }
 
     @Test
     void rejectRequest() {
-        user = buildStudent();
-        course = createValidCourse();
-        EnrollmentRequest req = EnrollmentRequest.create(user, course);
+        EnrollmentRequest request = mock(EnrollmentRequest.class);
 
-        when(userRepo.findUserByEmail(user.emailAddress())).thenReturn(Optional.of(user));
-        when(courseRepo.findByCode(courseCode)).thenReturn(Optional.of(course));
-        when(enrollmentRequestRepo.findByCourseAndStudent(course, user)).thenReturn(req);
+        when(enrollmentRequestRepo.save(request)).thenReturn(request);
 
-        service.rejectRequest(courseCode, user.emailAddress());
+        service.rejectRequest(request);
 
-        verify(userRepo).findUserByEmail(user.emailAddress());
-        verify(courseRepo).findByCode(courseCode);
-        verify(enrollmentRequestRepo).findByCourseAndStudent(course, user);
-        verify(enrollmentRequestRepo).save(req);
+        verify(request).reject();
+        verify(enrollmentRequestRepo).save(request);
+        verifyNoInteractions(courseRepo);
     }
 
     User buildStudent(){
@@ -166,6 +146,8 @@ class EnrollmentRequestManagementServiceTest {
         course.changeState(CourseStateConstants.ENROLL);
         return course;
     }
+
+
 
     Course createInvalidCourse(){
         CourseFactory factory = new CourseFactory();

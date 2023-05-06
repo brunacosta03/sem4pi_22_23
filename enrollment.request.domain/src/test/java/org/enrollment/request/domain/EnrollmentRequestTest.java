@@ -111,6 +111,12 @@ class EnrollmentRequestTest {
         course = createValidCourse();
         //makes sure equals is set by user and course and not memory location
         assertEquals(EnrollmentRequest.create(user, course), EnrollmentRequest.create(user, course));
+        assert EnrollmentRequest.create(user, course).sameAs(EnrollmentRequest.create(user, course));
+
+        EnrollmentRequest req = EnrollmentRequest.create(user, course);
+        req.toString();
+        req.identity();
+        req.hashCode();
     }
 
     User buildStudent(){
