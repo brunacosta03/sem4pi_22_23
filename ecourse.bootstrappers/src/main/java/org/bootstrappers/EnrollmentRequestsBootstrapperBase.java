@@ -10,25 +10,51 @@ import org.persistence.PersistenceContext;
 import org.usermanagement.domain.model.User;
 import org.usermanagement.domain.repositories.UserRepository;
 
+/**
+ * The type Enrollment requests bootstrapper base.
+ */
 public class EnrollmentRequestsBootstrapperBase {
-    UserRepository userRepo = PersistenceContext.repositories().users();
-    EnrollmentRequestManagementService service = new EnrollmentRequestManagementService(
+    /**
+     * The User repo.
+     */
+    private final UserRepository userRepo =
+            PersistenceContext.repositories().users();
+    /**
+     * The Service.
+     */
+    private final EnrollmentRequestManagementService service =
+            new EnrollmentRequestManagementService(
             PersistenceContext.repositories().courses(),
-            PersistenceContext.repositories().enrollmentRequests()
-    );
+            PersistenceContext.repositories().enrollmentRequests());
 
 
-    protected User findUserByEmail(String email) {
+    /**
+     * Find user by email user.
+     *
+     * @param email the email
+     * @return the user
+     */
+    protected User findUserByEmail(final String email) {
         return userRepo.findUserByEmail(
                 EmailAddress.valueOf(email)
         ).get();
     }
 
-    protected EnrollmentRequest createRequest(String courseCode, User student) {
+    /**
+     * Create enrollment request.
+     *
+     * @param courseCode the course code
+     * @param student    the student
+     * @return the enrollment request
+     */
+    protected EnrollmentRequest createRequest(
+            final String courseCode,
+            final User student
+    ) {
 
         EnrollmentRequest request = null;
 
-        try{
+        try {
 
              request = service.createRequest(
                     CourseCode.of(courseCode),

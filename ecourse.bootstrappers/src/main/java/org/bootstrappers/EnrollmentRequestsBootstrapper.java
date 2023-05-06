@@ -2,14 +2,15 @@ package org.bootstrappers;
 
 
 import eapli.framework.actions.Action;
-import eapli.framework.general.domain.model.EmailAddress;
-import org.domain.model.CourseCode;
-import org.enrollment.request.application.EnrollmentRequestManagementService;
-import org.persistence.PersistenceContext;
 import org.usermanagement.domain.model.User;
-import org.usermanagement.domain.repositories.UserRepository;
 
-public class EnrollmentRequestsBootstrapper extends EnrollmentRequestsBootstrapperBase implements Action {
+public class EnrollmentRequestsBootstrapper
+        extends EnrollmentRequestsBootstrapperBase
+        implements Action {
+    /**
+     * Executes enrollment requests bootstrapping.
+     * @return success or failure
+     */
     @Override
     public boolean execute() {
         User student3 = findUserByEmail("student3@email.com");
