@@ -67,8 +67,22 @@ public class ECourseBootstrapper implements Action {
         executeUsers();
         executeCourses();
         executeBoards();
-
+        executeEnrollmentRequests();
         return true;
+    }
+
+    /**
+     * Bootstrap for enrollment requests.
+     * @return true/false
+     */
+    private boolean executeEnrollmentRequests() {
+        EnrollmentRequestsBootstrapper bootstrapper =
+                new EnrollmentRequestsBootstrapper();
+
+        System.out.println("Bootstrapper --> "
+                + bootstrapper.getClass().getSimpleName());
+
+        return bootstrapper.execute();
     }
 
     /**

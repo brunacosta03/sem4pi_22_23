@@ -9,8 +9,6 @@ import org.domain.repositories.CourseRepository;
 import org.persistence.PersistenceContext;
 
 public class CoursesBootstrapper extends CoursesBootstrapperBase {
-
-    private final static int WAITING_TIME = 5000;
     public boolean execute(){
 
         Course c1 = addCourse("Matemática", "MAT-1", "INTRO-MAT-SEM01", "Mathematics from the begining of time",
@@ -35,15 +33,13 @@ public class CoursesBootstrapper extends CoursesBootstrapperBase {
 
         serv.addTeacher("teacher2@email.com", "APROG-5");
 
+
         serv.changeState(CourseCode.of("MAT-1"), CourseStateConstants.ENROLL);
+
         serv.changeState(CourseCode.of("PT-1"), CourseStateConstants.ENROLL);
+
         serv.changeState(CourseCode.of("APROG-3"), CourseStateConstants.ENROLL);
 
-        try {
-            Thread.sleep(WAITING_TIME); // wait for the state to change
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
 
         serv.addStudent("student1@email.com", "MAT-1");
 
