@@ -33,7 +33,7 @@ However, I can only enroll in a course if I am not already enrolled in it and th
 
 #### MVC (Model-View-Controller)
 
-- Model is responsible for managing the data and business logic of the application. (CourseRepository, EnrollmentRequestRepository, User, Course, EnrollmentRequest, AuthorizationService)
+- Model is responsible for managing the data and business logic of the application. (CourseRepository, EnrollmentRequestRepository, User, Course, EnrollmentRequest, AuthorizationService, EnrollmentRequestManagementService)
 - View is responsible for presenting the data to the user in a human-readable format. (RequestEnrollmentUI)
 - Controller is responsible for handling the user input and updating the model and the view accordingly. (RequestEnrollmentController)
 
