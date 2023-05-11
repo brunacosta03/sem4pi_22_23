@@ -40,6 +40,9 @@
 		<module>ecourse.app.teacher</module>
 		<module>ecourse.app.student</module>
 		<module>enrollment.request.application</module>
+        <module>shared.board.app</module>
+        <module>shared.board.server</module>
+		<module>shared.board.common</module>
 	</modules>
 
 	<dependencies>
