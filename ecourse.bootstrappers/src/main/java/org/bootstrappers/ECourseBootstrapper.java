@@ -9,6 +9,7 @@ import org.authz.application.AuthorizationService;
 import org.authz.application.AuthzRegistry;
 import org.bootstrappers.demo.BoardsBootstrapper;
 import org.bootstrappers.demo.CoursesBootstrapper;
+import org.bootstrappers.demo.EnrollmentRequestsBootstrapper;
 import org.bootstrappers.demo.UsersBootstrapper;
 import org.persistence.PersistenceContext;
 import org.user.management.CourseRoles;

@@ -1,7 +1,8 @@
-package org.bootstrappers;
+package org.bootstrappers.demo;
 
 
 import eapli.framework.actions.Action;
+import org.bootstrappers.EnrollmentRequestsBootstrapperBase;
 import org.usermanagement.domain.model.User;
 
 public class EnrollmentRequestsBootstrapper
