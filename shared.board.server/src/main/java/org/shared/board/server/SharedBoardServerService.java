@@ -8,6 +8,9 @@ import org.usermanagement.domain.model.UserSession;
 
 import java.util.Optional;
 
+/**
+ * The type Shared board server service.
+ */
 public class SharedBoardServerService {
     /**
      * Get AuthenticationService.
@@ -15,9 +18,17 @@ public class SharedBoardServerService {
     private final AuthenticationService authService = AuthzRegistry
             .authenticationService();
 
-    public int authenticateUser(String userData) throws IllegalArgumentException{
+    /**
+     * Authenticate user int.
+     * @param userData the user data
+     * @return the int
+     * @throws IllegalArgumentException the illegal argument exception
+     */
+    public int authenticateUser(final String userData)
+            throws IllegalArgumentException {
         String email = userData.substring(0, userData.indexOf("\0"));
-        String password = userData.substring(userData.indexOf("\0") + 1, userData.length() - 1);
+        String password = userData.substring(
+                userData.indexOf("\0") + 1, userData.length() - 1);
 
         Optional<UserSession> session = authService
                     .authenticate(email, password,

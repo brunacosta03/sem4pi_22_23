@@ -7,25 +7,42 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
+/**
+ * The type Main menu ui.
+ */
 public class MainMenuUI {
     private Socket sock;
     private SharedBoardAppController theController;
 
-    public MainMenuUI(Socket sockp) {
+    /**
+     * Instantiates a new Main menu ui.
+     * @param sockp the sockp
+     */
+    public MainMenuUI(final Socket sockp) {
         this.sock = sockp;
         this.theController = new SharedBoardAppController(sockp);
     }
 
-    public void handleACK(int codeResult,
-                          String messageOK,
-                          String messageBAD){
-        if(codeResult == MessageCodes.ACK){
+    /**
+     * Handle ack.
+     * @param codeResult the code result
+     * @param messageOK  the message ok
+     * @param messageBAD the message bad
+     */
+    public void handleACK(final int codeResult,
+                          final String messageOK,
+                          final String messageBAD) {
+        if (codeResult == MessageCodes.ACK) {
             System.out.println(messageOK);
         } else {
             System.out.println(messageBAD);
         }
     }
 
+    /**
+     * Do show.
+     * @throws IOException the io exception
+     */
     public void doShow() throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         String input = "";

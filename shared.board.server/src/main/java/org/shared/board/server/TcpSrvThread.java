@@ -8,24 +8,46 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 
+/**
+ * The type Tcp srv thread.
+ */
 public class TcpSrvThread implements Runnable {
+    /**
+     * The Socket.
+     */
     private Socket sock;
-
+    /**
+     * The SharedBoardServerController.
+     */
     private SharedBoardServerController theController;
+    /**
+     * The constant VERSION.
+     */
+    public static final int VERSION = 1;
 
-    public TcpSrvThread(Socket cli_s) {
-        sock = cli_s;
-        theController = new SharedBoardServerController(new SharedBoardServerService());
+    /**
+     * Instantiates a new Tcp srv thread.
+     *
+     * @param cliSer the cli s
+     */
+    public TcpSrvThread(final Socket cliSer) {
+        sock = cliSer;
+        theController = new SharedBoardServerController(
+                new SharedBoardServerService());
     }
 
+    /**
+     * Thread Runnable.
+     */
     public void run() {
         Message message;
         InetAddress clientIP;
 
         clientIP = sock.getInetAddress();
 
-        System.out.println("New client connection from " + clientIP.getHostAddress() +
-                    ", port number " + sock.getPort());
+        System.out.println("New client connection from "
+                + clientIP.getHostAddress()
+                + ", port number " + sock.getPort());
         try {
             MessageFormat mf = new MessageFormat(sock);
 
@@ -33,26 +55,28 @@ public class TcpSrvThread implements Runnable {
                 message = mf.readMessage();
 
                 if (message.code() == MessageCodes.COMMTEST) {
-                    mf.sendMessage(1, MessageCodes.ACK, "");
+                    mf.sendMessage(VERSION, MessageCodes.ACK, "");
                 }
 
-                if(message.code() == MessageCodes.AUTH){
-                    try{
+                if (message.code() == MessageCodes.AUTH) {
+                    try {
                         int result = theController.authenticate(message);
 
-                        mf.sendMessage(1, result, "");
-                    } catch (IllegalArgumentException e){
-                        mf.sendMessage(1, MessageCodes.ERR, e.getMessage());
+                        mf.sendMessage(VERSION, result, "");
+                    } catch (IllegalArgumentException e) {
+                        mf.sendMessage(VERSION, MessageCodes.ERR,
+                                e.getMessage());
                     }
                 }
-            } while(message.code() != MessageCodes.DISCONN);
+            } while (message.code() != MessageCodes.DISCONN);
 
-            mf.sendMessage(1, MessageCodes.ACK, "");
-            System.out.println("Client " + clientIP.getHostAddress() + ", port number: " + sock.getPort() +
-                        " disconnected");
+            mf.sendMessage(VERSION, MessageCodes.ACK, "");
+            System.out.println("Client " + clientIP.getHostAddress()
+                    + ", port number: " + sock.getPort()
+                    + " disconnected");
 
             sock.close();
-        } catch(IOException ex) {
+        } catch (IOException ex) {
             System.out.println("IOException");
         }
     }

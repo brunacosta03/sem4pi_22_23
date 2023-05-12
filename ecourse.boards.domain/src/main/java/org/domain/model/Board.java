@@ -51,7 +51,7 @@ public class Board
     /**
      * Date when user created board.
      */
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Calendar createdOn;
 
     /**
