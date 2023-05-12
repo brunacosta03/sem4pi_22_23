@@ -9,16 +9,33 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * The type Tcp srv.
+ */
 class TcpSrv {
-    static ServerSocket sock;
+    /**
+     * The Sock.
+     */
+    private static ServerSocket sock;
 
-    public static void main(String args[]) throws Exception {
+    /**
+     * The PORT.
+     */
+    private static final int PORT = 9999;
+
+    /**
+     * Main.
+     *
+     * @param args the args
+     * @throws Exception the exception
+     */
+    public static void main(final String args[]) throws Exception {
         Socket cliSock;
 
         try {
-            sock = new ServerSocket(9999);
+            sock = new ServerSocket(PORT);
             System.out.println("Server is listening");
-        } catch(IOException ex) {
+        } catch (IOException ex) {
             System.out.println("Failed to open server socket");
             System.exit(1);
         }
@@ -29,7 +46,7 @@ class TcpSrv {
                 new ECoursePasswordPolicy()
         );
 
-        while(true) {
+        while (true) {
             cliSock = sock.accept();
             new Thread(new TcpSrvThread(cliSock)).start();
         }

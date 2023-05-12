@@ -5,13 +5,35 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+/**
+ * The type Message format.
+ */
 public class MessageFormat {
-    Socket sock;
-    DataOutputStream sOut;
+    /**
+     * The Sock.
+     */
+    private Socket sock;
+    /**
+     * The S out.
+     */
+    private DataOutputStream sOut;
 
-    DataInputStream sIn;
+    /**
+     * The S in.
+     */
+    private DataInputStream sIn;
 
-    public MessageFormat(Socket sockp) {
+    /**
+     * 1 byte in decimal.
+     */
+    private static final int BYTE = 256;
+
+    /**
+     * Instantiates a new Message format.
+     *
+     * @param sockp the sockp
+     */
+    public MessageFormat(final Socket sockp) {
         try {
             this.sock = sockp;
             this.sOut = new DataOutputStream(sockp.getOutputStream());
@@ -21,26 +43,38 @@ public class MessageFormat {
         }
     }
 
-    public void sendMessage(int version,
-                            int code,
-                            String text){
+    /**
+     * Send message.
+     *
+     * @param version the version
+     * @param code    the code
+     * @param text    the text
+     */
+    public void sendMessage(final int version,
+                            final int code,
+                            final String text) {
         byte[] data = text.getBytes();
         int dataLength = data.length;
 
-        int d_length_1 = dataLength % 256;
-        int d_length_2 = dataLength / 256;
+        int d_length_1 = dataLength % BYTE;
+        int d_length_2 = dataLength / BYTE;
 
         try {
             sOut.writeByte(version);
             sOut.writeByte(code);
             sOut.writeByte(d_length_1);
             sOut.writeByte(d_length_2);
-            sOut.write(data,0, dataLength);
+            sOut.write(data, 0, dataLength);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+    /**
+     * Read message message.
+     *
+     * @return the message
+     */
     public Message readMessage() {
         try {
             int version = sIn.readUnsignedByte();
@@ -49,7 +83,7 @@ public class MessageFormat {
             int d_length_2 = sIn.readUnsignedByte();
 
             // calculate data length
-            int dataLength = d_length_1 + (d_length_2 * 256);
+            int dataLength = d_length_1 + (d_length_2 * BYTE);
 
             byte[] data = new byte[dataLength];
 

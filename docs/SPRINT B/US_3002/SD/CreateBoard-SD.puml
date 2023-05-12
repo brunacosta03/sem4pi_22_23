@@ -31,12 +31,12 @@ activate UI
     Actor --> UI: BoardTitle, BoardNRow, BoardNCol
 
         loop BoardNCol + (BoardNRow - 1) times 
-            UI -> Actor: Ask user EntryTitle
+            UI --> Actor: Ask user EntryTitle
                         note right: this is two different loops\none for for BoardNCol and\n another for BoardNRow
                         
-            Actor -> UI: EntryTitle
+            Actor --> UI: EntryTitle
 
-            UI --> Controller: createBoardEntry(entryNumber, boardRow,\nboardCol, entryTitle, boardNRow, boardNCol)
+            UI -> Controller: createBoardEntry(entryNumber, boardRow,\nboardCol, entryTitle, boardNRow, boardNCol)
             activate Controller
             Controller -> BEFactory: createBoardEntry(entryNumber, boardRow,\nboardCol, entryTitle, boardNRow, boardNCol)
             activate BEFactory

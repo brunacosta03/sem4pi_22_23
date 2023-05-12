@@ -1,10 +1,28 @@
 package org.shared.board.common;
 
-public class MessageCodes {
+/**
+ * The type Message codes.
+ */
+public final class MessageCodes {
+    /**
+     * The constant COMMTEST.
+     */
     public static final int COMMTEST = 0;
+    /**
+     * The constant DISCONN.
+     */
     public static final int DISCONN = 1;
+    /**
+     * The constant ACK.
+     */
     public static final int ACK = 2;
+    /**
+     * The constant ERR.
+     */
     public static final int ERR = 3;
+    /**
+     * The constant AUTH.
+     */
     public static final int AUTH = 4;
 
     private MessageCodes() {
