@@ -106,10 +106,10 @@ else course exists
     deactivate opt
 end alt
 
-svc -> enrollmentRequestRepo: findByCourseAndUser(course, user)
-activate enrollmentRequestRepo
-enrollmentRequestRepo --> svc: request
-deactivate enrollmentRequestRepo
+svc -> requestRepo: findByCourseAndUser(course, user)
+activate requestRepo
+requestRepo --> svc: request
+deactivate requestRepo
 
 alt request != null
     svc --> ui : throw new IllegalArgumentException("Request already exists.")
@@ -121,10 +121,10 @@ activate enrollmentRequest
 enrollmentRequest --> svc: request
 deactivate enrollmentRequest
 
-svc -> enrollmentRequestRepo: save(request)
-activate enrollmentRequestRepo
-enrollmentRequestRepo --> svc: request(mirrored)
-deactivate enrollmentRequestRepo
+svc -> requestRepo: save(request)
+activate requestRepo
+requestRepo --> svc: request(mirrored)
+deactivate requestRepo
 
 svc --> ctrl: request
 deactivate svc
