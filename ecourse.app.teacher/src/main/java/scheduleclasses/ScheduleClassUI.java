@@ -3,7 +3,6 @@ package scheduleclasses;
 import eapli.framework.presentation.console.AbstractUI;
 import org.authz.application.AuthzRegistry;
 import org.course.controller.ScheduleClassController;
-import org.domain.model.CourseCode;
 
 import java.util.Scanner;
 
@@ -37,7 +36,7 @@ public class ScheduleClassUI extends AbstractUI {
             String endTime = scanner.nextLine();
             System.out.println();
 
-            controller.createClass(courseCode, classTitle, dayOfWeek, startTime, endTime);
+            controller.scheduleClass(courseCode, classTitle, dayOfWeek, startTime, endTime);
 
             System.out.println("Class scheduled successfully.");
 

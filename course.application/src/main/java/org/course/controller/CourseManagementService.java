@@ -115,15 +115,20 @@ public class CourseManagementService{
     	return courseRepo.save(course);
     }
 
-    public Course addClass(String courseCode,
-                            String classTitle,
-                           String classDayOfWeek,
-                            String classStartTime,
-                            String classEndTime,
-                           User teacher){
+    public Course scheduleNewClass(String courseCode,
+                                   String classTitle,
+                                   String classDayOfWeek,
+                                   String classStartTime,
+                                   String classEndTime,
+                                   User teacher) {
         Course course = courseRepo.findByCode(CourseCode.of(courseCode)).
                 orElse(null);
         Preconditions.nonNull(course, "Course with code " + courseCode + " does not exist");
+
+        Preconditions.ensure(
+                courseRepo.findCoursesThatITeach(teacher) != null,
+                "You can not add a class to course " + courseCode + " because you are not a teacher there"
+        );
 
         Class newClass = classFactory.createClass(classTitle, classDayOfWeek, classStartTime, classEndTime, teacher, course.students());
 

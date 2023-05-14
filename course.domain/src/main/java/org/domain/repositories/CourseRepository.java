@@ -44,5 +44,5 @@ public interface CourseRepository extends DomainRepository<CourseCode, Course> {
 
     Iterable<Course> findCoursesTakenByStudent(User student);
 
-    Iterable<Course> findClassesOfCourse(Course course);
+    Iterable<Class> findClassesThatITeach(User teacher);
 }

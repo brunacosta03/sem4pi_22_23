@@ -217,7 +217,7 @@ public class Course implements AggregateRoot<CourseCode> {
                 "This class is already in this course"
         );
         Preconditions.ensure(classes.stream().noneMatch(c -> c.overlaps(aClass)),
-                "This class overlaps with another class in this course"
+                "The teacher already has a class at this time"
         );
         classes.add(aClass);
     }

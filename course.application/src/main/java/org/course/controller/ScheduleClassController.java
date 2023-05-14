@@ -23,15 +23,17 @@ public class ScheduleClassController {
         this.courseRepository = PersistenceContext.repositories().courses();
     }
 
-    public Course createClass(String courseCode,
-                            String classTitle,
-                            String dayOfWeek,
-                            String startTime,
-                            String endTime) {
+    public Course scheduleClass(String courseCode,
+                                String classTitle,
+                                String dayOfWeek,
+                                String startTime,
+                                String endTime) {
         authz.ensureAuthenticatedUserHasAnyOf(CourseRoles.TEACHER);
+
+        Preconditions.ensure(courseCode != null, "Course code must not be null");
 
         UserSession session = authz.session().orElse(null);
 
-        return courseManagementService.addClass(courseCode, classTitle, dayOfWeek, startTime, endTime, session.authenticatedUser());
+        return courseManagementService.scheduleNewClass(courseCode, classTitle, dayOfWeek, startTime, endTime, session.authenticatedUser());
     }
 }

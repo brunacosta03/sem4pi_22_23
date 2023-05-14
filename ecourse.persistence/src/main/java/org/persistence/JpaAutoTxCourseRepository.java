@@ -8,7 +8,9 @@ import org.domain.model.CourseStateConstants;
 import org.domain.repositories.CourseRepository;
 import org.usermanagement.domain.model.User;
 
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
 
@@ -79,16 +81,20 @@ public class JpaAutoTxCourseRepository
         return query.getResultList();
     }
 
-    @Override
-    public Iterable<Course> findClassesOfCourse(Course course) {
-        final TypedQuery<Course> query = createQuery(
-                "SELECT c FROM Course c JOIN c.classes cl WHERE cl.course = :course",
-                Course.class
+        @Override
+    public Iterable<Class> findClassesThatITeach(User teacher) {
+        final TypedQuery<Class> query = createQuery(
+                "SELECT c FROM Class c WHERE c.teacher = :teacher",
+                Class.class
         );
 
-        query.setParameter("course", course);
+        query.setParameter("teacher", teacher);
 
-        return query.getResultList();
+        try{
+            return query.getResultList();
+        } catch (NoResultException nre) {
+            return new ArrayList<>();
+        }
     }
 
     @Override
