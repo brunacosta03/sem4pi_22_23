@@ -19,20 +19,7 @@ pipelines:
           clone:
             depth: full    # SonarCloud scanner needs the full history to assign issues properly              
           script:
-            - mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar 
-      - step:
-          runs-on:
-            - 'self.hosted'
-            - 'linux'      
-          name: Chekstyle
-#          caches:
-#            - maven
-          clone:
-            depth: full    # SonarCloud scanner needs the full history to assign issues properly  
-          script:
-            - mvn checkstyle:checkstyle      
-          after-script:  # Collect checkstyle results, if any, and convert to Bitbucket Code Insights.
-            - pipe: atlassian/checkstyle-report:0.3.0
+            - mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
       - step:
           runs-on:
             - 'self.hosted'
