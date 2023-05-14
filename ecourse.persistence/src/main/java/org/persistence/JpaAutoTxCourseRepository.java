@@ -2,6 +2,7 @@ package org.persistence;
 
 
 import eapli.framework.infrastructure.repositories.impl.jpa.JpaAutoTxRepository;
+import org.domain.model.Class;
 import org.domain.model.Course;
 import org.domain.model.CourseCode;
 import org.domain.model.CourseStateConstants;
@@ -69,7 +70,6 @@ public class JpaAutoTxCourseRepository
 
     @Override
     public Iterable<Course> findCoursesTakenByStudent(User student) {
-        // JPQL t_course_student is not being recognized
         final TypedQuery<Course> query = createQuery(
                 "SELECT c FROM Course c JOIN c.students s WHERE s.email = :student_email",
                 Course.class

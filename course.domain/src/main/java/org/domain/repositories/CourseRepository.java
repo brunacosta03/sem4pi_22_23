@@ -2,6 +2,7 @@ package org.domain.repositories;
 
 
 import eapli.framework.domain.repositories.DomainRepository;
+import org.domain.model.Class;
 import org.domain.model.Course;
 import org.domain.model.CourseCode;
 import org.usermanagement.domain.model.User;

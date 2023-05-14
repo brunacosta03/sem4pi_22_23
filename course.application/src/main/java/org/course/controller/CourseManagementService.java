@@ -14,6 +14,9 @@ import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.User;
 import org.usermanagement.domain.repositories.UserRepository;
 
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
 @Service
 public class CourseManagementService{
 
@@ -108,11 +111,11 @@ public class CourseManagementService{
                 "Course with code " + courseCode + " does not exist"
         );
 
-    	course.changeState(state);
+        course.changeState(state);
 
         txt.commit();
 
-    	return courseRepo.save(course);
+        return courseRepo.save(course);
     }
 
     public Course scheduleNewClass(String courseCode,
@@ -131,6 +134,14 @@ public class CourseManagementService{
         );
 
         Class newClass = classFactory.createClass(classTitle, classDayOfWeek, classStartTime, classEndTime, teacher, course.students());
+
+        Iterable<Class> classesThatITeach = courseRepo.findClassesThatITeach(teacher);
+
+        Preconditions.ensure(
+                StreamSupport.stream(classesThatITeach.spliterator(), false)
+                        .noneMatch(c -> c.overlaps(newClass)),
+                "You are already teaching a class at that time"
+        );
 
         course.addClass(newClass);
 
