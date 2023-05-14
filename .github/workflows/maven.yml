@@ -65,10 +65,6 @@ jobs:
         name: code-coverage-report-markdown
         path: ecourse.infrastructure/target/site
         
-    - uses: jwgmeligmeyling/checkstyle-github-action@master
-      with:
-        path: '**/checkstyle-result.xml'
-        
     - name: Run the gitinspector HTML process with Docker
       run: docker run --rm -v ${{ github.workspace }}:/repo felix/gitinspector:0.4.4 --format=html --grading > gitinspector.html
 
