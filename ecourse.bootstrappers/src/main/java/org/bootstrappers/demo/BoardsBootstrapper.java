@@ -1,6 +1,7 @@
 package org.bootstrappers.demo;
 
 import eapli.framework.actions.Action;
+import eapli.framework.domain.repositories.IntegrityViolationException;
 import org.boards.controller.CreateBoardController;
 import org.domain.model.Board;
 import org.domain.model.BoardEntry;
@@ -74,6 +75,8 @@ public class BoardsBootstrapper implements Action {
             System.out.println("[+] Board Id - " + board.identity());
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
+        } catch (IntegrityViolationException e){
+            System.out.println("Already exist --> " + boardTitlep);
         }
     }
 
