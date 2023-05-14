@@ -1,10 +1,16 @@
 package org.domain.model;
 
 import eapli.framework.validations.Preconditions;
+import org.usermanagement.domain.model.User;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
+/**
+ * The type Class.
+ */
 @Entity
 @Table(name = "T_CLASS")
 public class Class implements Serializable {
@@ -19,127 +25,93 @@ public class Class implements Serializable {
     /**
      * The day of the week the class occurs.
      */
-    private final ClassRecurrence recurrence;
-
-    /**
-     * The time the class starts.
-     */
-    @Column (name = "start_time")
-    private final ClassTime startTime;
+    @Column(name = "day_of_week", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ClassDayOfWeek dayOfWeek;
 
     /**
      * The time the class ends.
      */
-    @Column (name = "end_time")
-    private final ClassTime endTime;
+    private final ClassTime time;
 
-    /**
-     * The course the class is part of.
-     */
-    @ManyToOne
-    @JoinColumn(name = "course_code")
-    private Course course;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "teacher_email")
+    private final User teacher;
 
-    /**
-     * The duration of the class.
-     */
-    @Column (name = "duration")
-    private final int duration;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "t_class_student",joinColumns =
+    @JoinColumn(name = "class_title"), inverseJoinColumns =
+    @JoinColumn(name = "student_email"))
+    private Set<User> students = new HashSet<>();
+
+
 
     /**
      * Empty constructor for ORM.
      */
     protected Class() {
         title = null;
-        recurrence = null;
-        startTime = null;
-        endTime = null;
-        duration = 0;
+        time = null;
+        teacher = null;
     }
 
     /**
      * Creates a new Class.
-     * @param courseCode - the course code of the class.
      * @param title - the title of the class.
-     * @param recurrence - the day of the week the class occurs.
-     * @param startTime - the time the class starts.
-     * @param duration - the duration of the class.
-     * @param endTime - the time the class ends.
+     * @param dayOfWeek - the day of the week the class occurs.
+     * @param time - the time the class ends.
      */
-    protected Class(final CourseCode courseCode,
-                    final ClassTitle title,
-                    final ClassRecurrence recurrence,
-                    final ClassTime startTime,
-                    int duration,
-                    final ClassTime endTime) {
+    public Class(
+            final ClassTitle title,
+            final ClassDayOfWeek dayOfWeek,
+            final ClassTime time,
+            final User teacher,
+            final Set<User> students
+    ) {
 
-        Preconditions.noneNull(courseCode, title, recurrence, startTime, duration, endTime);
-        Preconditions.ensure(startTime.startTime().isBefore(endTime.endTime()), "Start time must be before end time.");
+        Preconditions.noneNull(title, dayOfWeek, time, teacher, students);
 
         this.title = title;
-        this.recurrence = recurrence;
-        this.startTime = startTime;
-        this.duration = duration;
-        this.endTime = endTime;
-    }
-
-    /**
-     * Creates a new Class.
-     * @param courseCode - the course code of the class.
-     * @param title - the title of the class.
-     * @param recurrence - the day of the week the class occurs.
-     * @param startTime - the time the class starts.
-     * @param endTime - the time the class ends.
-     */
-
-    public static Class of(final CourseCode courseCode,
-                           final ClassTitle title,
-                           final ClassRecurrence recurrence,
-                           final ClassTime startTime,
-                           final int duration,
-                           final ClassTime endTime) {
-        return new Class(courseCode, title, recurrence, startTime, duration, endTime);
+        this.time = time;
+        this.dayOfWeek = dayOfWeek;
+        this.teacher = teacher;
+        this.students.addAll(students);
     }
 
     /**
      * Returns the title of the class.
+     *
      * @return - the title of the class.
      */
-
-    public ClassTitle title() {
+    protected ClassTitle title() {
         return title;
     }
 
     /**
-     * Returns the course the class is part of.
-     * @return - the course the class is part of.
+     * Returns the day of the week the class occurs.
+     *
+     * @return - the day of the week the class occurs.
      */
-    public ClassRecurrence recurrence() {
-        return recurrence;
+    public ClassDayOfWeek dayOfWeek() {
+        return dayOfWeek;
     }
 
     /**
-     * Returns the time the class starts.
-     * @return - the time the class starts.
+     * Returns the time the class occurs.
+     *
+     * @return - the time the class occurs.
      */
-    public ClassTime startTime() {
-        return startTime;
+    public ClassTime time() {
+        return time;
     }
 
     /**
-     * Returns the time the class ends.
-     * @return - the time the class ends.
+     * Identity class title.
+     *
+     * @return the class title
      */
-    public ClassTime endTime() {
-        return endTime;
-    }
-
-    /**
-     * Returns the course the class is part of.
-     * @return - the course the class is part of.
-     */
-    public Integer duration() {
-        return duration;
+    public ClassTitle identity() {
+        return title();
     }
 
     /**
@@ -148,12 +120,10 @@ public class Class implements Serializable {
      */
     @Override
     public String toString() {
-        return "Course: " + course + "\n" +
-                "Title: " + title + "\n" +
-                "Recurrence: " + recurrence + "\n" +
-                "Start Time: " + startTime + "\n" +
-                "End Time: " + endTime + "\n" +
-                "Duration: " + duration + "\n";
+        return "Title: " + title + "\n" +
+                "Day of the week: " + dayOfWeek + "\n" +
+                "Time: " + time + "\n";
+
     }
 
     /**
@@ -166,11 +136,12 @@ public class Class implements Serializable {
         if (!(o instanceof Class)) return false;
 
         Class aClass = (Class) o;
-
-        if (duration != aClass.duration) return false;
         if (!title.equals(aClass.title)) return false;
-        if (!recurrence.equals(aClass.recurrence)) return false;
-        if (!startTime.equals(aClass.startTime)) return false;
-        return endTime.equals(aClass.endTime);
+        if (!dayOfWeek.equals(aClass.dayOfWeek)) return false;
+        return time.equals(aClass.time);
+    }
+
+    public boolean overlaps(Class c) {
+        return this.dayOfWeek.equals(c.dayOfWeek) && this.time.overlaps(c.time);
     }
 }

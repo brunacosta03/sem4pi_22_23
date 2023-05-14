@@ -80,6 +80,18 @@ public class JpaAutoTxCourseRepository
     }
 
     @Override
+    public Iterable<Course> findClassesOfCourse(Course course) {
+        final TypedQuery<Course> query = createQuery(
+                "SELECT c FROM Course c JOIN c.classes cl WHERE cl.course = :course",
+                Course.class
+        );
+
+        query.setParameter("course", course);
+
+        return query.getResultList();
+    }
+
+    @Override
     public Iterable<Course> findAll() {
         return this.repo.findAll();
     }

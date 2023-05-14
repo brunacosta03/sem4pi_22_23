@@ -6,7 +6,6 @@ import org.domain.model.Course;
 import org.domain.model.CourseCode;
 import org.usermanagement.domain.model.User;
 
-import java.util.Collection;
 import java.util.Optional;
 
 public interface CourseRepository extends DomainRepository<CourseCode, Course> {
@@ -44,4 +43,6 @@ public interface CourseRepository extends DomainRepository<CourseCode, Course> {
     Iterable<Course> findOpenForEnrolment();
 
     Iterable<Course> findCoursesTakenByStudent(User student);
+
+    Iterable<Course> findClassesOfCourse(Course course);
 }

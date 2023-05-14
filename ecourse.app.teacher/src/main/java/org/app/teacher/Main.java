@@ -21,7 +21,7 @@ public final class Main {
     private static LoginUI login;
     /**
      * Start modulo user.
-     * @param args
+     * @param args - args
      */
     public static void main(final String[] args) {
         try {

@@ -12,6 +12,7 @@ import eapli.framework.presentation.console.menu.VerticalMenuRenderer;
 import org.authz.application.AuthorizationService;
 import org.authz.application.AuthzRegistry;
 import org.user.management.CourseRoles;
+import scheduleclasses.ScheduleClassUI;
 
 public class MainMenu extends AbstractUI {
     private static final String RETURN_LABEL = "Return ";
@@ -27,6 +28,8 @@ public class MainMenu extends AbstractUI {
     //SHARED BOARD
     private static final int SET_USER_BOARD_OPTION = 9;
     private static final int SET_USER_CREATE_BOARD_OPTION = 1;
+
+    private static final int SET_TEACHER_SCHEDULE_CLASS_OPTION = 2;
 
     private final AuthorizationService authz = AuthzRegistry.authorizationService();
 
@@ -70,6 +73,8 @@ public class MainMenu extends AbstractUI {
 
         menu.addItem(SET_TEACHER_LIST_AVAILABLE_COURSES_OPTION,
                 "List Available Courses", new ListCoursesUI()::show);
+        menu.addItem(SET_TEACHER_SCHEDULE_CLASS_OPTION,
+                "Schedule Class", new ScheduleClassUI()::show);
         menu.addItem(EXIT_OPTION, RETURN_LABEL, Actions.SUCCESS);
 
         return menu;

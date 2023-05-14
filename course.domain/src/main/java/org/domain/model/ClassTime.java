@@ -12,18 +12,19 @@ public class ClassTime {
     /**
      * The start time of the class.
      */
-    @Column(name = "startTime")
+    @Column(name = "start_time")
     private final LocalTime startTime;
 
     /**
      * The end time of the class.
      */
-    @Column(name = "endTime")
+    @Column(name = "end_time")
     private final LocalTime endTime;
 
     /**
      * The duration of the class.
      */
+    @Column(name = "duration")
     private Integer duration;
 
     /**
@@ -43,9 +44,9 @@ public class ClassTime {
     private ClassTime(final LocalTime startTime, final LocalTime endTime) {
 
         Preconditions.noneNull(startTime, endTime);
-        Preconditions.ensure(startTime.isBefore(LocalTime.of(21, 0)), "Start time must be before 23:59.");
+        Preconditions.ensure(startTime.isBefore(LocalTime.of(21, 0)), "Start time must be before 21:00.");
         Preconditions.ensure(startTime.isAfter(LocalTime.of(6, 0)), "Start time must be after 06:00.");
-        Preconditions.ensure(endTime.isBefore(LocalTime.of(22, 0)), "End time must be before 23:59.");
+        Preconditions.ensure(endTime.isBefore(LocalTime.of(22, 0)), "End time must be before 22:00.");
         Preconditions.ensure(endTime.isAfter(LocalTime.of(7, 0)), "End time must be after 07:00.");
         Preconditions.ensure(startTime.isBefore(endTime), "Start time must be before end time.");
 
@@ -53,7 +54,7 @@ public class ClassTime {
         this.endTime = endTime;
         this.duration = calculateDuration(startTime, endTime);
 
-        Preconditions.ensure(duration > 0 && duration <= 240, "Duration must be greater than 0 and less than 4 hours.");
+        Preconditions.ensure(duration >= 60 && duration <= 240, "Duration of the class must be between 1 and 4 hours,");
     }
 
     /**
@@ -152,5 +153,13 @@ public class ClassTime {
 
     public String toString() {
         return startTime.toString() + " - " + endTime.toString();
+    }
+
+    public boolean overlaps(ClassTime time) {
+        return (
+                this.startTime.isBefore(time.endTime)
+                        &&
+                        this.endTime.isAfter(time.startTime)
+        );
     }
 }

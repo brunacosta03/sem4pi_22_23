@@ -3,7 +3,9 @@ package org.bootstrappers;
 import eapli.framework.domain.repositories.ConcurrencyException;
 import eapli.framework.domain.repositories.IntegrityViolationException;
 import org.course.controller.AddCourseController;
+import org.course.controller.ScheduleClassController;
 import org.domain.model.Course;
+import org.domain.model.CourseCode;
 
 public class CoursesBootstrapperBase {
 

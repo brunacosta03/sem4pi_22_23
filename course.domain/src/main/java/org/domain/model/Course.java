@@ -7,11 +7,13 @@ import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.User;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "T_COURSE")
 public class Course implements AggregateRoot<CourseCode> {
+
     /**
      * Version of course;
      */
@@ -74,6 +76,9 @@ public class Course implements AggregateRoot<CourseCode> {
     @JoinColumn(name = "student_email"))
     private Set<User> students;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<Class> classes;
+
     public Course(final CourseName name,
            final CourseCode code,
            final CourseEdition edition,
@@ -100,6 +105,20 @@ public class Course implements AggregateRoot<CourseCode> {
         this.students = students;
     }
 
+    public Course(final CourseCode courseCode,
+                  final User headTeacher,
+                  final Set<User> students,
+                  final Set<Class> classes) {
+
+        Preconditions.nonNull(courseCode, "Course code can't be null.");
+        Preconditions.ensure(headTeacher.role().equals(CourseRoles.TEACHER.toString()));
+
+        this.code = courseCode;
+        this.students = students;
+        this.headTeacher = headTeacher;
+        this.classes = classes;
+    }
+
     protected Course() {
     }
 
@@ -116,6 +135,7 @@ public class Course implements AggregateRoot<CourseCode> {
         Preconditions.nonNull(headTeacher, "The course must have a head teacher.");
         Preconditions.ensure(headTeacher.role().equals(CourseRoles.TEACHER.toString()));
     }
+
     private void validateMaxMin(CourseMaxNumberLimit max, CourseMinNumberLimit min){
         int value = max.value()-min.value();
 
@@ -191,6 +211,17 @@ public class Course implements AggregateRoot<CourseCode> {
         this.state = state;
     }
 
+    public void addClass(Class aClass) {
+        Preconditions.ensure(
+                !classes.contains(aClass),
+                "This class is already in this course"
+        );
+        Preconditions.ensure(classes.stream().noneMatch(c -> c.overlaps(aClass)),
+                "This class overlaps with another class in this course"
+        );
+        classes.add(aClass);
+    }
+
     @Override
     public String toString() {
         return "Course " + code.value() + "\n" +
@@ -199,7 +230,11 @@ public class Course implements AggregateRoot<CourseCode> {
                 "Description: " + description.value() + "\n" +
                 "State: " + state.value() + "\n" +
                 "Max students: " + max.value() + "\n" +
-                "Minimun students: " + min.value() + "\n" +
+                "Minimum students: " + min.value() + "\n" +
                 "Head Teacher: " + headTeacher.emailAddress() + "\n";
+    }
+
+    public Set<User> students() {
+        return this.students;
     }
 }

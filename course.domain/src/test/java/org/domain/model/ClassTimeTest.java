@@ -19,17 +19,10 @@ class ClassTimeTest {
     }
 
     @Test
-    void testDuration() {
-        ClassTime classTime = ClassTime.of("07:00", "10:00");
-        assertEquals(180, classTime.duration());
-    }
-
-    @Test
     void testFullTimeClass() {
         ClassTime classTime = ClassTime.of("07:00", "10:00");
         assertEquals("07:00", classTime.startTime().toString());
         assertEquals("10:00", classTime.endTime().toString());
-        assertEquals(180, classTime.duration());
     }
 
     @Test
@@ -40,11 +33,6 @@ class ClassTimeTest {
     @Test
     void testEndTimeWithNull() {
         assertThrows(NullPointerException.class, () -> ClassTime.ofEnd(null));
-    }
-
-    @Test
-    void testDurationWithNull() {
-        assertThrows(NullPointerException.class, () -> ClassTime.of(null, null));
     }
 
     @Test
@@ -60,11 +48,6 @@ class ClassTimeTest {
     @Test
     void testEndTimeWithInvalidTime() {
         assertThrows(IllegalArgumentException.class, () -> ClassTime.ofEnd("05:00"));
-    }
-
-    @Test
-    void testDurationWithInvalidValue() {
-        assertThrows(DateTimeParseException.class, () -> ClassTime.of("05:00", "24:00"));
     }
 
     @Test

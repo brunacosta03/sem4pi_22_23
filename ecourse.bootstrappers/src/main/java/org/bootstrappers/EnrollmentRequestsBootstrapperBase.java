@@ -67,11 +67,18 @@ public class EnrollmentRequestsBootstrapperBase {
                             + " to " + courseCode
             );
 
-        } catch (final IntegrityViolationException | ConcurrencyException e) {
+        } catch (final IntegrityViolationException
+                | ConcurrencyException e) {
             System.out.println(
-                    "Already exist --> "
-                            + "[ " + student.emailAddress()
-                            + " with " + courseCode + " ]"
+                    "[-] Error creating EnrollmentRequest from "
+                            + student.emailAddress()
+                            + " to " + courseCode
+            );
+        } catch (final Exception e) {
+            System.out.println(
+                    "[-] Error creating EnrollmentRequest from "
+                            + student.emailAddress()
+                            + " to " + courseCode
             );
         }
         return request;

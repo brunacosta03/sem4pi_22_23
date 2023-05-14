@@ -5,10 +5,8 @@ import eapli.framework.general.domain.model.EmailAddress;
 import eapli.framework.validations.Preconditions;
 import org.authz.application.AuthorizationService;
 import org.authz.application.AuthzRegistry;
-import org.domain.model.Course;
-import org.domain.model.CourseCode;
-import org.domain.model.CourseState;
-import org.domain.model.CourseStateConstants;
+import org.domain.model.*;
+import org.domain.model.Class;
 import org.domain.repositories.CourseRepository;
 import org.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;
@@ -20,13 +18,19 @@ import org.usermanagement.domain.repositories.UserRepository;
 public class CourseManagementService{
 
     private final UserRepository userRepo = PersistenceContext.repositories().users();
-    private final CourseRepository courseRepo = PersistenceContext.repositories().courses();
+    private final CourseRepository courseRepo;
 
     private final TransactionalContext txt = PersistenceContext.repositories().newTransactionalContext();
 
     private final AuthorizationService authz = AuthzRegistry.authorizationService();
-    public CourseManagementService() {
 
+    private final ClassFactory classFactory = new ClassFactory();
+
+    public CourseManagementService() {
+        courseRepo = PersistenceContext.repositories().courses();
+    }
+    public CourseManagementService(final CourseRepository repo) {
+        courseRepo = repo;
     }
 
     public Course addStudent(String emailStudent, String c){
@@ -109,5 +113,22 @@ public class CourseManagementService{
         txt.commit();
 
     	return courseRepo.save(course);
+    }
+
+    public Course addClass(String courseCode,
+                            String classTitle,
+                           String classDayOfWeek,
+                            String classStartTime,
+                            String classEndTime,
+                           User teacher){
+        Course course = courseRepo.findByCode(CourseCode.of(courseCode)).
+                orElse(null);
+        Preconditions.nonNull(course, "Course with code " + courseCode + " does not exist");
+
+        Class newClass = classFactory.createClass(classTitle, classDayOfWeek, classStartTime, classEndTime, teacher, course.students());
+
+        course.addClass(newClass);
+
+        return courseRepo.save(course);
     }
 }
