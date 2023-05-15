@@ -291,6 +291,46 @@ package "ExamTemplate Aggregate" {
     ExamTemplateQuestion --> AnswerOptionList
 }
 
+
+package "ANTLR" {
+    card ANTLR {
+    }
+}
+
+' added
+package "FormativeQuestion Aggregate" {
+    entity TemplateFormativeQuestion <<entity>> <<root>> {
+    }
+
+    card SolutionList <<Value Object>> {
+    }
+
+    card QuestionDescription <<Value Object>> {
+    }
+
+    card AnswerOptionList <<Value Object>> {
+    }
+
+    enum QuestionType <<Value Object>> {
+        Matching
+        MultipleChoice
+        ShortAnswer
+        Numerical
+        MissingWords
+        TrueFalse
+    }
+
+    card Weight <<Value Object>> {
+    }
+
+    TemplateFormativeQuestion --> SolutionList
+    TemplateFormativeQuestion --> QuestionType
+    TemplateFormativeQuestion --> Weight
+    TemplateFormativeQuestion --> QuestionDescription
+    TemplateFormativeQuestion --> AnswerOptionList
+}
+' end added
+
 package "Exam Aggregate" {
     entity Exam <<entity>> <<root>> {
     }
@@ -449,6 +489,7 @@ package BoardAggregate {
     PostIt --> "1" User :owner
     SharedBoard --> "1" User :owner
     PostIt --> "1" SharedBoard :belongs
+
 
 
 
