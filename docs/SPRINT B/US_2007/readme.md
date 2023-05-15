@@ -109,7 +109,7 @@ The team decided that the missing words should appear between "[]" so that the s
     WEIGHT2: 0.50
     WEIGHT3: 0.50
 
-**True/false**
+**True/False**
 
 The team decided that true/false question should always have a "?" in final of question. The question only have 1 solution that can be "True" or "False".
 
