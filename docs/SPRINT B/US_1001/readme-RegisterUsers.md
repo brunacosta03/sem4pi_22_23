@@ -55,7 +55,7 @@ Students should have Mechanographic Number
 
 #### 4.3.2 Service
 
-- Services are operations or functions thatarenot naturallyin line with the responsibility of an entity or value object. They are used to model operations that involve multiple objects or complexbehaviour.
+- Services are operations or functions that are not naturally in line with the responsibility of an entity or value object. They are used to model operations that involve multiple objects or complex behaviour.
 
 #### 4.3.3 Single Responsibility Principle (SRP)
 
@@ -68,7 +68,7 @@ Students should have Mechanographic Number
 #### 4.3.5 Singleton Pattern
 
 - Only one instance, and provides a global point of access to that instance. 
-- The Authentication Registry is a singleton, since from thisclass we can only get aninstance of the authentication service, the authorization service and the user management service. 
+- The Authentication Registry is a singleton, since from this class we can only get aninstance of the authentication service, the authorization service and the user management service. 
 
 #### 4.3.6 Model-View-Controller (MVC)
 

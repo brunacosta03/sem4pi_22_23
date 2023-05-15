@@ -60,7 +60,7 @@ We added the UserState as a Value Object of the User so that it is easy to know 
 #### 4.3.4 Singleton Pattern
 
 - Only one instance, and provides a global point of access to that instance. 
-- The Authentication Registry is a singleton, since from thisclass we can only get aninstance of the authentication service, the authorization service and the user management service. 
+- The Authentication Registry is a singleton, since from this class we can only get aninstance of the authentication service, the authorization service and the user management service. 
 
 #### 4.3.5 Model-View-Controller (MVC)
 

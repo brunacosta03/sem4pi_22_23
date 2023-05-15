@@ -49,6 +49,29 @@ This is an excerpt of our domain Model, it provides the clear idea of how the Sh
 
 ### 4.3. Applied Patterns
 
+#### 4.3.1. Factory
+
+- Our PersistenceContext will create a RepositoryFactory based on the configuration file then the RepositoryFactory will create the repository that we need in order to persist our domain entity.
+
+#### 4.3.2 Service
+
+- Services are operations or functions that are not naturally in line with the responsibility of an entity or value object. They are used to model operations that involve multiple objects or complex behaviour.
+
+#### 4.3.3 Single Responsibility Principle (SRP)
+
+- Ensure that each object has a clear and well-defined responsibility within the domain.
+
+#### 4.3.4 Tell, Don't Ask
+
+- Ensure that objects do not expose their internal state or behaviour to the outside world. On the contrary, objects should receive commands telling them what they should do, rather than being asked for information about their current state.
+
+
+#### 4.3.5 Model-View-Controller (MVC)
+
+- Model is responsible for managing the data and business logic of the application. (BoardService)
+- View is responsible for presenting the data to the user in a human-readable format. (CreateBoardUI)
+- Controller is responsible for handling the user input and updating the model and the view accordingly. (CreateBoardController)
+
 ### 4.4. Tests
 
 **Test 1:** *Create a valid board*
