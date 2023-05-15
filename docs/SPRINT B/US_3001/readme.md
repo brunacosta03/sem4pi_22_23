@@ -25,11 +25,11 @@ Information in Application Protocol
 
 Message Format
 
-![Message Format](Analysis/MessageFormat.png)
+![Message Format](Analysis/MessageFormat.PNG)
 
 Message Codes
 
-![Message Codes](Analysis/MessageCodes.png)
+![Message Codes](Analysis/MessageCodes.PNG)
 
 
 Information in Application Protocol

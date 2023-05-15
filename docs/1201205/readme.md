@@ -15,4 +15,4 @@
 | **B**  | [US 2001](../SPRINT%20B/US_2001/readme.md) |
 | **B**  | [US 3001](../SPRINT%20B/US_3001/readme.md) |
 | **B**  | [US 3002](../SPRINT%20B/US_3002/readme.md) |
-| **B**  | [US 1003](../SPRINT%20B/US_3003/readme.md) |
+| **B**  | [US 3003](../SPRINT%20B/US_3003/readme.md) |
