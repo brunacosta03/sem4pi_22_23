@@ -490,6 +490,10 @@ package BoardAggregate {
     SharedBoard --> "1" User :owner
     PostIt --> "1" SharedBoard :belongs
 
+    TemplateFormativeQuestion -> "1" Course : is related to
+
+    ANTLR --> "N" TemplateFormativeQuestion : parses
+
 
 
 
