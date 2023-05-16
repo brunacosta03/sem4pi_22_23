@@ -158,7 +158,7 @@ public class ClassTime {
     public boolean overlaps(ClassTime time) {
         return (
                 this.startTime.isBefore(time.endTime)
-                        &&
+                        ||
                         this.endTime.isAfter(time.startTime)
         );
     }
