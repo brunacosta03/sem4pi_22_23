@@ -8,12 +8,15 @@ skinparam shadowing false
 actor Teacher as Actor
 participant ScheduleClassUI as UI <<presentation>>
 participant ScheduleClassController as Controller <<application>>
+participant AuthenticationService as Autzh <<service>>
+participant UserSession as UserSession <<session>>
 participant ClassManagementService as Service <<service>>
+participant ClassFactory as CFactory <<factory>>
+participant "class:Class" as Class <<domain>>
+participant "class:Course" as Domain <<domain>>
 participant PersistenceContext as Context <<persistence>>
-participant ClassBuilder as Builder <<builder>>
-participant "class:Class" as Domain <<domain>>
 participant RepositoryFactory as Factory <<factory>>
-database ClassRepository as Repository <<repository>>
+database CourseRepository as Repository <<repository>>
 
 Actor --> UI : schedule class
 
@@ -21,27 +24,28 @@ activate UI
 UI -> Controller : create()
 
 UI -> Actor : ask class details
-Actor -> UI : title, date, duration
+Actor -> UI : courseCode, title, dayOfWeek, startTime, endTime
 
-UI -> Controller : scheduleClass(title, date, duration)
+UI -> Controller : scheduleClass(courseCode, title, dayOfWeek, startTime, endTime)
 activate Controller
 
-Controller -> Service : scheduleNewClass(title, date, duration)
+Controller -> Autzh : create()
+Controller -> Autzh : ensureAuthenticatedUserHasAnyOf(CourseRoles.TEACHER)
+Autzh -> UserSession : create()
+
+activate Autzh
+Controller -> Autzh : session()
+Autzh -> Controller : session
+deactivate Autzh
+
+Controller -> UserSession : authenticatedUser()
+activate UserSession
+UserSession -> Controller : user
+deactivate UserSession
+
+Controller -> Service : create()
 activate Service
-
-Service -> Builder : create()
-activate Builder
-Service -> Builder : with(title, date, duration)
-Service -> Builder : build()
-Builder -> Domain : Class(title, date, duration)
-
-activate Domain
-Domain -> Domain : validateParameters(title, date, duration)
-Domain -> Builder : class
-deactivate Domain
-
-Builder -> Service : class
-deactivate Builder
+Controller -> Service : scheduleNewClass(courseCode, title, dayOfWeek, startTime, endTime, teacher)
 
 Service -> Context : repositories()
 activate Context
@@ -49,24 +53,40 @@ Context -> Factory : create()
 Context -> Service : factory
 deactivate Context
 
-Factory -> Repository : create()
+Service -> Factory : courses()
 activate Factory
-Factory -> Service : classRepository
+Factory -> Repository : create()
+Factory -> Service : courseRepository
+deactivate Repository
 deactivate Factory
 
+Service -> CFactory : create()
+activate CFactory
+Service -> CFactory : create(title, dayOfWeek, startTime, endTime, teacher, students)
+
+CFactory -> Class : Class(title, dayOfWeek, startTime, endTime, teacher, students)
+activate Class
+
+Class -> CFactory : class
+deactivate Class
+
+CFactory -> Service : class
+deactivate CFactory
+
+Service -> Domain : addClass(class)
 Service -> Repository : save(class)
 
 activate Repository
-Repository -> Service : class
+Repository --> Service : class
 deactivate Repository
 
-Service -> Controller : class
+Service --> Controller : class
 deactivate Service
 
-Controller -> UI : class
+Controller --> UI : class
 deactivate Controller
 
-UI --> Actor : show class details
-deactivate UI
+UI -> Actor : show the operation result
 
+deactivate UI
 @enduml
