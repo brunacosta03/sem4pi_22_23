@@ -1,0 +1,87 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor Teacher as Actor
+participant CreateExamUI as UI <<presentation>>
+participant CreateExamController as Controller <<application>>
+participant ExamManagementService as Service <<service>>
+participant AuthenticationService as Autzh <<service>>
+participant UserSession as UserSession <<session>>
+participant ExamBuilder as Builder <<builder>>
+participant "class:Exam" as Exam <<domain>>
+participant PersistenceContext as Context <<persistence>>
+participant RepositoryFactory as Factory <<factory>>
+database ExamRepository as Repository <<repository>>
+
+Actor --> UI : create an exam
+
+activate UI
+UI -> Controller : create()
+UI -> Actor : ask exam's first details
+Actor -> UI : courseCode, title, description, startDate, endDate
+UI -> Controller : createExam(courseCode, title, description, startDate, endDate)
+
+activate Controller
+Controller -> Autzh : create()
+Controller -> Autzh : ensureAuthenticatedUserHasAnyOf(CourseRoles.TEACHER)
+Autzh -> UserSession : create()
+
+activate Autzh
+Controller -> Autzh : session()
+Autzh -> Controller : session
+deactivate Autzh
+
+Controller -> UserSession : authenticatedUser()
+activate UserSession
+UserSession -> Controller : user
+deactivate UserSession
+
+Controller -> Service : create()
+activate Service
+Controller -> Service : createNewExam(courseCode, title, description, startDate, endDate, user)
+
+Service -> Context : repositories()
+activate Context
+Context -> Factory : create()
+Context -> Service : factory
+deactivate Context
+
+Service -> Factory : exams()
+activate Factory
+Factory -> Repository : create()
+Factory -> Service : examRepository
+deactivate Repository
+deactivate Factory
+
+Service -> Builder : build()
+Service -> Builder : with(title, description, startDate, endDate)
+
+activate Builder
+Builder -> Exam : Exam(title, description, startDate, endDate)
+activate Exam
+Exam --> Builder : exam
+deactivate Exam
+Builder -> Service : exam
+deactivate Builder
+
+Service -> Exam : addExam()
+Service -> Repository : save(exam)
+
+activate Repository
+Repository --> Service : exam
+deactivate Repository
+
+Service --> Controller : exam
+deactivate Service
+
+Controller --> UI : exam
+deactivate Controller
+
+UI --> Actor : show the operation success
+
+deactivate UI
+
+@enduml

@@ -43,7 +43,8 @@
         <module>shared.board.app</module>
         <module>shared.board.server</module>
 		<module>shared.board.common</module>
-	</modules>
+        <module>exam.domain</module>
+    </modules>
 
 	<dependencies>
 		<dependency>

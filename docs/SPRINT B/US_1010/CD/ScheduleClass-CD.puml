@@ -9,38 +9,58 @@ class ScheduleClassUI <<presentation>> {
     doShow()
 }
 class ScheduleClassController <<application>> {
-    scheduleClass(String, Date, Integer)
+    scheduleClass(String, String, String, String, String)
 }
 
-class ClassManagementService <<service>> {
-    scheduleNewClass(String, Date, Integer)
+class AuthorizationService <<service>> {
+    ensureAuthenticatedUserHasAnyOf(Role...)
+    session()
 }
 
-class ClassBuilder <<builder>> {
-    with(String, Date, Integer)
-    build()
+class UserSession {
+    authenticatedUser()
 }
+
+class CourseManagementService <<service>> {
+    scheduleNewClass(String, String, String, String, String)
+}
+
+class "class:Course" <<domain>> {
+    addClass(Class)
+}
+
+class ClassFactory <<factory>> {
+    createClass(String, String, String, String, User, Set<User>)
+}
+
 class "class:Class" <<domain>> {
-    Class(Title, Date, Duration)
-    validateParameters(Title, Date, Duration)
+    Class(Title, DayOfWeek, Time, Teacher, Set<User> Students)
 }
+
 class PersistenceContext <<persistence>> {
     repositories()
 }
+
 class RepositoryFactory <<factory>> {
-    classes()
+    courses()
 }
-class ClassRepository <<repository>> {
+
+class CourseRepository <<repository>> {
     save(Class)
 }
 
 ScheduleClassUI --> ScheduleClassController : theController
-ScheduleClassController --> ClassManagementService : theService
-ClassManagementService --> ClassBuilder : theBuilder
-ClassBuilder --> "class:Class"
-ClassManagementService --> PersistenceContext : persistence
+ScheduleClassController --> CourseManagementService : theService
+ScheduleClassController --> AuthorizationService : autzh
+AuthorizationService --> UserSession : session
+CourseManagementService -> ClassFactory : theFactory
+ClassFactory -> "class:Class"
+CourseManagementService --> PersistenceContext : persistence
 PersistenceContext --> RepositoryFactory : factory
-RepositoryFactory --> ClassRepository : repository
-ClassManagementService --> ClassRepository : repository
+RepositoryFactory --> CourseRepository : repository
+CourseManagementService --> CourseRepository : repository
+"class:Course" --> "class:Class" : addClass
+"class:Course" -> User : teacher
+"class:Course" -> CourseRepository : save
 
 @enduml

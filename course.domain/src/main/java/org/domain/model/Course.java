@@ -7,7 +7,6 @@ import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.User;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
