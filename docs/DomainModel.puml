@@ -181,67 +181,73 @@ package "ExamTemplate Aggregate" {
     }
 
     card Title <<Value Object>> {
-        }
+    }
 
     card ExamDescription <<Value Object>> {
-        }
-
-    card SolutionList <<Value Object>> {
-        }
+    }
 
     card OpenDate <<Value Object>> {
-        }
+    }
 
     card CloseDate <<Value Object>> {
-        }
+    }
 
     entity Header <<entity>> {
-        }
+    }
 
     card HeaderDescription <<Value Object>> {
-        }
+    }
 
     card HeaderGrade <<Value Object>> {
-        }
+    }
 
     card HeaderFeedback <<Value Object>> {
-        }
+    }
 
     enum FeedbackType <<Enumeration>> {
         None
         On-Submission
         After-Closing
-        }
+    }
 
     enum GradeType <<Enumeration>> {
         None
         On-Submission
         After-Closing
-        }
+    }
 
     entity Section <<entity>> {
-        }
+    }
 
     card SectionNumber <<Value Object>> {
-        }
+    }
 
     card SectionDescription <<Value Object>> {
-        }
+    }
 
     card SectionTitle <<Value Object>> {
-        }
+    }
 
     card Feedback <<Value Object>> {
-        }
+    }
 
     entity ExamTemplateQuestion <<entity>> {
-        }
+    }
+
+    entity Solution <<entity>> {
+    }
+
+    card SolutionDescription <<Value Object>> {
+    }
+
+    card SolutionWeight <<Value Object>> {
+    }
 
     card QuestionDescription <<Value Object>> {
-        }
+    }
 
     card AnswerOptionList <<Value Object>> {
-        }
+    }
 
     enum QuestionType <<Value Object>> {
         Matching
@@ -250,9 +256,6 @@ package "ExamTemplate Aggregate" {
         Numerical
         MissingWords
         TrueFalse
-        }
-
-    card Weight <<Value Object>> {
         }
 
     ExamTemplate --> Title
@@ -284,11 +287,13 @@ package "ExamTemplate Aggregate" {
         - If a Student misses an Exam, the Feedback is N/A
     end note
 
-    ExamTemplateQuestion --> SolutionList
     ExamTemplateQuestion --> QuestionType
-    ExamTemplateQuestion --> Weight
     ExamTemplateQuestion --> QuestionDescription
     ExamTemplateQuestion --> AnswerOptionList
+    ExamTemplateQuestion --> Solution
+
+    Solution --> SolutionDescription
+    Solution --> SolutionWeight
 }
 
 
@@ -302,7 +307,13 @@ package "FormativeQuestion Aggregate" {
     entity TemplateFormativeQuestion <<entity>> <<root>> {
     }
 
-    card SolutionList <<Value Object>> {
+    entity Solution <<entity>> {
+    }
+
+    card SolutionDescription <<Value Object>> {
+    }
+
+    card SolutionWeight <<Value Object>> {
     }
 
     card QuestionDescription <<Value Object>> {
@@ -320,14 +331,13 @@ package "FormativeQuestion Aggregate" {
         TrueFalse
     }
 
-    card Weight <<Value Object>> {
-    }
-
-    TemplateFormativeQuestion --> SolutionList
+    TemplateFormativeQuestion --> Solution
     TemplateFormativeQuestion --> QuestionType
-    TemplateFormativeQuestion --> Weight
     TemplateFormativeQuestion --> QuestionDescription
     TemplateFormativeQuestion --> AnswerOptionList
+
+    Solution --> SolutionDescription
+    Solution --> SolutionWeight
 }
 ' end added
 
