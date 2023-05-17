@@ -296,7 +296,7 @@ package "ExamTemplate Aggregate" {
 }
 
 
-package "ANTLR" {
+package "ANTLR Aggregate" {
     card ANTLR {
     }
 }

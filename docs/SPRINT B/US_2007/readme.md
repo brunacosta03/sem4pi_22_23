@@ -43,8 +43,7 @@ or False.
 |  NQUES:     | Numerical question  |
 |  SWQUES:    | Select missing words question  |
 |  TFQUES:    | True/False question  |
-|  WEIGHT[N]: | Weight of correct response |
-|  OPT[N]:    | Option number      |
+|  OPT:    | Option number      |
 |  SOL:       | Question solution  |
 
 **Matching question**
@@ -54,69 +53,54 @@ Should There must 4 options after the ":". To match the question options there m
 The solution must have the same number of ";" and "-" that the options of the question. That way all the question options will have a match answer.
 
     MQUES: Identify the type of these creatures: Ant; Cow; Dog; Sparrow;
-    OPT1: Insect
-    OPT2: Mammal
-    OPT3: Mammal
-    OPT4: Bird
-    SOL: Ant-Insect; Cow-Mammal; Dog-Mammal; Bird-Sparrow;
-    WEIGHT1: 0.25
-    WEIGHT2: 0.25
-    WEIGHT3: 0.25
-    WEIGHT4: 0.25
+    OPT: Insect
+    OPT: Mammal
+    OPT: Mammal
+    OPT: Bird
+    SOL: Ant-Insect|0.25; Cow-Mammal|0.25; Dog-Mammal|0.25; Bird-Sparrow|0.25;
 
 **Multiple Choice**
 
-The team decided that each multiplie choice should always have 4 options. The number of solutions must always be presented followed by a ";". This way there must be the same number of weight as ";" solutions.
+The team decided that each multiplie choice should always have 4 options. The number of solutions must always be presented followed by a ";". This way there must be the same number of weight after "|" in solution.
 
     MCQUES: Choose all animals that have 4 paws
-    WEIGHT: 2.00
-    OPT1: Ant
-    OPT2: Cow
-    OPT3: Dog
-    OPT4: Sparrow
-    SOL: Cow; Dog;
-    WEIGHT1: 0.25
-    WEIGHT2: 0.25
+    OPT: Ant
+    OPT: Cow
+    OPT: Dog
+    OPT: Sparrow
+    SOL: Cow|0.25; Dog|0.25;
 
 **Short Answer**
 
-The team decided that short answer question should always have a "?" in final of question. The possible solutions must always be separated by a ";". This way there must be the same number of weight as ";" solutions.
+The team decided that short answer question should always have a "?" in final of question. The possible solutions must always be separated by a ";". This way there must be the same number of weight after "|" in solution.
 
     SAQUES: What is a rabbit?
-    SOL: animal; mammal; vertebrate;
-    WEIGHT1: 0.25
-    WEIGHT2: 0.50
-    WEIGHT3: 0.50
+    SOL: animal|0.25; mammal|0.50; vertebrate|0.50;
 
 **Numerical**
 
-The team decided that short answer question should always have a "?" in final of question. The possible solution must be a number (integer or decimal). There is only one solution.
+The team decided that short answer question should always have a "?" in final of question. The possible solution must be a number (integer or decimal). There is only one solution. This way there must be the same number of weight after "|" in solution.
 
     NQUES: How many paws does a dog have?
-    SOL: 4;
-    WEIGHT1: 0.25
+    SOL: 4|0.25;
 
 **Select Missing Words**
 
 The team decided that the missing words should appear between "[]" so that the student knows which word he needs to fill. There must be the same number of "[OPTION]" then options available for the student to fill in the blanks. In turn, each option placed in the correct place will have its score. The solution must be placed in order of missing fields.
 
-    SWQUES: On a farm there are different types of animals. Namely the [OPT1]. He serves to take care of the other [OPT2]. No animal needs to move away from the [OPT3].
-    OPT1: animals
-    OPT2: dog
-    OPT3: place
-    SOL: dog; animals; place;
-    WEIGHT1: 0.50
-    WEIGHT2: 0.50
-    WEIGHT3: 0.50
+    SWQUES: On a farm there are different types of animals. Namely the [OPT]. He serves to take care of the other [OPT]. No animal needs to move away from the [OPT].
+    OPT: animals
+    OPT: dog
+    OPT: place
+    SOL: dog|0.50; animals|0.50; place|0.50;
 
 **True/False**
 
 The team decided that true/false question should always have a "?" in final of question. The question only have 1 solution that can be "True" or "False".
 
     TFQUES: Does the dog have 4 paws?
-    SOL: True;
-    WEIGHT1: 1
-
+    SOL: True|1.00;
+    
 
 ## 5. Implementation
 
@@ -133,6 +117,3 @@ The team decided that true/false question should always have a "?" in final of q
 ```txt
 
 ```
-
-
-## 7. Observations
