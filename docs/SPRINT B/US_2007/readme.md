@@ -89,9 +89,6 @@ The team decided that short answer question should always have a "?" in final of
 The team decided that the missing words should appear between "[]" so that the student knows which word he needs to fill. There must be the same number of "[OPTION]" then options available for the student to fill in the blanks. In turn, each option placed in the correct place will have its score. The solution must be placed in order of missing fields.
 
     SWQUES: On a farm there are different types of animals. Namely the [OPT]. He serves to take care of the other [OPT]. No animal needs to move away from the [OPT].
-    OPT: animals
-    OPT: dog
-    OPT: place
     SOL: dog|0.50; animals|0.50; place|0.50;
 
 **True/False**

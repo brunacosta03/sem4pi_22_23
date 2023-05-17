@@ -11,38 +11,42 @@ question: matching NEWLINE
     ;
 
 
+
+
 matching: ;
-multiple_choice: ;
-short_answer: ;
 
-numerical: NUMERICAL_OPT .+ '?' SOLUTION WEIGHT DECIMAL NEWLINE ;
+multiple_choice: MULTIPLE_CHOICE_OPT .+ (OPTION .+){4} SOLUTION (' ' .+ '|' DECIMAL ';'){1-4} NEWLINE ;
 
-true_false: TRUE_FALSE_OPT .+ '?' SOLUTION ('True'|'False') WEIGHT (DECIMAL|NUMBER) OPTION NEWLINE ;
+short_answer: SHORT_ANSWER_OPT .+ '?' SOLUTION (' ' .+ '|' DECIMAL ';')+ NEWLINE ;
 
-select_words: ;
+numerical: NUMERICAL_OPT .+ '?' SOLUTION ' ' NUMBER '|' DECIMAL ';' NEWLINE ;
 
+true_false: TRUE_FALSE_OPT .+ '?' SOLUTION ' ' ('True'|'False') '|' DECIMAL ';' NEWLINE ;
 
-
-
+select_words: SELECT_WORDS_OPT .+ SOLUTION (' ' .+ '|' DECIMAL ';')+ NEWLINE ;
 
 
 
-MATCHING_OPT : 'MQUES:' ;
-MULTIPLE_CHOICE_OPT :'MCQUES:' ;
-SHORT_ANSWER_OPT : 'SAQUES:' ;
-NUMERICAL_OPT : 'NQUES:' ;
-SELECT_WORDS_OPT : 'SWQUES:' ;
-TRUE_FALSE_OPT : 'TFQUES:' ;
+
+
+
+
+MATCHING_OPT : 'MQUES: ' ;
+MULTIPLE_CHOICE_OPT :'MCQUES: ' ;
+SHORT_ANSWER_OPT : 'SAQUES: ' ;
+NUMERICAL_OPT : 'NQUES: ' ;
+SELECT_WORDS_OPT : 'SWQUES: ' ;
+TRUE_FALSE_OPT : 'TFQUES: ' ;
 
 WEIGHT : 'WEIGHT' ;
-OPTION : 'OPTION' ;
-SOLUTION : 'SOL:'  ;
+OPTION : 'OPT: ' ;
 
 
+SOLUTION : 'SOL:' ;
 
 NUMBER : [1-9][0-9]* ;
 
-DECIMAL : '0.' [0-9]{2} ;
+DECIMAL : [0-9] '.' [0-9]{2} ;
 
 
 NEWLINE : '\r'? '\n' ;
