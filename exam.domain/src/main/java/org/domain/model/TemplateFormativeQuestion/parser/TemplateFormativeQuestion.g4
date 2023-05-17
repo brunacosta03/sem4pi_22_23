@@ -42,7 +42,7 @@ SOLUTION : 'SOL:'  ;
 
 NUMBER : [1-9][0-9]* ;
 
-DECIMAL : '0.' NUMBER ;
+DECIMAL : '0.' [0-9]{2} ;
 
 
 NEWLINE : '\r'? '\n' ;
