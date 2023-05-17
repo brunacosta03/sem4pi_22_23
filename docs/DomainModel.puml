@@ -1,5 +1,4 @@
-@startuml "Domain Model"
-
+@startuml
 hide methods
 left to right direction
 
@@ -234,7 +233,7 @@ package "ExamTemplate Aggregate" {
     entity ExamTemplateQuestion <<entity>> {
     }
 
-    entity Solution <<entity>> {
+    card Solution <<Value Object>> {
     }
 
     card SolutionDescription <<Value Object>> {
@@ -246,7 +245,7 @@ package "ExamTemplate Aggregate" {
     card QuestionDescription <<Value Object>> {
     }
 
-    card AnswerOptionList <<Value Object>> {
+    card Answer <<Value Object>> {
     }
 
     enum QuestionType <<Value Object>> {
@@ -289,7 +288,7 @@ package "ExamTemplate Aggregate" {
 
     ExamTemplateQuestion --> QuestionType
     ExamTemplateQuestion --> QuestionDescription
-    ExamTemplateQuestion --> AnswerOptionList
+    ExamTemplateQuestion --> Answer
     ExamTemplateQuestion --> Solution
 
     Solution --> SolutionDescription
@@ -307,7 +306,7 @@ package "FormativeQuestion Aggregate" {
     entity TemplateFormativeQuestion <<entity>> <<root>> {
     }
 
-    entity Solution <<entity>> {
+    card Solution <<Value Object>> {
     }
 
     card SolutionDescription <<Value Object>> {
@@ -319,7 +318,7 @@ package "FormativeQuestion Aggregate" {
     card QuestionDescription <<Value Object>> {
     }
 
-    card AnswerOptionList <<Value Object>> {
+    card Answer <<Value Object>> {
     }
 
     enum QuestionType <<Value Object>> {
@@ -334,7 +333,7 @@ package "FormativeQuestion Aggregate" {
     TemplateFormativeQuestion --> Solution
     TemplateFormativeQuestion --> QuestionType
     TemplateFormativeQuestion --> QuestionDescription
-    TemplateFormativeQuestion --> AnswerOptionList
+    TemplateFormativeQuestion --> Answer
 
     Solution --> SolutionDescription
     Solution --> SolutionWeight
@@ -503,8 +502,4 @@ package BoardAggregate {
     TemplateFormativeQuestion -> "1" Course : is related to
 
     ANTLR --> "N" TemplateFormativeQuestion : parses
-
-
-
-
 @enduml
