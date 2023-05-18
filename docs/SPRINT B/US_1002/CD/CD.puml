@@ -9,7 +9,7 @@ skinparam shadowing false
 
 class CreateCourseUI <<presentation>>
 class CreateCourseController<<application>>
-class CreateCourseBuilder<<builder>>
+class CourseManagementService<<service>>
 class Course<<course>>
 class PersistenceContext<<persistence>>
 class RepositoryFactory<<factory>>
@@ -22,19 +22,17 @@ show()
 }
 
 class CreateCourseController{
-createCourse(String, String, String, String, Integer, Integer, String)
+addCourse(String, String, String, String, Integer, Integer, String)
 }
 
-class CreateCourseBuilder{
+class CourseManagementService{
 create(String, String, String, String, Integer, Integer, String)
 }
 
 class Course{
-Course(CourseEdition, CourseCode, CourseName, CourseDescription, CourseMaxNumberLimit, CourseMinNumberLimit, CourseState, User)
-validateEdition(CourseEdition)
-validateCode(CourseCode)
+Course(CourseName, CourseCode, CourseEdition, CourseDescription, CourseMaxNumberLimit, CourseMinNumberLimit, CourseState, User)
+necessaryParameters(CourseName, CourseCode, CourseEdition, CourseMaxNumberLimit, User)
 validateMaxMin(CourseMaxNumberLimit, CourseMinNumberLimit)
-validateTeacher(User)
 }
 
 class PersistenceContext{
@@ -47,11 +45,11 @@ courses()
 }
 CreateCourseUI -.-> CreateCourseController
 
-CreateCourseController --> CreateCourseBuilder
+CreateCourseController --> CourseManagementService
 CreateCourseController --> PersistenceContext
 CreateCourseController --> RepositoryFactory
 
-CreateCourseBuilder --> Course
+CourseManagementService --> Course
 
 Course --> PersistenceContext
 Course --> RepositoryFactory
