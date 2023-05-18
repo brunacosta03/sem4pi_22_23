@@ -1,7 +1,9 @@
 package org.course.controller;
 
 import eapli.framework.application.UseCaseController;
+import eapli.framework.domain.repositories.TransactionalContext;
 import eapli.framework.general.domain.model.EmailAddress;
+import org.aspectj.weaver.tools.Trace;
 import org.authz.application.AuthorizationService;
 import org.authz.application.AuthzRegistry;
 import org.domain.model.*;
@@ -20,25 +22,39 @@ public class AddCourseController {
     /**
      * The authorization service for managing user authorization.
      */
-    private final AuthorizationService authz =
-            AuthzRegistry.authorizationService();
+    private final AuthorizationService authz;
     /**
      * The repository for managing course entities.
      */
-    private final CourseRepository repo =
-            PersistenceContext.repositories().courses();
+    private final CourseRepository repo;
 
     /**
      * The repository for managing user entities.
      */
-    private final UserRepository userRepo =
-            PersistenceContext.repositories().users();
+    private final UserRepository userRepo;
 
     /**
-     * The factory for creating course entities.
+     * The service for creating course entities.
      */
-    private final CourseFactory factory = new CourseFactory();
+    private final CourseManagementService service;
 
+    private final TransactionalContext txt;
+
+    /**
+     *
+     * @param repo
+     * @param users
+     * @param authz
+     */
+
+    public AddCourseController(final CourseRepository repo, final UserRepository users,
+                               final TransactionalContext txt, final AuthorizationService authz){
+        this.authz = authz;
+        this.repo = repo;
+        this.userRepo = users;
+        this.txt = txt;
+        service = new CourseManagementService(users, repo, txt, authz);
+    }
     /**
      * Add course course.
      *
@@ -62,11 +78,11 @@ public class AddCourseController {
         authz.ensureAuthenticatedUserHasAnyOf(CourseRoles.MANAGER);
 
         User teacher = userRepo.findUserByEmail(
-                EmailAddress.valueOf(headTeacher)
+                        EmailAddress.valueOf(headTeacher)
                 )
                 .orElse(null);
 
-        final Course course = factory.createCourse(name, code, edition,
+        final Course course = service.createCourse(name, code, edition,
                 description, max, min, teacher);
 
         return repo.save(course);

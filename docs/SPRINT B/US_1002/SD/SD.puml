@@ -7,7 +7,7 @@ autonumber
 actor Manager
 participant CreateCourseUI <<presentation>>
 participant CreateCourseController<<application>>
-participant CreateCourseBuilder<<builder>>
+participant CreateCourseService<<service>>
 participant Course<<course>>
 participant PersistenceContext<<persistence>>
 participant RepositoryFactory<<factory>>
@@ -33,66 +33,56 @@ CreateCourseUI -> CreateCourseController: createCourse(edition, code, name,\n de
 
 activate CreateCourseController
 
-CreateCourseController -> CreateCourseBuilder: create
+CreateCourseController -> CreateCourseService: create
 
-CreateCourseController -> CreateCourseBuilder: setEdition(edition)
 
-CreateCourseController -> CreateCourseBuilder: setCode(code)
-
-CreateCourseController -> CreateCourseBuilder: setName(name)
-
-CreateCourseController -> CreateCourseBuilder: setDescription(description)
-
-CreateCourseController -> CreateCourseBuilder: setMaximum(maximum)
-
-CreateCourseController -> CreateCourseBuilder: setMinimum(minimum)
-
-CreateCourseController -> CreateCourseBuilder: setHeadTeacher(userEmail)
-
-CreateCourseController -> CreateCourseBuilder: createCourse()
-
-activate CreateCourseBuilder
-
-CreateCourseBuilder -> Course : create(edition, code, name, description,\nmaximum, minimum, userEmail)
-
-activate Course
-
-Course -> Course : validateEdition(edition)
-
-Course -> Course : validateCode(code)
-
-Course -> Course : validateMaxMin(maximum, minimum)
-
-Course -> Course : validateTeacher(userEmail)
-
-Course -> PersistenceContext : repositories()
+CreateCourseController -> PersistenceContext : repositories()
 
 activate PersistenceContext
 
 PersistenceContext -> RepositoryFactory : get
 
-PersistenceContext -> Course : factory
+PersistenceContext -> CreateCourseController : factory
 
 deactivate PersistenceContext
 
-Course -> RepositoryFactory : users()
+CreateCourseController -> RepositoryFactory : users()
 
 activate RepositoryFactory
 
 RepositoryFactory -> UserRepository : get
 
-RepositoryFactory -> Course : user
+RepositoryFactory -> CreateCourseController : users
 
 deactivate RepositoryFactory
 
+CreateCourseController -> UserRepository : findUserByEmail(userEmail)
 
-Course -> CreateCourseBuilder : course
+activate UserRepository
+
+UserRepository -> CreateCourseController : user
+
+deactivate UserRepository
+
+CreateCourseController -> CreateCourseService: createCourse(edition, code, name, description,\nmaximum, minimum, user)
+
+activate CreateCourseService
+
+CreateCourseService -> Course : create(name, code, edition, description,\nmaximum, minimum, userEmail)
+
+activate Course
+
+Course -> Course : necessaryParameters(name, code,edition, maximum, headTeacher)
+
+Course -> Course : validateMaxMin(maximum, minimum)
+
+Course -> CreateCourseService : course
 
 deactivate Course
 
-CreateCourseBuilder ->CreateCourseController : course
+CreateCourseService ->CreateCourseController : course
 
-deactivate CreateCourseBuilder
+deactivate CreateCourseService
 
 CreateCourseController -> PersistenceContext : repositories()
 
