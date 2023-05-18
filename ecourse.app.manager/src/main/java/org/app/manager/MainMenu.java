@@ -1,6 +1,7 @@
 package org.app.manager;
 
 import boards.CreateBoardUI;
+import coursemanagement.CreateCourseUI;
 import courses.ListCoursesUI;
 import eapli.framework.actions.Actions;
 import eapli.framework.actions.menu.Menu;
@@ -37,6 +38,7 @@ public class MainMenu extends AbstractUI {
     private static final int SET_MANAGER_LIST_AVAILABLE_COURSES_OPTION = 1;
     private static final int SET_MANAGER_ANSWER_ENROLLMENT_REQUEST_OPTION = 2;
 
+    private static final int SET_MANAGER_COURSE_CREATION_OPTION = 3;
     //SHARED BOARD
     private static final int SET_USER_BOARD_OPTION = 9;
     private static final int SET_USER_CREATE_BOARD_OPTION = 1;
@@ -90,6 +92,8 @@ public class MainMenu extends AbstractUI {
                 "Accept or Reject a Enrollment Request",
                 new AnswerEnrollmentRequestUI()::show
         );
+        menu.addItem(SET_MANAGER_COURSE_CREATION_OPTION,
+                "Create a new Course", new CreateCourseUI()::show);
         menu.addItem(EXIT_OPTION, RETURN_LABEL, Actions.SUCCESS);
 
         return menu;

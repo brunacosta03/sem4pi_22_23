@@ -2,14 +2,14 @@ package org.bootstrappers;
 
 import eapli.framework.domain.repositories.ConcurrencyException;
 import eapli.framework.domain.repositories.IntegrityViolationException;
+import org.authz.application.AuthzRegistry;
 import org.course.controller.AddCourseController;
-import org.course.controller.ScheduleClassController;
 import org.domain.model.Course;
-import org.domain.model.CourseCode;
+import org.persistence.PersistenceContext;
 
 public class CoursesBootstrapperBase {
 
-    private final AddCourseController ctrl = new AddCourseController();
+    private final AddCourseController ctrl = new AddCourseController(PersistenceContext.repositories().courses(), PersistenceContext.repositories().users(),PersistenceContext.repositories().newTransactionalContext(), AuthzRegistry.authorizationService());
     public CoursesBootstrapperBase(){
         super();
     }

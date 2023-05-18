@@ -2,6 +2,7 @@ package org.course.controller;
 
 import eapli.framework.validations.Preconditions;
 import org.authz.application.AuthorizationService;
+import org.authz.application.AuthzRegistry;
 import org.domain.model.Course;
 import org.domain.repositories.CourseRepository;
 import org.persistence.PersistenceContext;
@@ -19,7 +20,7 @@ public class ScheduleClassController {
 
     public ScheduleClassController(final AuthorizationService authzService) {
         this.authz = authzService;
-        this.courseManagementService = new CourseManagementService();
+        this.courseManagementService = new CourseManagementService(PersistenceContext.repositories().users(), PersistenceContext.repositories().courses(), PersistenceContext.repositories().newTransactionalContext(), authzService);
         this.courseRepository = PersistenceContext.repositories().courses();
     }
 

@@ -19,23 +19,37 @@ import java.util.stream.StreamSupport;
 
 @Service
 public class CourseManagementService{
-
-    private final UserRepository userRepo = PersistenceContext.repositories().users();
-    private final CourseRepository courseRepo;
-
-    private final TransactionalContext txt = PersistenceContext.repositories().newTransactionalContext();
-
-    private final AuthorizationService authz = AuthzRegistry.authorizationService();
-
     private final ClassFactory classFactory = new ClassFactory();
 
-    public CourseManagementService() {
-        courseRepo = PersistenceContext.repositories().courses();
-    }
-    public CourseManagementService(final CourseRepository repo) {
-        courseRepo = repo;
-    }
+    private final UserRepository userRepo;
+    private final CourseRepository courseRepo;
 
+    private final TransactionalContext txt;
+
+    private final AuthorizationService authz;
+
+    private final CourseFactory factory = new CourseFactory();
+    public CourseManagementService(UserRepository userRepo, CourseRepository courseRepo, TransactionalContext txt, AuthorizationService authz) {
+        this.userRepo = userRepo;
+        this.courseRepo = courseRepo;
+        this.txt = txt;
+        this.authz = authz;
+    }
+    public Course createCourse(final String name,
+                               final String code,
+                               final String edition,
+                               final String description,
+                               final Integer max,
+                               final Integer min,
+                               final User headTeacher){
+        return factory.createCourse(name,
+                code,
+                edition,
+                description,
+                max,
+                min,
+                headTeacher);
+    }
     public Course addStudent(String emailStudent, String c){
         txt.beginTransaction();
 
