@@ -24,15 +24,15 @@ public class ScheduleClassUI extends AbstractUI {
             String classTitle = scanner.nextLine();
             System.out.println();
 
-            System.out.println("Which day of the week do you want to schedule the class for?");
+            System.out.println("Which day of the week do you want to schedule the class for? (Monday-Friday)");
             String dayOfWeek = scanner.nextLine();
             System.out.println();
 
-            System.out.println("What time do you want to schedule the class for?");
+            System.out.println("What time do you want to schedule the class for? (HH:mm)");
             String startTime = scanner.nextLine();
             System.out.println();
 
-            System.out.println("What time do you want the class to end?");
+            System.out.println("What time do you want the class to end? (HH:mm)");
             String endTime = scanner.nextLine();
             System.out.println();
 
