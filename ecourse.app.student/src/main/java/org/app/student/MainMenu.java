@@ -10,6 +10,7 @@ import eapli.framework.presentation.console.menu.MenuItemRenderer;
 import eapli.framework.presentation.console.menu.MenuRenderer;
 import eapli.framework.presentation.console.menu.VerticalMenuRenderer;
 import enrollment.RequestEnrollmentUI;
+import exams.ListFutureExamsUI;
 import org.authz.application.AuthorizationService;
 import org.authz.application.AuthzRegistry;
 import org.user.management.CourseRoles;
@@ -29,6 +30,8 @@ public class MainMenu extends AbstractUI {
     //SHARED BOARD
     private static final int SET_USER_BOARD_OPTION = 9;
     private static final int SET_USER_CREATE_BOARD_OPTION = 1;
+
+    private static final int SET_STUDENT_LIST_FUTURE_EXAMS_OPTION = 3;
 
 
     private final AuthorizationService authz = AuthzRegistry.authorizationService();
@@ -79,6 +82,10 @@ public class MainMenu extends AbstractUI {
                 "Request Enrollment in a Course",
                 new RequestEnrollmentUI()::show
         );
+        menu.addItem(
+                SET_STUDENT_LIST_FUTURE_EXAMS_OPTION,
+                "List Future Exams",
+                new ListFutureExamsUI()::show);
         menu.addItem(EXIT_OPTION, RETURN_LABEL, Actions.SUCCESS);
 
         return menu;
