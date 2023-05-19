@@ -2,10 +2,8 @@ package org.persistence;
 
 
 import eapli.framework.infrastructure.repositories.impl.jpa.JpaAutoTxRepository;
+import org.domain.model.*;
 import org.domain.model.Class;
-import org.domain.model.Course;
-import org.domain.model.CourseCode;
-import org.domain.model.CourseStateConstants;
 import org.domain.repositories.CourseRepository;
 import org.usermanagement.domain.model.User;
 
