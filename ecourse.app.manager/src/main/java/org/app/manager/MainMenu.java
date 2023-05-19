@@ -2,7 +2,6 @@ package org.app.manager;
 
 import boards.CreateBoardUI;
 import coursemanagement.CreateCourseUI;
-import coursemanagement.OpenCloseCourseUI;
 import coursemanagement.OpenCloseEnrollmentUI;
 import courses.ListCoursesUI;
 import eapli.framework.actions.Actions;
