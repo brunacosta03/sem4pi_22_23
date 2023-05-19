@@ -49,14 +49,6 @@ Faced with the set of synchronization problems, the team decided to carry out an
 #include <sys/mman.h>
 #include <string.h>
 
-#define SEM_EXCL "/sem_exclude"
-#define SEM_ITEMS "/sem_items"
-#define SEM_SPAC "/sem_space"
-#define SEM_BAR "/sem_barrier"
-#define SHM_MEM "/shm_memory"
-
-#define NUM_USERS 10
-
 void down(sem_t *sem){
 	if(sem_wait(sem) == -1){
 		perror("semphore");
@@ -71,13 +63,23 @@ void up(sem_t *sem){
 	}
 }
 
+
+#define SEM_EXCL "/sem_exclude"
+#define SEM_ITEMS "/sem_items"
+#define SEM_SPAC "/sem_space"
+#define SEM_BAR "/sem_barrier"
+#define SHM_MEM "/shm_memory"
+
+
 typedef struct {
     char postit[3][100];
     int last_postit_changed;
     int number_of_producers;
     int count_proccess;
     int producer;
+	int num_users;
 } board;
+
 
 int main() {
     sem_t *sem_excl, *sem_items, *sem_spac, *sem_barrier;
@@ -141,11 +143,12 @@ int main() {
 	shared_mem -> number_of_producers = 0;  
 	shared_mem -> count_proccess = 0;
 	shared_mem -> producer = 0; 
+	shared_mem -> num_users = 10;
 	pid_t pid;
 	int i;
 
     // create child processes
-    for (i = 0; i < NUM_USERS; i++) {
+    for (i = 0; i < shared_mem -> num_users; i++) {
         pid = fork();
 
         if (pid == 0) {
@@ -187,7 +190,7 @@ int main() {
 					
 				up(sem_excl);
 					
-				if(shared_mem -> count_proccess == NUM_USERS){
+				if(shared_mem -> count_proccess == shared_mem -> num_users){
 					shared_mem -> number_of_producers = shared_mem -> number_of_producers + 1;
 					shared_mem -> producer = shared_mem -> producer + 1;
 						 						
@@ -206,14 +209,14 @@ int main() {
 			} else {					
 				up(sem_spac);
 			}
-		} while(shared_mem -> number_of_producers < NUM_USERS);
+		} while(shared_mem -> number_of_producers < shared_mem -> num_users);
 	}		
     
     
 	// parent
     if (pid > 0){    	
     	// parent should wait for childs to finish
-		for(int j = 0; j < NUM_USERS; j++){
+		for(int j = 0; j < shared_mem -> num_users; j++){
 			wait(NULL);
 		}
 		
@@ -397,4 +400,3 @@ POST-IT 0 HAS BEEN MODIFIED BY THE FOLLOWING PROCESSES -->  152744 152745 152746
 POST-IT 1 HAS BEEN MODIFIED BY THE FOLLOWING PROCESSES -->  152747 152748 152750
 POST-IT 2 HAS BEEN MODIFIED BY THE FOLLOWING PROCESSES -->  152742 152743 152749
 ```
-
