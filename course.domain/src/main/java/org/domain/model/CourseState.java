@@ -58,5 +58,9 @@ public class CourseState implements ValueObject {
 
         return Objects.equals(value, that.value);
     }
+    @Override
+    public String toString(){
+        return this.value;
+    }
 }
 

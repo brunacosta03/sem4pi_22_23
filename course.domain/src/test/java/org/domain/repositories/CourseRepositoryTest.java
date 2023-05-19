@@ -1,11 +1,8 @@
 package org.domain.repositories;
 
-
-import eapli.framework.domain.repositories.TransactionalContext;
 import eapli.framework.general.domain.model.EmailAddress;
 import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
 import org.domain.model.*;
-import org.domain.repositories.CourseRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -32,9 +29,6 @@ class CourseRepositoryTest {
 
     @Mock
     UserRepository userRepo;
-
-    @Mock
-    TransactionalContext txt;
 
     UserBuilder builder;
 

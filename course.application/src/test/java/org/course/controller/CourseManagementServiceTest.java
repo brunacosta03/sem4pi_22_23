@@ -43,6 +43,7 @@ public class CourseManagementServiceTest {
 
     User user;
 
+    CourseFactory factory;
     @BeforeEach
     void setUp() {
         user = mock(User.class);
@@ -55,6 +56,8 @@ public class CourseManagementServiceTest {
                 new PlainTextEncoder());
 
         srvc = new CourseManagementService(userRepo, repo, PersistenceContext.repositories().newTransactionalContext(), new AuthorizationService());
+
+        factory = mock(CourseFactory.class);
     }
 
     @Test
@@ -80,4 +83,31 @@ public class CourseManagementServiceTest {
 
         verify(repo).save(courseCaptor.capture());
     }
+
+    @Test
+    void changeStateTest(){
+        builder.with("Pedro","Password1","Pedro Alves","pedro@email.com", "23/05/2002", CourseRoles.TEACHER,"333333333")
+                .createdOn(Calendar.getInstance())
+                .withAcronym("PPA");
+
+        final User user = builder.build();
+
+        userRepo.save(user);
+
+        when(userRepo.findUserByEmail(EmailAddress.valueOf("pedro@email.com"))).thenReturn(Optional.of(user));
+
+        Course c1 = new Course(CourseName.of("Matemática"),
+                CourseCode.of("MAT-1"),
+                CourseEdition.of("INTRO-MAT-SEM01"),
+                CourseDescription.of("Mathematics"),
+                CourseState.of(CourseStateConstants.CLOSED.toString()),
+                CourseMaxNumberLimit.of(100),
+                CourseMinNumberLimit.of(10),
+                user, new HashSet<>(), new HashSet<>());
+
+        srvc.changeState(c1);
+
+        assertEquals(CourseStateConstants.OPEN, c1.state());
+    }
+
 }

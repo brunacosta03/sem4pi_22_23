@@ -223,14 +223,14 @@ public class Course implements AggregateRoot<CourseCode> {
 
     @Override
     public String toString() {
-        return "Course " + code.value() + "\n" +
+        return "Course   " + code.value() + "\n" +
                 "Name: " + name.value() + "\n" +
                 "Edition: " + edition.value() + "\n" +
                 "Description: " + description.value() + "\n" +
                 "State: " + state.value() + "\n" +
                 "Max students: " + max.value() + "\n" +
                 "Minimum students: " + min.value() + "\n" +
-                "Head Teacher: " + headTeacher.emailAddress() + "\n";
+                "Head Teacher: " + headTeacher.emailAddress();
     }
 
     public Set<User> students() {

@@ -85,6 +85,6 @@ public class AddCourseController {
         final Course course = service.createCourse(name, code, edition,
                 description, max, min, teacher);
 
-        return repo.save(course);
+        return course;
     }
 }

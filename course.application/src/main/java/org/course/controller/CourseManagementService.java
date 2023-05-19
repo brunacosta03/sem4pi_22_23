@@ -42,13 +42,15 @@ public class CourseManagementService{
                                final Integer max,
                                final Integer min,
                                final User headTeacher){
-        return factory.createCourse(name,
+        Course course = factory.createCourse(name,
                 code,
                 edition,
                 description,
                 max,
                 min,
                 headTeacher);
+
+        return courseRepo.save(course);
     }
     public Course addStudent(String emailStudent, String c){
         txt.beginTransaction();
