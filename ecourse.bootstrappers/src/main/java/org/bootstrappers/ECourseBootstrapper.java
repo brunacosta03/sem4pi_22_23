@@ -7,10 +7,7 @@ import eapli.framework.validations.Invariants;
 import org.authz.application.AuthenticationService;
 import org.authz.application.AuthorizationService;
 import org.authz.application.AuthzRegistry;
-import org.bootstrappers.demo.BoardsBootstrapper;
-import org.bootstrappers.demo.CoursesBootstrapper;
-import org.bootstrappers.demo.EnrollmentRequestsBootstrapper;
-import org.bootstrappers.demo.UsersBootstrapper;
+import org.bootstrappers.demo.*;
 import org.persistence.PersistenceContext;
 import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.User;
@@ -69,6 +66,7 @@ public class ECourseBootstrapper implements Action {
         executeCourses();
         executeBoards();
         executeEnrollmentRequests();
+        executeExams();
         return true;
     }
 
@@ -109,6 +107,13 @@ public class ECourseBootstrapper implements Action {
         return bootstrapper.execute();
     }
 
+    /* public boolean executeExams() {
+        ExamsBootstrapper bootstrapper = new ExamsBootstrapper();
+        System.out.println("Bootstrapper --> " + bootstrapper.getClass().getSimpleName());
+
+        return bootstrapper.execute();
+    } */
+
     /**
      * Boostrap for Boards.
      * @return true/false
@@ -146,6 +151,13 @@ public class ECourseBootstrapper implements Action {
         } catch (ConcurrencyException | IntegrityViolationException e) {
             return false;
         }
+    }
+
+    public boolean executeExams() {
+        ExamsBootstrapper bootstrapper = new ExamsBootstrapper();
+        System.out.println("Bootstrapper --> " + bootstrapper.getClass().getSimpleName());
+
+        return bootstrapper.execute();
     }
 
     /**
