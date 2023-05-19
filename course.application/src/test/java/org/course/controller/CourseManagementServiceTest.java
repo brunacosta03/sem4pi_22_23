@@ -3,16 +3,13 @@ package org.course.controller;
 import eapli.framework.general.domain.model.EmailAddress;
 import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
 import org.authz.application.AuthorizationService;
-import org.authz.application.AuthzRegistry;
 import org.domain.model.*;
 import org.domain.repositories.CourseRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.persistence.PersistenceContext;
 import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.ECoursePasswordPolicy;
@@ -26,10 +23,9 @@ import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
 public class CourseManagementServiceTest {
-
     @Mock
     CourseRepository repo;
 
@@ -109,5 +105,4 @@ public class CourseManagementServiceTest {
 
         assertEquals(CourseStateConstants.OPEN, c1.state());
     }
-
 }
