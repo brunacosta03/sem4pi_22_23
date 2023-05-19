@@ -7,6 +7,7 @@ import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.User;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -76,7 +77,7 @@ public class Course implements AggregateRoot<CourseCode> {
     private Set<User> students;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<Class> classes;
+    private Set<Class> classes = new HashSet<>();
 
     public Course(final CourseName name,
            final CourseCode code,
@@ -87,7 +88,7 @@ public class Course implements AggregateRoot<CourseCode> {
            final CourseMinNumberLimit min,
            final User headTeacher,
                   final Set<User> teachers,
-                  final Set<User> students){
+                  final Set<User> students) {
 
         necessaryParameters(name, code, edition, max, headTeacher);
         validateMaxMin(max, min);
@@ -102,20 +103,6 @@ public class Course implements AggregateRoot<CourseCode> {
         this.headTeacher = headTeacher;
         this.teachers = teachers;
         this.students = students;
-    }
-
-    public Course(final CourseCode courseCode,
-                  final User headTeacher,
-                  final Set<User> students,
-                  final Set<Class> classes) {
-
-        Preconditions.nonNull(courseCode, "Course code can't be null.");
-        Preconditions.ensure(headTeacher.role().equals(CourseRoles.TEACHER.toString()));
-
-        this.code = courseCode;
-        this.students = students;
-        this.headTeacher = headTeacher;
-        this.classes = classes;
     }
 
     protected Course() {
