@@ -30,4 +30,6 @@ public interface ExamRepository extends DomainRepository<ExamTitle, ExamTemplate
 
 
     Iterable<ExamTemplate> findByCourse(Course course);
+
+    Iterable<ExamTemplate> findFutureExams(User student);
 }

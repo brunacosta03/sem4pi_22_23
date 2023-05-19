@@ -60,7 +60,9 @@ public class ExamManagementService {
 
     public Iterable<ExamTemplate> listFutureExams(User student) {
 
-        return null;
+            Preconditions.nonNull(student, "Student must not be null");
+
+            return examRepo.findFutureExams(student);
 
     }
 }

@@ -90,5 +90,10 @@ public class JpaAutoTxExamRepository
         }
     }
 
+    @Override
+    public Iterable<ExamTemplate> findFutureExams(User student) {
+        return null;
+    }
+
 
 }
