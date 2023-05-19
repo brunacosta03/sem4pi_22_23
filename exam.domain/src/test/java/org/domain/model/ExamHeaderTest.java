@@ -4,13 +4,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ExamDescriptionTest {
+class ExamHeaderTest {
 
     @Test
     void testCreateValidExamDescription() {
         String validValue = "Exam Description";
 
-        ExamDescription examDescription = ExamDescription.of(validValue);
+        ExamHeader examDescription = ExamHeader.of(validValue);
 
         assertNotNull(examDescription);
         assertEquals(validValue, examDescription.value());
@@ -21,7 +21,7 @@ class ExamDescriptionTest {
         String invalidValue = null;
 
         assertThrows(NullPointerException.class,
-                () -> ExamDescription.of(invalidValue));
+                () -> ExamHeader.of(invalidValue));
     }
 
     @Test
@@ -29,7 +29,7 @@ class ExamDescriptionTest {
         String invalidValue = "";
 
         assertThrows(IllegalArgumentException.class,
-                () -> ExamDescription.of(invalidValue));
+                () -> ExamHeader.of(invalidValue));
     }
 
     @Test
@@ -37,14 +37,14 @@ class ExamDescriptionTest {
         String invalidValue = "Ex";
 
         assertThrows(IllegalArgumentException.class,
-                () -> ExamDescription.of(invalidValue));
+                () -> ExamHeader.of(invalidValue));
     }
 
     @Test
     void ExamDescriptionEquals() {
-        ExamDescription examDescription = ExamDescription.of("Exam Description");
-        ExamDescription examDescription2 = ExamDescription.of("Exam Description");
-        ExamDescription examDescription3 = ExamDescription.of("Exam Description 2");
+        ExamHeader examDescription = ExamHeader.of("Exam Description");
+        ExamHeader examDescription2 = ExamHeader.of("Exam Description");
+        ExamHeader examDescription3 = ExamHeader.of("Exam Description 2");
 
         assertEquals(examDescription, examDescription2);
         assertNotEquals(examDescription, examDescription3);
