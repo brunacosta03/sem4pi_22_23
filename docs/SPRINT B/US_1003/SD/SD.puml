@@ -73,7 +73,7 @@ Manager -> ChangeStateEnrollmentUI : Accepts
 
 activate ChangeStateEnrollmentUI
 
-ChangeStateEnrollmentUI -> ChangeStateController : changeCourseState(course)
+ChangeStateEnrollmentUI -> ChangeStateController : changeState(course)
 
 activate ChangeStateController
 
