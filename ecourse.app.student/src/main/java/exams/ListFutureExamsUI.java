@@ -14,6 +14,10 @@ public class ListFutureExamsUI extends AbstractUI {
 
         Iterable<ExamTemplate> exams = ctrl.listFutureExams();
 
+        for (ExamTemplate exam : exams) {
+            System.out.println(exam);
+        }
+
         System.out.println("Future exams found successfully.");
 
         return true;

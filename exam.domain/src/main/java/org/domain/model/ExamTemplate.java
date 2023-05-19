@@ -34,7 +34,7 @@ public class ExamTemplate implements AggregateRoot<ExamTitle> {
     private final User teacher;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "t_exam_student",joinColumns =
+    @JoinTable(name = "t_exam_student", joinColumns =
     @JoinColumn(name = "exam_title"), inverseJoinColumns =
     @JoinColumn(name = "student_email"))
     private Set<User> students = new HashSet<>();

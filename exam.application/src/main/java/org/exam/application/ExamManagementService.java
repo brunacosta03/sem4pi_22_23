@@ -62,7 +62,11 @@ public class ExamManagementService {
 
             Preconditions.nonNull(student, "Student must not be null");
 
-            return examRepo.findFutureExams(student);
+            Course course = courseRepo.findCoursesTakenByStudent(student)
+                    .iterator()
+                    .next();
+
+            return examRepo.findFutureExams(course);
 
     }
 }

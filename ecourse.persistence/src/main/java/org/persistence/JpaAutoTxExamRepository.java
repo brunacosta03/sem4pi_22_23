@@ -91,8 +91,19 @@ public class JpaAutoTxExamRepository
     }
 
     @Override
-    public Iterable<ExamTemplate> findFutureExams(User student) {
-        return null;
+    public Iterable<ExamTemplate> findFutureExams(Course course) {
+        TypedQuery<ExamTemplate> query = createQuery(
+                "SELECT e FROM ExamTemplate e WHERE e.course = :course AND e.date.startDate > CURRENT_DATE",
+                ExamTemplate.class
+        );
+
+        query.setParameter("course", course);
+
+        try {
+            return query.getResultList();
+        } catch (NoResultException nre) {
+            return new ArrayList<>();
+        }
     }
 
 
