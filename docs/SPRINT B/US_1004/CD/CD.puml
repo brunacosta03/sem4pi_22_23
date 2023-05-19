@@ -21,7 +21,8 @@ show()
 
 class ChangeStateController{
 verifyCourse(course)
-changeCourseState(course)
+confirmForOpenClose(course)
+changeState(course)
 }
 
 class PersistenceContext{
@@ -43,7 +44,6 @@ state()
 
 class CourseManagementService{
 changeState(course)
-confirmForOpenClose(course)
 }
 
 ChangeStateUI -.-> ChangeStateController

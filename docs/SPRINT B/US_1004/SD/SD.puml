@@ -81,7 +81,7 @@ ChangeStateController -> CourseManagementService : changeState(course)
 
 activate CourseManagementService
 
-ChangeStateController -> CourseManagementService : save(course)
+CourseManagementService -> ChangeStateController : save(course)
 
 deactivate CourseManagementService
 
