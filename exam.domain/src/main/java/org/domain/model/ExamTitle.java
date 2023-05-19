@@ -1,11 +1,11 @@
 package org.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import eapli.framework.domain.model.ValueObject;
 import eapli.framework.strings.StringMixin;
 import eapli.framework.validations.Preconditions;
 import lombok.EqualsAndHashCode;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
@@ -16,7 +16,7 @@ public class ExamTitle implements Serializable, ValueObject, Comparable<ExamTitl
     /**
      * The title of the exam.
      */
-    @JsonProperty
+    @Column(name = "title")
     private final String title;
 
     /**
