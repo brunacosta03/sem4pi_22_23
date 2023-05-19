@@ -23,7 +23,7 @@ public class OpenCloseCourseUI extends AbstractUI {
             Course course = ctrl.verifyCourse(code);
 
             if (course != null) {
-                if(ctrl.confirmforOpenClose(course)){
+                if(ctrl.confirmForOpenClose(course)){
                     showState(course);
                 }
             }

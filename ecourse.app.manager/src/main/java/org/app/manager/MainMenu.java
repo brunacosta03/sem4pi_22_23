@@ -2,6 +2,7 @@ package org.app.manager;
 
 import boards.CreateBoardUI;
 import coursemanagement.CreateCourseUI;
+import coursemanagement.OpenCloseCourseUI;
 import coursemanagement.OpenCloseEnrollmentUI;
 import courses.ListCoursesUI;
 import eapli.framework.actions.Actions;
@@ -41,6 +42,7 @@ public class MainMenu extends AbstractUI {
 
     private static final int SET_MANAGER_COURSE_CREATION_OPTION = 3;
     private static final int SET_MANAGER_COURSE_ENROLMENT_OPTION = 4;
+    private static final int SET_MANAGER_COURSE_OPEN_CLOSE_OPTION = 5;
     //SHARED BOARD
     private static final int SET_USER_BOARD_OPTION = 9;
     private static final int SET_USER_CREATE_BOARD_OPTION = 1;
@@ -94,11 +96,22 @@ public class MainMenu extends AbstractUI {
                 "Accept or Reject a Enrollment Request",
                 new AnswerEnrollmentRequestUI()::show
         );
-        menu.addItem(SET_MANAGER_COURSE_CREATION_OPTION,
-                "Create a new Course", new CreateCourseUI()::show);
+        menu.addItem(
+                SET_MANAGER_COURSE_CREATION_OPTION,
+                "Create a new Course",
+                new CreateCourseUI()::show
+        );
+        menu.addItem(
+                SET_MANAGER_COURSE_ENROLMENT_OPTION,
+                "Open/Close Enrollments in a Course",
+                new OpenCloseEnrollmentUI()::show
+        );
+        menu.addItem(
+                SET_MANAGER_COURSE_OPEN_CLOSE_OPTION,
+                "Open/Close a course",
+                new OpenCloseCourseUI()::show
+        );
 
-        menu.addItem(SET_MANAGER_COURSE_ENROLMENT_OPTION,
-                "Open/Close Enrollments in a Course", new OpenCloseEnrollmentUI()::show);
         menu.addItem(EXIT_OPTION, RETURN_LABEL, Actions.SUCCESS);
 
         return menu;

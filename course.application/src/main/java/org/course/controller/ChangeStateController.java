@@ -56,7 +56,7 @@ public class ChangeStateController {
             throw new IllegalArgumentException("This course is in the state " + course.state().toString() + ", so it can't be changed");
         }
     }
-    public boolean confirmforOpenClose(Course course){
+    public boolean confirmForOpenClose(Course course){
         if(course.state().toString().equals(String.valueOf(CourseStateConstants.CLOSED))||
                 course.state().equals(String.valueOf(CourseStateConstants.IN_PROGRESS))){
             return true;
