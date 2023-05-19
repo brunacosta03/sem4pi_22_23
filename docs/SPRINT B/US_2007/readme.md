@@ -35,71 +35,158 @@ The ANTLR tool should be used (https://www.antlr.org/).
 
 ## 4. Grammar definitions
 
-|     CODE    |      MEANING       |
- |:-----------:|:------------------:|
-|  MQUES:     | Matching question  |
-|  MCQUES:    | Multiple Choice question  |
-|  SAQUES:    | Short Answer question  |
-|  NQUES:     | Numerical question  |
-|  SWQUES:    | Select missing words question  |
-|  TFQUES:    | True/False question  |
-|  OPT:    | Option number      |
-|  SOL:       | Question solution  |
+|  CODE   |            MEANING            |
+|:-------:|:-----------------------------:|
+| MQUES:  |       Matching question       |
+| MCQUES: |   Multiple Choice question    |
+| SAQUES: |     Short Answer question     |
+| NQUES:  |      Numerical question       |
+| SWQUES: | Select missing words question |
+| TFQUES: |      True/False question      |
+|  OPT:   |         Option number         |
+|  SOL:   |       Question solution       |
 
 **Matching question**
 
-The team decided that the question options should appear after the ":".
-Should There must 4 options after the ":". To match the question options there must always be 4 match options.
-The solution must have the same number of ";" and "-" that the options of the question. That way all the question options will have a match answer.
-
-     MQUES: Identify the type of these creatures: Ant; Cow; Dog; Sparrow;
-     OPT: Insect
-     OPT: Mammal
-     OPT: Mammal
-     OPT: Bird
-     SOL: Ant-Insect|0.25; Cow-Mammal|0.25; Dog-Mammal|0.25; Bird-Sparrow|0.25;
+     MQUES "Identify the type of these creatures: Ant; Cow; Dog; Sparrow;";
+     OPT "Insect";
+     OPT "Mammal";
+     OPT "Mammal";
+     OPT "Bird";
+     SOL |Ant-Insect|0.25|;
+     SOL |Cow-Mammal|0.25|;
+     SOL |Dog-Mammal|0.25|;
+     SOL |Bird-Sparrow|0.25|;
 
 **Multiple Choice**
 
 The team decided that each multiplie choice should always have 4 options. The number of solutions must always be presented followed by a ";". This way there must be the same number of weight after "|" in solution.
 
-     MCQUES: Choose all animals that have 4 paws
-     OPT: Ant
-     OPT: Cow
-     OPT: Dog
-     OPT: Sparrow
-     SOL: Cow|0.25; Dog|0.25;
+     MCQUES "Choose all animals that have 4 paws";
+     OPT "Ant";
+     OPT "Cow";
+     OPT "Dog";
+     OPT "Sparrow";
+     SOL |Cow|0.25|;
+     SOL |Dog|0.25|;
 
 **Short Answer**
 
-The team decided that short answer question should always have a "?" in final of question. The possible solutions must always be separated by a ";". This way there must be the same number of weight after "|" in solution.
+This question has multiple correct answers, however some might me more correct than others.
 
-     SAQUES: What is a rabbit?
-     SOL: animal|0.25; mammal|0.50; vertebrate|0.50;
+     SAQUES "What is a rabbit?";
+     SOL |animal|0.25|;
+     SOL |mammal|0.50|;
+     SOL |vertebrate|0.50|;
 
 **Numerical**
 
-The team decided that short answer question should always have a "?" in final of question. The possible solution must be a number (integer or decimal). There is only one solution. This way there must be the same number of weight after "|" in solution.
+The possible solution must be a number (integer or decimal). There is only one solution. This way there must be the same number of weight after "|" in solution.
 
-     NQUES: How many paws does a dog have?
-     SOL: 4|0.25;
+     NQUES "How many paws does a dog have?";
+     SOL |4|0.25|;
 
 **Select Missing Words**
 
-The team decided that the missing words should appear between "[]" so that the student knows which word he needs to fill. There must be the same number of "[OPTION]" then options available for the student to fill in the blanks. In turn, each option placed in the correct place will have its score. The solution must be placed in order of missing fields.
+The solution must be placed in order of missing fields.
 
-     SWQUES: On a farm there are different types of animals. Namely the [OPT]. He serves to take care of the other [OPT]. No animal needs to move away from the [OPT].
-     SOL: dog|0.50; animals|0.50; place|0.50;
+     SWQUES "On a farm there are different types of animals. Namely the [OPT]. He serves to take care of the other [OPT]. No animal needs to move away from the [OPT].";
+     SOL |dog|0.50|;
+     SOL |animals|0.50|;
+     SOL |place|0.50|;
 
 **True/False**
 
-The team decided that true/false question should always have a "?" in final of question. The question only have 1 solution that can be "True" or "False".
+The question only have 1 solution that can be "True" or "False".
 
-     TFQUES: Does the dog have 4 paws?
-     SOL: True|1.00;
+     TFQUES "Does the dog have 4 paws?";
+     SOL <True|1.00>;
 
+### 4.1. Grammar rules
+
+***Creating question***
+
+     ID "DESCRIPTION" ;
+
+***Creating options***
+
+     OPT "OPTION";
+
+***Creating solution***
+
+        SOL |DESCRIPTION|WEIGHT|;
+        SOL <True|WEIGHT>;
+
+- Basically we followed a programming language alike syntax to follow, with 3 important "commands" to totally create a question.
+- Then in the grammar we have patterns of commands that are used to create different types of questions.
 
 ## 5. Implementation
+
+```antlrv4
+grammar TemplateFormativeQuestion;
+
+
+start: quest ;
+
+quest: matching_quest
+    | multiple_choice_quest
+    | short_answer_quest
+    | numerical_quest
+    | select_words_quest
+    | true_false_quest
+    ;
+
+matching_quest: MATCHING ' '*? DESCRIPTION ' '*? ';' NEWLINE*? create_option+ create_solution+;
+
+multiple_choice_quest: MULTIPLE_CHOICE ' '*? DESCRIPTION ' '*? ';' NEWLINE*? create_option+ create_solution+;
+
+short_answer_quest: SHORT_ANSWER ' '*? DESCRIPTION ' '*? ';' NEWLINE*? create_solution+;
+
+numerical_quest: NUMERICAL ' '*? DESCRIPTION ' '*? ';' NEWLINE*? create_solution;
+
+select_words_quest: SELECT_WORDS ' '*? DESCRIPTION ' '*? ';' NEWLINE*? create_solution+;
+
+true_false_quest: TRUE_FALSE ' '*? DESCRIPTION ' '*? ';' NEWLINE*? create_true_false_solution;
+
+
+
+
+create_option : ID_OPTION ' '*? DESCRIPTION ' '*? ';' NEWLINE*?;
+
+create_solution : ID_SOLUTION ' '*? SOLUTION_TEXT ' '*? ';' NEWLINE*?;
+create_true_false_solution : ID_SOLUTION ' '*? TRUE_FALSE_SOLUTION_TEXT ' '*? ';' NEWLINE*?;
+create_numerical_solution : ID_SOLUTION ' '*? NUMBER ' '*? ';' NEWLINE*?;
+
+
+ID_OPTION : 'OPT';
+ID_SOLUTION : 'SOL';
+
+MATCHING : 'MQUES';
+MULTIPLE_CHOICE : 'MCQUES';
+SHORT_ANSWER : 'SAQUES';
+NUMERICAL : 'NQUES';
+SELECT_WORDS : 'SWQUES';
+TRUE_FALSE : 'TFQUES';
+
+SOLUTION_TEXT : '|' SOL_DESCRIPTION '|' DECIMAL '|' ;
+
+TRUE_FALSE_SOLUTION_TEXT : '<' TRUE_FALSE_SOL_DESCRIPTION '|' DECIMAL '>';
+
+
+
+
+SOL_DESCRIPTION : .*? ;
+
+TRUE_FALSE_SOL_DESCRIPTION : 'True' | 'False';
+
+DESCRIPTION : '"' .*? '"';
+
+NUMBER : [1-9][0-9]*?( '.' [0-9]+ ) ?;
+
+NEWLINE : '\r'? '\n';
+
+DECIMAL : [0-9] '.' [0-9][0-9];
+```
 
 
  ```java
