@@ -22,7 +22,7 @@ class UserSession {
 }
 
 class ExamManagementService <<service>> {
-    listAllCourseExams = findAllExamsByCourse()
+    listCourseExams()
 }
 
 class PersistenceContext <<persistence>> {
@@ -34,7 +34,7 @@ class RepositoryFactory <<factory>> {
 }
 
 class ExamRepository <<repository>> {
-    allCourseExams
+    findByCourse
 }
 
 ListCourseExamsUI --> ListCourseExamsController : the controller

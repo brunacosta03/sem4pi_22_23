@@ -33,7 +33,7 @@ UserSession -> Controller : user
 deactivate UserSession
 
 Controller -> Service : create()
-Controller -> Service : listAllCourseExams()
+Controller -> Service : listCourseExams()
 
 activate Service
 Service -> Context : repositories()
@@ -50,19 +50,19 @@ Factory -> Repository : create()
 Factory -> Service : examRepository
 deactivate Factory
 
-Service -> Repository : listAllCourseExams = findAllExamsByCourse()
+Service -> Repository : listCourseExams = findByCourse()
 
 activate Repository
-Repository --> Service : listAllCourseExams
+Repository --> Service : listCourseExams
 
 deactivate Repository
-Service --> Controller : listAllCourseExams
+Service --> Controller : listCourseExams
 
 deactivate Service
-Controller --> UI : listAllCourseExams
+Controller --> UI : listCourseExams
 
 deactivate Controller
-UI -> Actor : show the operation result
+UI -> Actor : show the operation result and print the results
 
 deactivate UI
 
