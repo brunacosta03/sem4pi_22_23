@@ -19,9 +19,9 @@ class ExamTemplateTest {
 
     private final String examHeader = "Exam Header for the exam";
 
-    private final String examStartDate = "01-06-2023 10:00";
+    private final String examStartDate = "01-08-2023 10:00";
 
-    private final String examEndDate = "01-06-2023 11:00";
+    private final String examEndDate = "01-08-2023 11:00";
 
     private User teacher;
 
@@ -82,8 +82,8 @@ class ExamTemplateTest {
         assertEquals(examTitle, examTemplate.title().toString());
         assertEquals(examHeader, examTemplate.header().toString());
 
-        String formatterStartDate = "2023-06-01T10:00";
-        String formatterEndDate = "2023-06-01T11:00";
+        String formatterStartDate = "2023-08-01T10:00";
+        String formatterEndDate = "2023-08-01T11:00";
 
         assertEquals(formatterStartDate, examTemplate.formattedStartDate());
         assertEquals(formatterEndDate, examTemplate.formattedEndDate());
@@ -305,7 +305,7 @@ class ExamTemplateTest {
 
         ExamTemplate examTemplate2 = examBuilder.withTitle(examTitle)
                                     .withHeader(examHeader)
-                                    .withStartDate("20-05-2023 09:00")
+                                    .withStartDate("20-07-2023 09:00")
                                     .withEndDate(examEndDate)
                                     .withTeacher(teacher)
                                     .withStudents(new HashSet<>())
