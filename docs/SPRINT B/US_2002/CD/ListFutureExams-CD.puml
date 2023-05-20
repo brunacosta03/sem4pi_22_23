@@ -22,7 +22,7 @@ class UserSession {
 }
 
 class ExamManagementService <<service>> {
-    findFutureExamsByStudentId()
+    findFutureExams()
 }
 
 class PersistenceContext <<persistence>> {
@@ -30,7 +30,7 @@ class PersistenceContext <<persistence>> {
 }
 
 class RepositoryFactory <<factory>> {
-    courses()
+    exams()
 }
 
 class ExamRepository <<repository>> {

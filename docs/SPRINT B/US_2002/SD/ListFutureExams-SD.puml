@@ -38,7 +38,7 @@ UserSession -> Controller : user
 deactivate UserSession
 
 Controller -> Service : create()
-Controller -> Service : listStudentFutureExams()
+Controller -> Service : listFutureExams()
 
 activate Service
 Service -> Context : repositories()
@@ -68,7 +68,7 @@ deactivate Service
 Controller --> UI : futureExams
 
 deactivate Controller
-UI -> Actor : show the operation result
+UI -> Actor : show the operation result and print the results
 
 deactivate UI
 
