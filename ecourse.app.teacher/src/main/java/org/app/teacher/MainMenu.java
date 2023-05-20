@@ -11,6 +11,7 @@ import eapli.framework.presentation.console.menu.MenuRenderer;
 import eapli.framework.presentation.console.menu.VerticalMenuRenderer;
 import exams.CreateExamUI;
 import exams.ListCourseExamsUI;
+import formative.questions.CreateFormativeQuestionsUI;
 import org.authz.application.AuthorizationService;
 import org.authz.application.AuthzRegistry;
 import org.user.management.CourseRoles;
@@ -36,6 +37,10 @@ public class MainMenu extends AbstractUI {
     private static final int SET_TEACHER_CREATE_EXAM_OPTION = 3;
 
     private static final int SET_TEACHER_LIST_COURSE_EXAMS_OPTION = 5;
+
+    // FORMATIVE QUESTIONS
+    private static final int SET_USER_CREATE_FORMATIVE_QUESTION_OPTION = 1;
+    private static final int SET_FORMATIVE_QUESTION_OPTION = 2;
 
     private final AuthorizationService authz = AuthzRegistry.authorizationService();
 
@@ -64,8 +69,10 @@ public class MainMenu extends AbstractUI {
         if(authz.isAuthenticatedUserAuthorizedTo(CourseRoles.TEACHER)) {
             final Menu teacherMenu = buildTeacherMenu();
             final Menu boardMenu = buildBoardMenu();
+            final Menu formativeQuestionsMenu = buildFormativeQuestionsMenu();
 
             mainMenu.addSubMenu(SET_TEACHER_MANAGE_COURSES_OPTION, teacherMenu);
+            mainMenu.addSubMenu(SET_FORMATIVE_QUESTION_OPTION, formativeQuestionsMenu);
             mainMenu.addSubMenu(SET_USER_BOARD_OPTION, boardMenu);
         }
 
@@ -96,6 +103,16 @@ public class MainMenu extends AbstractUI {
         menu.addItem(SET_USER_CREATE_BOARD_OPTION, "Create Board",
                 new CreateBoardUI()::show);
 
+        menu.addItem(EXIT_OPTION, RETURN_LABEL, Actions.SUCCESS);
+
+        return menu;
+    }
+
+    private Menu buildFormativeQuestionsMenu() {
+        final Menu menu = new Menu("Formative Questions");
+
+        menu.addItem(SET_USER_CREATE_FORMATIVE_QUESTION_OPTION, "Create Formative Question",
+                new CreateFormativeQuestionsUI()::show);
         menu.addItem(EXIT_OPTION, RETURN_LABEL, Actions.SUCCESS);
 
         return menu;

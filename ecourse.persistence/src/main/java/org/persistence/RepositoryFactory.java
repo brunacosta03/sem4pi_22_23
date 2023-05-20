@@ -6,6 +6,7 @@ import org.domain.repositories.CourseRepository;
 import org.enrollment.request.repositories.EnrollmentRequestRepository;
 import org.usermanagement.domain.repositories.UserRepository;
 import repositories.ExamRepository;
+import repositories.TemplateFormativeQuestionRepository;
 
 public interface RepositoryFactory {
     /**
@@ -43,4 +44,6 @@ public interface RepositoryFactory {
      * @return ExamRepository
      */
     ExamRepository exams();
+
+    TemplateFormativeQuestionRepository formativeQuestions();
 }
