@@ -8,17 +8,23 @@ public class ListFutureExamsUI extends AbstractUI {
 
     private final ListFutureExamsController ctrl = new ListFutureExamsController(AuthzRegistry.authorizationService());
 
-
     @Override
     protected boolean doShow() {
 
-        Iterable<ExamTemplate> exams = ctrl.listFutureExams();
+        try {
 
-        for (ExamTemplate exam : exams) {
-            System.out.println(exam);
+            Iterable<ExamTemplate> exams = ctrl.listFutureExams();
+
+            if (exams.iterator().hasNext()) {
+                for (ExamTemplate exam : exams) {
+                    System.out.println(exam);
+                }
+            } else {
+                System.out.println("The student does not have future exams");
+            }
+        } catch (IllegalArgumentException iae) {
+            System.out.println(iae.getMessage());
         }
-
-        System.out.println("Future exams found successfully.");
 
         return true;
     }
