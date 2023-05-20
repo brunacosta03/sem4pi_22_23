@@ -120,7 +120,7 @@ public class ExamTemplate implements AggregateRoot<ExamTitle> {
     @Override
     public String toString() {
         return "title: " + title +
-                " || header: " + header + " || " + date +
+                " || " + date +
                  '\n';
     }
 }
