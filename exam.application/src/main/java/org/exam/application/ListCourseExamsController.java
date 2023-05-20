@@ -6,6 +6,8 @@ import org.authz.application.AuthorizationService;
 import org.domain.model.ExamTemplate;
 import org.persistence.PersistenceContext;
 import org.user.management.CourseRoles;
+import org.usermanagement.domain.model.User;
+import org.usermanagement.domain.model.UserSession;
 
 @UseCaseController
 public class ListCourseExamsController {
@@ -29,6 +31,9 @@ public class ListCourseExamsController {
 
         Preconditions.ensure(courseCode != null, "Course code must not be null");
 
-        return service.listCourseExams(courseCode);
+        UserSession session = authz.session().orElseThrow();
+        User teacher = session.authenticatedUser();
+
+        return service.listCourseExams(courseCode, teacher);
     }
 }

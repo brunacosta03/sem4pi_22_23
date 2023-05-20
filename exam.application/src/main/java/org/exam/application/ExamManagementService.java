@@ -9,6 +9,11 @@ import org.domain.repositories.CourseRepository;
 import org.usermanagement.domain.model.User;
 import repositories.ExamRepository;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.StreamSupport;
+
 public class ExamManagementService {
 
     private final ExamRepository examRepo;
@@ -47,12 +52,14 @@ public class ExamManagementService {
         return examRepo.save(newExam);
     }
 
-    public Iterable<ExamTemplate> listCourseExams(String courseCode) {
+    public Iterable<ExamTemplate> listCourseExams(String courseCode, User teacher) {
 
         Course course = courseRepo.findByCode(CourseCode.of(courseCode))
                 .orElseThrow(() -> new IllegalArgumentException("Course with code " + courseCode + " does not exist"));
 
         Preconditions.nonNull(course, "Course must not be null");
+
+        Preconditions.ensure(teacher != null, "Teacher must not be null");
 
         return examRepo.findByCourse(course);
     }
@@ -60,13 +67,14 @@ public class ExamManagementService {
 
     public Iterable<ExamTemplate> listFutureExams(User student) {
 
+            List<ExamTemplate> listFutureExams = new ArrayList<>();
+
             Preconditions.nonNull(student, "Student must not be null");
 
-            Course course = courseRepo.findCoursesTakenByStudent(student)
-                    .iterator()
-                    .next();
+            for (Course course : courseRepo.findCoursesTakenByStudent(student)) {
+                listFutureExams.addAll((Collection<? extends ExamTemplate>) examRepo.findFutureExams(course));
+            }
 
-            return examRepo.findFutureExams(course);
-
+            return listFutureExams;
     }
 }

@@ -25,14 +25,16 @@ public class ListCourseExamsUI extends AbstractUI {
 
             Iterable<ExamTemplate> exams = ctrl.listCourseExams(courseCode);
 
-            for (ExamTemplate exam : exams) {
-                System.out.println(exam.toString());
+            if (exams.iterator().hasNext()){
+                for (ExamTemplate exam : exams) {
+                    System.out.println(exam);
+                }
+            } else {
+                System.out.println("There are no exams for this course");
             }
 
-            System.out.println("Exams for course " + courseCode + " listed successfully");
-
         } catch (IllegalArgumentException iae) {
-            System.out.println("\nThere are no exams for this course");
+            System.out.println(iae.getMessage());
         }
 
         return true;

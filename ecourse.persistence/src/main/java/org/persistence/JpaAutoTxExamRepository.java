@@ -92,8 +92,9 @@ public class JpaAutoTxExamRepository
 
     @Override
     public Iterable<ExamTemplate> findFutureExams(Course course) {
+
         TypedQuery<ExamTemplate> query = createQuery(
-                "SELECT e FROM ExamTemplate e WHERE e.course = :course AND e.date.startDate > CURRENT_DATE",
+                "SELECT e FROM ExamTemplate e WHERE e.course = :course AND e.date.endDate > CURRENT_DATE",
                 ExamTemplate.class
         );
 
@@ -105,6 +106,5 @@ public class JpaAutoTxExamRepository
             return new ArrayList<>();
         }
     }
-
 
 }
