@@ -5,11 +5,11 @@ skinparam packageStyle rect
 skinparam defaultFontName FG Virgil
 skinparam shadowing false
 
-class ListCourseExamsUI <<presentation>> {
+class ListFutureExamsUI <<presentation>> {
     doShow()
 }
-class ListCourseExamsController <<application>> {
-    listCourseExams()
+class ListFutureExamsController <<application>> {
+    listStudentFutureExams()
 }
 
 class AuthorizationService <<service>> {
@@ -22,7 +22,7 @@ class UserSession {
 }
 
 class ExamManagementService <<service>> {
-    listCourseExams()
+    findFutureExams()
 }
 
 class PersistenceContext <<persistence>> {
@@ -30,17 +30,17 @@ class PersistenceContext <<persistence>> {
 }
 
 class RepositoryFactory <<factory>> {
-    courses()
+    exams()
 }
 
 class ExamRepository <<repository>> {
-    findByCourse
+    futureExams
 }
 
-ListCourseExamsUI --> ListCourseExamsController : the controller
-ListCourseExamsController --> AuthorizationService : autzh
-ListCourseExamsController --> ExamManagementService : service
-ListCourseExamsController --> PersistenceContext : persistence
+ListFutureExamsUI --> ListFutureExamsController : the controller
+ListFutureExamsController --> AuthorizationService : autzh
+ListFutureExamsController --> ExamManagementService : service
+ListFutureExamsController --> PersistenceContext : persistence
 AuthorizationService --> UserSession : session
 ExamManagementService --> PersistenceContext : persistence
 ExamManagementService --> ExamRepository : repo

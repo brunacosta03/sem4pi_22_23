@@ -27,5 +27,10 @@
             <artifactId>enrollment.request.application</artifactId>
             <version>0.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>exam.application</artifactId>
+            <version>0.1.0</version>
+        </dependency>
     </dependencies>
 </project>

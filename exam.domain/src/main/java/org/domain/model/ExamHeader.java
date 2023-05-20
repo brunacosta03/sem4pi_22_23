@@ -4,11 +4,12 @@ import eapli.framework.domain.model.ValueObject;
 import eapli.framework.validations.Preconditions;
 import lombok.EqualsAndHashCode;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
 @EqualsAndHashCode
-public class ExamDescription implements ValueObject, Comparable<ExamDescription> {
+public class ExamHeader implements ValueObject, Comparable<ExamHeader> {
 
     /**
      * The description of the exam.
@@ -18,11 +19,11 @@ public class ExamDescription implements ValueObject, Comparable<ExamDescription>
     /**
      * Constructor for ORM.
      */
-    protected ExamDescription() {
+    protected ExamHeader() {
         description = "";
     }
 
-    private ExamDescription(final String description) {
+    private ExamHeader(final String description) {
         Preconditions.noneNull("Description cannot be null.");
         Preconditions.ensure(!description.isEmpty(), "Description cannot be empty.");
         Preconditions.ensure(description.length() >= 10, "Description cannot be smaller than 10 characters.");
@@ -34,8 +35,8 @@ public class ExamDescription implements ValueObject, Comparable<ExamDescription>
      * @param description - the description of the exam.
      * @return - the new ExamDescription.
      */
-    public static ExamDescription of(final String description) {
-        return new ExamDescription(description);
+    public static ExamHeader of(final String description) {
+        return new ExamHeader(description);
     }
 
     /**
@@ -52,7 +53,7 @@ public class ExamDescription implements ValueObject, Comparable<ExamDescription>
      * @return - the comparison between the two objects.
      */
     @Override
-    public int compareTo(ExamDescription o) {
+    public int compareTo(ExamHeader o) {
         return description.compareTo(String.valueOf(o));
     }
 

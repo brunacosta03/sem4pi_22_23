@@ -1,8 +1,13 @@
 @startuml
 
-participant Teacher as Actor
-participant ListCourseExamsUI as UI <<presentation>>
-participant ListCourseExamsController as Controller
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor Student as Actor
+participant ListFutureExamsUI as UI <<presentation>>
+participant ListFutureExamsController as Controller
 participant AuthenticationService as Autzh <<service>>
 participant UserSession as UserSession <<session>>
 participant ExamManagementService as Service <<service>>
@@ -15,11 +20,11 @@ Actor --> UI : list future exams
 activate UI
 UI -> Controller : create()
 
-UI -> Controller : listCourseExams()
+UI -> Controller : listFutureExams()
 
 activate Controller
 Controller -> Autzh : create()
-Controller -> Autzh : ensureAuthenticatedUserHasAnyOf(CourseRoles.TEACHER)
+Controller -> Autzh : ensureAuthenticatedUserHasAnyOf(CourseRoles.STUDENT)
 Autzh -> UserSession : create()
 
 activate Autzh
@@ -33,7 +38,7 @@ UserSession -> Controller : user
 deactivate UserSession
 
 Controller -> Service : create()
-Controller -> Service : listCourseExams()
+Controller -> Service : listFutureExams()
 
 activate Service
 Service -> Context : repositories()
@@ -50,16 +55,17 @@ Factory -> Repository : create()
 Factory -> Service : examRepository
 deactivate Factory
 
-Service -> Repository : listCourseExams = findByCourse()
+Service -> Repository : findFutureExams()
+
 
 activate Repository
-Repository --> Service : listCourseExams
+Repository --> Service : futureExams
 
 deactivate Repository
-Service --> Controller : listCourseExams
+Service --> Controller : futureExams
 
 deactivate Service
-Controller --> UI : listCourseExams
+Controller --> UI : futureExams
 
 deactivate Controller
 UI -> Actor : show the operation result and print the results

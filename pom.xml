@@ -44,7 +44,8 @@
         <module>shared.board.server</module>
 		<module>shared.board.common</module>
         <module>exam.domain</module>
-    </modules>
+        <module>exam.application</module>
+	</modules>
 
 	<dependencies>
 		<dependency>
@@ -196,23 +197,5 @@
 			<url>https://api.bintray.com/maven/pagsousa/eapli/eapli.framework/;publish=1</url>
 		</repository>
 	</distributionManagement>
-
-
-	<reporting>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-checkstyle-plugin</artifactId>
-          <version>3.2.0</version>
-          <reportSets>
-            <reportSet>
-              <reports>
-                <report>checkstyle</report>
-              </reports>
-            </reportSet>
-          </reportSets>
-        </plugin>
-      </plugins>
-    </reporting>	
 
 </project>

@@ -9,6 +9,8 @@ import eapli.framework.presentation.console.ExitWithMessageAction;
 import eapli.framework.presentation.console.menu.MenuItemRenderer;
 import eapli.framework.presentation.console.menu.MenuRenderer;
 import eapli.framework.presentation.console.menu.VerticalMenuRenderer;
+import exams.CreateExamUI;
+import exams.ListCourseExamsUI;
 import org.authz.application.AuthorizationService;
 import org.authz.application.AuthzRegistry;
 import org.user.management.CourseRoles;
@@ -30,6 +32,10 @@ public class MainMenu extends AbstractUI {
     private static final int SET_USER_CREATE_BOARD_OPTION = 1;
 
     private static final int SET_TEACHER_SCHEDULE_CLASS_OPTION = 2;
+
+    private static final int SET_TEACHER_CREATE_EXAM_OPTION = 3;
+
+    private static final int SET_TEACHER_LIST_COURSE_EXAMS_OPTION = 5;
 
     private final AuthorizationService authz = AuthzRegistry.authorizationService();
 
@@ -75,6 +81,10 @@ public class MainMenu extends AbstractUI {
                 "List Available Courses", new ListCoursesUI()::show);
         menu.addItem(SET_TEACHER_SCHEDULE_CLASS_OPTION,
                 "Schedule Class", new ScheduleClassUI()::show);
+        menu.addItem(SET_TEACHER_CREATE_EXAM_OPTION,
+                "Create Exam", new CreateExamUI()::show);
+        menu.addItem(SET_TEACHER_LIST_COURSE_EXAMS_OPTION,
+                "List Course Exams", new ListCourseExamsUI()::show);
         menu.addItem(EXIT_OPTION, RETURN_LABEL, Actions.SUCCESS);
 
         return menu;

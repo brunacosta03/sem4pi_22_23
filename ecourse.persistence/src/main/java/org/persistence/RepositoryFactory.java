@@ -5,6 +5,7 @@ import org.domain.repositories.BoardRepository;
 import org.domain.repositories.CourseRepository;
 import org.enrollment.request.repositories.EnrollmentRequestRepository;
 import org.usermanagement.domain.repositories.UserRepository;
+import repositories.ExamRepository;
 
 public interface RepositoryFactory {
     /**
@@ -37,4 +38,9 @@ public interface RepositoryFactory {
      */
     EnrollmentRequestRepository enrollmentRequests();
 
+    /**
+     * For configure persistence context.
+     * @return ExamRepository
+     */
+    ExamRepository exams();
 }
