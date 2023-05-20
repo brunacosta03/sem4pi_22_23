@@ -21,8 +21,6 @@ Regarding these requirements we understand that this User Story relates to [US10
 
 ### 2.1 Client Specifications
 
-
-
 ## 3. Analysis
 
 ### 3.1. Domain Model
@@ -35,12 +33,13 @@ After analyzing the requirements and the dependencies of this User Story, we con
 
 - **ScheduleClassUI (UI)** - The user interface of the functionality.
 - **ScheduleClassController (Controller)** - The controller of the functionality.
-- **ClassManagementService (Service)** - The service of the functionality.
-- **ClassBuilder (Builder)** - The builder of the functionality. It is used to build a class.
+- **CourseManagementService (Service)** - The service of the functionality.
+- **ClassFactory (Factory)** - The builder of the functionality. It is used to build a class.
 - **PersistenceContext (Persistence)** - The persistence context of the functionality.
 - **RepositoryFactory (Factory)** - The repository factory of the functionality.
-- **ClassRepository (Repository)** - The repository of the functionality.
+- **CourseRepository (Repository)** - The repository of the functionality.
 - **Class (Domain)** - The domain class of the functionality.
+- **Course (Domain)** - The domain class of the functionality - the course knows the classes it has.
 
 ## 4. Design
 
@@ -61,37 +60,242 @@ Some main design patterns were applied in this functionality, namely:
   - For example, in this User Story, the class `Class` is open for extension, since it is possible to extend it with new attributes and methods. However, it is closed for modification, since it is not possible to modify the existing attributes and methods.
 - **High Cohesion**: A class should have a single, well-defined purpose.
   - For example, in this User Story, the class `Class` has a single, well-defined purpose: to represent a class.
-- **Low Coupling**: Classes should depend on abstractions, not on concretions.
-  - For example, in this User Story, the class `Class` depends on the abstraction `ClassRepository`, not on the concretion `ClassRepositoryImpl`.
+- **Factory Method**: Define an interface for creating an object, but let subclasses decide which class to instantiate. Factory Method lets a class defer instantiation to subclasses.
+  - For example, in this User Story, the class `ClassFactory` is a factory method, since it is used to build a class.
+- **Service Layer**: Defines an application's boundary with a layer of services that establishes a set of available operations and coordinates the application's response in each operation.
+  - For example, in this User Story, the class `CourseManagementService` is a service layer, since it defines the application's boundary with a layer of services that establishes a set of available operations and coordinates the application's response in each operation.
 
 
 ### 4.4. Tests
 
-**Test 1:** *Verifies that it is not possible to create an instance of the Example class with null values.*
+````
+@Test
+public void testCreateValidClass() {
 
-```
-@Test(expected = IllegalArgumentException.class)
-public void ensureNullIsNotAllowed() {
-	Example instance = new Example(null, null);
+        ClassFactory classFactory = new ClassFactory();
+
+        Class aClass = classFactory.createClass(classTitle, classDayOfWeek, classStartTime, classEndTime, teacher, new HashSet<>());
+
+        assertEquals(classTitle, aClass.title().toString());
+        assertEquals(classDayOfWeek, aClass.dayOfWeek().toString());
+        assertEquals(classStartTime, aClass.time().startTime().toString());
+        assertEquals(classEndTime, aClass.time().endTime().toString());
+
+    }
+
+    @Test
+    public void testCreateInvalidClassWithNullClassTitle() {
+
+        ClassFactory classFactory = new ClassFactory();
+        assertThrows(NullPointerException.class,
+                () -> classFactory.createClass(null, classDayOfWeek, classStartTime, classEndTime, teacher, new HashSet<>()));
+    }
+
+    @Test
+    public void testCreateInvalidClassWithNullClassDay() {
+
+        ClassFactory classFactory = new ClassFactory();
+        assertThrows(NullPointerException.class,
+                () -> classFactory.createClass(classTitle, null, classStartTime, classEndTime, teacher, new HashSet<>()));
+    }
+
+    @Test
+    public void testCreateInvalidClassWithNullClassStartTime() {
+
+        ClassFactory classFactory = new ClassFactory();
+        assertThrows(NullPointerException.class,
+                () -> classFactory.createClass(classTitle, classDayOfWeek, null, classEndTime, teacher, new HashSet<>()));
+    }
+
+    @Test
+    public void testCreateInvalidClassWithNullClassEndTime() {
+
+        ClassFactory classFactory = new ClassFactory();
+        assertThrows(NullPointerException.class,
+                () -> classFactory.createClass(classTitle, classDayOfWeek, classStartTime, null, teacher, new HashSet<>()));
+    }
+
+    @Test
+    public void testCreateInvalidClassWithInvalidClassStartTime() {
+
+        ClassFactory classFactory = new ClassFactory();
+        assertThrows(IllegalArgumentException.class,
+                () -> classFactory.createClass(classTitle, classDayOfWeek, "05:00", classEndTime, teacher, new HashSet<>()));
+    }
+
+    @Test
+    public void testCreateInvalidClassWithInvalidClassEndTime() {
+
+        ClassFactory classFactory = new ClassFactory();
+        assertThrows(IllegalArgumentException.class,
+                () -> classFactory.createClass(classTitle, classDayOfWeek, classStartTime, "05:00", teacher, new HashSet<>()));
+    }
+
+    @Test
+    public void testCreateInvalidClassWithSameClassStartTimeAndEndTime() {
+
+        ClassFactory classFactory = new ClassFactory();
+        assertThrows(IllegalArgumentException.class,
+                () -> classFactory.createClass(classTitle, classDayOfWeek, "05:00", "05:00", teacher, new HashSet<>()));
+    }
+
+    @Test
+    public void testCompareTwoEqualClasses() {
+
+        ClassFactory classFactory = new ClassFactory();
+        Class aClass = classFactory.createClass(classTitle, classDayOfWeek, classStartTime, classEndTime, teacher, new HashSet<>());
+        Class anotherClass = classFactory.createClass(classTitle, classDayOfWeek, classStartTime, classEndTime, teacher, new HashSet<>());
+
+        assertEquals(aClass, anotherClass);
+    }
+
+    @Test
+    public void testCompareTwoDifferentClassTitleClasses() {
+
+        ClassFactory classFactory = new ClassFactory();
+        Class aClass = classFactory.createClass(classTitle, classDayOfWeek, classStartTime, classEndTime, teacher, new HashSet<>());
+        Class anotherClass = classFactory.createClass("Another Class Title", classDayOfWeek, classStartTime, classEndTime, teacher, new HashSet<>());
+
+        assertNotEquals(aClass, anotherClass);
+    }
+
+    @Test
+    public void testCompareTwoDifferentClassDayOfWeekClasses() {
+
+        ClassFactory classFactory = new ClassFactory();
+        Class aClass = classFactory.createClass(classTitle, classDayOfWeek, classStartTime, classEndTime, teacher, new HashSet<>());
+        Class anotherClass = classFactory.createClass(classTitle, "TUESDAY", classStartTime, classEndTime, teacher, new HashSet<>());
+
+        assertNotEquals(aClass, anotherClass);
+    }
+
+    @Test
+    public void testCompareTwoDifferentStartTimeClasses() {
+
+        ClassFactory classFactory = new ClassFactory();
+        Class aClass = classFactory.createClass(classTitle, classDayOfWeek, classStartTime, classEndTime, teacher, new HashSet<>());
+        Class anotherClass = classFactory.createClass(classTitle, classDayOfWeek, "09:00", classEndTime, teacher, new HashSet<>());
+
+        assertNotEquals(aClass, anotherClass);
+    }
+
+    @Test
+    public void testCompareTwoDifferentEndTimeClasses() {
+
+        ClassFactory classFactory = new ClassFactory();
+        Class aClass = classFactory.createClass(classTitle, classDayOfWeek, classStartTime, classEndTime, teacher, new HashSet<>());
+        Class anotherClass = classFactory.createClass(classTitle, classDayOfWeek, classStartTime, "11:00", teacher, new HashSet<>());
+
+        assertNotEquals(aClass, anotherClass);
+    }
+
+    @Test
+    public void testCompareClassWithNull() {
+
+        ClassFactory classFactory = new ClassFactory();
+        Class aClass = classFactory.createClass(classTitle, classDayOfWeek, classStartTime, classEndTime, teacher, new HashSet<>());
+
+        assertNotEquals(aClass, null);
+    }
+
+    @Test
+    public void testCompareClassWithDifferentClass() {
+
+        ClassFactory classFactory = new ClassFactory();
+        Class aClass = classFactory.createClass(classTitle, classDayOfWeek, classStartTime, classEndTime, teacher, new HashSet<>());
+
+        assertNotEquals(aClass, new Object());
+    }
 }
 ````
 
 ## 5. Implementation
 
-*In this section the team should present, if necessary, some evidencies that the implementation is according to the design. It should also describe and explain other important artifacts necessary to fully understand the implementation like, for instance, configuration files.*
+**ScheduleClassUI**
 
-*It is also a best practice to include a listing (with a brief summary) of the major commits regarding this requirement.*
+````
+public class ScheduleClassUI extends AbstractUI {
+
+    private final Scanner scanner = new Scanner(System.in);
+
+    private final ScheduleClassController controller = new ScheduleClassController(AuthzRegistry.authorizationService());
+
+    @Override
+    protected boolean doShow() {
+        try {
+
+            System.out.println("Which course do you want to schedule a class for?");
+            String courseCode = scanner.nextLine();
+            System.out.println();
+
+            System.out.println("Which class title do you want to schedule?");
+            String classTitle = scanner.nextLine();
+            System.out.println();
+
+            System.out.println("Which day of the week do you want to schedule the class for? (Monday-Friday)");
+            String dayOfWeek = scanner.nextLine();
+            System.out.println();
+
+            System.out.println("What time do you want to schedule the class for? (HH:mm)");
+            String startTime = scanner.nextLine();
+            System.out.println();
+
+            System.out.println("What time do you want the class to end? (HH:mm)");
+            String endTime = scanner.nextLine();
+            System.out.println();
+
+            controller.scheduleClass(courseCode, classTitle, dayOfWeek, startTime, endTime);
+
+            System.out.println("Class scheduled successfully.");
+
+        } catch (IllegalArgumentException iae) {
+            System.out.println(iae.getMessage());
+        }
+        return true;
+    }
+
+    @Override
+    public String headline() {
+        return "Schedule Class UI";
+    }
+}
+````
+
+**ScheduleClassController**
+
+````
+public class ScheduleClassController {
+
+    private final AuthorizationService authz;
+
+
+    private final CourseManagementService courseManagementService;
+
+    private final CourseRepository courseRepository;
+
+    public ScheduleClassController(final AuthorizationService authzService) {
+        this.authz = authzService;
+        this.courseManagementService = new CourseManagementService(PersistenceContext.repositories().users(), PersistenceContext.repositories().courses(), PersistenceContext.repositories().newTransactionalContext(), authzService);
+        this.courseRepository = PersistenceContext.repositories().courses();
+    }
+
+    public Course scheduleClass(String courseCode,
+                                String classTitle,
+                                String dayOfWeek,
+                                String startTime,
+                                String endTime) {
+        authz.ensureAuthenticatedUserHasAnyOf(CourseRoles.TEACHER);
+
+        Preconditions.ensure(courseCode != null, "Course code must not be null");
+
+        UserSession session = authz.session().orElse(null);
+
+        return courseManagementService.scheduleNewClass(courseCode, classTitle, dayOfWeek, startTime, endTime, session.authenticatedUser());
+    }
+}
+````
 
 ## 6. Integration/Demonstration
 
-*In this section the team should describe the efforts realized in order to integrate this functionality with the other parts/components of the system*
-
-*It is also important to explain any scripts or instructions required to execute an demonstrate this functionality*
-
-## 7. Observations
-
-*This section should be used to include any content that does not fit any of the previous sections.*
-
-*The team should present here, for instance, a critical prespective on the developed work including the analysis of alternative solutioons or related works*
-
-*The team should include in this section statements/references regarding third party works that were used in the development this work.* 
+![img.png](img.png)
+![img_1.png](img_1.png)
