@@ -58,9 +58,41 @@ AddCourseTeacherController -> AddCourseTeacherUI : course
 
 deactivate AddCourseTeacherController
 
-loop
+AddCourseTeacherUI -> AddCourseTeacherController : getTeachersAvailable(course)
 
-AddCourseTeacherUI --> Manager : Asks for teacher's email
+activate AddCourseTeacherController
+
+AddCourseTeacherController -> CourseManagementService : getTeachersAvailable(course)
+
+activate CourseManagementService
+
+CourseManagementService -> Course : getTeachers()
+
+activate Course
+
+Course -> CourseManagementService : teachers
+
+deactivate Course
+
+CourseManagementService -> CourseManagementService : getTeachers()
+
+CourseManagementService -> UserRepository : findAll()
+
+activate UserRepository
+
+UserRepository -> CourseManagementService : users
+
+deactivate UserRepository
+
+CourseManagementService -> AddCourseTeacherController : teachersAvailable
+
+deactivate CourseManagementService
+
+AddCourseTeacherController -> AddCourseTeacherUI : teachersAvailable
+
+deactivate AddCourseTeacherController
+
+AddCourseTeacherUI --> Manager : Shows all the available \n teachers and asks for teacher's email
 
 deactivate AddCourseTeacherUI
 
@@ -72,29 +104,6 @@ AddCourseTeacherUI -> AddCourseTeacherController : addTeacherToCourse(email, cou
 
 activate AddCourseTeacherController
 
-AddCourseTeacherController -> PersistenceContext : repositories()
-
-activate PersistenceContext
-
-PersistenceContext -> AddCourseTeacherController : factory
-
-deactivate PersistenceContext
-
-AddCourseTeacherController -> RepositoryFactory : users()
-
-activate RepositoryFactory
-
-RepositoryFactory -> AddCourseTeacherController : users
-
-deactivate RepositoryFactory
-
-AddCourseTeacherController -> UserRepository : findUserByEmail(email)
-
-activate UserRepository
-
-UserRepository ->AddCourseTeacherController : user
-
-deactivate UserRepository
 
 AddCourseTeacherController -> CourseManagementService : addTeacherToCourse(user, course)
 
@@ -120,5 +129,4 @@ AddCourseTeacherUI --> Manager : shows operation success
 
 deactivate AddCourseTeacherUI
 
-end
 @enduml

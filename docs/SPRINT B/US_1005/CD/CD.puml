@@ -11,16 +11,17 @@ show()
 }
 
 class AddCourseTeacherController<<application>>{
-verifyCourse(code)
-addTeacherToCourse(email, course)
+verifyCourse(String code)
+getTeachersAvailable(Course course)
+addTeacherToCourse(User user,Course course)
 }
 
 class CourseManagementService<<service>>{
-addTeacherToCourse(user, course)
+addTeacher(User user,Course course)
 }
 
 class Course<<course>>{
-addTeacher(user)
+addTeacher(User user)
 }
 
 class PersistenceContext<<persistence>>{
@@ -33,11 +34,11 @@ courses()
 }
 
 class CourseRepository <<repository>>{
-findByCode(code)
+findByCode(CourseCode code)
 }
 
 class UserRepository <<repository>>{
-findUserByEmail(email)
+findUserByEmail(EmailAddress email)
 }
 
 AddCourseTeacherUI -.-> AddCourseTeacherController
