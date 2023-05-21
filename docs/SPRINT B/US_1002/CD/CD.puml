@@ -22,17 +22,17 @@ show()
 }
 
 class CreateCourseController{
-addCourse(String, String, String, String, Integer, Integer, String)
+addCourse(String name, String code, String edition,\n String description, Integer maximum, Integer minimum, String headTeacherEmail)
 }
 
 class CourseManagementService{
-create(String, String, String, String, Integer, Integer, String)
+createCourse(String name, String code, String edition,\n String description, Integer maximum, Integer minimum, String headTeacherEmail)
 }
 
 class Course{
-Course(CourseName, CourseCode, CourseEdition, CourseDescription, CourseMaxNumberLimit, CourseMinNumberLimit, CourseState, User)
-necessaryParameters(CourseName, CourseCode, CourseEdition, CourseMaxNumberLimit, User)
-validateMaxMin(CourseMaxNumberLimit, CourseMinNumberLimit)
+Course(CourseName name, CourseCode code, CourseEdition edition, CourseDescription description \n, CourseMaxNumberLimit maximum, CourseMinNumberLimit minimum, CourseState state, User headTeacher)
+necessaryParameters(CourseName name, CourseCode code,\n CourseEdition edition, CourseMaxNumberLimit maximum, User headTeacher)
+validateMaxMin(CourseMaxNumberLimit maximum, CourseMinNumberLimit minimum)
 }
 
 class PersistenceContext{
