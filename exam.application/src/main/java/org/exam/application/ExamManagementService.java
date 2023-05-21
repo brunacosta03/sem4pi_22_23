@@ -9,6 +9,7 @@ import org.domain.repositories.CourseRepository;
 import org.usermanagement.domain.model.User;
 import repositories.ExamRepository;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -25,31 +26,42 @@ public class ExamManagementService {
         this.courseRepo = courseRepo;
     }
 
-    public ExamTemplate createExam(String courseCode,
-                                   String examTitle,
-                                   String examHeader,
-                                   String examStartDate,
-                                   String examEndDate,
-                                   User teacher) {
+    public ExamTemplate updateExam(
+            String filePath,
+            ExamTitle title,
+            User teacher
+                                   ) throws IOException{
 
-        Course course = courseRepo.findByCode(CourseCode.of(courseCode))
+        ExamTemplate toUpdate = examRepo.findByTitle(title).orElseThrow(
+                () -> new IllegalArgumentException("No exam with such title exists")
+        );
+
+        Preconditions.ensure(
+                toUpdate.teacher().emailAddress().equals(teacher.emailAddress()),
+                ""
+        );
+
+        toUpdate = ExamTemplateEvaluator.evaluateFromFile(filePath, teacher, toUpdate.course(), toUpdate.course().students());
+
+        return examRepo.save(toUpdate);
+    }
+
+    public ExamTemplate createExam(
+            String filePath,
+            CourseCode courseCode,
+            User teacher
+    ) throws IOException {
+
+        Course course = courseRepo.findByCode(courseCode)
                 .orElseThrow(() -> new IllegalArgumentException("Course with code " + courseCode + " does not exist"));
 
-        Preconditions.nonNull(course, "Course must not be null");
+        Set<User> courseStudents = course.students();
 
-        ExamTemplate newExam = new ExamBuilder()
-                .withCourse(course)
-                .withTitle(examTitle)
-                .withHeader(examHeader)
-                .withStartDate(examStartDate)
-                .withEndDate(examEndDate)
-                .withTeacher(teacher)
-                .withStudents(course.students())
-                .build();
 
-        Preconditions.ensure(newExam != null, "Exam must not be null");
+        ExamTemplate template = ExamTemplateEvaluator.evaluateFromFile(filePath, teacher, course, courseStudents);
 
-        return examRepo.save(newExam);
+
+        return examRepo.save(template);
     }
 
     public Iterable<ExamTemplate> listCourseExams(CourseCode courseCode, User teacher) {

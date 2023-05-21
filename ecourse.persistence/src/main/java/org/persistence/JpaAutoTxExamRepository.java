@@ -36,7 +36,7 @@ public class JpaAutoTxExamRepository
 
     public JpaAutoTxExamRepository(String persistenceUnitName,
                                    Map properties) {
-        super(persistenceUnitName, properties, "id");
+        super(persistenceUnitName, properties, "exam_title");
     }
 
     @Override
@@ -94,7 +94,7 @@ public class JpaAutoTxExamRepository
     public Iterable<ExamTemplate> findFutureExams(Course course) {
 
         TypedQuery<ExamTemplate> query = createQuery(
-                "SELECT e FROM ExamTemplate e WHERE e.course = :course AND e.date.endDate > CURRENT_DATE",
+                "SELECT e FROM ExamTemplate e WHERE e.course = :course AND e.closeDate.value > CURRENT_DATE",
                 ExamTemplate.class
         );
 

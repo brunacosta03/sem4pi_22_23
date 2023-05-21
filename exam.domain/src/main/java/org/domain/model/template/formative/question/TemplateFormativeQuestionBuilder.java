@@ -108,7 +108,7 @@ public class TemplateFormativeQuestionBuilder extends TemplateFormativeQuestionB
         // no need for validation now, it's done in the parser
         String solution = ctx.TRUE_FALSE_SOLUTION_TEXT().getText().substring(1, ctx.TRUE_FALSE_SOLUTION_TEXT().getText().length() - 1);
 
-        String solutionText = solution.split("|")[0];
+        String solutionText = solution.split("\\|")[0];
         Double solutionWeight = Double.parseDouble(solution.split("\\|")[1]);
 
         solutions.add(

@@ -16,7 +16,7 @@ public class ExamTitle implements Serializable, ValueObject, Comparable<ExamTitl
     /**
      * The title of the exam.
      */
-    @Column(name = "title")
+    @Column(name = "exam_title", unique = true)
     private final String title;
 
     /**

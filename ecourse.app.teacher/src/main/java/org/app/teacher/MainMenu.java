@@ -39,6 +39,13 @@ public class MainMenu extends AbstractUI {
     private static final int SET_USER_CREATE_FORMATIVE_QUESTION_OPTION = 1;
     private static final int SET_FORMATIVE_QUESTION_OPTION = 2;
 
+    //EXAMS
+    private static final int SET_TEACHER_CREATE_EXAM_OPTION = 1;
+    private static final int SET_TEACHER_UPDATE_EXAM_OPTION = 2;
+
+    private static final int SET_TEACHER_LIST_COURSE_EXAMS_OPTION = 3;
+    private static final int SET_EXAM_OPTION = 2;
+
     private final AuthorizationService authz = AuthzRegistry.authorizationService();
 
     @Override
@@ -65,11 +72,13 @@ public class MainMenu extends AbstractUI {
 
         if(authz.isAuthenticatedUserAuthorizedTo(CourseRoles.TEACHER)) {
             final Menu teacherMenu = buildTeacherMenu();
-            final Menu boardMenu = buildBoardMenu();
             final Menu formativeQuestionsMenu = buildFormativeQuestionsMenu();
+            final Menu examMenu = buildExamMenu();
+            final Menu boardMenu = buildBoardMenu();
 
             mainMenu.addSubMenu(SET_TEACHER_MANAGE_COURSES_OPTION, teacherMenu);
             mainMenu.addSubMenu(SET_FORMATIVE_QUESTION_OPTION, formativeQuestionsMenu);
+            mainMenu.addSubMenu(SET_EXAM_OPTION, examMenu);
             mainMenu.addSubMenu(SET_USER_BOARD_OPTION, boardMenu);
         }
 
@@ -85,10 +94,7 @@ public class MainMenu extends AbstractUI {
                 "List Available Courses", new ListCoursesUI()::show);
         menu.addItem(SET_TEACHER_SCHEDULE_CLASS_OPTION,
                 "Schedule Class", new ScheduleClassUI()::show);
-        menu.addItem(SET_TEACHER_CREATE_EXAM_OPTION,
-                "Create Exam", new CreateExamUI()::show);
-        menu.addItem(SET_TEACHER_LIST_COURSE_EXAMS_OPTION,
-                "List Course Exams", new ListCourseExamsUI()::show);
+
         menu.addItem(EXIT_OPTION, RETURN_LABEL, Actions.SUCCESS);
 
         return menu;
@@ -110,6 +116,20 @@ public class MainMenu extends AbstractUI {
 
         menu.addItem(SET_USER_CREATE_FORMATIVE_QUESTION_OPTION, "Create Formative Question",
                 new CreateFormativeQuestionsUI()::show);
+        menu.addItem(EXIT_OPTION, RETURN_LABEL, Actions.SUCCESS);
+
+        return menu;
+    }
+
+    private Menu buildExamMenu(){
+        final Menu menu = new Menu("Exams");
+
+        menu.addItem(SET_TEACHER_CREATE_EXAM_OPTION, "Create Exam",
+                new CreateExamUI()::show);
+        /* menu.addItem(SET_TEACHER_UPDATE_EXAM_OPTION, "Update Exam",
+                new UpdateExamUI()::show); */
+        menu.addItem(SET_TEACHER_LIST_COURSE_EXAMS_OPTION,
+                "List Course Exams", new ListCourseExamsUI()::show);
         menu.addItem(EXIT_OPTION, RETURN_LABEL, Actions.SUCCESS);
 
         return menu;
