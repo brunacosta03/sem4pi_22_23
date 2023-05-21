@@ -12,13 +12,13 @@ public class ClassTime {
     /**
      * The start time of the class.
      */
-    @Column(name = "start_time")
+    @Column(name = "start_time", columnDefinition = "TIME")
     private final LocalTime startTime;
 
     /**
      * The end time of the class.
      */
-    @Column(name = "end_time")
+    @Column(name = "end_time", columnDefinition = "TIME")
     private final LocalTime endTime;
 
     /**
@@ -157,9 +157,9 @@ public class ClassTime {
 
     public boolean overlaps(ClassTime time) {
         return (
-                this.startTime.isBefore(time.endTime)
-                        ||
-                        this.endTime.isAfter(time.startTime)
+                this.startTime.isBefore(time.endTime) && this.startTime.isAfter(time.startTime)
+                        || this.endTime.isAfter(time.startTime) && this.endTime.isBefore(time.endTime)
+                        || this.startTime.equals(time.startTime) && this.endTime.equals(time.endTime)
         );
     }
 }

@@ -197,7 +197,7 @@ public class Course implements AggregateRoot<CourseCode> {
         teachers.remove(teacher);
     }
 
-    public Set<User> getTeachers(){
+    public Set<User> teachers(){
         return teachers;
     }
 
@@ -225,10 +225,20 @@ public class Course implements AggregateRoot<CourseCode> {
                 "State: " + state.value() + "\n" +
                 "Max students: " + max.value() + "\n" +
                 "Minimum students: " + min.value() + "\n" +
-                "Head Teacher: " + headTeacher.emailAddress();
+                "Head Teacher: " + headTeacher.emailAddress() + "\n";
     }
 
     public Set<User> students() {
         return this.students;
+    }
+
+    public boolean containtsTeacher(User teacher) {
+        for(User t : teachers) {
+            if(t.emailAddress().equals(teacher.emailAddress())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

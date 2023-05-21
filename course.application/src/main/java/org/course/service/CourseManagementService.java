@@ -166,11 +166,11 @@ public class CourseManagementService{
         Preconditions.nonNull(course, "Course with code " + courseCode + " does not exist");
 
         Preconditions.ensure(
-                courseRepo.findCoursesThatITeach(teacher) != null,
+                course.containtsTeacher(teacher),
                 "You can not add a class to course " + courseCode + " because you are not a teacher there"
         );
 
-        org.domain.model.Class newClass = classFactory.createClass(classTitle, classDayOfWeek, classStartTime, classEndTime, teacher, course.students());
+        Class newClass = classFactory.createClass(classTitle, classDayOfWeek, classStartTime, classEndTime, teacher, course.students());
 
         Iterable<Class> classesThatITeach = courseRepo.findClassesThatITeach(teacher);
 
@@ -186,7 +186,7 @@ public class CourseManagementService{
     }
 
     public Set<User> getTeachersAvailable(Course course){
-        Set<User> inCourse = course.getTeachers();
+        Set<User> inCourse = course.teachers();
 
         Set<User> allTeachersAvailable = new HashSet<>();
 

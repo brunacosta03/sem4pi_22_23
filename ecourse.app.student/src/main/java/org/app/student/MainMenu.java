@@ -24,7 +24,7 @@ public class MainMenu extends AbstractUI {
     private static final int SET_STUDENT_MANAGE_COURSES_OPTION = 1;
 
     // STUDENT MANAGE COURSES
-    private static final int SET_STUDENT_LIST_AVAILABLE_COURSES_OPTION = 3;
+    private static final int SET_STUDENT_LIST_AVAILABLE_COURSES_OPTION = 1;
     private static final int SET_STUDENT_ENROLL_COURSE_OPTION = 2;
 
     //SHARED BOARD
