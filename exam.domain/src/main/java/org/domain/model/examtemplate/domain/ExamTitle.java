@@ -33,7 +33,7 @@ public class ExamTitle implements Serializable, ValueObject, Comparable<ExamTitl
     private ExamTitle(final String title) {
         Preconditions.noneNull("Title cannot be null.");
         Preconditions.ensure(!title.isEmpty(), "Title cannot be empty.");
-        Preconditions.ensure(title.length() <= 25, "Title cannot be bigger than 50 characters.");
+        Preconditions.ensure(title.length() <= 25, "Title cannot be bigger than 25 characters.");
         Preconditions.ensure(title.length() >= 3, "Title cannot be smaller than 3 characters.");
         this.title = title;
     }

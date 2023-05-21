@@ -14,11 +14,16 @@ public class CloseDate {
     private LocalDateTime value;
 
     private CloseDate(String date){
+        Preconditions.nonNull(date);
+        Preconditions.ensure(!date.isEmpty(), "Date cannot be empty.");
+
         Preconditions.ensure(isValidFormat(date), "Invalid date format");
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
         LocalDateTime valueDate = LocalDateTime.parse(date, formatter);
+
+        Preconditions.ensure(valueDate.isAfter(LocalDateTime.now()), "Date cannot be in the past.");
 
         this.value = valueDate;
     }
@@ -40,5 +45,12 @@ public class CloseDate {
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         return value.format(formatter);
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CloseDate)) return false;
+        CloseDate that = (CloseDate) o;
+        return value.equals(that.value);
     }
 }

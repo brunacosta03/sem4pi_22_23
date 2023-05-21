@@ -15,10 +15,14 @@ public class OpenDate {
 
     private OpenDate(String date){
         Preconditions.ensure(isValidFormat(date), "Invalid date format");
+        Preconditions.nonNull(date);
+        Preconditions.ensure(!date.isEmpty(), "Date cannot be empty.");
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
         LocalDateTime valueDate = LocalDateTime.parse(date, formatter);
+
+        Preconditions.ensure(valueDate.isAfter(LocalDateTime.now()), "Date cannot be in the past.");
 
         this.value = valueDate;
     }
@@ -40,6 +44,13 @@ public class OpenDate {
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         return value.format(formatter);
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof OpenDate)) return false;
+        OpenDate that = (OpenDate) o;
+        return value.equals(that.value);
     }
 
 }

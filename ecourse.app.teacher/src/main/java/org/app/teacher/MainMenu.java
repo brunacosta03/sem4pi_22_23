@@ -43,8 +43,8 @@ public class MainMenu extends AbstractUI {
     private static final int SET_TEACHER_CREATE_EXAM_OPTION = 1;
     private static final int SET_TEACHER_UPDATE_EXAM_OPTION = 2;
 
-    private static final int SET_TEACHER_LIST_COURSE_EXAMS_OPTION = 3;
-    private static final int SET_EXAM_OPTION = 2;
+    private static final int SET_TEACHER_LIST_COURSE_EXAMS_OPTION = 2;
+    private static final int SET_EXAM_OPTION = 3;
 
     private final AuthorizationService authz = AuthzRegistry.authorizationService();
 

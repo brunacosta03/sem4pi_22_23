@@ -20,4 +20,16 @@ public class SectionDescription {
     public static SectionDescription of(String value){
         return new SectionDescription(value);
     }
+
+    @Override
+    public String toString() {
+        return value;
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SectionDescription)) return false;
+        SectionDescription that = (SectionDescription) o;
+        return value.equals(that.value);
+    }
 }
