@@ -113,44 +113,24 @@ package "Course Aggregate" {
 
     entity Class <<entity>>
 
-    card ClassDate <<Value Object>>{
-    }
-
-    card ClassDuration <<Value Object>>{
+    card ClassTime <<Value Object>>{
     }
 
     card ClassTitle <<Value Object>>{
     }
 
-    card ClassType <<Value Object>>{
+    card ClassDayOfWeek <<Value Object>>{
     }
-
-        note right of ClassDate
-            A class is always a recurring weekly event.
-
-            It should be impossible to schedule classes that
-            are coincident with other classes of the same course.
-
-            The system should also warn if one of the participants
-            in the class (either a teacher or a student) has other classes
-            at the same time. Teachers can schedule extra classes.
-        end note
 
         note right of ClassTitle
             A class must have a unique title
         end note
 
-    Class --> ClassDate
-    Class --> ClassDuration
+    Class --> ClassTime
     Class --> ClassTitle
-    Class --> ClassType
+    Class --> ClassDayOfWeek
     Course --> "*" Class : contains
 
-    note right of ClassType
-        Can be one of the following:
-            - Recurring
-            - Extra
-    end note
 }
 
 package "EnrollmentRequest Aggregate" {
@@ -455,8 +435,9 @@ package BoardAggregate {
 
     User --> "1" Calendar : has
 
-    Class --> User : has participant
-    User --> "N" ExamTemplate : creates
+    Class --> User : has participants
+    Class --> User : has teacher
+    ExamTemplate --> "1" User : has teacher
     Course --> "N" ExamTemplate : has
     Exam --> "1" ExamTemplate : is based on
     User --> "N" Exam : takes
@@ -471,4 +452,5 @@ package BoardAggregate {
     TemplateFormativeQuestion -> "1" Course : is related to
 
     ANTLR --> "N" TemplateFormativeQuestion : parses
+    ANTLR --> "N" ExamTemplate : parses
 @enduml
