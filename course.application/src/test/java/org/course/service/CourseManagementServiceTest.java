@@ -1,9 +1,10 @@
-package org.domain.model;
+package org.course.service;
 
 import eapli.framework.domain.repositories.TransactionalContext;
 import eapli.framework.general.domain.model.EmailAddress;
 import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
 import org.authz.application.AuthorizationService;
+import org.domain.model.*;
 import org.domain.repositories.CourseRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

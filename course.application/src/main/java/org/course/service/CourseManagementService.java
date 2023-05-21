@@ -1,9 +1,11 @@
-package org.domain.model;
+package org.course.service;
 
 import eapli.framework.domain.repositories.TransactionalContext;
 import eapli.framework.general.domain.model.EmailAddress;
 import eapli.framework.validations.Preconditions;
 import org.authz.application.AuthorizationService;
+import org.domain.model.*;
+import org.domain.model.Class;
 import org.domain.repositories.CourseRepository;
 import org.springframework.stereotype.Service;
 import org.user.management.CourseRoles;
@@ -168,7 +170,7 @@ public class CourseManagementService{
                 "You can not add a class to course " + courseCode + " because you are not a teacher there"
         );
 
-        Class newClass = classFactory.createClass(classTitle, classDayOfWeek, classStartTime, classEndTime, teacher, course.students());
+        org.domain.model.Class newClass = classFactory.createClass(classTitle, classDayOfWeek, classStartTime, classEndTime, teacher, course.students());
 
         Iterable<Class> classesThatITeach = courseRepo.findClassesThatITeach(teacher);
 

@@ -3,6 +3,7 @@ package org.course.controller;
 
 import eapli.framework.application.UseCaseController;
 import org.authz.application.AuthorizationService;
+import org.course.service.CourseManagementService;
 import org.domain.model.*;
 import org.domain.repositories.CourseRepository;
 import org.persistence.PersistenceContext;

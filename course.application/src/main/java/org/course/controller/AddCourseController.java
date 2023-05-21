@@ -4,6 +4,7 @@ import eapli.framework.application.UseCaseController;
 import eapli.framework.domain.repositories.TransactionalContext;
 import eapli.framework.general.domain.model.EmailAddress;
 import org.authz.application.AuthorizationService;
+import org.course.service.CourseManagementService;
 import org.domain.model.*;
 import org.domain.repositories.CourseRepository;
 import org.user.management.CourseRoles;

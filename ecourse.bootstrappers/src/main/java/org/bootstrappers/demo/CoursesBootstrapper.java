@@ -2,7 +2,7 @@ package org.bootstrappers.demo;
 
 import org.authz.application.AuthzRegistry;
 import org.bootstrappers.CoursesBootstrapperBase;
-import org.domain.model.CourseManagementService;
+import org.course.service.CourseManagementService;
 import org.domain.model.CourseCode;
 import org.domain.model.CourseStateConstants;
 import org.persistence.PersistenceContext;

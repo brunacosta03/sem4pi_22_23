@@ -1,7 +1,5 @@
 package coursemanagement;
 
-import eapli.framework.actions.menu.Menu;
-import eapli.framework.general.domain.model.EmailAddress;
 import eapli.framework.io.util.Console;
 import eapli.framework.presentation.console.AbstractUI;
 import eapli.framework.validations.Preconditions;
@@ -9,12 +7,10 @@ import org.authz.application.AuthorizationService;
 import org.authz.application.AuthzRegistry;
 import org.course.controller.AddCourseTeacherController;
 import org.domain.model.Course;
-import org.persistence.PersistenceContext;
 import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.User;
 import org.usermanagement.domain.model.UserSession;
 
-import java.awt.*;
 import java.util.Set;
 
 public class AddCourseTeacherUI extends AbstractUI {
@@ -30,6 +26,7 @@ public class AddCourseTeacherUI extends AbstractUI {
 
             Preconditions.nonNull(session);
 
+            assert session != null;
             User user = session.authenticatedUser();
 
             String loggedRole = user.role();

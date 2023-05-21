@@ -1,16 +1,13 @@
 package org.course.controller;
 
 import eapli.framework.application.UseCaseController;
-import eapli.framework.domain.repositories.TransactionalContext;
 import org.authz.application.AuthzRegistry;
 import org.domain.model.Course;
 import org.domain.model.CourseCode;
-import org.domain.model.CourseManagementService;
+import org.course.service.CourseManagementService;
 import org.domain.repositories.CourseRepository;
 import org.persistence.PersistenceContext;
-import org.springframework.format.number.PercentStyleFormatter;
 import org.usermanagement.domain.model.User;
-import org.usermanagement.domain.repositories.UserRepository;
 
 import java.util.Set;
 @UseCaseController
