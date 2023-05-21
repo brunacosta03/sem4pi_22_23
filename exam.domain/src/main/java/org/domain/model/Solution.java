@@ -1,10 +1,15 @@
 package org.domain.model;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.*;
 
-@Embeddable
+@Entity
+@Table(name = "T_SOLUTION")
 public class Solution {
+
+    @Id
+    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
+    @Column(name = "solution_id")
+    private Long id;
     @Column(name = "solution_weight", nullable = false)
     private SolutionWeight weight;
     @Column(name = "solution_description", nullable = false)

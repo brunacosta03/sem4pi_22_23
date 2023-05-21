@@ -3,7 +3,8 @@ package org.exam.application;
 import eapli.framework.application.UseCaseController;
 import eapli.framework.validations.Preconditions;
 import org.authz.application.AuthorizationService;
-import org.domain.model.ExamTemplate;
+import org.domain.model.CourseCode;
+import org.domain.model.examtemplate.domain.ExamTemplate;
 import org.persistence.PersistenceContext;
 import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.User;
@@ -34,6 +35,6 @@ public class ListCourseExamsController {
         UserSession session = authz.session().orElseThrow();
         User teacher = session.authenticatedUser();
 
-        return service.listCourseExams(courseCode, teacher);
+        return service.listCourseExams(CourseCode.of(courseCode), teacher);
     }
 }

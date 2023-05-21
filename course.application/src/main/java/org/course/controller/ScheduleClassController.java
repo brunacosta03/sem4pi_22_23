@@ -2,8 +2,8 @@ package org.course.controller;
 
 import eapli.framework.validations.Preconditions;
 import org.authz.application.AuthorizationService;
-import org.authz.application.AuthzRegistry;
 import org.domain.model.Course;
+import org.domain.model.CourseManagementService;
 import org.domain.repositories.CourseRepository;
 import org.persistence.PersistenceContext;
 import org.user.management.CourseRoles;

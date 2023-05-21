@@ -182,25 +182,13 @@ package "ExamTemplate Aggregate" {
     card Title <<Value Object>> {
     }
 
-    card ExamDescription <<Value Object>> {
-    }
-
     card OpenDate <<Value Object>> {
     }
 
     card CloseDate <<Value Object>> {
     }
 
-    entity Header <<entity>> {
-    }
-
-    card HeaderDescription <<Value Object>> {
-    }
-
-    card HeaderGrade <<Value Object>> {
-    }
-
-    card HeaderFeedback <<Value Object>> {
+    card ExamDescription <<Value Object>> {
     }
 
     enum FeedbackType <<Enumeration>> {
@@ -222,12 +210,6 @@ package "ExamTemplate Aggregate" {
     }
 
     card SectionDescription <<Value Object>> {
-    }
-
-    card SectionTitle <<Value Object>> {
-    }
-
-    card Feedback <<Value Object>> {
     }
 
     entity ExamTemplateQuestion <<entity>> {
@@ -258,32 +240,19 @@ package "ExamTemplate Aggregate" {
         }
 
     ExamTemplate --> Title
-    ExamTemplate --> Header
     ExamTemplate --> OpenDate
     ExamTemplate --> CloseDate
-    ExamTemplate --> ExamDescription
     ExamTemplate --> Section
-    ExamTemplate --> Feedback
-
-    Header --> HeaderDescription
-    Header --> HeaderFeedback
-    Header --> HeaderGrade
-
-    HeaderGrade --> GradeType
-    HeaderFeedback --> FeedbackType
+    ExamTemplate --> FeedbackType
+    ExamTemplate --> GradeType
+    ExamTemplate --> ExamDescription
 
     Section --> SectionDescription
-    Section --> SectionTitle
     Section --> ExamTemplateQuestion
     Section --> SectionNumber
 
     note right of SectionNumber
         Its number will be auto-incremented
-    end note
-
-    note right of Feedback
-        - Feedback is a text explaining the Solution (why the answer is correct or incorrect)
-        - If a Student misses an Exam, the Feedback is N/A
     end note
 
     ExamTemplateQuestion --> QuestionType

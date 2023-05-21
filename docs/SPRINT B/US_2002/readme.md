@@ -19,7 +19,16 @@ Regarding these requirements we understand that this User Story relates to [US20
 
 ## 3. Analysis
 
-After analyzing the requirements and the dependencies of this User Story, we concluded that the following classes should be created:
+### 3.1. Domain Model
+
+### 3.2 Implementation Analysis
+
+After analyzing the requirements and the dependencies of this User Story, we concluded that the following classes should be used:
+
+- **ListFutureExamsUI**: The user interface of this functionality.
+- **ListFutureExamsController**: The controller of this functionality.
+- **ExamManagementService**: The service of this functionality.
+- **ExamRepository**: The repository of this functionality.
 
 ## 4. Design
 
@@ -35,37 +44,80 @@ After analyzing the requirements and the dependencies of this User Story, we con
 
 Some main design patterns were applied in this functionality, namely:
 - **Single Responsibility Principle (SRP)**: A class should have only one reason to change and only one responsibility.
-  - For example, in this User Story,
-- **Open/Closed Principle (OCP)**: Software entities (classes, modules, functions, etc.) should be open for extension, but closed for modification.
-  - For example, in this User Story,
+  - For example, in this User Story, the class `ListFutureExamsUI` is responsible for the user interaction.
 
-### 4.4. Tests
-
-**Test 1:** *Verifies that it is not possible to create an instance of the Example class with null values.*
-
-```
-@Test(expected = IllegalArgumentException.class)
-public void ensureNullIsNotAllowed() {
-	Example instance = new Example(null, null);
-}
-````
 
 ## 5. Implementation
 
-*In this section the team should present, if necessary, some evidencies that the implementation is according to the design. It should also describe and explain other important artifacts necessary to fully understand the implementation like, for instance, configuration files.*
+**ListFutureExamsUI**
 
-*It is also a best practice to include a listing (with a brief summary) of the major commits regarding this requirement.*
+```java
+public class ListFutureExamsUI extends AbstractUI {
+
+    private final ListFutureExamsController ctrl = new ListFutureExamsController(AuthzRegistry.authorizationService());
+
+    @Override
+    protected boolean doShow() {
+
+        try {
+
+            Iterable<ExamTemplate> exams = ctrl.listFutureExams();
+
+            if (exams.iterator().hasNext()) {
+                for (ExamTemplate exam : exams) {
+                    System.out.println(exam);
+                }
+            } else {
+                System.out.println("The student does not have future exams");
+            }
+        } catch (IllegalArgumentException iae) {
+            System.out.println(iae.getMessage());
+        }
+
+        return true;
+    }
+
+    @Override
+    public String headline() {
+        return "Find Future Exams";
+    }
+}
+```
+
+**ListFutureExamsController**
+
+```java
+public class ListFutureExamsController {
+
+    private final ExamManagementService service;
+
+    private final AuthorizationService authz;
+
+    public ListFutureExamsController(
+            final AuthorizationService authzServicep
+    ) {
+        this.authz = authzServicep;
+        this.service = new ExamManagementService(
+                PersistenceContext.repositories().exams(),
+                PersistenceContext.repositories().courses()
+        );
+    }
+
+    public Iterable<ExamTemplate> listFutureExams() {
+
+        authz.ensureAuthenticatedUserHasAnyOf(CourseRoles.STUDENT);
+
+        UserSession session = authz.session().orElse(null);
+
+        assert session != null;
+        User student = session.authenticatedUser();
+
+        return service.listFutureExams(student);
+
+    }
+}
+```
 
 ## 6. Integration/Demonstration
 
-*In this section the team should describe the efforts realized in order to integrate this functionality with the other parts/components of the system*
-
-*It is also important to explain any scripts or instructions required to execute an demonstrate this functionality*
-
-## 7. Observations
-
-*This section should be used to include any content that does not fit any of the previous sections.*
-
-*The team should present here, for instance, a critical prespective on the developed work including the analysis of alternative solutioons or related works*
-
-*The team should include in this section statements/references regarding third party works that were used in the development this work.* 
+![img.png](img.png)

@@ -3,7 +3,7 @@ package exams;
 import eapli.framework.presentation.console.AbstractUI;
 import org.exam.application.ListFutureExamsController;
 import org.authz.application.AuthzRegistry;
-import org.domain.model.ExamTemplate;
+import org.domain.model.examtemplate.domain.ExamTemplate;
 public class ListFutureExamsUI extends AbstractUI {
 
     private final ListFutureExamsController ctrl = new ListFutureExamsController(AuthzRegistry.authorizationService());

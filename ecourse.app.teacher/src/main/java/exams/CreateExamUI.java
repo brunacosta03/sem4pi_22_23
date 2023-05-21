@@ -1,10 +1,11 @@
 package exams;
 
 import eapli.framework.presentation.console.AbstractUI;
-import org.domain.model.ExamTemplate;
+import org.domain.model.examtemplate.domain.ExamTemplate;
 import org.exam.application.CreateExamController;
 import org.authz.application.AuthzRegistry;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class CreateExamUI extends AbstractUI {
@@ -20,29 +21,19 @@ public class CreateExamUI extends AbstractUI {
 
             String courseCode = scanner.nextLine();
 
-            System.out.println("What is the title of the exam?");
+            System.out.println("What is the exam file?");
 
-            String examTitle = scanner.nextLine();
+            String filePath = scanner.nextLine();
 
-            System.out.println("What is the header of the exam?");
-
-            String examHeader = scanner.nextLine();
-
-            System.out.println("When does the exam start? (dd-MM-yyyy HH:mm)");
-
-            String startDate = scanner.nextLine();
-
-            System.out.println("When does the exam end? (dd-MM-yyyy HH:mm)");
-
-            String endDate = scanner.nextLine();
-
-            ExamTemplate exam = ctrl.createExam(courseCode, examTitle, examHeader, startDate, endDate);
+            ExamTemplate exam = ctrl.createExam(courseCode, filePath);
 
             System.out.println("Exam created successfully!");
 
 
-        } catch (Exception e) {
-            System.out.println("Error creating exam: " + e.getMessage());
+        } catch(IllegalArgumentException iae){
+            System.out.println(iae.getMessage());
+        } catch(IOException ioe){
+            System.out.println("File doesn't exist or is not accessible.\nTry again.");
         }
         return true;
     }

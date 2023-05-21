@@ -8,6 +8,7 @@ import org.ecourse.Application;
 import org.enrollment.request.repositories.EnrollmentRequestRepository;
 import org.usermanagement.domain.repositories.UserRepository;
 import repositories.ExamRepository;
+import repositories.TemplateFormativeQuestionRepository;
 
 /**
  * Factory class for creating JPA repositories.
@@ -62,6 +63,14 @@ public class JpaRepositoryFactory implements RepositoryFactory {
     @Override
     public ExamRepository exams() {
         return new JpaAutoTxExamRepository(
+                Application.settings().persistenceUnitName(),
+                Application.settings().extendedPersistenceProperties()
+        );
+    }
+
+    @Override
+    public TemplateFormativeQuestionRepository formativeQuestions() {
+        return new JpaAutoTxTemplateFormativeQuestionRepository(
                 Application.settings().persistenceUnitName(),
                 Application.settings().extendedPersistenceProperties()
         );

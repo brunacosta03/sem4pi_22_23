@@ -3,8 +3,8 @@ package org.persistence;
 import eapli.framework.domain.repositories.TransactionalContext;
 import eapli.framework.infrastructure.repositories.impl.jpa.JpaAutoTxRepository;
 import org.domain.model.Course;
-import org.domain.model.ExamTemplate;
-import org.domain.model.ExamTitle;
+import org.domain.model.examtemplate.domain.ExamTemplate;
+import org.domain.model.examtemplate.domain.ExamTitle;
 import org.usermanagement.domain.model.User;
 import repositories.ExamRepository;
 
@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public class JpaAutoTxExamRepository
-        extends JpaAutoTxRepository<ExamTemplate, Long, Long>
+        extends JpaAutoTxRepository<ExamTemplate, ExamTitle, ExamTitle>
         implements ExamRepository {
 
     public JpaAutoTxExamRepository(final String persistenceUnitName,
@@ -36,7 +36,7 @@ public class JpaAutoTxExamRepository
 
     public JpaAutoTxExamRepository(String persistenceUnitName,
                                    Map properties) {
-        super(persistenceUnitName, properties, "id");
+        super(persistenceUnitName, properties, "title");
     }
 
     @Override
@@ -45,13 +45,13 @@ public class JpaAutoTxExamRepository
     }
 
     @Override
-    public Iterable<ExamTemplate> findAll() {
-        return this.repo.findAll();
+    public Optional<ExamTemplate> ofIdentity(ExamTitle id) {
+        return this.repo.ofIdentity(id);
     }
 
     @Override
-    public Optional<ExamTemplate> ofIdentity(ExamTitle id) {
-        return Optional.empty();
+    public Iterable<ExamTemplate> findAll() {
+        return this.repo.findAll();
     }
 
     @Override
@@ -61,7 +61,7 @@ public class JpaAutoTxExamRepository
 
     @Override
     public void deleteOfIdentity(ExamTitle entityId) {
-
+        this.repo.deleteOfIdentity(entityId);
     }
 
     @Override
@@ -94,7 +94,7 @@ public class JpaAutoTxExamRepository
     public Iterable<ExamTemplate> findFutureExams(Course course) {
 
         TypedQuery<ExamTemplate> query = createQuery(
-                "SELECT e FROM ExamTemplate e WHERE e.course = :course AND e.date.endDate > CURRENT_DATE",
+                "SELECT e FROM ExamTemplate e WHERE e.course = :course AND e.closeDate.value > CURRENT_DATE",
                 ExamTemplate.class
         );
 
