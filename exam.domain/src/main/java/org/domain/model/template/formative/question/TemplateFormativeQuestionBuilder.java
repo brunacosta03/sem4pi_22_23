@@ -95,6 +95,14 @@ public class TemplateFormativeQuestionBuilder extends TemplateFormativeQuestionB
         String solutionText = solution.split("\\|")[0];
         Double solutionWeight = Double.parseDouble(solution.split("\\|")[1]);
 
+        if(type.equals(QuestionType.NUMERICAL)){
+            try{
+                Double.parseDouble(solutionText);
+            }catch (NumberFormatException e){
+                throw new IllegalArgumentException("The solution text must be a number for a numerical question");
+            }
+        }
+
         solutions.add(
                 new Solution(
                         new SolutionWeight(solutionWeight),
