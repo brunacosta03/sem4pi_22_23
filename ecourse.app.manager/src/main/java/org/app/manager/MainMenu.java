@@ -1,6 +1,7 @@
 package org.app.manager;
 
 import boards.CreateBoardUI;
+import coursemanagement.AddCourseTeacherUI;
 import coursemanagement.CreateCourseUI;
 import coursemanagement.OpenCloseCourseUI;
 import coursemanagement.OpenCloseEnrollmentUI;
@@ -43,6 +44,7 @@ public class MainMenu extends AbstractUI {
     private static final int SET_MANAGER_COURSE_CREATION_OPTION = 3;
     private static final int SET_MANAGER_COURSE_ENROLMENT_OPTION = 4;
     private static final int SET_MANAGER_COURSE_OPEN_CLOSE_OPTION = 5;
+    private static final int SET_MANAGER_COURSE_ADD_TEACHER_OPTION = 6;
     //SHARED BOARD
     private static final int SET_USER_BOARD_OPTION = 9;
     private static final int SET_USER_CREATE_BOARD_OPTION = 1;
@@ -110,6 +112,11 @@ public class MainMenu extends AbstractUI {
                 SET_MANAGER_COURSE_OPEN_CLOSE_OPTION,
                 "Open/Close a course",
                 new OpenCloseCourseUI()::show
+        );
+        menu.addItem(
+                SET_MANAGER_COURSE_ADD_TEACHER_OPTION,
+                "Add a teacher to a course",
+                new AddCourseTeacherUI()::show
         );
 
         menu.addItem(EXIT_OPTION, RETURN_LABEL, Actions.SUCCESS);

@@ -19,6 +19,7 @@ public class CourseCodeTest {
     @Test
     void equals(){
         CourseCode code = CourseCode.of("Mat");
-        assertTrue(code.equals(CourseCode.of("Mat")));
+        CourseCode code2 = CourseCode.of("Mat");
+        assertTrue(code.equals(code2));
     }
 }

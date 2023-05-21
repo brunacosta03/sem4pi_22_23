@@ -190,11 +190,11 @@ public class CourseManagementService{
 
         Set<User> allUsers = getTeachers();
 
-        for(User user: inCourse){
+        for(User user: allUsers){
             int count = 0;
 
-            for(User allUser: allUsers){
-                if(user.emailAddress().toString().equals(allUser.emailAddress().toString())){
+            for(User inUser : inCourse){
+                if(user.emailAddress().toString().equals(inUser.emailAddress().toString())){
                     count++;
                     break;
                 }

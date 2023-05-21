@@ -20,8 +20,9 @@ import org.usermanagement.domain.repositories.UserRepository;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
-import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
 
@@ -205,5 +206,58 @@ public class CourseManagementServiceTest {
                 "Mathematics from the beginning of time", 100, 10, user);
 
         verify(repo).save(captor.capture());
+    }
+
+
+    @Test
+    void getTeachersAvailableTest(){
+        builder.with("Pedro","Password1","Pedro Alves","pedro@email.com", "23/05/2002", CourseRoles.TEACHER,"333333333")
+                .createdOn(Calendar.getInstance())
+                .withAcronym("PPA");
+
+        final User user = builder.build();
+
+        builder.with("Joao","Password2","Joao Alves","joao@email.com", "23/05/1992", CourseRoles.TEACHER,"333223333")
+                .createdOn(Calendar.getInstance())
+                .withAcronym("PAP");
+
+        final User user2 = builder.build();
+
+        Course c1 = new Course(CourseName.of("Matemática"), CourseCode.of("MAT-1"),
+                CourseEdition.of("INTRO-MAT-SEM01"), CourseDescription.of("Mathematics from the beginning of time"),
+                CourseState.of(String.valueOf(CourseStateConstants.CLOSED)), CourseMaxNumberLimit.of(100),
+                CourseMinNumberLimit.of(10), user,
+                new HashSet<>(), new HashSet<>());
+
+        service.addTeacher(user, c1);
+
+        Set<User> users = new HashSet<>();
+        users.add(user2);
+
+        when(service.getTeachersAvailable(c1)).thenReturn(users);
+    }
+
+    @Test
+    void addTeacherTest(){
+        builder.with("Pedro","Password1","Pedro Alves","pedro@email.com", "23/05/2002", CourseRoles.TEACHER,"333333333")
+                .createdOn(Calendar.getInstance())
+                .withAcronym("PPA");
+
+        final User user = builder.build();
+
+        builder.with("Joao","Password2","Joao Alves","joao@email.com", "23/05/1992", CourseRoles.TEACHER,"333223333")
+                .createdOn(Calendar.getInstance())
+                .withAcronym("PAP");
+
+        final User user2 = builder.build();
+
+        Course c1 = new Course(CourseName.of("Matemática"), CourseCode.of("MAT-1"),
+                CourseEdition.of("INTRO-MAT-SEM01"), CourseDescription.of("Mathematics from the beginning of time"),
+                CourseState.of(String.valueOf(CourseStateConstants.CLOSED)), CourseMaxNumberLimit.of(100),
+                CourseMinNumberLimit.of(10), user,
+                new HashSet<>(), new HashSet<>());
+
+
+        when(service.addTeacher(user2, c1)).thenReturn(c1);
     }
 }
