@@ -2,7 +2,7 @@ package exams;
 
 import eapli.framework.presentation.console.AbstractUI;
 import org.authz.application.AuthzRegistry;
-import org.domain.model.ExamTemplate;
+import org.domain.model.examtemplate.domain.ExamTemplate;
 import org.exam.application.ListCourseExamsController;
 
 import java.util.Scanner;

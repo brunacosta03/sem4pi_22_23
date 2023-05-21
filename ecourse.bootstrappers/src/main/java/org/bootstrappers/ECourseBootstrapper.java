@@ -66,7 +66,6 @@ public class ECourseBootstrapper implements Action {
         executeCourses();
         executeBoards();
         executeEnrollmentRequests();
-        executeExams();
         return true;
     }
 
@@ -151,13 +150,6 @@ public class ECourseBootstrapper implements Action {
         } catch (ConcurrencyException | IntegrityViolationException e) {
             return false;
         }
-    }
-
-    public boolean executeExams() {
-        ExamsBootstrapper bootstrapper = new ExamsBootstrapper();
-        System.out.println("Bootstrapper --> " + bootstrapper.getClass().getSimpleName());
-
-        return bootstrapper.execute();
     }
 
     /**

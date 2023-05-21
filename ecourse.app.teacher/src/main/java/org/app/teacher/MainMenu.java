@@ -34,9 +34,6 @@ public class MainMenu extends AbstractUI {
 
     private static final int SET_TEACHER_SCHEDULE_CLASS_OPTION = 2;
 
-    private static final int SET_TEACHER_CREATE_EXAM_OPTION = 3;
-
-    private static final int SET_TEACHER_LIST_COURSE_EXAMS_OPTION = 5;
 
     // FORMATIVE QUESTIONS
     private static final int SET_USER_CREATE_FORMATIVE_QUESTION_OPTION = 1;

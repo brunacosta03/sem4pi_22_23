@@ -3,8 +3,8 @@ package org.persistence;
 import eapli.framework.domain.repositories.TransactionalContext;
 import eapli.framework.infrastructure.repositories.impl.jpa.JpaAutoTxRepository;
 import org.domain.model.Course;
-import org.domain.model.ExamTemplate;
-import org.domain.model.ExamTitle;
+import org.domain.model.examtemplate.domain.ExamTemplate;
+import org.domain.model.examtemplate.domain.ExamTitle;
 import org.usermanagement.domain.model.User;
 import repositories.ExamRepository;
 

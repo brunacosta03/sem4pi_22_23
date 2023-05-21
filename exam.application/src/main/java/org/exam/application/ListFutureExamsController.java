@@ -1,14 +1,11 @@
 package org.exam.application;
 
 import org.authz.application.AuthorizationService;
-import org.domain.model.ExamTemplate;
+import org.domain.model.examtemplate.domain.ExamTemplate;
 import org.persistence.PersistenceContext;
 import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.User;
 import org.usermanagement.domain.model.UserSession;
-
-import java.time.temporal.Temporal;
-import java.util.Set;
 
 public class ListFutureExamsController {
 

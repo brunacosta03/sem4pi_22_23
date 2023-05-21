@@ -1,4 +1,4 @@
-package org.domain.model;
+package org.domain.model.examtemplate.domain;
 
 import eapli.framework.domain.model.ValueObject;
 import eapli.framework.strings.StringMixin;

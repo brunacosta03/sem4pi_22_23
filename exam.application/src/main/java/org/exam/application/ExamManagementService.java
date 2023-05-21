@@ -3,8 +3,8 @@ package org.exam.application;
 import eapli.framework.validations.Preconditions;
 import org.domain.model.Course;
 import org.domain.model.CourseCode;
-import org.domain.model.ExamBuilder;
-import org.domain.model.ExamTemplate;
+import org.domain.model.examtemplate.domain.ExamTemplate;
+import org.domain.model.examtemplate.domain.ExamTitle;
 import org.domain.repositories.CourseRepository;
 import org.usermanagement.domain.model.User;
 import repositories.ExamRepository;
@@ -12,7 +12,7 @@ import repositories.ExamRepository;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.StreamSupport;
+import java.util.Set;
 
 public class ExamManagementService {
 
@@ -52,12 +52,10 @@ public class ExamManagementService {
         return examRepo.save(newExam);
     }
 
-    public Iterable<ExamTemplate> listCourseExams(String courseCode, User teacher) {
+    public Iterable<ExamTemplate> listCourseExams(CourseCode courseCode, User teacher) {
 
-        Course course = courseRepo.findByCode(CourseCode.of(courseCode))
+        Course course = courseRepo.findByCode(courseCode)
                 .orElseThrow(() -> new IllegalArgumentException("Course with code " + courseCode + " does not exist"));
-
-        Preconditions.nonNull(course, "Course must not be null");
 
         Preconditions.ensure(teacher != null, "Teacher must not be null");
 

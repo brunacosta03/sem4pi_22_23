@@ -6,7 +6,9 @@
   <persistence-unit name="DEMO_ORMPU">
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
       <class>org.usermanagement.domain.model.User</class>
-      <class>org.domain.model.ExamTemplate</class>
+      <class>org.domain.model.examtemplate.domain.ExamTemplate</class>
+      <class>org.domain.model.examtemplate.domain.ExamTemplateQuestion</class>
+        <class>org.domain.model.examtemplate.domain.Section</class>
       <class>org.domain.model.Course</class>
       <class>org.domain.model.Class</class>
       <class>org.domain.model.Board</class>

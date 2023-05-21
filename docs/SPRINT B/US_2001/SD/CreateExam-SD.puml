@@ -11,7 +11,7 @@ participant ExamManagementService as Service <<service>>
 participant AuthenticationService as Autzh <<service>>
 participant UserSession as UserSession <<session>>
 participant ExamBuilder as Builder <<builder>>
-participant "class:Exam" as Exam <<domain>>
+participant "class:ExamTemplate" as Exam <<domain>>
 participant PersistenceContext as Context <<persistence>>
 participant RepositoryFactory as Factory <<factory>>
 database ExamRepository as Repository <<repository>>
@@ -57,17 +57,16 @@ deactivate Repository
 deactivate Factory
 
 Service -> Builder : build()
-Service -> Builder : with(title, description, startDate, endDate)
+Service -> Builder : with(title, description, startDate, endDate, teacher, students)
 
 activate Builder
-Builder -> Exam : Exam(title, description, startDate, endDate)
+Builder -> Exam : Exam(title, description, startDate, endDate, teacher, students)
 activate Exam
 Exam --> Builder : exam
 deactivate Exam
 Builder -> Service : exam
 deactivate Builder
 
-Service -> Exam : addExam()
 Service -> Repository : save(exam)
 
 activate Repository

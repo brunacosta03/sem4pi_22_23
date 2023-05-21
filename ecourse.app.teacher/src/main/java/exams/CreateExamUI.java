@@ -1,7 +1,7 @@
 package exams;
 
 import eapli.framework.presentation.console.AbstractUI;
-import org.domain.model.ExamTemplate;
+import org.domain.model.examtemplate.domain.ExamTemplate;
 import org.exam.application.CreateExamController;
 import org.authz.application.AuthzRegistry;
 
@@ -20,21 +20,9 @@ public class CreateExamUI extends AbstractUI {
 
             String courseCode = scanner.nextLine();
 
-            System.out.println("What is the title of the exam?");
+            System.out.println("What is the exam file?");
 
-            String examTitle = scanner.nextLine();
-
-            System.out.println("What is the header of the exam?");
-
-            String examHeader = scanner.nextLine();
-
-            System.out.println("When does the exam start? (dd-MM-yyyy HH:mm)");
-
-            String startDate = scanner.nextLine();
-
-            System.out.println("When does the exam end? (dd-MM-yyyy HH:mm)");
-
-            String endDate = scanner.nextLine();
+            String filePath = scanner.nextLine();
 
             ExamTemplate exam = ctrl.createExam(courseCode, examTitle, examHeader, startDate, endDate);
 

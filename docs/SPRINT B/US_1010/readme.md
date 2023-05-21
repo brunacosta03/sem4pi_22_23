@@ -213,7 +213,7 @@ public void testCreateValidClass() {
 
 **ScheduleClassUI**
 
-````
+```java
 public class ScheduleClassUI extends AbstractUI {
 
     private final Scanner scanner = new Scanner(System.in);
@@ -293,7 +293,7 @@ public class ScheduleClassController {
         return courseManagementService.scheduleNewClass(courseCode, classTitle, dayOfWeek, startTime, endTime, session.authenticatedUser());
     }
 }
-````
+```
 
 ## 6. Integration/Demonstration
 

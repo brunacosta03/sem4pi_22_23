@@ -31,7 +31,10 @@ public class MainMenu extends AbstractUI {
     private static final int SET_USER_BOARD_OPTION = 9;
     private static final int SET_USER_CREATE_BOARD_OPTION = 1;
 
-    private static final int SET_STUDENT_LIST_FUTURE_EXAMS_OPTION = 3;
+    //EXAMS
+
+    private static final int SET_EXAM_OPTION = 2;
+    private static final int SET_STUDENT_LIST_FUTURE_EXAMS_OPTION = 1;
 
 
     private final AuthorizationService authz = AuthzRegistry.authorizationService();
@@ -60,9 +63,11 @@ public class MainMenu extends AbstractUI {
 
         if (authz.isAuthenticatedUserAuthorizedTo(CourseRoles.STUDENT)) {
             final Menu studentMenu = buildStudentMenu();
+            final Menu examMenu = buildExamMenu();
             final Menu boardMenu = buildBoardMenu();
 
             mainMenu.addSubMenu(SET_STUDENT_MANAGE_COURSES_OPTION, studentMenu);
+            mainMenu.addSubMenu(SET_EXAM_OPTION, examMenu);
             mainMenu.addSubMenu(SET_USER_BOARD_OPTION, boardMenu);
         }
 
@@ -85,6 +90,16 @@ public class MainMenu extends AbstractUI {
         menu.addItem(
                 SET_STUDENT_LIST_FUTURE_EXAMS_OPTION,
                 "List Future Exams",
+                new ListFutureExamsUI()::show);
+        menu.addItem(EXIT_OPTION, RETURN_LABEL, Actions.SUCCESS);
+
+        return menu;
+    }
+
+    private Menu buildExamMenu(){
+        final Menu menu = new Menu("Exams");
+
+        menu.addItem(SET_STUDENT_LIST_AVAILABLE_COURSES_OPTION, "Create Exam",
                 new ListFutureExamsUI()::show);
         menu.addItem(EXIT_OPTION, RETURN_LABEL, Actions.SUCCESS);
 
