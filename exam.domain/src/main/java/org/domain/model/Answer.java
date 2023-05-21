@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Answer {
 
     @Id
-    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "answer_id")
     private Long id;
 

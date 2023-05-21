@@ -36,7 +36,7 @@ public class JpaAutoTxExamRepository
 
     public JpaAutoTxExamRepository(String persistenceUnitName,
                                    Map properties) {
-        super(persistenceUnitName, properties, "exam_title");
+        super(persistenceUnitName, properties, "title");
     }
 
     @Override
