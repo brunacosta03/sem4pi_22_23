@@ -117,11 +117,35 @@ package "Course Aggregate" {
         are to be considered different
         courses
     end note
+
+
+    entity Class <<entity>>
+
+    card ClassTime <<Value Object>>{
+    }
+
+    card ClassTitle <<Value Object>>{
+    }
+
+    card ClassDayOfWeek <<Value Object>>{
+    }
+
+    note right of ClassTitle
+        A class must have a unique title
+    end note
+
+    Class --> ClassTime
+    Class --> ClassTitle
+    Class --> ClassDayOfWeek
+    Course --> "*" Class : contains
 }
 
 
     Course --> "1" User : is owned
     Course --> "N" User : has
     Course --> "N" User : teaches
+
+    Class --> User : has participants
+    Class --> User : has teacher
 
 @enduml
