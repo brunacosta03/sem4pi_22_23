@@ -26,9 +26,22 @@ Regarding these requirements we understand that this User Story relates to [US10
 
 ## 3. Analysis
 
-*In this section, the team should report the study/analysis/comparison that was done in order to take the best design decisions for the requirement. This section should also include supporting diagrams/artifacts (such as domain model; use case diagrams, etc.),*
+### 3.1. Domain Model
 
-After analyzing the requirements and the dependencies, we concluded that the following classes should be created:
+![Domain Model Excerpt](Analysis/DomainModelExcerpt.svg)
+
+### 3.2 Implementation Analysis
+
+After analyzing the requirements and the dependencies of this User Story, we concluded that the following classes are involved in this functionality:
+
+- **CreateExamUI (UI)** - The user interface of the functionality.
+- **CreateExamController (Controller)** - The controller of the functionality.
+- **ExamManagementService (Service)** - The service of the functionality.
+- **ExamBuilder (Builder)** - The builder of the functionality. It is used to build a class.
+- **PersistenceContext (Persistence)** - The persistence context of the functionality.
+- **RepositoryFactory (Factory)** - The repository factory of the functionality.
+- **ExamRepository (Repository)** - The repository of the functionality.
+- **ExamTemplate (Domain)** - The domain class of the functionality.
 
 ## 4. Design
 
@@ -44,9 +57,11 @@ After analyzing the requirements and the dependencies, we concluded that the fol
 
 Some main design patterns were applied in this functionality, namely:
 - **Single Responsibility Principle (SRP)**: A class should have only one reason to change and only one responsibility.
-    - For example, in this User Story,
-- **Open/Closed Principle (OCP)**: Software entities (classes, modules, functions, etc.) should be open for extension, but closed for modification.
-    - For example, in this User Story,
+    - For example, in this User Story, the class `CreateExamController` has the responsibility of controlling the creation of an exam.
+- **Service Layer**: Defines an application's boundary with a layer of services that establishes a set of available operations and coordinates the application's response in each operation.
+  - For example, in this User Story, the class `ExamManagementService` is a service layer, since it defines the application's boundary with a layer of services that establishes a set of available operations and coordinates the application's response in each operation.
+- **Builder**: It is used to build a class.
+  - For example, in this User Story, the class `ExamBuilder` is a builder, since it is used to build the class `ExamTemplate`.
 
 ### 4.4. Tests
 

@@ -5,16 +5,18 @@ skinparam packageStyle rect
 skinparam defaultFontName FG Virgil
 skinparam shadowing false
 
+left to right direction
+
 class CreateExamUI <<presntation>> {
     doShow()
 }
 
 class CreateExamController <<application>> {
-    createExam()
+    createExam(String, String)
 }
 
 class ExamManagementService <<service>> {
-    createNewExam()
+    createExam(String, CourseCode, User)
 }
 
 class AuthorizationService <<service>> {
@@ -27,13 +29,13 @@ class UserSession {
 }
 
 
-class "class:Exam" <<domain>> {
-    addExam(Exam)
+class "class:ExamTemplate" <<domain>> {
+    ExamTemplate(ExamTitle, OpenDate, CloseDate, ExamDescription, FeedbackType, GradeType, Sections, Teacher, Students, Course)
 }
 
 class ExamBuilder <<build>> {
     build()
-    with(String, String, Date, Date)
+    with(ExamTitle, OpenDate, CloseDate, ExamDescription, FeedbackType, GradeType, Sections, Teacher, Students, Course)
 }
 
 
@@ -54,7 +56,7 @@ CreateExamController -> ExamManagementService : theService
 ExamManagementService -> AuthorizationService : autzh
 AuthorizationService -> UserSession : session
 ExamManagementService -> ExamBuilder : theBuilder
-ExamBuilder -> "class:Exam" : exam
+ExamBuilder -> "class:ExamTemplate" : exam
 ExamManagementService --> PersistenceContext : persistence
 PersistenceContext --> RepositoryFactory : factory
 RepositoryFactory --> ExamRepository : repository
