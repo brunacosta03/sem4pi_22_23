@@ -14,6 +14,6 @@
 | **B**  | [US 2001](../SPRINT%20B/US_2001/readme.md) |
 | **B**  | [US 2002](../SPRINT%20B/US_2002/readme.md) |
 | **B**  | [US 2003](../SPRINT%20B/US_2003/readme.md) |
-| **B**  | US 3001                                    |
-| **B**  | US 3003                                    |
-| **B**  | US 5001                                    |
+| **B**  | [US 3001](../SPRINT%20B/US_3001/readme.md) |
+| **B**  | [US 3003](../SPRINT%20B/US_3003/readme.md) |
+| **B**  | [US 5001](../SPRINT%20B/US_5001/US5001_Group8.pptx) |
