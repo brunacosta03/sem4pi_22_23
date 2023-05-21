@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public class JpaAutoTxExamRepository
-        extends JpaAutoTxRepository<ExamTemplate, Long, Long>
+        extends JpaAutoTxRepository<ExamTemplate, ExamTitle, ExamTitle>
         implements ExamRepository {
 
     public JpaAutoTxExamRepository(final String persistenceUnitName,
@@ -45,13 +45,13 @@ public class JpaAutoTxExamRepository
     }
 
     @Override
-    public Iterable<ExamTemplate> findAll() {
-        return this.repo.findAll();
+    public Optional<ExamTemplate> ofIdentity(ExamTitle id) {
+        return this.repo.ofIdentity(id);
     }
 
     @Override
-    public Optional<ExamTemplate> ofIdentity(ExamTitle id) {
-        return Optional.empty();
+    public Iterable<ExamTemplate> findAll() {
+        return this.repo.findAll();
     }
 
     @Override
@@ -61,7 +61,7 @@ public class JpaAutoTxExamRepository
 
     @Override
     public void deleteOfIdentity(ExamTitle entityId) {
-
+        this.repo.deleteOfIdentity(entityId);
     }
 
     @Override

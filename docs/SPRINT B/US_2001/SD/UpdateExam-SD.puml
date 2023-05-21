@@ -5,8 +5,8 @@ skinparam defaultFontName FG Virgil
 skinparam shadowing false
 
 actor Teacher as Actor
-participant CreateExamUI as UI <<presentation>>
-participant CreateExamController as Controller <<application>>
+participant UpdateExamUI as UI <<presentation>>
+participant UpdateExamController as Controller <<application>>
 participant ExamManagementService as Service <<service>>
 participant AuthenticationService as Autzh <<service>>
 participant UserSession as UserSession <<session>>
@@ -15,7 +15,6 @@ participant RepositoryFactory as Factory <<factory>>
 participant ExamTemplateEvaluator as Evaluator <<service>>
 participant ExamBuilder as Builder <<builder>>
 participant "class:ExamTemplate" as Exam <<domain>>
-database CourseRepository as CourseRepo <<repository>>
 database ExamRepository as Repository <<repository>>
 
 Actor --> UI : create an exam
@@ -23,8 +22,8 @@ Actor --> UI : create an exam
 activate UI
 UI -> Controller : create()
 UI -> Actor : ask exam's details
-Actor -> UI : courseCode, filePath
-UI -> Controller : createExam(courseCode, filePath)
+Actor -> UI : title, filePath
+UI -> Controller : updateExam(title, filePath)
 
 activate Controller
 Controller -> Autzh : create()
@@ -43,7 +42,7 @@ deactivate UserSession
 
 Controller -> Service : create()
 activate Service
-Controller -> Service : createExam(courseCode, filePath, teacher)
+Controller -> Service : updateExam(title, filePath, user)
 
 Service -> Context : repositories()
 activate Context
@@ -51,15 +50,16 @@ Context -> Factory : create()
 Context -> Service : factory
 deactivate Context
 
-Service -> Factory : courses()
+Service -> Factory : exams()
 activate Factory
-Factory -> CourseRepo : create()
-Factory -> Service : courses
+Factory -> Repository : create()
+Factory -> Service : exams
 deactivate Factory
-Service -> CourseRepo : findByCode(courseCode)
-activate CourseRepo
-CourseRepo -> Service : course
-deactivate CourseRepo
+Service -> Repository : ofIdentity(title)
+activate Repository
+Repository -> Service : exam
+deactivate Repository
+Service -> Repository : deleteOfIdentity(title)
 Service -> Evaluator : evaluateFromFile(filePath, teacher, course, courseStudents)
 activate Evaluator
 Evaluator -> Builder : build()
@@ -71,20 +71,6 @@ Exam --> Builder : examTemplate
 deactivate Exam
 Builder -> Service : examTemplate
 deactivate Builder
-
-Service -> Context : repositories()
-activate Context
-Context -> Factory : create()
-Context -> Service : factory
-deactivate Context
-
-Service -> Factory : exans()
-activate Factory
-Factory -> Repository : create()
-Factory -> Service : examRepository
-deactivate Factory
-deactivate Repository
-deactivate Factory
 
 Service -> Repository : save(examTemplate)
 

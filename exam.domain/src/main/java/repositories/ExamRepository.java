@@ -14,16 +14,6 @@ public interface ExamRepository extends DomainRepository<ExamTitle, ExamTemplate
 
     Optional<ExamTemplate> ofIdentity(ExamTitle id);
 
-    /**
-     * Get Exam with Title.
-     * @param title - the title of the exam.
-     * @return - the exam with the title.
-     */
-    default Optional<ExamTemplate> findByTitle(
-            final ExamTitle title) {
-        return ofIdentity(title);
-    }
-
     Iterable<ExamTemplate> findAll();
 
     Iterable<ExamTemplate> findExamsThatIHadCreated(User teacher);

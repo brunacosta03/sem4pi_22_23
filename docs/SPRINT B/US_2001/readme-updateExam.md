@@ -18,8 +18,7 @@ There are six different question types: **matching**, **multiple choice**, **sho
 
 **US 2001** As Teacher, I want to create an exam.
 
-- The Teacher can only create an exam if there are no other exams of the same course with the same open date and close date.
-- The Teacher can only create an exam if there is at least one section.
+- The Teacher can only update an exam if there is at least one exam previously created.
 
 Regarding these requirements we understand that this User Story relates to [US1006](../US_1006/readme.md).
 
@@ -33,8 +32,8 @@ Regarding these requirements we understand that this User Story relates to [US10
 
 After analyzing the requirements and the dependencies of this User Story, we concluded that the following classes are involved in this functionality:
 
-- **CreateExamUI (UI)** - The user interface of the functionality.
-- **CreateExamController (Controller)** - The controller of the functionality.
+- **UpdateExamUI (UI)** - The user interface of the functionality.
+- **UpdateExamController (Controller)** - The controller of the functionality.
 - **ExamManagementService (Service)** - The service of the functionality.
 - **ExamBuilder (Builder)** - The builder of the functionality. It is used to build a class.
 - **PersistenceContext (Persistence)** - The persistence context of the functionality.
@@ -46,11 +45,11 @@ After analyzing the requirements and the dependencies of this User Story, we con
 
 ### 4.1. Sequence Diagram
 
-![Sequence Diagram](SD/CreateExam-SD.svg "Create Exam - Sequence Diagram")
+![Sequence Diagram](SD/UpdateExam-SD.svg "Update Exam - Sequence Diagram")
 
 ### 4.2. Class Diagram
 
-![Class Diagram](CD/CreateExam-CD.svg "Create Exam - Class Diagram")
+![Class Diagram](CD/UpdateExam-CD.svg "Update Exam - Class Diagram")
 
 ### 4.3. Applied Patterns
 
@@ -64,61 +63,63 @@ Some main design patterns were applied in this functionality, namely:
 
 ## 5. Implementation
 
-**CreateExamUI**
+**UpdateExamUI**
 
 ```java
-public class CreateExamUI extends AbstractUI {
+public class UpdateExamUI extends AbstractUI {
 
     Scanner scanner = new Scanner(System.in);
 
-    private final CreateExamController ctrl = new CreateExamController(AuthzRegistry.authorizationService());
+    private final UpdateExamController ctrl = new UpdateExamController(AuthzRegistry.authorizationService());
 
     @Override
     protected boolean doShow() {
+
         try {
-            System.out.println("For which course do you want to create an exam?");
 
-            String courseCode = scanner.nextLine();
+            System.out.println("Which exam do you want to update? (Title)");
+            String title = scanner.nextLine();
 
-            System.out.println("What is the exam file?");
-
+            System.out.println("What is the new exam file?");
             String filePath = scanner.nextLine();
 
-            ExamTemplate exam = ctrl.createExam(courseCode, filePath);
+            ExamTemplate exam = ctrl.updateExam(title, filePath);
 
-            System.out.println("Exam created successfully!");
-
+            System.out.println("Exam updated successfully!");
 
         } catch(IllegalArgumentException iae){
             System.out.println(iae.getMessage());
         } catch(IOException ioe){
             System.out.println("File doesn't exist or is not accessible.\nTry again.");
         }
+
         return true;
+
     }
 
     @Override
     public String headline() {
-        return "Create Exam UI";
+        return "Update Exam UI";
     }
 }
 ```
 
-**CreateExamController**
+**UpdateExamController**
 
 ```java
-public class CreateExamController {
+public class UpdateExamController {
 
     private final ExamManagementService service;
 
+
     private final AuthorizationService authz;
 
-    public CreateExamController() {
+    public UpdateExamController() {
         this.authz = null;
         this.service = null;
     }
 
-    public CreateExamController(
+    public UpdateExamController(
             final AuthorizationService authzServicep
     ) {
         this.authz = authzServicep;
@@ -128,24 +129,23 @@ public class CreateExamController {
         );
     }
 
-
-    public ExamTemplate createExam(String courseCode,
-                                   String filePath) throws IOException {
+    public ExamTemplate updateExam(String title,
+                                   String filePath) throws IOException  {
         authz.ensureAuthenticatedUserHasAnyOf(CourseRoles.TEACHER);
-
-        Preconditions.ensure(courseCode != null, "Course code must not be null");
 
         UserSession session = authz.session().orElse(null);
 
         assert session != null;
         User teacher = session.authenticatedUser();
 
-        return service.createExam(filePath, CourseCode.of(courseCode), teacher);
+        return service.updateExam(ExamTitle.of(title), filePath, teacher);
     }
+
 }
 ```
-
 ## 6. Integration/Demonstration
 
-![img.png](CreateExamUI.png)
-![img.png](DatabaseCreate.png)
+![img.png](UpdateExamUI.png)
+![img.png](DatabaseUpdate.png)
+
+

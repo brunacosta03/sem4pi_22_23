@@ -26,26 +26,6 @@ public class ExamManagementService {
         this.courseRepo = courseRepo;
     }
 
-    public ExamTemplate updateExam(
-            String filePath,
-            ExamTitle title,
-            User teacher
-                                   ) throws IOException{
-
-        ExamTemplate toUpdate = examRepo.findByTitle(title).orElseThrow(
-                () -> new IllegalArgumentException("No exam with such title exists")
-        );
-
-        Preconditions.ensure(
-                toUpdate.teacher().emailAddress().equals(teacher.emailAddress()),
-                ""
-        );
-
-        toUpdate = ExamTemplateEvaluator.evaluateFromFile(filePath, teacher, toUpdate.course(), toUpdate.course().students());
-
-        return examRepo.save(toUpdate);
-    }
-
     public ExamTemplate createExam(
             String filePath,
             CourseCode courseCode,
@@ -86,5 +66,23 @@ public class ExamManagementService {
             }
 
             return listFutureExams;
+    }
+
+    public ExamTemplate updateExam(ExamTitle title,
+                                   String filePath,
+                                   User teacher) throws IOException {
+
+        ExamTemplate template = examRepo.ofIdentity(title)
+                .orElseThrow(() -> new IllegalArgumentException("Exam with title " + title + " does not exist"));
+
+        Course course = template.course();
+
+        Set<User> courseStudents = course.students();
+
+        ExamTemplate updatedTemplate = ExamTemplateEvaluator.evaluateFromFile(filePath, teacher, course, courseStudents);
+
+        examRepo.deleteOfIdentity(title);
+
+        return examRepo.save(updatedTemplate);
     }
 }
