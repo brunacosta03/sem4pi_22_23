@@ -66,6 +66,74 @@ package "User Aggregate" {
     end note
 }
 
+package "Course Aggregate" {
+    entity Course <<entity>><<root>>
+
+    'Course value objects
+    card Code <<Value Object>> {
+    }
+    card Name <<Value Object>>{
+    }
+    card State <<Value Object>>{
+    }
+    card Description <<Value Object>>{
+    }
+    card MaxStudents <<Value Object>>{
+    }
+    card MinStudents <<Value Object>>{
+    }
+    card Edition <<Value Object>>{
+    }
+
+    Course --> Name
+    Course --> State
+    Course --> Description
+    Course --> MaxStudents
+    Course --> MinStudents
+    Course --> Code
+    Course --> Edition
+
+    note right of State
+        Can be one of the following:
+            - Open
+            - Closed
+            - Enroll
+            - InProgress
+    end note
+
+    note right of Code
+        Each course has a unique code
+        Example: "JAVA-1"
+    end note
+
+    note left of Edition
+        Different editions of a course
+        are to be considered different
+        courses
+    end note
+
+    entity Class <<entity>>
+
+    card ClassTime <<Value Object>>{
+    }
+
+    card ClassTitle <<Value Object>>{
+    }
+
+    card ClassDayOfWeek <<Value Object>>{
+    }
+
+        note right of ClassTitle
+            A class must have a unique title
+        end note
+
+    Class --> ClassTime
+    Class --> ClassTitle
+    Class --> ClassDayOfWeek
+    Course --> "*" Class : contains
+
+}
+
 package "ExamTemplate Aggregate" {
     entity ExamTemplate <<Entity>> <<root>> {
     }
@@ -155,10 +223,16 @@ package "ExamTemplate Aggregate" {
     Solution --> SolutionWeight
 }
 
-
 package "ANTLR Aggregate" {
     card ANTLR {
     }
 }
+
+    ANTLR --> "N" ExamTemplate : parses
+    ExamTemplate --> "1" User : has teacher
+    Course --> "N" ExamTemplate : has
+    Course --> "1" User : is owned
+    Course --> "N" User : has
+    Course --> "N" User : teaches
 
 @enduml
