@@ -1,4 +1,4 @@
-// Generated from D:/JavaProjects/TemplateFormativeQuestion/src/main/java/org\TemplateFormativeQuestion.g4 by ANTLR 4.12.0
+// Generated from D:/JavaProjects/sem4pi-22-23-8/exam.domain/src/main/java/org/domain/model/template/formative/question\TemplateFormativeQuestion.g4 by ANTLR 4.12.0
 package org.domain.model.template.formative.question;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -144,18 +144,6 @@ public class TemplateFormativeQuestionBaseListener implements TemplateFormativeQ
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCreate_true_false_solution(TemplateFormativeQuestionParser.Create_true_false_solutionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCreate_numerical_solution(TemplateFormativeQuestionParser.Create_numerical_solutionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCreate_numerical_solution(TemplateFormativeQuestionParser.Create_numerical_solutionContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

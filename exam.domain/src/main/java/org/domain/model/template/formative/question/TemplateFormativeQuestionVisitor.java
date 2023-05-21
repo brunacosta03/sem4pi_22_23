@@ -1,4 +1,4 @@
-// Generated from D:/JavaProjects/TemplateFormativeQuestion/src/main/java/org\TemplateFormativeQuestion.g4 by ANTLR 4.12.0
+// Generated from D:/JavaProjects/sem4pi-22-23-8/exam.domain/src/main/java/org/domain/model/template/formative/question\TemplateFormativeQuestion.g4 by ANTLR 4.12.0
 package org.domain.model.template.formative.question;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -76,10 +76,4 @@ public interface TemplateFormativeQuestionVisitor<T> extends ParseTreeVisitor<T>
 	 * @return the visitor result
 	 */
 	T visitCreate_true_false_solution(TemplateFormativeQuestionParser.Create_true_false_solutionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link TemplateFormativeQuestionParser#create_numerical_solution}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCreate_numerical_solution(TemplateFormativeQuestionParser.Create_numerical_solutionContext ctx);
 }

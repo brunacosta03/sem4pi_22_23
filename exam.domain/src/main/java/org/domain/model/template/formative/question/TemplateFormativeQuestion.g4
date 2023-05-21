@@ -30,7 +30,6 @@ create_option : ID_OPTION ' '*? DESCRIPTION ' '*? ';' NEWLINE*?;
 
 create_solution : ID_SOLUTION ' '*? SOLUTION_TEXT ' '*? ';' NEWLINE*?;
 create_true_false_solution : ID_SOLUTION ' '*? TRUE_FALSE_SOLUTION_TEXT ' '*? ';' NEWLINE*?;
-create_numerical_solution : ID_SOLUTION ' '*? NUMBER ' '*? ';' NEWLINE*?;
 
 
 ID_OPTION : 'OPT';

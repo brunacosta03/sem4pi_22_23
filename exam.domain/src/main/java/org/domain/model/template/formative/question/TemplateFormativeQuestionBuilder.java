@@ -119,22 +119,6 @@ public class TemplateFormativeQuestionBuilder extends TemplateFormativeQuestionB
         );
     }
 
-    @Override
-    public void enterCreate_numerical_solution(TemplateFormativeQuestionParser.Create_numerical_solutionContext ctx) {
-        // no need for validation now, it's done in the parser
-        String solution = ctx.NUMBER().getText().substring(1, ctx.NUMBER().getText().length() - 1);
-
-        String solutionText = solution.split("|")[0];
-        Double solutionWeight = Double.parseDouble(solution.split("\\|")[1]);
-
-        solutions.add(
-                new Solution(
-                        new SolutionWeight(solutionWeight),
-                        new SolutionDescription(solutionText)
-                )
-        );
-    }
-
     public void withCourse(Course course) {
         this.course = course;
     }
