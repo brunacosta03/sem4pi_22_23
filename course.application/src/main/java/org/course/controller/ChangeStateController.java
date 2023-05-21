@@ -2,12 +2,8 @@ package org.course.controller;
 
 
 import eapli.framework.application.UseCaseController;
-import eapli.framework.domain.repositories.TransactionalContext;
 import org.authz.application.AuthorizationService;
-import org.domain.model.Course;
-import org.domain.model.CourseCode;
-import org.domain.model.CourseState;
-import org.domain.model.CourseStateConstants;
+import org.domain.model.*;
 import org.domain.repositories.CourseRepository;
 import org.persistence.PersistenceContext;
 import org.usermanagement.domain.repositories.UserRepository;
@@ -49,20 +45,10 @@ public class ChangeStateController {
     }
 
     public boolean confirmForEnrollment(Course course){
-        if(course.state().toString().equals(String.valueOf(CourseStateConstants.OPEN))||
-                course.state().toString().equals(String.valueOf(CourseStateConstants.ENROLL))){
-            return true;
-        }else{
-            throw new IllegalArgumentException("This course is in the state " + course.state().toString() + ", so it can't be changed");
-        }
+        return service.confirmForEnrollment(course);
     }
     public boolean confirmForOpenClose(Course course){
-        if(course.state().toString().equals(String.valueOf(CourseStateConstants.CLOSED))||
-                course.state().equals(String.valueOf(CourseStateConstants.IN_PROGRESS))){
-            return true;
-        }else{
-            throw new IllegalArgumentException("This course is in the state " + course.state().toString() + ", so it can't be changed");
-        }
+        return service.confirmForOpenClose(course);
     }
 
     public Course changeState(Course course){
