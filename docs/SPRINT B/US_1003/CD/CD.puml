@@ -20,9 +20,9 @@ show()
 }
 
 class ChangeStateController{
-verifyCourse(course)
-changeState(course)
-confirmForOpenClose(course)
+verifyCourse(String courseCode)
+changeState(Course course)
+confirmForOpenClose(Course course)
 }
 
 class PersistenceContext{
@@ -34,16 +34,16 @@ courses()
 }
 
 class CourseRepository{
-findByCode(code)
+findByCode(CourseCode code)
 }
 
 class Course{
-changeState(state)
+changeState(CourseState courseState)
 state()
 }
 
 class CourseManagementService{
-changeState(course)
+changeState(Course course)
 }
 
 ChangeStateUI -.-> ChangeStateController
