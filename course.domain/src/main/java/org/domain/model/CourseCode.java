@@ -2,6 +2,7 @@ package org.domain.model;
 
 
 import eapli.framework.domain.model.ValueObject;
+import eapli.framework.validations.Preconditions;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -23,8 +24,6 @@ public class CourseCode implements ValueObject, Comparable<CourseCode> {
     protected CourseCode(){ value = null;}
 
     private CourseCode(final String value){
-        //Preconditions enssurance
-
         this.value = value;
     }
 
@@ -33,7 +32,10 @@ public class CourseCode implements ValueObject, Comparable<CourseCode> {
      * @param code the unique code of students
      * @return CourseCode
      */
-    public static CourseCode of(final String code){ return new CourseCode(code);}
+    public static CourseCode of(final String code){
+        Preconditions.nonNull(code, "Code can't be null");
+        return new CourseCode(code);
+    }
 
     /**
      * Get code value.
@@ -43,7 +45,10 @@ public class CourseCode implements ValueObject, Comparable<CourseCode> {
 
     @Override
     public int compareTo(final CourseCode o) {
-        return value.compareTo(String.valueOf(o));
+        if(value.equals(o.value)){
+            return 1;
+        }
+        return 0;
     }
 
     @Override

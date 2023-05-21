@@ -2,6 +2,7 @@ package org.domain.model;
 
 
 import eapli.framework.domain.model.ValueObject;
+import eapli.framework.validations.Preconditions;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -20,10 +21,8 @@ public class CourseMaxNumberLimit implements ValueObject {
     /**
      * Instantiates a new Course max number limit.
      */
-    protected CourseMaxNumberLimit(){ value = 1000;}
 
     private CourseMaxNumberLimit(final Integer value){
-        // Preconditions ensurrance
         this.value = value;
     }
 
@@ -33,7 +32,9 @@ public class CourseMaxNumberLimit implements ValueObject {
      * @param maxValue the maximum number of students
      * @return CourseMaxNumberLimit
      */
-    public static CourseMaxNumberLimit of(final Integer  maxValue){ return new CourseMaxNumberLimit(maxValue);}
+    public static CourseMaxNumberLimit of(final Integer  maxValue){
+        Preconditions.nonNull(maxValue, "Maximum value must be higher than 0");
+        return new CourseMaxNumberLimit(maxValue);}
 
     /**
      * Get maximum number of students' value.

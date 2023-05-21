@@ -1,20 +1,17 @@
-package org.course.controller;
+package org.domain.model;
 
 import eapli.framework.domain.repositories.TransactionalContext;
 import eapli.framework.general.domain.model.EmailAddress;
 import eapli.framework.validations.Preconditions;
 import org.authz.application.AuthorizationService;
-import org.authz.application.AuthzRegistry;
-import org.domain.model.*;
-import org.domain.model.Class;
 import org.domain.repositories.CourseRepository;
-import org.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;
 import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.User;
 import org.usermanagement.domain.repositories.UserRepository;
 
-import java.util.stream.Stream;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -92,7 +89,29 @@ public class CourseManagementService{
         return courseRepo.save(course);
     }
 
-   public Course changeState(Course c){
+    public Course addTeacher(User user, Course c){
+        c.addTeacher(user);
+
+        return courseRepo.save(c);
+    }
+
+    public boolean confirmForEnrollment(Course c){
+        if(c.state().toString().equals(String.valueOf(CourseStateConstants.OPEN))||
+                c.state().toString().equals(String.valueOf(CourseStateConstants.ENROLL))){
+            return true;
+        }else{
+            throw new IllegalArgumentException("This course is in the state " + c.state().toString() + ", so it can't be changed");
+        }
+    }
+    public boolean confirmForOpenClose(Course c){
+        if(c.state().toString().equals(String.valueOf(CourseStateConstants.CLOSED))||
+                c.state().toString().equals(String.valueOf(CourseStateConstants.IN_PROGRESS))){
+            return true;
+        }else{
+            throw new IllegalArgumentException("This course is in the state " + c.state().toString() + ", so it can't be changed");
+        }
+    }
+    public Course changeState(Course c){
         txt.beginTransaction();
         CourseState state = c.state();
 
@@ -162,5 +181,42 @@ public class CourseManagementService{
         course.addClass(newClass);
 
         return courseRepo.save(course);
+    }
+
+    public Set<User> getTeachersAvailable(Course course){
+        Set<User> inCourse = course.getTeachers();
+
+        Set<User> allTeachersAvailable = new HashSet<>();
+
+        Set<User> allUsers = getTeachers();
+
+        for(User user: inCourse){
+            int count = 0;
+
+            for(User allUser: allUsers){
+                if(user.emailAddress().toString().equals(allUser.emailAddress().toString())){
+                    count++;
+                    break;
+                }
+            }
+
+            if(count==0){
+                allTeachersAvailable.add(user);
+            }
+        }
+
+        return allTeachersAvailable;
+    }
+
+    public Set<User> getTeachers(){
+        Set<User> users = new HashSet<>();
+
+        for(User user: userRepo.findAll()){
+            if(user.role().equals(CourseRoles.TEACHER.toString())){
+                users.add(user);
+            }
+        }
+
+        return users;
     }
 }

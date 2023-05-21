@@ -179,6 +179,10 @@ public class Course implements AggregateRoot<CourseCode> {
         students.remove(student);
     }
 
+    public Set<User> getStudents(){
+        return students;
+    }
+
     public void addTeacher(User teacher){
         Preconditions.ensure(
                 teacher.role().equals(CourseRoles.TEACHER.toString()),
@@ -191,6 +195,10 @@ public class Course implements AggregateRoot<CourseCode> {
                 teachers.contains(teacher),
                 "This teacher is not enrolled in this course");
         teachers.remove(teacher);
+    }
+
+    public Set<User> getTeachers(){
+        return teachers;
     }
 
     public void changeState(CourseState state){

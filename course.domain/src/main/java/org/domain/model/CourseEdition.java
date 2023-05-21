@@ -1,6 +1,7 @@
 package org.domain.model;
 
 import eapli.framework.domain.model.ValueObject;
+import eapli.framework.validations.Preconditions;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -22,7 +23,6 @@ public class CourseEdition implements ValueObject, Comparable<CourseEdition> {
     protected CourseEdition(){ value = null;}
 
     private CourseEdition(final String value){
-        //Preconditions enssurance
         this.value = value;
     }
 
@@ -32,7 +32,10 @@ public class CourseEdition implements ValueObject, Comparable<CourseEdition> {
      * @param edition the course's edition
      * @return CourseEdition
      */
-    public static CourseEdition of(final String edition){ return new CourseEdition(edition);}
+    public static CourseEdition of(final String edition){
+        Preconditions.nonNull(edition, "Edition can't be null");
+        return new CourseEdition(edition);
+    }
 
     /**
      * Get the edition's value

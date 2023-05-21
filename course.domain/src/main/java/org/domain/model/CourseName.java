@@ -1,6 +1,7 @@
 package org.domain.model;
 
 import eapli.framework.domain.model.ValueObject;
+import eapli.framework.validations.Preconditions;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -31,7 +32,9 @@ public class CourseName implements ValueObject {
      * @param name, the name of the course
      * @return CourseName
      */
-    public static CourseName of(final String name){return new CourseName(name);}
+    public static CourseName of(final String name){
+        Preconditions.nonNull(name, "Name can't be null");
+        return new CourseName(name);}
 
     public String value(){
         return this.value;
