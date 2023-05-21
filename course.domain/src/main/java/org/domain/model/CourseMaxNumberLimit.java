@@ -22,9 +22,14 @@ public class CourseMaxNumberLimit implements ValueObject {
      * Instantiates a new Course max number limit.
      */
 
-    private CourseMaxNumberLimit(final Integer value){
+    public CourseMaxNumberLimit(final Integer value){
         this.value = value;
     }
+
+    public CourseMaxNumberLimit() {
+
+    }
+
 
     /**
      * Factory method for coursemaxnumberlimit creation
