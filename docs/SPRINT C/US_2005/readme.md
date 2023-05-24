@@ -15,6 +15,7 @@ Students will take an exam that will be graded and will have access to their gra
 - The Student can only view his/her own grades.
 - The Student can only view the grades of the exams he/she took. 
 - The Student's grade is N/A if they were in the course but did not take the exam.
+- The Student's total grade is the sum of the grades of all the questions of the exams he/she took.
 
 Regarding these requirements we understand that this User Story relates to [US2004](../US_2004/readme.md).
 

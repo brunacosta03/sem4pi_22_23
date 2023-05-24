@@ -1,11 +1,191 @@
 @startuml
-'https://plantuml.com/sequence-diagram
+hide methods
+left to right direction
 
-autonumber
+skinparam classAttributeIconSize 0
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+skinparam class {
+    LifeLineBorderColor DodgerBlue
+    LifeLineBackgroundColor APPLICATION
+    BackgroundColor #D8F5FF
+    ArrowColor DodgerBlue
+    BorderColor DodgerBlue
+}
 
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+skinparam packageStyle rectangle
+
+skinparam card {
+    LifeLineBorderColor DodgerBlue
+    LifeLineBackgroundColor APPLICATION
+    BackgroundColor #D8F5FF
+    ArrowColor DodgerBlue
+    BorderColor DodgerBlue
+}
+
+package "Exam Aggregate" {
+    entity Exam <<entity>> <<root>> {
+    }
+    entity ExamQuestion <<entity>> {
+    }
+    card Answer <<Value Object>> {
+    }
+    card Grade <<Value Object>> {
+    }
+    card Grading <<Value Object>>{
+    }
+
+    Exam --> Grading
+    Exam --> ExamQuestion
+
+    ExamQuestion --> Answer
+    ExamQuestion --> Grade
+
+    note right of Grading
+        - A value between 0 and 20
+        - If a Student misses an Exam, the Exam Grade is N/A
+        - The total exam grade is the sum of the grades of all the questions
+    end note
+}
+
+package "User Aggregate" {
+    entity User <<entity>><<root>>
+
+    card EmailAddress <<Value Object>>{
+    }
+    card Password <<Value Object>>{
+    }
+    card FullName <<Value Object>>{
+    }
+    card ShortName <<Value Object>>{
+    }
+    card UserState <<Value Object>>{
+    }
+    card MechanographicNumber <<Value Object>>{
+    }
+    card Acronym <<Value Object>> {
+    }
+    card BirthDate <<Value Object>> {
+    }
+    card TaxPayerNumber <<Value Object>> {
+    }
+    card Role <<Value Object>> {
+    }
+    note right of Role: Can be Teacher, Student or Manager
+
+    User --> EmailAddress
+    User --> Password
+    User --> FullName
+    User --> ShortName
+    User --> Role
+    User --> UserState
+    User --> MechanographicNumber
+    User --> Acronym
+    User --> BirthDate
+    User --> TaxPayerNumber
+
+    note left of Role
+        This is only used for purposes
+        of authorization
+    end note
+}
+
+package "ExamTemplate Aggregate" {
+    entity ExamTemplate <<Entity>> <<root>> {
+    }
+
+    card Title <<Value Object>> {
+    }
+
+    card OpenDate <<Value Object>> {
+    }
+
+    card CloseDate <<Value Object>> {
+    }
+
+    card ExamDescription <<Value Object>> {
+    }
+
+    enum FeedbackType <<Enumeration>> {
+        None
+        On-Submission
+        After-Closing
+    }
+
+    enum GradeType <<Enumeration>> {
+        None
+        On-Submission
+        After-Closing
+    }
+
+    entity Section <<entity>> {
+    }
+
+    card SectionNumber <<Value Object>> {
+    }
+
+    card SectionDescription <<Value Object>> {
+    }
+
+    entity ExamTemplateQuestion <<entity>> {
+    }
+
+    card Solution <<Value Object>> {
+    }
+
+    card SolutionDescription <<Value Object>> {
+    }
+
+    card SolutionWeight <<Value Object>> {
+    }
+
+    card QuestionDescription <<Value Object>> {
+    }
+
+    card Answer <<Value Object>> {
+    }
+
+    enum QuestionType <<Value Object>> {
+        Matching
+        MultipleChoice
+        ShortAnswer
+        Numerical
+        MissingWords
+        TrueFalse
+        }
+
+    ExamTemplate --> Title
+    ExamTemplate --> OpenDate
+    ExamTemplate --> CloseDate
+    ExamTemplate --> Section
+    ExamTemplate --> FeedbackType
+    ExamTemplate --> GradeType
+    ExamTemplate --> ExamDescription
+
+    Section --> SectionDescription
+    Section --> ExamTemplateQuestion
+    Section --> SectionNumber
+
+    note right of SectionNumber
+        Its number will be auto-incremented
+    end note
+
+    ExamTemplateQuestion --> QuestionType
+    ExamTemplateQuestion --> QuestionDescription
+    ExamTemplateQuestion --> Answer
+    ExamTemplateQuestion --> Solution
+
+    Solution --> SolutionDescription
+    Solution --> SolutionWeight
+}
+
+package "ANTLR Aggregate" {
+    card ANTLR {
+    }
+}
+
+Exam --> "1" ExamTemplate : is based on
+User --> "N" Exam : takes
+ExamTemplate --> "1" User : has teacher
+ANTLR --> "N" ExamTemplate : parses
+
 @enduml
