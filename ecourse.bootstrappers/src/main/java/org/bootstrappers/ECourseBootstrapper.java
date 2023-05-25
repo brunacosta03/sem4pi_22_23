@@ -66,7 +66,16 @@ public class ECourseBootstrapper implements Action {
         executeCourses();
         executeBoards();
         executeEnrollmentRequests();
+        executeExams();
         return true;
+    }
+
+    private boolean executeExams() {
+        ExamsBootstrapper bootstrapper = new ExamsBootstrapper();
+
+        System.out.println("Bootstrapper --> " + bootstrapper.getClass().getSimpleName());
+
+        return bootstrapper.execute();
     }
 
     /**
