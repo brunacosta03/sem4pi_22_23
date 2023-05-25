@@ -29,9 +29,9 @@ public class ExamsBootstrapperBase {
         try{
             User user = userRepo.findUserByEmail(email).get();
 
-            //ExamTemplate examTemplate = examTemplateRepo.findByTitle(title).get();
+            ExamTemplate examTemplate = examTemplateRepo.findByTitle(title).get();
 
-            Exam exam = examRepo.save(new Exam(null, user, sections, grade));
+            Exam exam = examRepo.save(new Exam(examTemplate, user, sections, grade));
 
             System.out.println("[+] Exam added");
 

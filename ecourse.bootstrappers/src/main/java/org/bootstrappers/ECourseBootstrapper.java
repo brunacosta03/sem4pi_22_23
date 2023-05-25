@@ -66,11 +66,12 @@ public class ECourseBootstrapper implements Action {
         executeCourses();
         executeBoards();
         executeEnrollmentRequests();
-        executeExams();
+        executeExamTemplates();
+        executeExamSubmissions();
         return true;
     }
 
-    private boolean executeExams() {
+    private boolean executeExamSubmissions() {
         ExamsBootstrapper bootstrapper = new ExamsBootstrapper();
 
         System.out.println("Bootstrapper --> " + bootstrapper.getClass().getSimpleName());
@@ -115,18 +116,22 @@ public class ECourseBootstrapper implements Action {
         return bootstrapper.execute();
     }
 
-    /* public boolean executeExams() {
-        ExamsBootstrapper bootstrapper = new ExamsBootstrapper();
+    /**
+     * Boostrap for Exam Templates.
+     * @return true/false
+     */
+    public boolean executeExamTemplates() {
+        ExamTemplatesBootstrapper bootstrapper = new ExamTemplatesBootstrapper();
         System.out.println("Bootstrapper --> " + bootstrapper.getClass().getSimpleName());
 
         return bootstrapper.execute();
-    } */
+    }
 
     /**
      * Boostrap for Boards.
      * @return true/false
      */
-    public boolean executeBoards(){
+    public boolean executeBoards() {
         BoardsBootstrapper bootstrapper = new BoardsBootstrapper();
         System.out.println("Bootstrapper --> " + bootstrapper.getClass().getSimpleName());
 
