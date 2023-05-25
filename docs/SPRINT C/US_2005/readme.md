@@ -29,6 +29,13 @@ Regarding these requirements we understand that this User Story relates to [US20
 
 ### 3.2 Implementation Analysis
 
+After analyzing the requirements and the dependencies of this User Story, we concluded that the following classes should be used:
+
+- **ListExamGradesUI**: The user interface of this functionality.
+- **ListExamGradesController**: The controller of this functionality.
+- **ExamManagementService**: The service of this functionality.
+- **ExamRepository**: The repository of this functionality.
+
 ## 4. Domain
 
 ### 4.1 Sequence Diagram
@@ -37,9 +44,13 @@ Regarding these requirements we understand that this User Story relates to [US20
 
 ### 4.2 Class Diagram
 
-![Class Diagram](SD/ListExamGrades-CD.svg "List Grades - Class Diagram")
+![Class Diagram](CD/ListExamGrades-CD.svg "List Grades - Class Diagram")
 
 ### 4.3 Applied Patterns
+
+Some main design patterns were applied in this functionality, namely:
+- **Single Responsibility Principle (SRP)**: A class should have only one reason to change and only one responsibility.
+    - For example, in this User Story, the class `ListExamGradesUI` is responsible for the user interaction.
 
 ## 5. Implementation
 
