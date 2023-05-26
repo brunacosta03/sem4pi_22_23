@@ -1,24 +1,14 @@
 package repositories;
 
 import eapli.framework.domain.repositories.DomainRepository;
-import org.domain.model.Course;
-import org.domain.model.examtemplate.domain.ExamTemplate;
-import org.domain.model.examtemplate.domain.ExamTitle;
-import org.usermanagement.domain.model.User;
+import org.domain.model.exam.Exam;
 
 import java.util.Optional;
 
-public interface ExamRepository extends DomainRepository<ExamTitle, ExamTemplate> {
+public interface ExamRepository extends DomainRepository<Long, Exam> {
+    Exam save(Exam exam);
 
-    ExamTemplate save(ExamTemplate exam);
+    Optional<Exam> ofIdentity(Long id);
 
-    Optional<ExamTemplate> ofIdentity(ExamTitle id);
-
-    Iterable<ExamTemplate> findAll();
-
-    Iterable<ExamTemplate> findExamsThatIHadCreated(User teacher);
-
-    Iterable<ExamTemplate> findByCourse(Course course);
-
-    Iterable<ExamTemplate> findFutureExams(Course course);
+    Iterable<Exam> findAll();
 }

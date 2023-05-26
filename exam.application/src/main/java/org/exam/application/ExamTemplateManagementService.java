@@ -7,7 +7,7 @@ import org.domain.model.examtemplate.domain.ExamTemplate;
 import org.domain.model.examtemplate.domain.ExamTitle;
 import org.domain.repositories.CourseRepository;
 import org.usermanagement.domain.model.User;
-import repositories.ExamRepository;
+import repositories.ExamTemplateRepository;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,13 +15,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-public class ExamManagementService {
+public class ExamTemplateManagementService {
 
-    private final ExamRepository examRepo;
+    private final ExamTemplateRepository examRepo;
 
     private final CourseRepository courseRepo;
 
-    public ExamManagementService(ExamRepository examRepo, CourseRepository courseRepo) {
+    public ExamTemplateManagementService(ExamTemplateRepository examRepo, CourseRepository courseRepo) {
         this.examRepo = examRepo;
         this.courseRepo = courseRepo;
     }

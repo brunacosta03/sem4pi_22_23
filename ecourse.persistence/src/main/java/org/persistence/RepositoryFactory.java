@@ -6,6 +6,7 @@ import org.domain.repositories.CourseRepository;
 import org.enrollment.request.repositories.EnrollmentRequestRepository;
 import org.usermanagement.domain.repositories.UserRepository;
 import repositories.ExamRepository;
+import repositories.ExamTemplateRepository;
 import repositories.TemplateFormativeQuestionRepository;
 
 public interface RepositoryFactory {
@@ -43,7 +44,9 @@ public interface RepositoryFactory {
      * For configure persistence context.
      * @return ExamRepository
      */
-    ExamRepository exams();
+    ExamTemplateRepository examTemplates();
 
     TemplateFormativeQuestionRepository formativeQuestions();
+
+    ExamRepository exams();
 }

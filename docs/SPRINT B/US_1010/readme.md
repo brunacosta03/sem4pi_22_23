@@ -293,9 +293,9 @@ public class ScheduleClassController {
         return courseManagementService.scheduleNewClass(courseCode, classTitle, dayOfWeek, startTime, endTime, session.authenticatedUser());
     }
 }
-```
+````
 
 ## 6. Integration/Demonstration
 
-![img.png](img.png)
-![img_1.png](img_1.png)
+![img.png](ScheduleClassUI.png)
+![img_1.png](Database.png)

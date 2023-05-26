@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "T_EXAM")
+@Table(name = "T_EXAM_TEMPLATE")
 public class ExamTemplate implements AggregateRoot<ExamTitle> {
 
 

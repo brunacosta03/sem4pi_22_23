@@ -9,7 +9,7 @@ import org.usermanagement.domain.model.UserSession;
 
 public class ListFutureExamsController {
 
-    private final ExamManagementService service;
+    private final ExamTemplateManagementService service;
 
     private final AuthorizationService authz;
 
@@ -17,8 +17,8 @@ public class ListFutureExamsController {
             final AuthorizationService authzServicep
     ) {
         this.authz = authzServicep;
-        this.service = new ExamManagementService(
-                PersistenceContext.repositories().exams(),
+        this.service = new ExamTemplateManagementService(
+                PersistenceContext.repositories().examTemplates(),
                 PersistenceContext.repositories().courses()
         );
     }
