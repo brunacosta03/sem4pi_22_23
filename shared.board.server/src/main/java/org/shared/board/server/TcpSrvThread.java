@@ -1,11 +1,14 @@
 package org.shared.board.server;
 
+import org.authz.application.AuthorizationService;
+import org.authz.application.AuthzRegistry;
 import org.shared.board.common.Message;
 import org.shared.board.common.MessageCodes;
 import org.shared.board.common.MessageFormat;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
@@ -17,9 +20,18 @@ public class TcpSrvThread implements Runnable {
      */
     private Socket sock;
     /**
+     * The http Sock.
+     */
+    private ServerSocket httpSock;
+    /**
      * The SharedBoardServerController.
      */
     private SharedBoardServerController theController;
+
+    /**
+     * Base folder with myboards.html
+     */
+    private static final String BASE_FOLDER = "shared.board.server/src/main/java/org/shared/board/server/www";
     /**
      * The constant VERSION.
      */
@@ -30,10 +42,16 @@ public class TcpSrvThread implements Runnable {
      *
      * @param cliSer the cli s
      */
-    public TcpSrvThread(final Socket cliSer) {
-        sock = cliSer;
-        theController = new SharedBoardServerController(
-                new SharedBoardServerService());
+    public TcpSrvThread(final Socket cliSer, final int httpPort) {
+        try {
+            sock = cliSer;
+            httpSock = new ServerSocket(httpPort);
+            System.out.println("localhost:" + httpPort);
+            theController = new SharedBoardServerController(
+                    new SharedBoardServerService());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -48,6 +66,22 @@ public class TcpSrvThread implements Runnable {
         System.out.println("New client connection from "
                 + clientIP.getHostAddress()
                 + ", port number " + sock.getPort());
+
+        new Thread(() -> {
+            AuthorizationService authz = AuthzRegistry.authorizationService();
+
+            while (true) {
+                try {
+                    Socket httpCliSock = httpSock.accept();
+
+                    new Thread(new HttpRequestThread(httpCliSock, BASE_FOLDER,
+                            authz)).start();
+                } catch (IOException e) {
+                    System.out.println("Failed to accept connection");
+                }
+            }
+        }).start();
+
         try {
             MessageFormat mf = new MessageFormat(sock);
 

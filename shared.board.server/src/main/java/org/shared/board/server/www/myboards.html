@@ -1,0 +1,116 @@
+<html>
+    <head>
+        <title>My Boards</title>
+
+        <link rel="stylesheet" href="../css/style.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+        <script src="index.js"></script>
+    </head>
+
+    <body onload="checkUser()">
+        <div id="loader"></div>
+        <div id="main-container">
+            <div id="board-container">
+                <ul class="columns">
+<!--                    <li class="column">-->
+<!--                        <div class="entry-header">-->
+<!--                            <h4>To Do</h4>-->
+<!--                        </div>-->
+<!--                        <ul class="post-it-list">-->
+<!--                            <li class="post-it">-->
+<!--                                <p>Analysis</p>-->
+<!--                            </li>-->
+<!--                            <li class="post-it">-->
+<!--                                <p>Coding</p>-->
+<!--                            </li>-->
+<!--                            <li class="post-it">-->
+<!--                                <p>Card Sorting</p>-->
+<!--                            </li>-->
+<!--                            <li class="post-it">-->
+<!--                                <p>Measure</p>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+
+<!--                    <li class="column">-->
+<!--                        <div class="entry-header">-->
+<!--                            <h4>Doing</h4>-->
+<!--                        </div>-->
+<!--                        <ul class="post-it-list">-->
+<!--                            <li class="post-it">-->
+<!--                                <p>Hypothesis</p>-->
+<!--                            </li>-->
+<!--                            <li class="post-it">-->
+<!--                                <p>User Testing</p>-->
+<!--                            </li>-->
+<!--                            <li class="post-it">-->
+<!--                                <p>Prototype</p>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+
+<!--                    <li class="column">-->
+<!--                        <div class="entry-header">-->
+<!--                            <h4>Done</h4>-->
+<!--                        </div>-->
+<!--                        <ul class="post-it-list">-->
+<!--                            <li class="post-it">-->
+<!--                                <p>Ideation</p>-->
+<!--                            </li>-->
+<!--                            <li class="post-it">-->
+<!--                                <p>Sketches</p>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+
+<!--                    <li class="column">-->
+<!--                        <div class="entry-header">-->
+<!--                            <h4>Trash</h4>-->
+<!--                        </div>-->
+<!--                        <ul class="post-it-list">-->
+<!--                            <li class="post-it">-->
+<!--                                <p>Interviews</p>-->
+<!--                            </li>-->
+<!--                            <li class="post-it">-->
+<!--                                <p>Research</p>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+                </ul>
+            </div>
+
+            <section id="create-board-section">
+                <div id="create-board-container">
+                    <div>
+                        <h2 class="title">Create Board</h2>
+                        <form class="create-board-form">
+                            <h3 class="title">Board Title:</h3>
+                            <input id="board-title" type="text">
+
+                            <h3 class="title">Board Number of Columns:</h3>
+                            <input id="number-columns" type="text">
+
+                            <h3 class="title">Board Number of Rows:</h3>
+                            <input id="number-rows" type="text">
+
+                            <div class="buttons-form">
+                                <button class="button add-button" onclick="generateBoard()">Generate</button>
+                                <button class="button add-button" onclick="createBoard()">Create</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <div id="container-notification">
+                <div id="rectangle-notification">
+                    <div class="notification-text">
+                        <i class="material-icons">info</i>
+                        <span id="notification-text"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -15,7 +15,7 @@ public class SharedBoardServerService {
     /**
      * Get AuthenticationService.
      */
-    private final AuthenticationService authService = AuthzRegistry
+    private AuthenticationService authService = AuthzRegistry
             .authenticationService();
 
     /**

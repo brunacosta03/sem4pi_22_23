@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <title>Login</title>
+
+        <link rel="stylesheet" href="../css/style.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+        <script src="index.js"></script>
+    </head>
+
+    <body onload="checkUserAuth()">
+        <div id="login-main">
+            <div id="login-container">
+                <div>
+                    <h2 class="title">eCourse</h2>
+
+                    <form class="login-form">
+                        <h3 class="title">Email:</h3>
+                        <input id="email" type="email">
+
+                        <h3 class="title login--password">Password:</h3>
+                        <input id="password" type="password">
+
+                        <button class="button login-button" onclick="login()">Login</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="container-notification">
+                <div id="rectangle-notification">
+                    <div class="notification-text">
+                        <i class="material-icons">info</i>
+                        <span id="notification-text"></span>
+                    </div>
+                </div>
+            </div>
+        <div>
+    </body>
+</html>

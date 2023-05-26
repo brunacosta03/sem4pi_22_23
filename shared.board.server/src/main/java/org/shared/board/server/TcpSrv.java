@@ -14,14 +14,14 @@ import java.net.Socket;
  */
 class TcpSrv {
     /**
-     * The Sock.
+     * The tcp Sock.
      */
-    private static ServerSocket sock;
+    private static ServerSocket tcpSock;
 
     /**
-     * The PORT.
+     * The tcp PORT.
      */
-    private static final int PORT = 9999;
+    private static final int TCP_PORT = 9999;
 
     /**
      * Main.
@@ -30,25 +30,30 @@ class TcpSrv {
      * @throws Exception the exception
      */
     public static void main(final String args[]) throws Exception {
-        Socket cliSock;
+        Socket tpcCliSock;
 
         try {
-            sock = new ServerSocket(PORT);
+            tcpSock = new ServerSocket(TCP_PORT);
             System.out.println("Server is listening");
         } catch (IOException ex) {
             System.out.println("Failed to open server socket");
             System.exit(1);
         }
 
-        AuthzRegistry.configure(
-                PersistenceContext.repositories().users(),
-                new PlainTextEncoder(),
-                new ECoursePasswordPolicy()
-        );
+        int httpPort = 8000;
 
         while (true) {
-            cliSock = sock.accept();
-            new Thread(new TcpSrvThread(cliSock)).start();
+            tpcCliSock = tcpSock.accept();
+
+            AuthzRegistry.configure(
+                    PersistenceContext.repositories().users(),
+                    new PlainTextEncoder(),
+                    new ECoursePasswordPolicy()
+            );
+
+            new Thread(new TcpSrvThread(tpcCliSock, httpPort)).start();
+
+            httpPort++;
         }
     }
 }

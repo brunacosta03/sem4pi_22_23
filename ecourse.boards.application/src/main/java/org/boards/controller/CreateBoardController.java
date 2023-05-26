@@ -20,14 +20,21 @@ public class CreateBoardController {
     /**
      * Authorization service instance.
      */
-    private final AuthorizationService authz = AuthzRegistry
-                                            .authorizationService();
+    private final AuthorizationService authz;
 
     /**
      * Create a board service with repository injection.
      */
     private final BoardService boardSvc = new BoardService(
             PersistenceContext.repositories().boards());
+
+    public CreateBoardController() {
+        authz = AuthzRegistry.authorizationService();
+    }
+
+    public CreateBoardController(AuthorizationService authz) {
+        this.authz = authz;
+    }
 
     /**
      * Create shared board.
