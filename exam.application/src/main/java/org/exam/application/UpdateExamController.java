@@ -1,7 +1,6 @@
 package org.exam.application;
 
 import eapli.framework.application.UseCaseController;
-import eapli.framework.validations.Preconditions;
 import org.authz.application.AuthorizationService;
 import org.domain.model.examtemplate.domain.ExamTemplate;
 import org.domain.model.examtemplate.domain.ExamTitle;
@@ -15,7 +14,7 @@ import java.io.IOException;
 @UseCaseController
 public class UpdateExamController {
 
-    private final ExamManagementService service;
+    private final ExamTemplateManagementService service;
 
 
     private final AuthorizationService authz;
@@ -29,8 +28,8 @@ public class UpdateExamController {
             final AuthorizationService authzServicep
     ) {
         this.authz = authzServicep;
-        this.service = new ExamManagementService(
-                PersistenceContext.repositories().exams(),
+        this.service = new ExamTemplateManagementService(
+                PersistenceContext.repositories().examTemplates(),
                 PersistenceContext.repositories().courses()
         );
     }

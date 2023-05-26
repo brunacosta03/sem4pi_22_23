@@ -18,6 +18,8 @@
       <class>org.domain.model.template.formative.question.TemplateFormativeQuestion</class>
     <class>org.domain.model.Solution</class>
     <class>org.domain.model.Answer</class>
+    <class>org.domain.model.exam.Exam</class>
+    <class>org.domain.model.exam.ResolutionSection</class>
 
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost:9092/./ecourse"/>

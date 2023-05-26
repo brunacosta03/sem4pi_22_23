@@ -8,6 +8,7 @@ import org.ecourse.Application;
 import org.enrollment.request.repositories.EnrollmentRequestRepository;
 import org.usermanagement.domain.repositories.UserRepository;
 import repositories.ExamRepository;
+import repositories.ExamTemplateRepository;
 import repositories.TemplateFormativeQuestionRepository;
 
 /**
@@ -61,8 +62,8 @@ public class JpaRepositoryFactory implements RepositoryFactory {
     }
 
     @Override
-    public ExamRepository exams() {
-        return new JpaAutoTxExamRepository(
+    public ExamTemplateRepository examTemplates() {
+        return new JpaAutoTxExamTemplateRepository(
                 Application.settings().persistenceUnitName(),
                 Application.settings().extendedPersistenceProperties()
         );
@@ -71,6 +72,14 @@ public class JpaRepositoryFactory implements RepositoryFactory {
     @Override
     public TemplateFormativeQuestionRepository formativeQuestions() {
         return new JpaAutoTxTemplateFormativeQuestionRepository(
+                Application.settings().persistenceUnitName(),
+                Application.settings().extendedPersistenceProperties()
+        );
+    }
+
+    @Override
+    public ExamRepository exams() {
+        return new JpaAutoTxExamRepository(
                 Application.settings().persistenceUnitName(),
                 Application.settings().extendedPersistenceProperties()
         );
