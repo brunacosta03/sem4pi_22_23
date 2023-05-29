@@ -27,4 +27,11 @@ public class Solution {
     }
 
 
+    public String description() {
+        return this.description.value();
+    }
+
+    public Double weight() {
+        return this.weight.value();
+    }
 }

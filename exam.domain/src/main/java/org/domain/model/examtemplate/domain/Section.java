@@ -31,4 +31,16 @@ public class Section {
     public void setQuestions(List<ExamTemplateQuestion> questions){
         this.questions = questions;
     }
+
+    public SectionDescription description() {
+        return this.description;
+    }
+
+    public List<ExamTemplateQuestion> questions() {
+
+        questions.get(0);
+
+        return this.questions;
+
+    }
 }

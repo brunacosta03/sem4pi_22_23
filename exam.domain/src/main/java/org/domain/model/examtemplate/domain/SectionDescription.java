@@ -32,4 +32,8 @@ public class SectionDescription {
         SectionDescription that = (SectionDescription) o;
         return value.equals(that.value);
     }
+
+    public String value() {
+        return value;
+    }
 }

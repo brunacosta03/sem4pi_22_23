@@ -55,4 +55,20 @@ public class ExamTemplateQuestion {
     public void setSolutions(List<Solution> solutions) {
         this.solutions = solutions;
     }
+
+    public QuestionDescription description() {
+        return this.description;
+    }
+
+    public QuestionType type() {
+        return this.type;
+    }
+
+    public List<Answer> options() {
+        return this.options;
+    }
+
+    public List<Solution> solutions() {
+        return this.solutions;
+    }
 }

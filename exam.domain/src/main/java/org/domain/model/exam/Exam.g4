@@ -47,7 +47,7 @@ NAME: '"' .*? '"';
 
 NULL_OPERATOR: 'null';
 
-NUMBER : [1-9][0-9]*?( '.' [0-9]+ ) ?;
+NUMBER : [1-9][0-9]*( '.' [0-9]+ ) ?;
 
 TRUE_FALSE_OPT : 'True' | 'False';
 

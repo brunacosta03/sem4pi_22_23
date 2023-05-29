@@ -11,6 +11,7 @@ import eapli.framework.presentation.console.menu.MenuRenderer;
 import eapli.framework.presentation.console.menu.VerticalMenuRenderer;
 import enrollment.RequestEnrollmentUI;
 import exams.ListFutureExamsUI;
+import exams.TakeExamUI;
 import org.authz.application.AuthorizationService;
 import org.authz.application.AuthzRegistry;
 import org.user.management.CourseRoles;
@@ -35,6 +36,7 @@ public class MainMenu extends AbstractUI {
 
     private static final int SET_EXAM_OPTION = 2;
     private static final int SET_STUDENT_LIST_FUTURE_EXAMS_OPTION = 1;
+    private static final int SET_STUDENT_TAKE_EXAM_OPTION = 2;
 
 
     private final AuthorizationService authz = AuthzRegistry.authorizationService();
@@ -96,6 +98,8 @@ public class MainMenu extends AbstractUI {
 
         menu.addItem(SET_STUDENT_LIST_FUTURE_EXAMS_OPTION, "List Future Exams",
                 new ListFutureExamsUI()::show);
+        menu.addItem(SET_STUDENT_TAKE_EXAM_OPTION, "Take an Exam",
+                new TakeExamUI()::show);
         menu.addItem(EXIT_OPTION, RETURN_LABEL, Actions.SUCCESS);
 
         return menu;

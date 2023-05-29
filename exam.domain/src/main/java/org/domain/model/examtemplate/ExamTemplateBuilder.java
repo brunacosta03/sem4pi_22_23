@@ -82,7 +82,7 @@ public class ExamTemplateBuilder extends ExamTemplateBaseListener{
 
         number++;
 
-        sectionDescription = SectionDescription.of(ctx.DESCRIPTION().getText());
+        sectionDescription = SectionDescription.of(ctx.DESCRIPTION().getText().replaceAll("\"", ""));
 
         sections.add(
                 new Section(number, sectionDescription)

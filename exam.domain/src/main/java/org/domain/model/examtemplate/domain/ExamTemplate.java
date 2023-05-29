@@ -118,4 +118,17 @@ public class ExamTemplate implements AggregateRoot<ExamTitle> {
     public Course course() {
         return this.course;
     }
+
+    public List<Section> sections() {
+        return this.sections;
+    }
+
+    public boolean containsStudent(User student) {
+        for (User s : students) {
+            if (s.emailAddress().equals(student.emailAddress())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
