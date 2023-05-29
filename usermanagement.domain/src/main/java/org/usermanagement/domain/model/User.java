@@ -378,8 +378,7 @@ public class User
                     && this.fullName.equals(that.fullName)
                     && this.password.equals(that.password)
                     && this.email.equals(that.email)
-                    && !this.role.equals(that.role)
-                    && this.numberMec.equals(that.numberMec)
+                    && this.role.equals(that.role)
                     && this.birthDate.equals(that.birthDate)) {
                 return this.resetToken == null
                         ? that.resetToken == null

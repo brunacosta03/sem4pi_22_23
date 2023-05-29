@@ -9,6 +9,7 @@ import org.domain.model.BoardEntry;
 import org.domain.model.BoardEntryFactory;
 import org.persistence.PersistenceContext;
 import org.user.management.CourseRoles;
+import org.usermanagement.domain.model.User;
 
 import java.util.List;
 
@@ -32,10 +33,6 @@ public class CreateBoardController {
         authz = AuthzRegistry.authorizationService();
     }
 
-    public CreateBoardController(AuthorizationService authz) {
-        this.authz = authz;
-    }
-
     /**
      * Create shared board.
      * @param boardTitlep Board Title
@@ -52,6 +49,26 @@ public class CreateBoardController {
 
         return boardSvc.createBoard(boardTitlep, boardNRowp, boardNColp,
                 allBoardEntrys, authz.session().get().authenticatedUser());
+    }
+
+    /**
+     * Create shared board.
+     * @param boardTitlep Board Title
+     * @param boardNRowp Board number of rows
+     * @param boardNColp Board number of columns
+     * @param allBoardEntrys Board entrys
+     * @param authUser authenticated user
+     * @return Board
+     */
+    public Board createBoard(final String boardTitlep,
+                             final String boardNRowp,
+                             final String boardNColp,
+                             final List<BoardEntry> allBoardEntrys,
+                             final User authUser) {
+        authz.ensureAuthenticatedUserHasAnyOf(CourseRoles.allRoles());
+
+        return boardSvc.createBoard(boardTitlep, boardNRowp, boardNColp,
+                allBoardEntrys, authUser);
     }
 
     /**

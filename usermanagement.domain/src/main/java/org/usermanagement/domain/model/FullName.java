@@ -5,6 +5,7 @@ import eapli.framework.validations.Preconditions;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.util.Objects;
 
 @Embeddable
 public class FullName implements ValueObject {
@@ -52,5 +53,29 @@ public class FullName implements ValueObject {
      */
     public String value() {
         return this.value;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        FullName fullName = (FullName) o;
+
+        return Objects.equals(value, fullName.value);
+    }
+
+    /**
+     * Hash code int.
+     *
+     * @return the int
+     */
+    @Override
+    public int hashCode() {
+        return value != null ? value.hashCode() : 0;
     }
 }

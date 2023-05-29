@@ -1,7 +1,7 @@
 var validation = {
     isNumber:function(str) {
         var pattern = /^\d+\.?\d*$/;
-        return pattern.test(str);  // returns a boolean
+        return pattern.test(str);
     }
 };
 function checkUserAuth() {
@@ -15,6 +15,13 @@ function checkUserAuth() {
 
   	request.open("GET", "/user", true);
 	request.timeout = 5000;
+
+    const token = getTokenCookie();
+
+    if(token){
+        request.setRequestHeader("Authorization", token);
+    }
+
   	request.send();
 }
 
@@ -38,6 +45,13 @@ function checkUser() {
 
     request.open("GET", "/user", true);
     request.timeout = 5000;
+
+    const token = getTokenCookie();
+
+    if(token){
+        request.setRequestHeader("Authorization", token);
+    }
+
     request.send();
 }
 
@@ -48,6 +62,8 @@ function login(){
 
     requestLogin.onload = function() {
         if (requestLogin.status === 200) {
+            document.cookie = "token=" + encodeURIComponent(requestLogin.responseText);
+
             window.location.href = window.location.origin + '/myboards';
         } else {
             notification(requestLogin.responseText, requestLogin.status);
@@ -155,8 +171,14 @@ function createBoard(){
             }
         };
 
+        const token = getTokenCookie();
+
         requestPost.open("POST", "/create_board", true);
         requestPost.setRequestHeader("Content-Type", "application/json");
+
+        if(token){
+            requestPost.setRequestHeader("Authorization", token);
+        }
 
         var data = {
             boardTitle: boardTitle,
@@ -186,6 +208,14 @@ function notification(text, code){
     }
 
     setTimeout(() => notificationContainer.style.display = "none", 4000);
+}
+
+function getTokenCookie(){
+    const cookies = document.cookie.split(";").map(cookie => cookie.trim());
+    const tokenCookie = cookies.find(cookie => cookie.startsWith("token="));
+    const token = decodeURIComponent(tokenCookie.split("=")[1]);
+
+    return token;
 }
 
 function voteFor(option) {

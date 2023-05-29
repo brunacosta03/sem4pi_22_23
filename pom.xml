@@ -45,7 +45,9 @@
 		<module>shared.board.common</module>
         <module>exam.domain</module>
         <module>exam.application</module>
-	</modules>
+        <module>ecourse.postit.domain</module>
+        <module>ecourse.postit.application</module>
+    </modules>
 
 	<dependencies>
 		<dependency>

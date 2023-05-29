@@ -68,6 +68,8 @@ public class ECourseBootstrapper implements Action {
         executeEnrollmentRequests();
         executeExamTemplates();
         executeExamSubmissions();
+        executePostIts();
+
         return true;
     }
 
@@ -133,6 +135,17 @@ public class ECourseBootstrapper implements Action {
      */
     public boolean executeBoards() {
         BoardsBootstrapper bootstrapper = new BoardsBootstrapper();
+        System.out.println("Bootstrapper --> " + bootstrapper.getClass().getSimpleName());
+
+        return bootstrapper.execute();
+    }
+
+    /**
+     * Boostrap for post-its.
+     * @return true/false
+     */
+    public boolean executePostIts() {
+        PostItBootstrapper bootstrapper = new PostItBootstrapper();
         System.out.println("Bootstrapper --> " + bootstrapper.getClass().getSimpleName());
 
         return bootstrapper.execute();

@@ -2,7 +2,6 @@ package org.shared.board.server;
 
 import com.google.gson.Gson;
 import eapli.framework.domain.repositories.IntegrityViolationException;
-import org.apache.commons.httpclient.auth.InvalidCredentialsException;
 import org.authz.application.AuthorizationService;
 import org.shared.board.server.request_bodys.BoardBody;
 import org.shared.board.server.request_bodys.LoginBody;
@@ -19,16 +18,14 @@ public class HttpRequestThread extends Thread {
     DataInputStream inS;
     DataOutputStream outS;
     HttpServerAjax httpServerAjax;
-    AuthorizationService authz;
     Gson json;
 
 
-    public HttpRequestThread(Socket httpCliSock, String folder, AuthorizationService authzp) {
+    public HttpRequestThread(Socket httpCliSock, String folder) {
         this.baseFolder = folder;
         this.sock = httpCliSock;
-        this.authz = authzp;
         this.json = new Gson();
-        this.httpServerAjax = new HttpServerAjax(authzp);
+        this.httpServerAjax = new HttpServerAjax();
     }
 
     @Override
@@ -45,6 +42,8 @@ public class HttpRequestThread extends Thread {
             HTTPmessage response = new HTTPmessage();
             System.out.println(request.getURI());
 
+            String token = request.getAuthorization();
+
             if(request.getMethod().equals("GET")) {
                 if(request.getURI().equals("/myboards")) {
                     String fullname = baseFolder + "/myboards.html";
@@ -55,16 +54,15 @@ public class HttpRequestThread extends Thread {
                         fileNotFound(response);
                     }
 
-                    response.setResponseStatus("200 Ok");
                     response.send(outS);
                 }
 
                 if(request.getURI().equals("/user")) {
                     try{
                         response.setContentFromString(
-                                httpServerAjax.getAuthenticatedUser(), "text");
+                                httpServerAjax.getAuthenticatedUser(token), "text");
                         response.setResponseStatus("200 Ok");
-                    } catch (NoSuchElementException e){
+                    } catch (IllegalArgumentException | NullPointerException e){
                         response.setResponseStatus("401 unauthorized");
                     }
 
@@ -88,7 +86,7 @@ public class HttpRequestThread extends Thread {
 
             if(request.getMethod().equals("POST")){
                 if(request.getURI().equals("/create_board")){
-                    createBoard(request, response);
+                    createBoard(request, response, token);
                 }
 
                 if(request.getURI().equals("/login")){
@@ -101,7 +99,7 @@ public class HttpRequestThread extends Thread {
                                 httpServerAjax.login(body),
                                 "text");
                         response.setResponseStatus("200 Ok");
-                    } catch (InvalidCredentialsException e){
+                    } catch (Exception e){
                         response.setContentFromString(
                                 e.getMessage(),
                                 "text");
@@ -124,7 +122,7 @@ public class HttpRequestThread extends Thread {
         }
     }
 
-    public void createBoard(HTTPmessage request, HTTPmessage response){
+    public void createBoard(HTTPmessage request, HTTPmessage response, String token){
         try {
             String requestBody = request.getContentAsString();
 
@@ -132,7 +130,7 @@ public class HttpRequestThread extends Thread {
 
             try{
                 response.setContentFromString(
-                        httpServerAjax.createBoard(body),
+                        httpServerAjax.createBoard(body, token),
                         "text");
                 response.setResponseStatus("200 Ok");
             } catch (IntegrityViolationException e){

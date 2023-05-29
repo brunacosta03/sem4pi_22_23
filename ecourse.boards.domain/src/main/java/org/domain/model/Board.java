@@ -66,7 +66,8 @@ public class Board
      */
     @OneToMany(
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
     )
     private List<BoardPermission> boardPermissions;
 
@@ -136,6 +137,55 @@ public class Board
      */
     public void addPermission(final BoardPermission boardPermissionp) {
         this.boardPermissions.add(boardPermissionp);
+    }
+
+    /**
+     * Check if user has specific permission in board
+     * @param user user that should have permission
+     * @param accessLevel typer of permission
+     * @return true/false
+     */
+    public boolean userHasPermission(User user, AccessLevel accessLevel){
+        for (BoardPermission boardPermission : this.boardPermissions) {
+                if(boardPermission.userWithPermission().sameAs(user)
+                    && boardPermission.accessLevel().equals(accessLevel)){
+                    return true;
+                }
+        }
+
+        return false;
+    }
+
+    /**
+     * Find row of entry Title
+     * @return String
+     */
+    public String findRowByEntryTitle(String rowTitle){
+        EntryTitle findEntryTitle = EntryTitle.of(rowTitle);
+
+        for (BoardEntry boardEntry : this.boardEntrys) {
+            if(boardEntry.entryTitle().equals(findEntryTitle)){
+                return boardEntry.boardRow().toString();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Find column of entry Title
+     * @return String
+     */
+    public String findColumnByEntryTitle(String colTitle){
+        EntryTitle findEntryTitle = EntryTitle.of(colTitle);
+
+        for (BoardEntry boardEntry : this.boardEntrys) {
+            if(boardEntry.entryTitle().equals(findEntryTitle)){
+                return boardEntry.boardCol().toString();
+            }
+        }
+
+        return null;
     }
 
     /**

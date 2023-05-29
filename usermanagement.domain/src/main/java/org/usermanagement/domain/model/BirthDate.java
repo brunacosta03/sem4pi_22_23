@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 /**
  * The type Birth date.
@@ -100,5 +101,35 @@ public final class BirthDate implements ValueObject {
      */
     public LocalDate value() {
         return this.value;
+    }
+
+    /**
+     * Equals boolean.
+     *
+     * @param o the o
+     * @return the boolean
+     */
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        BirthDate birthDate = (BirthDate) o;
+
+        return Objects.equals(value, birthDate.value);
+    }
+
+    /**
+     * Hash code int.
+     *
+     * @return the int
+     */
+    @Override
+    public int hashCode() {
+        return value != null ? value.hashCode() : 0;
     }
 }

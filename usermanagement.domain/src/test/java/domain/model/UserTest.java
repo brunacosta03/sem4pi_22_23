@@ -49,7 +49,8 @@ class UserTest {
     private static final Calendar DEACTIVATED_ON = Calendar.getInstance();
 
     private static final String STRING_ACRONYM = "TST";
-
+    private static final String BIRTH_DATE = "10/10/2000";
+    private static final String TAX_PAYER_NUMBER = "111111111";
     private static final String STRING_NUMBER_MEC = "202300001";
 
     private static final String STRING_ROLE_TWO = "ROLE_TWO";
@@ -269,11 +270,13 @@ class UserTest {
     @Test
     void testSameAs() {
         final User user = builder.with(
-                        SHORTNAME,
-                        PASSWORD,
-                        FULLNAME,
-                        EMAIL,
-                        ROLE)
+                        STRING_SHORTNAME,
+                        STRING_PASS,
+                        STRING_FULLNAME,
+                        STRING_EMAIL,
+                        BIRTH_DATE,
+                        ROLE,
+                        TAX_PAYER_NUMBER)
                 .createdOn(CREATED_ON)
                 .build();
         final User user2 = user;
@@ -281,15 +284,17 @@ class UserTest {
         assertTrue(user.sameAs(user2));
 
         final User user3 = builder.with(
-                        SHORTNAME,
-                        PASSWORD,
-                        FULLNAME,
-                        EMAIL,
-                        ROLE)
+                        STRING_SHORTNAME,
+                        STRING_PASS,
+                        STRING_FULLNAME,
+                        STRING_EMAIL,
+                        BIRTH_DATE,
+                        ROLE,
+                        TAX_PAYER_NUMBER)
                 .createdOn(CREATED_ON)
                 .build();
 
-        assertFalse(user.sameAs(user3));
+        assertTrue(user.sameAs(user3));
     }
 
     @Test

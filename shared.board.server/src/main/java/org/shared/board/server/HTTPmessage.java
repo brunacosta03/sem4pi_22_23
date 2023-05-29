@@ -9,6 +9,7 @@ public class HTTPmessage {
     private static final String CONTENT_TYPE="Content-type:";
     private static final String CONTENT_LENGTH="Content-length:";
     private static final String CONNECTION="Connection:";
+    private static final String AUTHORIZATION = "Authorization:";
 
     private static final String[][] knownFileExt = {
             { ".pdf" , "application/pdf" } ,
@@ -59,6 +60,8 @@ public class HTTPmessage {
     private String contentType;
     private byte[] content;
 
+    private String authorization;
+
     /**
      * Creates a new HTTPmessage by receiving it from an DataInputStream
      * @param in
@@ -87,6 +90,10 @@ public class HTTPmessage {
 
         do {
             headerLine=readHeaderLine(in);
+
+            if (headerLine.toUpperCase().startsWith(AUTHORIZATION.toUpperCase())) {
+                authorization = headerLine.substring(AUTHORIZATION.length()).trim();
+            }
 
             if(headerLine.toUpperCase().startsWith(CONTENT_TYPE.toUpperCase())) {
                 contentType=headerLine.substring(CONTENT_TYPE.length()).trim();
@@ -149,6 +156,9 @@ public class HTTPmessage {
     public String getContentAsString() { return(new String(content)); }
     public String getMethod() { return method; }
     public String getURI() { return uri; }
+    public String getAuthorization() {
+        return authorization;
+    }
     public void setContentFromString(String c, String ct) {
         content=c.getBytes();
         contentType=ct;

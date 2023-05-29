@@ -89,4 +89,8 @@ public class BoardCol implements ValueObject {
         return Objects.equals(value, other.value);
     }
 
+    @Override
+    public String toString(){
+        return String.valueOf(value);
+    }
 }

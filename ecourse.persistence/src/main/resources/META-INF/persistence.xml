@@ -8,7 +8,7 @@
       <class>org.usermanagement.domain.model.User</class>
       <class>org.domain.model.examtemplate.domain.ExamTemplate</class>
       <class>org.domain.model.examtemplate.domain.ExamTemplateQuestion</class>
-        <class>org.domain.model.examtemplate.domain.Section</class>
+      <class>org.domain.model.examtemplate.domain.Section</class>
       <class>org.domain.model.Course</class>
       <class>org.domain.model.Class</class>
       <class>org.domain.model.Board</class>
@@ -16,10 +16,11 @@
       <class>org.domain.model.BoardEntry</class>
       <class>org.enrollment.request.domain.EnrollmentRequest</class>
       <class>org.domain.model.template.formative.question.TemplateFormativeQuestion</class>
-    <class>org.domain.model.Solution</class>
-    <class>org.domain.model.Answer</class>
-    <class>org.domain.model.exam.Exam</class>
-    <class>org.domain.model.exam.ResolutionSection</class>
+      <class>org.domain.model.Solution</class>
+      <class>org.domain.model.Answer</class>
+      <class>org.domain.model.exam.Exam</class>
+      <class>org.domain.model.exam.ResolutionSection</class>
+      <class>org.domain.model.postit.PostIt</class>
 
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost:9092/./ecourse"/>

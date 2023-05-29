@@ -1,12 +1,16 @@
 package org.shared.board.server;
 
+import org.apache.commons.httpclient.auth.InvalidCredentialsException;
 import org.authz.application.AuthenticationService;
 import org.authz.application.AuthzRegistry;
+import org.hibernate.Session;
 import org.shared.board.common.MessageCodes;
+import org.shared.board.server.session.SessionManager;
 import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.UserSession;
 
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * The type Shared board server service.
@@ -15,8 +19,7 @@ public class SharedBoardServerService {
     /**
      * Get AuthenticationService.
      */
-    private AuthenticationService authService = AuthzRegistry
-            .authenticationService();
+    private SessionManager sessionManager = SessionManager.getInstance();
 
     /**
      * Authenticate user int.
@@ -30,14 +33,12 @@ public class SharedBoardServerService {
         String password = userData.substring(
                 userData.indexOf("\0") + 1, userData.length() - 1);
 
-        Optional<UserSession> session = authService
-                    .authenticate(email, password,
-                            CourseRoles.allRoles());
+        try{
+            sessionManager.login(email, password);
 
-        if (session.isPresent()) {
             return MessageCodes.ACK;
+        } catch (InvalidCredentialsException e){
+            return MessageCodes.ERR;
         }
-
-        return MessageCodes.ERR;
     }
 }

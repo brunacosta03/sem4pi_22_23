@@ -49,4 +49,8 @@ public class UserSession  {
     public User authenticatedUser() {
         return authenticatedUser;
     }
+
+    public UUID token() {
+        return token;
+    }
 }

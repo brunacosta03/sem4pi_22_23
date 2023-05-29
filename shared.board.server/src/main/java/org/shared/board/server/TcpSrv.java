@@ -1,6 +1,7 @@
 package org.shared.board.server;
 
 import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
+import org.authz.application.AuthorizationService;
 import org.authz.application.AuthzRegistry;
 import org.persistence.PersistenceContext;
 import org.usermanagement.domain.model.ECoursePasswordPolicy;
@@ -24,6 +25,21 @@ class TcpSrv {
     private static final int TCP_PORT = 9999;
 
     /**
+     * The http Sock.
+     */
+    private static ServerSocket httpSock;
+
+    /**
+     * The http PORT.
+     */
+    private static final int HTTP_PORT = 8000;
+
+    /**
+     * Base folder with myboards.html
+     */
+    private static final String BASE_FOLDER = "shared.board.server/src/main/java/org/shared/board/server/www";
+
+    /**
      * Main.
      *
      * @param args the args
@@ -34,26 +50,35 @@ class TcpSrv {
 
         try {
             tcpSock = new ServerSocket(TCP_PORT);
+            httpSock = new ServerSocket(HTTP_PORT);
             System.out.println("Server is listening");
         } catch (IOException ex) {
             System.out.println("Failed to open server socket");
             System.exit(1);
         }
 
-        int httpPort = 8000;
+        AuthzRegistry.configure(
+                PersistenceContext.repositories().users(),
+                new PlainTextEncoder(),
+                new ECoursePasswordPolicy()
+        );
+
+        new Thread(() -> {
+            while (true) {
+                try {
+                    Socket httpCliSock = httpSock.accept();
+
+                    new Thread(new HttpRequestThread(httpCliSock, BASE_FOLDER)).start();
+                } catch (IOException e) {
+                    System.out.println("Failed to accept connection");
+                }
+            }
+        }).start();
 
         while (true) {
             tpcCliSock = tcpSock.accept();
 
-            AuthzRegistry.configure(
-                    PersistenceContext.repositories().users(),
-                    new PlainTextEncoder(),
-                    new ECoursePasswordPolicy()
-            );
-
-            new Thread(new TcpSrvThread(tpcCliSock, httpPort)).start();
-
-            httpPort++;
+            new Thread(new TcpSrvThread(tpcCliSock)).start();
         }
     }
 }
