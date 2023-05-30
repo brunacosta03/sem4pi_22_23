@@ -341,8 +341,10 @@ package PostItAggregate {
     }
 
     note right of PostItState
-        0 - Deleted
-        1 - Active
+        0 - CREATED
+        1 - UPDATED
+        2 - MOVED
+        3 - DELETED
     end note
 
     PostItContent <-- PostIt

@@ -39,7 +39,8 @@ class PostItFactoryTest {
                 POST_IT_ROW,
                 POST_IT_COLUMN,
                 POST_IT_OWNER,
-                BOARD
+                BOARD,
+                PostItStateType.CREATED
         );
 
         assertNotNull(postIt);
@@ -62,7 +63,8 @@ class PostItFactoryTest {
                     "10",
                     POST_IT_COLUMN,
                     POST_IT_OWNER,
-                    BOARD
+                    BOARD,
+                    PostItStateType.CREATED
             );
         });
     }
@@ -79,7 +81,8 @@ class PostItFactoryTest {
                     POST_IT_ROW,
                     "10",
                     POST_IT_OWNER,
-                    BOARD
+                    BOARD,
+                    PostItStateType.CREATED
             );
         });
     }
@@ -96,7 +99,8 @@ class PostItFactoryTest {
                     POST_IT_ROW,
                     POST_IT_COLUMN,
                     POST_IT_OWNER,
-                    BOARD
+                    BOARD,
+                    PostItStateType.CREATED
             );
         });
     }
@@ -113,7 +117,8 @@ class PostItFactoryTest {
                     POST_IT_ROW,
                     POST_IT_COLUMN,
                     POST_IT_OWNER,
-                    BOARD
+                    BOARD,
+                    PostItStateType.CREATED
             );
         });
     }
@@ -129,7 +134,8 @@ class PostItFactoryTest {
                     POST_IT_ROW,
                     POST_IT_COLUMN,
                     null,
-                    BOARD
+                    BOARD,
+                    PostItStateType.CREATED
             );
         });
     }
@@ -145,7 +151,8 @@ class PostItFactoryTest {
                     POST_IT_ROW,
                     POST_IT_COLUMN,
                     POST_IT_OWNER,
-                    null
+                    null,
+                    PostItStateType.CREATED
             );
         });
     }

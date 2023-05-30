@@ -95,6 +95,7 @@ void testCreatePostItSuccessful() {
     assertEquals(PostItColumn.of(POST_IT_ROW_COL, board.boardNCol()), createdPostIt.columnPos());
     assertEquals(postItOwner, createdPostIt.owner());
     assertEquals(board, createdPostIt.board());
+    assertEquals(PostItStateType.CREATED, createdPostIt.state());
     verify(postItRepository, times(1)).save(any(PostIt.class));
 }
 ```
@@ -334,7 +335,8 @@ public class PostItService {
                 postItRowp,
                 postItColumnp,
                 postItOwner,
-                board);
+                board,
+                PostItStateType.CREATED);
 
         return postItRepository.save(postIt);
     }
@@ -352,7 +354,9 @@ public class PostItService {
         PostIt postIt = postItRepository.positByPosition(postItRowp,
                     postItColumnp, boardp);
 
-        if(!postIt.state()){
+        if(postIt != null
+                && (postIt.state().equals(PostItStateType.DELETED)
+                || postIt.state().equals(PostItStateType.MOVED))){
             return null;
         }
 

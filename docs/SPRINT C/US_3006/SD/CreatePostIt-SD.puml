@@ -53,10 +53,10 @@ activate Server
 
 
         Service -> PFactory: create()
-        Service -> PFactory: create(postItContent, postItRow, postItColumn, postItOwner, board)
+        Service -> PFactory: create(postItContent, postItRow, postItColumn,\npostItOwner, board, PostItStateType.CREATED)
         activate PFactory
 
-        PFactory -> Domain: PostIt(postItContent, postItRow, postItColumn, postItOwner, board)
+        PFactory -> Domain: PostIt(postItContent, postItRow, postItColumn,\npostItOwner, board, postItState)
         activate Domain
             Domain -> PFactory: postIt
         deactivate Domain

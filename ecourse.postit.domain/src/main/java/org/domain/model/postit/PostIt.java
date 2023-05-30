@@ -56,9 +56,9 @@ public class PostIt
     private PostItColumn postItColumn;
 
     /**
-     * Active or Deleted.
+     * CREATED, UPDATED, MOVED, DELETED.
      */
-    private boolean postItState;
+    private PostItState postItState;
 
     /**
      * Post-It Owner.
@@ -75,6 +75,13 @@ public class PostIt
     private Board boardId;
 
     /**
+     * Moved from post it.
+     */
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "moved_from_post_it_id")
+    private PostIt comeFromPostIt;
+
+    /**
      * Instantiates a new Post-It.
      */
     protected PostIt() {
@@ -83,23 +90,25 @@ public class PostIt
 
     /**
      * Instantiates a new Post-It.
-     * @param postItContentp the post it contentp
-     * @param postItRowp     the post it rowp
-     * @param postItColumnp  the post it columnp
-     * @param postItOwnerp   the post it ownerp
+     * @param postItContentp the post-it contentp
+     * @param postItRowp     the post-it rowp
+     * @param postItColumnp  the post-it columnp
+     * @param postItOwnerp   the post-it ownerp
      * @param boardIdp       the board idp
+     * @param postItStatep   the post-it state
      */
     PostIt(final PostItContent postItContentp,
            final PostItRow postItRowp,
            final PostItColumn postItColumnp,
            final User postItOwnerp,
-           final Board boardIdp) {
+           final Board boardIdp,
+           final PostItState postItStatep) {
         this.postItContent = postItContentp;
         this.postItRow = postItRowp;
         this.postItColumn = postItColumnp;
         this.postItOwner = postItOwnerp;
         this.boardId = boardIdp;
-        this.postItState = true;
+        this.postItState = postItStatep;
         this.postItTimeStamp = CurrentTimeCalendars.now();
     }
 
@@ -145,9 +154,9 @@ public class PostIt
 
     /**
      * Get Post-It state.
-     * @return Active or deleted
+     * @return CREATED, UPDATED, MOVED, DELETED
      */
-    public boolean state() {
+    public PostItState state() {
         return postItState;
     }
 

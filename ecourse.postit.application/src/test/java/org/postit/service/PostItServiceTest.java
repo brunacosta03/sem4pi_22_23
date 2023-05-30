@@ -2,10 +2,7 @@ package org.postit.service;
 
 import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
 import org.domain.model.*;
-import org.domain.model.postit.PostIt;
-import org.domain.model.postit.PostItColumn;
-import org.domain.model.postit.PostItFactory;
-import org.domain.model.postit.PostItRow;
+import org.domain.model.postit.*;
 import org.domain.repositories.BoardRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -71,6 +68,7 @@ class PostItServiceTest {
         assertEquals(PostItColumn.of(POST_IT_ROW_COL, board.boardNCol()), createdPostIt.columnPos());
         assertEquals(postItOwner, createdPostIt.owner());
         assertEquals(board, createdPostIt.board());
+        assertEquals(PostItStateType.CREATED, createdPostIt.state());
         verify(postItRepository, times(1)).save(any(PostIt.class));
     }
 

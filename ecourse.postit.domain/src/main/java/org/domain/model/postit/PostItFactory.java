@@ -23,19 +23,22 @@ public class PostItFactory {
      * @param postItColumn  the post-it column
      * @param postItOwner   the post-it owner
      * @param board         the board
+     * @param postItState   the post-it state
      * @return the post it
      */
     public PostIt create(final String postItContent,
                                 final String postItRow,
                                 final String postItColumn,
                                 final User postItOwner,
-                                final Board board) {
+                                final Board board,
+                                final PostItState postItState) {
         return new PostIt(
                 PostItContent.of(postItContent),
                 PostItRow.of(postItRow, board.boardNRow()),
                 PostItColumn.of(postItColumn, board.boardNCol()),
                 postItOwner,
-                board
+                board,
+                postItState
         );
     }
 }

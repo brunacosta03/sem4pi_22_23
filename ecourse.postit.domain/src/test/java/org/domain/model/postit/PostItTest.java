@@ -39,7 +39,8 @@ class PostItTest {
                 POST_IT_ROW,
                 POST_IT_COLUMN,
                 POST_IT_OWNER,
-                BOARD
+                BOARD,
+                PostItStateType.CREATED
         );
 
         assertNotNull(postIt);
@@ -47,7 +48,7 @@ class PostItTest {
         assertEquals(POST_IT_CONTENT, postIt.content().value());
         assertEquals(Integer.parseInt(POST_IT_ROW), postIt.rowPos().value());
         assertEquals(Integer.parseInt(POST_IT_COLUMN), postIt.columnPos().value());
-        assertTrue(postIt.state());
+        assertEquals(PostItStateType.CREATED, postIt.state());
         assertEquals(POST_IT_OWNER, postIt.owner());
         assertEquals(BOARD, postIt.board());
     }
@@ -92,7 +93,8 @@ class PostItTest {
                 POST_IT_ROW,
                 POST_IT_COLUMN,
                 POST_IT_OWNER,
-                BOARD
+                BOARD,
+                PostItStateType.CREATED
         );
 
         return postIt;

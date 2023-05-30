@@ -94,7 +94,8 @@ public class PostItService {
                 postItRowp,
                 postItColumnp,
                 postItOwner,
-                board);
+                board,
+                PostItStateType.CREATED);
 
         return postItRepository.save(postIt);
     }
@@ -112,7 +113,9 @@ public class PostItService {
         PostIt postIt = postItRepository.positByPosition(postItRowp,
                     postItColumnp, boardp);
 
-        if(postIt != null && !postIt.state()){
+        if(postIt != null
+                && (postIt.state().equals(PostItStateType.DELETED)
+                || postIt.state().equals(PostItStateType.MOVED))){
             return null;
         }
 

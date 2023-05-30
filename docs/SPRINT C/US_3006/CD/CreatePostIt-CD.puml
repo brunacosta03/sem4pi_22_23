@@ -42,11 +42,12 @@ PostItService : checkIfIsRowEntryTitle(String, Board)
 PostItService : checkIfIsColumnEntryTitle(String, Board)
 PostItService : postItByPosition(String, String, Board)
 PostItService : isNumeric(String)
-PostItFactory : create(String, String, String, User, Board)
+PostItFactory : create(String, String, String, User, Board, PostItState)
 Board : userHasPermission(User, AccessLevel)
 PostItRepository : positByPosition(String, String, Board)
 PostItRepository : save(PostIt)
 BoardRepository : ofIdentity(Long)
+PostIt : PostIt(PostItContent, PostItRow, PostItColumn, User, Board, PostItState)
 
 
 @enduml
