@@ -11,6 +11,9 @@ import repositories.ExamRepository;
 import repositories.ExamTemplateRepository;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Collection;
 
 @Service
 public class ExamService {
@@ -42,4 +45,12 @@ public class ExamService {
         return this.repo.save(evaluated);
     }
 
+    public Iterable<Exam> listExamGrades(User student) {
+
+        List<Exam> listExamGrades = new ArrayList<>();
+
+        listExamGrades.addAll((Collection<? extends Exam>) repo.findGradesByStudentEmail(student));
+
+        return listExamGrades;
+    }
 }

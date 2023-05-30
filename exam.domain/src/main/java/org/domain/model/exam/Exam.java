@@ -7,7 +7,6 @@ import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.User;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(
@@ -82,10 +81,11 @@ public class Exam implements AggregateRoot<Long> {
 
     @Override
     public String toString() {
+
         return
         "Exam: " + this.examTemplate.identity().value() + "\n"
         + "Course: " + this.examTemplate.course().identity().value() + "\n"
         + "Student: " + this.student.identity() + "\n"
-        + "Grade: " + this.schoolGrade() + "\n";
+        + "Grade: " + String.format("%.1f",this.schoolGrade()) + "\n";
     }
 }
