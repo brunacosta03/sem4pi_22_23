@@ -1,5 +1,4 @@
 @startuml
-@startuml
 
 skinparam monochrome true
 skinparam packageStyle rect
@@ -56,7 +55,7 @@ Factory -> Repository : create()
 Factory -> Service : examRepository
 deactivate Factory
 
-Service -> Repository : findGradesByStudent()
+Service -> Repository : findGradesByStudentEmail()
 
 activate Repository
 Repository --> Service : examGrades

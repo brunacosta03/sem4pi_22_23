@@ -56,6 +56,92 @@ Some main design patterns were applied in this functionality, namely:
 
 **ListExamGradesUI**
 
+```java
+package exams;
+
+import eapli.framework.presentation.console.AbstractUI;
+import org.authz.application.AuthzRegistry;
+import org.domain.model.exam.Exam;
+import org.exam.application.ListExamGradesController;
+
+public class ListExamGradesUI extends AbstractUI {
+
+    private final ListExamGradesController ctrl = new ListExamGradesController(AuthzRegistry.authorizationService());
+
+    @Override
+    protected boolean doShow() {
+        try {
+
+            Iterable<Exam> exams = ctrl.listExamGrades();
+
+            if (exams.iterator().hasNext()) {
+                for (Exam exam : exams) {
+                    System.out.printf("Title: %s\nCourse: %s\nStudent: %s\nGrade: %.2f\n\n", exam.title(), exam.course(), exam.student(), exam.schoolGrade());
+                }
+            } else {
+                System.out.println("The student did not take any exams yet");
+            }
+
+        } catch (IllegalArgumentException iae) {
+            System.out.println(iae.getMessage());
+        }
+
+        return true;
+
+    }
+
+    @Override
+    public String headline() {
+        return "List Exam Grades";
+    }
+}
+```
+
 **ListExamGradesController**
 
+```java
+package org.exam.application;
+
+import org.authz.application.AuthorizationService;
+import org.domain.model.exam.Exam;
+import org.persistence.PersistenceContext;
+import org.user.management.CourseRoles;
+import org.usermanagement.domain.model.User;
+import org.usermanagement.domain.model.UserSession;
+
+public class ListExamGradesController {
+
+    private final ExamService service;
+
+    private final AuthorizationService authz;
+
+    public ListExamGradesController(
+            final AuthorizationService authzServicep
+    ) {
+        this.authz = authzServicep;
+        this.service = new ExamService(
+                PersistenceContext.repositories().exams(),
+                PersistenceContext.repositories().examTemplates(),
+                PersistenceContext.repositories().courses()
+        );
+    }
+
+    public Iterable<Exam> listExamGrades() {
+
+        authz.ensureAuthenticatedUserHasAnyOf(CourseRoles.STUDENT);
+
+        UserSession session = authz.session().orElse(null);
+
+        assert session != null;
+        User student = session.authenticatedUser();
+
+        return service.listExamGrades(student);
+
+    }
+
+}
+```
+
 ## 6. Integration/Demonstration
+![img.png](ListExamGradesUI.png)
+![img.png](Database.png)
