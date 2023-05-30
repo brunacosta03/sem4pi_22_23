@@ -245,7 +245,7 @@ package "ExamTemplate Aggregate" {
 }
 
 
-package "ANTLR Aggregate" {
+package "ANTLR Service" {
     card ANTLR {
     }
 }

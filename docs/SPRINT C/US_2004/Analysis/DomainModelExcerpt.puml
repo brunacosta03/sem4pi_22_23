@@ -167,7 +167,7 @@ package "ExamTemplate Aggregate" {
     Solution --> SolutionWeight
 }
 
-package "ANTLR Aggregate" {
+package "ANTLR Service" {
     card ANTLR {
     }
 }
