@@ -104,6 +104,14 @@ public class PostIt
     }
 
     /**
+     * Get Post-It content.
+     * @return PostItContent post-it content
+     */
+    public PostItContent content() {
+        return postItContent;
+    }
+
+    /**
      * Get Post-It column.
      * @return PostItColumn post-it column
      */
@@ -117,6 +125,14 @@ public class PostIt
      */
     public PostItRow rowPos() {
         return postItRow;
+    }
+
+    /**
+     * Get Post-It owner.
+     * @return User post-it owner
+     */
+    public User owner() {
+        return postItOwner;
     }
 
     /**

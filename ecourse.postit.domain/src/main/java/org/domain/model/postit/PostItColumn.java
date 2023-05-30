@@ -87,5 +87,4 @@ public class PostItColumn implements ValueObject {
         PostItColumn other = (PostItColumn) obj;
         return Objects.equals(value, other.value);
     }
-
 }

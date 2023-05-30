@@ -76,21 +76,76 @@ This is an excerpt of our domain Model, it provides the clear idea of how the Po
 
 **Test 1:** *Create a valid post-it*
 
-```java
+```Java
+@Test
+void testCreatePostItSuccessful() {
+    User postItOwner = managerUser();
+    Board board = createBoard();
 
-````
+    board.addPermission(createBoardPermission(postItOwner));
+    when(boardRepository.ofIdentity(123L)).thenReturn(Optional.of(board));
+    when(postItRepository.positByPosition(POST_IT_ROW_COL, POST_IT_ROW_COL, board)).thenReturn(null);
+    when(postItRepository.save(any(PostIt.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-**Test 2:** *Create a post-it with column outside of board should throw error.*
+    PostIt createdPostIt = postItService.createPostIt(POST_IT_CONTENT, POST_IT_ROW_COL, POST_IT_ROW_COL, postItOwner, BOARD_ID);
 
-```java
+    assertNotNull(createdPostIt);
+    assertEquals(POST_IT_CONTENT, createdPostIt.content().value());
+    assertEquals(PostItRow.of(POST_IT_ROW_COL, board.boardNRow()), createdPostIt.rowPos());
+    assertEquals(PostItColumn.of(POST_IT_ROW_COL, board.boardNCol()), createdPostIt.columnPos());
+    assertEquals(postItOwner, createdPostIt.owner());
+    assertEquals(board, createdPostIt.board());
+    verify(postItRepository, times(1)).save(any(PostIt.class));
+}
+```
 
-````
+**Test 2:** *Create a post-it with row outside of board should throw error.*
 
-**Test 3:** *Create a post-it with row outside of board should throw error.*
+```Java
+@Test
+void testCreatePostWithRowPosOutsideShouldThrowError() {
+    User postItOwner = managerUser();
+    Board board = createBoard();
 
-```java
+    board.addPermission(createBoardPermission(postItOwner));
+    when(boardRepository.ofIdentity(123L)).thenReturn(Optional.of(board));
+    when(postItRepository.positByPosition(POST_IT_ROW_COL, POST_IT_ROW_COL, board)).thenReturn(null);
+    when(postItRepository.save(any(PostIt.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-````
+    assertThrows(IllegalArgumentException.class, () -> {
+        postItService.createPostIt(
+                POST_IT_CONTENT,
+                "10",
+                POST_IT_ROW_COL,
+                postItOwner,
+                BOARD_ID);
+    });
+}
+```
+
+**Test 3:** *Create a post-it with column outside of board should throw error.*
+
+```Java
+@Test
+void testCreatePostWithColumnPosOutsideShouldThrowError() {
+    User postItOwner = managerUser();
+    Board board = createBoard();
+
+    board.addPermission(createBoardPermission(postItOwner));
+    when(boardRepository.ofIdentity(123L)).thenReturn(Optional.of(board));
+    when(postItRepository.positByPosition(POST_IT_ROW_COL, POST_IT_ROW_COL, board)).thenReturn(null);
+    when(postItRepository.save(any(PostIt.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+    assertThrows(IllegalArgumentException.class, () -> {
+        postItService.createPostIt(
+                POST_IT_CONTENT,
+                POST_IT_ROW_COL,
+                "10",
+                postItOwner,
+                BOARD_ID);
+    });
+}
+```
 
 ## 5. Implementation
 

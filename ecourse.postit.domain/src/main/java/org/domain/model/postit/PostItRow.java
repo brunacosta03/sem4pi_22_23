@@ -3,7 +3,6 @@ package org.domain.model.postit;
 import eapli.framework.domain.model.ValueObject;
 import eapli.framework.validations.Preconditions;
 import org.domain.model.BoardNRow;
-import org.ecourse.Application;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -88,4 +87,8 @@ public class PostItRow implements ValueObject {
         return Objects.equals(value, other.value);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
 }

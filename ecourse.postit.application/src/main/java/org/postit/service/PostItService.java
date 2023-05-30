@@ -112,7 +112,7 @@ public class PostItService {
         PostIt postIt = postItRepository.positByPosition(postItRowp,
                     postItColumnp, boardp);
 
-        if(!postIt.state()){
+        if(postIt != null && !postIt.state()){
             return null;
         }
 
