@@ -1,12 +1,14 @@
 package org.postit.controller;
 
 import eapli.framework.application.UseCaseController;
+import eapli.framework.validations.Preconditions;
 import org.authz.application.AuthorizationService;
 import org.authz.application.AuthzRegistry;
 import org.domain.model.postit.PostIt;
 import org.persistence.PersistenceContext;
 import org.postit.service.PostItService;
 import org.user.management.CourseRoles;
+import org.usermanagement.domain.model.User;
 
 /**
  * Controller class for adding a new post-it to the board.
@@ -35,10 +37,10 @@ public class CreatePostItController {
 
     /**
      * Create post it.
-     * @param postItContentp the post it contentp
-     * @param postItRowp     the post it rowp
-     * @param postItColumnp  the post it columnp
-     * @param boardIdp       the board idp
+     * @param postItContentp the post-it contentp
+     * @param postItRowp     the post-it rowp
+     * @param postItColumnp  the post-it columnp
+     * @param boardIdp       the board id
      * @return the post it
      */
     public PostIt createPostIt(final String postItContentp,
@@ -49,5 +51,25 @@ public class CreatePostItController {
 
         return postItSvc.createPostIt(postItContentp, postItRowp, postItColumnp,
                 authz.session().get().authenticatedUser(), boardIdp);
+    }
+
+    /**
+     * Create post it.
+     * @param postItContentp the post-it contentp
+     * @param postItRowp     the post-it rowp
+     * @param postItColumnp  the post-it columnp
+     * @param boardIdp       the board id
+     * @return the post it
+     */
+    public PostIt createPostIt(final String postItContentp,
+                               final String postItRowp,
+                               final String postItColumnp,
+                               final String boardIdp,
+                               final User authUser) {
+        Preconditions.ensure(authUser != null,
+                "You need to authenticate first");
+
+        return postItSvc.createPostIt(postItContentp, postItRowp, postItColumnp,
+                authUser, boardIdp);
     }
 }

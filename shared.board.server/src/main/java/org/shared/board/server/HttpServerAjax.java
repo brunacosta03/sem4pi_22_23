@@ -2,9 +2,9 @@ package org.shared.board.server;
 
 import eapli.framework.domain.repositories.IntegrityViolationException;
 import org.apache.commons.httpclient.auth.InvalidCredentialsException;
-import org.authz.application.AuthorizationService;
 import org.boards.controller.CreateBoardController;
 import org.domain.model.BoardEntry;
+import org.postit.controller.CreatePostItController;
 import org.shared.board.server.request_bodys.BoardBody;
 import org.shared.board.server.request_bodys.LoginBody;
 import org.shared.board.server.session.SessionManager;
@@ -12,7 +12,6 @@ import org.usermanagement.domain.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
 public class HttpServerAjax {
@@ -27,7 +26,7 @@ public class HttpServerAjax {
         this.sessionManager = SessionManager.getInstance();
     }
 
-    public synchronized String getAuthenticatedUser(String token)
+    public String getAuthenticatedUser(String token)
             throws IllegalArgumentException, NullPointerException {
         String textHtml = String.valueOf(sessionManager.getUserByToken(token).identity());
 
@@ -50,7 +49,8 @@ public class HttpServerAjax {
                     String.valueOf(i),
                     boardEntrys.get(i - 1),
                     requestBody.boardNRow(),
-                    requestBody.boardNColumn()
+                    requestBody.boardNColumn(),
+                    authUser
             );
 
             allBoardEntrys.add(boardEntry);
@@ -64,7 +64,8 @@ public class HttpServerAjax {
                     MIN_ROWS_COLS,
                     boardEntrys.get(j),
                     requestBody.boardNRow(),
-                    requestBody.boardNColumn()
+                    requestBody.boardNColumn(),
+                    authUser
             );
 
             j++;
@@ -86,5 +87,12 @@ public class HttpServerAjax {
         UUID token = sessionManager.login(body.email(), body.password());
 
         return token.toString();
+    }
+
+    public synchronized String createPostIt(String token){
+        CreatePostItController theController = new CreatePostItController();
+        User authUser = sessionManager.getUserByToken(token);
+
+        return "Post-It created successfully!";
     }
 }

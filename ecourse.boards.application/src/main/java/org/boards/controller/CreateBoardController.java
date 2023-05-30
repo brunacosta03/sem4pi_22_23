@@ -1,6 +1,7 @@
 package org.boards.controller;
 
 import eapli.framework.application.UseCaseController;
+import eapli.framework.validations.Preconditions;
 import org.authz.application.AuthorizationService;
 import org.authz.application.AuthzRegistry;
 import org.boards.service.BoardService;
@@ -65,7 +66,8 @@ public class CreateBoardController {
                              final String boardNColp,
                              final List<BoardEntry> allBoardEntrys,
                              final User authUser) {
-        authz.ensureAuthenticatedUserHasAnyOf(CourseRoles.allRoles());
+        Preconditions.ensure(authUser != null,
+                "You need to authenticate first");
 
         return boardSvc.createBoard(boardTitlep, boardNRowp, boardNColp,
                 allBoardEntrys, authUser);
@@ -88,6 +90,36 @@ public class CreateBoardController {
                                        final String boardNRowp,
                                        final String boardNColps) {
         authz.ensureAuthenticatedUserHasAnyOf(CourseRoles.allRoles());
+
+        return new BoardEntryFactory().create(
+                entryNumberp,
+                boardRowp,
+                boardColp,
+                entryTitlep,
+                boardNRowp,
+                boardNColps
+        );
+    }
+
+    /**
+     * Create board entry.
+     * @param entryNumberp Entry number
+     * @param boardRowp Row position
+     * @param boardColp Column position
+     * @param entryTitlep Entry Title
+     * @param boardNRowp Board number of rows
+     * @param boardNColps Board number of columns
+     * @return BoardEntry
+     */
+    public BoardEntry createBoardEntry(final String entryNumberp,
+                                       final String boardRowp,
+                                       final String boardColp,
+                                       final String entryTitlep,
+                                       final String boardNRowp,
+                                       final String boardNColps,
+                                       final User authUser ) {
+        Preconditions.ensure(authUser != null,
+                "You need to authenticate first");
 
         return new BoardEntryFactory().create(
                 entryNumberp,

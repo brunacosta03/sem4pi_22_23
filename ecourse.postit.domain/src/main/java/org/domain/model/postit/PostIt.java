@@ -128,6 +128,14 @@ public class PostIt
     }
 
     /**
+     * Get Post-It state.
+     * @return Active or deleted
+     */
+    public boolean state() {
+        return postItState;
+    }
+
+    /**
      * Check if some Board is the same object then other.
      * @param other
      * @return true/false
