@@ -57,10 +57,20 @@ public class HttpRequestThread extends Thread {
                     response.send(outS);
                 }
 
+                if(request.getURI().equals("/all_my_boards")) {
+                    response.setContentFromString(
+                            httpServerAjax.getUserAccessBoards(token),
+                            "application/json");
+                    response.setResponseStatus("200 Ok");
+
+                    response.send(outS);
+                }
+
                 if(request.getURI().equals("/user")) {
                     try{
                         response.setContentFromString(
-                                httpServerAjax.getAuthenticatedUser(token), "text");
+                                httpServerAjax.getAuthenticatedUser(token),
+                                "text");
                         response.setResponseStatus("200 Ok");
                     } catch (IllegalArgumentException | NullPointerException e){
                         response.setResponseStatus("401 unauthorized");
@@ -156,7 +166,7 @@ public class HttpRequestThread extends Thread {
             try{
                 response.setContentFromString(
                         httpServerAjax.createBoard(body, token),
-                        "text");
+                        "application/json");
                 response.setResponseStatus("200 Ok");
             } catch (IntegrityViolationException e){
                 response.setContentFromString(

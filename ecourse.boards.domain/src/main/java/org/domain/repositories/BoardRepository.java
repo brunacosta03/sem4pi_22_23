@@ -2,7 +2,10 @@ package org.domain.repositories;
 
 import eapli.framework.domain.repositories.DomainRepository;
 import org.domain.model.Board;
+import org.domain.model.BoardPermission;
+import org.usermanagement.domain.model.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface BoardRepository extends DomainRepository<Long, Board> {
@@ -19,4 +22,11 @@ public interface BoardRepository extends DomainRepository<Long, Board> {
      * @return Board
      */
     Optional<Board> ofIdentity(Long id);
+
+    /**
+     * Get boards that user have permission.
+     * @param user user
+     * @return List<Board>
+     */
+    Iterable<Board> getBoardsByUser(User user);
 }

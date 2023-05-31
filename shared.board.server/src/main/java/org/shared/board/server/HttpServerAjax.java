@@ -1,20 +1,29 @@
 package org.shared.board.server;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import eapli.framework.domain.repositories.IntegrityViolationException;
 import org.apache.commons.httpclient.auth.InvalidCredentialsException;
 import org.boards.controller.CreateBoardController;
+import org.boards.controller.GetBoardsController;
+import org.domain.model.Board;
 import org.domain.model.BoardEntry;
 import org.postit.controller.CreatePostItController;
+import org.shared.board.server.gson_adapter.HibernateProxyTypeAdapter;
+import org.shared.board.server.gson_adapter.LocalDateAdapter;
 import org.shared.board.server.request_bodys.BoardBody;
 import org.shared.board.server.request_bodys.LoginBody;
 import org.shared.board.server.request_bodys.PostItBody;
 import org.shared.board.server.session.SessionManager;
 import org.usermanagement.domain.model.User;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class HttpServerAjax {
     SessionManager sessionManager;
+
+    Gson json;
 
     /**
      * The constant MIN_ROWS_COLUMNS.
@@ -26,6 +35,12 @@ public class HttpServerAjax {
 
     public HttpServerAjax() {
         this.sessionManager = SessionManager.getInstance();
+
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
+        gsonBuilder.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
+
+        this.json = gsonBuilder.create();
     }
 
     public String getAuthenticatedUser(String token)
@@ -109,6 +124,16 @@ public class HttpServerAjax {
 
 
         return "Post-It created successfully!";
+    }
+
+    public String getUserAccessBoards(String token){
+        User authUser = sessionManager.getUserByToken(token);
+
+        GetBoardsController theController = new GetBoardsController();
+
+        Iterable<Board> boards = theController.getBoardsByUser(authUser);
+
+        return json.toJson(boards);
     }
 
     private String generateLockKey(PostItBody requestBody) {

@@ -32,6 +32,11 @@ Information in Forum
     In order for user to post content into a cell they must identify the cell. Therefore, I think at least, ir should be possible to identify the cell by the number of its column and the number of its row. If the cells have titles, these titles can be used to identify the cells. However, it should always be possible to identify a cell by the column number and row number.
     Regarding changing the title of the columns and rows after creating the board, there is nothing explicit about that. Therefore, I would accept the solution that does not support that possibility.
 
+    "Quando um User cria um post-it deve passar um link da imagem por exemplo: "https://www.isep.ipp.pt/img/logo_20230106.png" Ou devemos anexar uma imagem que está no nosso computador?"
+
+    Para o cliente é um pouco indiferente o mecanismo que usam para fazer o "post" de imagens (assim como o(s) formato(s) suportado(s)).
+    Podem optar pela solução que for mais simples. Suponho que suportar o "upload" de imagens locais e suportar um formato comum, como png ou jpeg, seja suficiente
+
 
 This is an excerpt of our domain Model, it provides the clear idea of how the Post-It should be identified according to the information in System Specification.
 

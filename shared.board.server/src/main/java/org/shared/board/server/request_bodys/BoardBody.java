@@ -1,5 +1,7 @@
 package org.shared.board.server.request_bodys;
 
+import org.domain.model.Board;
+
 import java.util.ArrayList;
 import java.util.List;
 

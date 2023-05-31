@@ -38,6 +38,10 @@ function checkUser() {
                 mainContainer.style.display = "block";
                 console.log(request.responseText);
             }, 1);
+
+
+            fileListener();
+            getAllUserBoards();
         } else {
             window.location.href = window.location.origin;
         }
@@ -231,6 +235,58 @@ function createPostIt(){
 
     requestCreatePostIt.send(JSON.stringify(data));
 }
+
+function getAllUserBoards(){
+    const request = new XMLHttpRequest();
+
+    request.onload = function() {
+        if(request.status === 200){
+            console.log(JSON.parse(request.responseText))
+        }
+    };
+
+    request.open("GET", "/all_my_boards", true);
+    request.timeout = 5000;
+
+    const token = getTokenCookie();
+
+    if(token){
+        request.setRequestHeader("Authorization", token);
+    }
+
+    request.send();
+}
+
+function fileListener() {
+    const file = document.getElementById("file");
+    const content = document.getElementById('post-it-content');
+
+    file.addEventListener("change", ev => {
+        ev.preventDefault();
+
+        const formdata = new FormData();
+        formdata.append("image", ev.target.files[0]);
+
+        const request = new XMLHttpRequest();
+        request.open("POST", "https://api.imgur.com/3/image/");
+        request.setRequestHeader("Authorization", "Client-ID eae95290510293a");
+
+        request.onreadystatechange = function () {
+            if (request.readyState === XMLHttpRequest.DONE) {
+                if (request.status === 200) {
+                    const response = JSON.parse(request.responseText);
+                    content.textContent = response.data.link;
+
+                    notification("Image upload with success!", request.status);
+                } else {
+                    notification("Problem uploading image!", request.status);
+                }
+            }
+        };
+        request.send(formdata);
+    });
+}
+
 
 function notification(text, code){
     const notificationContainer = document.getElementById("container-notification");

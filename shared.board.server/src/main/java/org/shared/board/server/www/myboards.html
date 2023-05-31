@@ -117,8 +117,15 @@
                             <h3 class="title">Column Position:</h3>
                             <input id="post-it-column-position" type="text">
 
-                            <h3 class="title">Content:</h3>
-                            <textarea id="post-it-content" maxlength="50"></textarea>
+
+                            <div class="content-header">
+                                <h3 class="title">Content:</h3>
+                                <div class="inputWrapper">
+                                    <input id="file" class="fileInput" type="file" name="file1" accept="image/jpeg, image/png"/>
+                                </div>
+                            </div>
+
+                            <textarea id="post-it-content" maxlength="100"></textarea>
 
                             <div class="buttons-form">
                                 <button class="button add-button" onclick="createPostIt()">Create</button>
