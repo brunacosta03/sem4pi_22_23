@@ -2,7 +2,6 @@ package org.shared.board.server.session;
 
 import org.apache.commons.httpclient.auth.InvalidCredentialsException;
 import org.authz.application.AuthenticationService;
-import org.authz.application.AuthorizationService;
 import org.authz.application.AuthzRegistry;
 import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.User;
@@ -22,12 +21,6 @@ public class SessionManager implements SessionManagerInt{
      */
     private AuthenticationService authService = AuthzRegistry
             .authenticationService();
-
-    /**
-     * Get AuthorizationService.
-     */
-    private final AuthorizationService authz = AuthzRegistry
-            .authorizationService();
 
     private SessionManager(){
 
