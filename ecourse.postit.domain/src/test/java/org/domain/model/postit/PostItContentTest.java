@@ -34,6 +34,9 @@ public class PostItContentTest {
         });
 
         String value = "This is a very long content"
+                + "that exceeds the maximum allowed length"
+                + "that exceeds the maximum allowed length"
+                + "that exceeds the maximum allowed length"
                 + "that exceeds the maximum allowed length";
 
         assertThrows(IllegalArgumentException.class, () -> {
