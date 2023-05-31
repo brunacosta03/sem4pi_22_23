@@ -263,13 +263,27 @@ input{
   font-size: 18px;
 }
 
+textarea{
+  width: 100%;
+  margin-top: 10px;
+  font-family: var(--font);
+  outline: 0;
+  background: #f2f2f2;
+  border: 0;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 18px;
+  height: 100px;
+  resize: none;
+}
+
 .login--password{
   margin-top: 20px;
 }
 
 
 #container-notification {
-  position: absolute;
+  position: fixed;
   display: none;
   margin: 34px;
   right: 0;
@@ -386,7 +400,7 @@ input{
   background-color: var(--background);
 }
 
-.create-board-form {
+.boards-form {
   width: 500px;
   padding: 16px;
   background-color: var(--gray);
@@ -401,6 +415,6 @@ input{
   margin: 16px 10px 0;
 }
 
-#create-board-container .title:not(:first-child){
+.container .title:not(:first-child){
   margin-top: 16px;
 }

@@ -81,10 +81,10 @@
             </div>
 
             <section id="create-board-section">
-                <div id="create-board-container">
+                <div id="create-board-container" class="container">
                     <div>
                         <h2 class="title">Create Board</h2>
-                        <form class="create-board-form">
+                        <form id="create-board-form" class="boards-form">
                             <h3 class="title">Board Title:</h3>
                             <input id="board-title" type="text">
 
@@ -97,6 +97,31 @@
                             <div class="buttons-form">
                                 <button class="button add-button" onclick="generateBoard()">Generate</button>
                                 <button class="button add-button" onclick="createBoard()">Create</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <section id="create-post-it-section">
+                <div id="create-post-it-container" class="container">
+                    <div>
+                        <h2 class="title">Create Post-It</h2>
+                        <form id="create-post-it-form" class="boards-form">
+                            <h3 class="title">Board Id:</h3>
+                            <input id="board-id" type="text">
+
+                            <h3 class="title">Row Position:</h3>
+                            <input id="post-it-row-position" type="text">
+
+                            <h3 class="title">Column Position:</h3>
+                            <input id="post-it-column-position" type="text">
+
+                            <h3 class="title">Content:</h3>
+                            <textarea id="post-it-content" maxlength="50"></textarea>
+
+                            <div class="buttons-form">
+                                <button class="button add-button" onclick="createPostIt()">Create</button>
                             </div>
                         </form>
                     </div>

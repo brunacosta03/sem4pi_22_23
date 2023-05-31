@@ -77,9 +77,7 @@ public class PostItService {
                         postItRowp,
                         postItColumnp,
                         board
-                ) == null, "Already exist --> Post-It Row --> " + postItRowp
-                        + " Post-It Column --> " + postItColumnp
-                        + " Board --> " + boardIdp);
+                ) == null, "Already exist a Post-It in that cell!");
 
         Preconditions.ensure(
                 board.userHasPermission(postItOwner,

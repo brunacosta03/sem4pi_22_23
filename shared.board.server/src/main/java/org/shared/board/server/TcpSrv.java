@@ -63,12 +63,15 @@ class TcpSrv {
                 new ECoursePasswordPolicy()
         );
 
+        HttpServerAjax httpServerAjax = new HttpServerAjax();
+
         new Thread(() -> {
             while (true) {
                 try {
                     Socket httpCliSock = httpSock.accept();
 
-                    new Thread(new HttpRequestThread(httpCliSock, BASE_FOLDER)).start();
+                    new Thread(new HttpRequestThread(httpCliSock,
+                            BASE_FOLDER, httpServerAjax)).start();
                 } catch (IOException e) {
                     System.out.println("Failed to accept connection");
                 }

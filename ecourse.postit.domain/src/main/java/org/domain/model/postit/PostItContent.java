@@ -21,7 +21,7 @@ public class PostItContent implements ValueObject {
     /**
      * The constant MAX_LENGTH.
      */
-    private static final Integer MAX_LENGTH = 50;
+    private static final Integer MAX_LENGTH = 100;
 
     /**
      * The constant MIN_LENGTH.
@@ -38,15 +38,15 @@ public class PostItContent implements ValueObject {
     private PostItContent(final String valuep) {
         Preconditions.nonEmpty(
                 valuep,
-                "Post-It Title should neither be null nor empty"
+                "Post-It Content should neither be null nor empty"
         );
         Preconditions.nonNull(
                 valuep,
-                "Post-It Title should neither be null nor empty"
+                "Post-It Content should neither be null nor empty"
         );
         Preconditions.ensure(
                 valuep.length() <= MAX_LENGTH && valuep.length() >= MIN_LENGTH,
-                "Post-It Title should have between "
+                "Post-It Content should have between "
                         + MIN_LENGTH + " and "
                         + MAX_LENGTH + " characters"
         );

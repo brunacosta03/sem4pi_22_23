@@ -73,7 +73,7 @@ function login(){
     requestLogin.open("POST", "/login", true);
     requestLogin.setRequestHeader("Content-Type", "application/json");
 
-    var data = {
+    const data = {
         email: document.getElementById('email').value,
         password: document.getElementById('password').value
     };
@@ -137,7 +137,7 @@ function generateBoard(){
 function createBoard(){
     event.preventDefault();
 
-    const form = document.querySelector('.create-board-form');
+    const form = document.getElementById('create-board-form');
     const boardTitle = document.getElementById('board-title').value;
     const numberOfColumns = document.getElementById('number-columns').value;
     const numberOfRows = document.getElementById('number-rows').value;
@@ -180,7 +180,7 @@ function createBoard(){
             requestPost.setRequestHeader("Authorization", token);
         }
 
-        var data = {
+        const data = {
             boardTitle: boardTitle,
             boardNRow: numberOfRows,
             boardNColumn: numberOfColumns,
@@ -191,6 +191,45 @@ function createBoard(){
     } else {
         notification("Fill all fields correctly");
     }
+}
+
+function createPostIt(){
+    event.preventDefault();
+
+    const form = document.getElementById('create-post-it-form');
+    const boardId = document.getElementById('board-id').value;
+    const rowPos = document.getElementById('post-it-row-position').value;
+    const colPos = document.getElementById('post-it-column-position').value;
+    const content = document.getElementById('post-it-content').value;
+
+    const requestCreatePostIt = new XMLHttpRequest();
+
+    requestCreatePostIt.onload = function() {
+        if (requestCreatePostIt.status === 200) {
+            form.reset();
+            notification(requestCreatePostIt.responseText, requestCreatePostIt.status);
+        } else {
+            notification(requestCreatePostIt.responseText, requestCreatePostIt.status);
+        }
+    };
+
+    const token = getTokenCookie();
+
+    requestCreatePostIt.open("POST", "/create_post_it", true);
+    requestCreatePostIt.setRequestHeader("Content-Type", "application/json");
+
+    if(token){
+        requestCreatePostIt.setRequestHeader("Authorization", token);
+    }
+
+    const data = {
+        postItContent: content,
+        postItRow: rowPos,
+        postItColumn: colPos,
+        boardId: boardId
+    };
+
+    requestCreatePostIt.send(JSON.stringify(data));
 }
 
 function notification(text, code){

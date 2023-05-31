@@ -7,12 +7,11 @@ import org.domain.model.BoardEntry;
 import org.postit.controller.CreatePostItController;
 import org.shared.board.server.request_bodys.BoardBody;
 import org.shared.board.server.request_bodys.LoginBody;
+import org.shared.board.server.request_bodys.PostItBody;
 import org.shared.board.server.session.SessionManager;
 import org.usermanagement.domain.model.User;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class HttpServerAjax {
     SessionManager sessionManager;
@@ -21,6 +20,9 @@ public class HttpServerAjax {
      * The constant MIN_ROWS_COLUMNS.
      */
     private static final String MIN_ROWS_COLS = "1";
+
+    Map<String, Object> lockObjects = new HashMap<>();
+
 
     public HttpServerAjax() {
         this.sessionManager = SessionManager.getInstance();
@@ -89,10 +91,31 @@ public class HttpServerAjax {
         return token.toString();
     }
 
-    public synchronized String createPostIt(String token){
+    public String createPostIt(PostItBody requestBody, String token){
         CreatePostItController theController = new CreatePostItController();
         User authUser = sessionManager.getUserByToken(token);
 
+        String lockKey = generateLockKey(requestBody);
+        Object lock = getOrCreateLockObject(lockKey);
+
+        synchronized (lock){
+            theController.createPostIt(
+                    requestBody.content(),
+                    requestBody.row(),
+                    requestBody.column(),
+                    requestBody.boardId(),
+                    authUser);
+        }
+
+
         return "Post-It created successfully!";
+    }
+
+    private String generateLockKey(PostItBody requestBody) {
+        return requestBody.row() + requestBody.column() + requestBody.boardId();
+    }
+
+    private synchronized Object getOrCreateLockObject(String lockKey) {
+        return lockObjects.computeIfAbsent(lockKey, k -> new Object());
     }
 }

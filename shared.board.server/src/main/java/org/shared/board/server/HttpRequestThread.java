@@ -2,9 +2,9 @@ package org.shared.board.server;
 
 import com.google.gson.Gson;
 import eapli.framework.domain.repositories.IntegrityViolationException;
-import org.authz.application.AuthorizationService;
 import org.shared.board.server.request_bodys.BoardBody;
 import org.shared.board.server.request_bodys.LoginBody;
+import org.shared.board.server.request_bodys.PostItBody;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -21,11 +21,11 @@ public class HttpRequestThread extends Thread {
     Gson json;
 
 
-    public HttpRequestThread(Socket httpCliSock, String folder) {
+    public HttpRequestThread(Socket httpCliSock, String folder, HttpServerAjax httpServerAjax) {
         this.baseFolder = folder;
         this.sock = httpCliSock;
         this.json = new Gson();
-        this.httpServerAjax = new HttpServerAjax();
+        this.httpServerAjax = httpServerAjax;
     }
 
     @Override
@@ -87,6 +87,31 @@ public class HttpRequestThread extends Thread {
             if(request.getMethod().equals("POST")){
                 if(request.getURI().equals("/create_board")){
                     createBoard(request, response, token);
+                }
+
+                if(request.getURI().equals("/create_post_it")){
+                    String requestBody = request.getContentAsString();
+
+                    PostItBody body = json.fromJson(requestBody, PostItBody.class);
+
+                    try{
+                        response.setContentFromString(
+                                httpServerAjax.createPostIt(body, token),
+                                "text");
+                        response.setResponseStatus("200 Ok");
+                    } catch (IllegalArgumentException e){
+                        response.setContentFromString(
+                                e.getMessage(),
+                                "text");
+                        response.setResponseStatus("400 Bad Request");
+                    } catch (NoSuchElementException e){
+                        response.setContentFromString(
+                                "This board doesn't exist",
+                                "text");
+                        response.setResponseStatus("400 Bad Request");
+                    }
+
+                    response.send(outS);
                 }
 
                 if(request.getURI().equals("/login")){
