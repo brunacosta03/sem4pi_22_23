@@ -204,13 +204,15 @@ function createPostIt(){
     const boardId = document.getElementById('board-id').value;
     const rowPos = document.getElementById('post-it-row-position').value;
     const colPos = document.getElementById('post-it-column-position').value;
-    const content = document.getElementById('post-it-content').value;
+    const content = document.getElementById('post-it-content');
 
     const requestCreatePostIt = new XMLHttpRequest();
 
     requestCreatePostIt.onload = function() {
         if (requestCreatePostIt.status === 200) {
             form.reset();
+            content.value = '';
+
             notification(requestCreatePostIt.responseText, requestCreatePostIt.status);
         } else {
             notification(requestCreatePostIt.responseText, requestCreatePostIt.status);
@@ -227,7 +229,7 @@ function createPostIt(){
     }
 
     const data = {
-        postItContent: content,
+        postItContent: content.value,
         postItRow: rowPos,
         postItColumn: colPos,
         boardId: boardId
