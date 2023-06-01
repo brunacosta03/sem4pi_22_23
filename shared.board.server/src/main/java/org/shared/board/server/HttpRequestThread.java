@@ -20,6 +20,8 @@ public class HttpRequestThread extends Thread {
     HttpServerAjax httpServerAjax;
     Gson json;
 
+    private static final String BOARD_HISTORY_BY_ID_REGEX = "\\Q/board_history?id=\\E\\d+";
+
 
     public HttpRequestThread(Socket httpCliSock, String folder, HttpServerAjax httpServerAjax) {
         this.baseFolder = folder;
@@ -66,6 +68,18 @@ public class HttpRequestThread extends Thread {
                     response.send(outS);
                 }
 
+                if(request.getURI().matches(BOARD_HISTORY_BY_ID_REGEX)){
+
+                    String id = request.getURI().split("\\?")[1];
+
+                    Long value = Long.parseLong(id.split("=")[1]);
+
+                    // call controller that retrieves all occurrings of a board change
+                    // logic of response can either be done here or on the server
+
+                    response.send(outS);
+                }
+
                 if(request.getURI().equals("/user")) {
                     try{
                         response.setContentFromString(
@@ -91,6 +105,7 @@ public class HttpRequestThread extends Thread {
                         fileNotFound(response);
                     }
                 }
+
                 response.send(outS);
             }
 
