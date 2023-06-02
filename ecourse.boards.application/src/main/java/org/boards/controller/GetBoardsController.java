@@ -3,7 +3,6 @@ package org.boards.controller;
 import eapli.framework.validations.Preconditions;
 import org.domain.model.Board;
 import org.domain.repositories.BoardRepository;
-import org.persistence.PersistenceContext;
 import org.usermanagement.domain.model.User;
 
 public class GetBoardsController {
@@ -12,8 +11,8 @@ public class GetBoardsController {
      */
     private final BoardRepository boardRepository;
 
-    public GetBoardsController() {
-        boardRepository = PersistenceContext.repositories().boards();
+    public GetBoardsController(BoardRepository repository) {
+        boardRepository = repository;
     }
 
     public Iterable<Board> getBoardsByUser(final User authUser) {

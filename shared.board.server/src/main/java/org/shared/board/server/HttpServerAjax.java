@@ -9,6 +9,7 @@ import org.boards.controller.GetBoardsController;
 import org.domain.model.Board;
 import org.domain.model.BoardEntry;
 import org.domain.model.postit.PostIt;
+import org.persistence.PersistenceContext;
 import org.postit.controller.CreatePostItController;
 import org.shared.board.server.gson_adapter.HibernateProxyTypeAdapter;
 import org.shared.board.server.gson_adapter.LocalDateAdapter;
@@ -18,6 +19,7 @@ import org.shared.board.server.request_bodys.PostItBody;
 import org.shared.board.server.session.SessionManager;
 import org.usermanagement.domain.model.User;
 
+import javax.persistence.Persistence;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -177,7 +179,8 @@ public class HttpServerAjax {
     public String getUserAccessBoards(String token){
         User authUser = sessionManager.getUserByToken(token);
 
-        GetBoardsController theController = new GetBoardsController();
+        GetBoardsController theController = new GetBoardsController(
+                PersistenceContext.repositories().boards());
 
         Iterable<Board> boards = theController.getBoardsByUser(authUser);
 
