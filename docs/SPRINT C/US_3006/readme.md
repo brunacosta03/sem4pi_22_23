@@ -160,34 +160,72 @@ void testCreatePostWithColumnPosOutsideShouldThrowError() {
 ```Java
 package org.shared.board.server;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import eapli.framework.domain.repositories.IntegrityViolationException;
 import org.apache.commons.httpclient.auth.InvalidCredentialsException;
 import org.boards.controller.CreateBoardController;
+import org.boards.controller.GetBoardsController;
+import org.domain.model.Board;
 import org.domain.model.BoardEntry;
+import org.domain.model.postit.PostIt;
 import org.postit.controller.CreatePostItController;
+import org.shared.board.server.gson_adapter.HibernateProxyTypeAdapter;
+import org.shared.board.server.gson_adapter.LocalDateAdapter;
 import org.shared.board.server.request_bodys.BoardBody;
 import org.shared.board.server.request_bodys.LoginBody;
 import org.shared.board.server.request_bodys.PostItBody;
 import org.shared.board.server.session.SessionManager;
 import org.usermanagement.domain.model.User;
 
+import java.time.LocalDate;
 import java.util.*;
 
+/**
+ * The type Http server ajax.
+ */
 public class HttpServerAjax {
+    /**
+     * The Session manager.
+     */
     SessionManager sessionManager;
+
+    /**
+     * The Json.
+     */
+    Gson json;
 
     /**
      * The constant MIN_ROWS_COLUMNS.
      */
     private static final String MIN_ROWS_COLS = "1";
 
+    /**
+     * The Lock objects.
+     */
     Map<String, Object> lockObjects = new HashMap<>();
 
 
+    /**
+     * Instantiates a new Http server ajax.
+     */
     public HttpServerAjax() {
         this.sessionManager = SessionManager.getInstance();
+
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
+        gsonBuilder.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
+
+        this.json = gsonBuilder.create();
     }
 
+    /**
+     * Gets authenticated user.
+     * @param token the token
+     * @return the authenticated user
+     * @throws IllegalArgumentException the illegal argument exception
+     * @throws NullPointerException     the null pointer exception
+     */
     public String getAuthenticatedUser(String token)
             throws IllegalArgumentException, NullPointerException {
         String textHtml = String.valueOf(sessionManager.getUserByToken(token).identity());
@@ -195,6 +233,14 @@ public class HttpServerAjax {
         return textHtml;
     }
 
+    /**
+     * Create board string.
+     * @param requestBody the request body
+     * @param token       the token
+     * @return the string
+     * @throws IntegrityViolationException the integrity violation exception
+     * @throws NumberFormatException       the number format exception
+     */
     public String createBoard(BoardBody requestBody, String token)
             throws IntegrityViolationException, NumberFormatException {
         CreateBoardController theController = new CreateBoardController();
@@ -234,16 +280,22 @@ public class HttpServerAjax {
             allBoardEntrys.add(boardEntry);
         }
 
-        theController.createBoard(
+        Board board = theController.createBoard(
                 requestBody.boardTitle(),
                 requestBody.boardNRow(),
                 requestBody.boardNColumn(),
                 allBoardEntrys,
                 authUser);
 
-        return "Board created successfully!";
+        return json.toJson(board);
     }
 
+    /**
+     * Login user and add session.
+     * @param body the body
+     * @return the string
+     * @throws InvalidCredentialsException the invalid credentials exception
+     */
     public String login(LoginBody body)
             throws InvalidCredentialsException {
         UUID token = sessionManager.login(body.email(), body.password());
@@ -251,15 +303,22 @@ public class HttpServerAjax {
         return token.toString();
     }
 
+    /**
+     * Create post it to board.
+     * @param requestBody the request body
+     * @param token       the token
+     * @return the string
+     */
     public String createPostIt(PostItBody requestBody, String token){
         CreatePostItController theController = new CreatePostItController();
         User authUser = sessionManager.getUserByToken(token);
 
         String lockKey = generateLockKey(requestBody);
         Object lock = getOrCreateLockObject(lockKey);
+        PostIt postIt;
 
         synchronized (lock){
-            theController.createPostIt(
+            postIt = theController.createPostIt(
                     requestBody.content(),
                     requestBody.row(),
                     requestBody.column(),
@@ -267,14 +326,39 @@ public class HttpServerAjax {
                     authUser);
         }
 
-
-        return "Post-It created successfully!";
+        return json.toJson(postIt);
     }
 
+    /**
+     * Get user access boards string.
+     * @param token the token
+     * @return the string
+     */
+    public String getUserAccessBoards(String token){
+        User authUser = sessionManager.getUserByToken(token);
+
+        GetBoardsController theController = new GetBoardsController();
+
+        Iterable<Board> boards = theController.getBoardsByUser(authUser);
+
+        return json.toJson(boards);
+    }
+
+    /**
+     * Generate String based on row column and board id.
+     * @param requestBody post-it
+     * @return String
+     */
     private String generateLockKey(PostItBody requestBody) {
         return requestBody.row() + requestBody.column() + requestBody.boardId();
     }
 
+    /**
+     * Get object corresponding to String.
+     * Or create a new one if that string doesn't exist.
+     * @param lockKey string base on post-it
+     * @return Object
+     */
     private synchronized Object getOrCreateLockObject(String lockKey) {
         return lockObjects.computeIfAbsent(lockKey, k -> new Object());
     }
@@ -543,3 +627,28 @@ public class PostItService {
 
 ## 6. Integration/Demonstration
 
+**Login into the application**
+
+![Login](Demonstration/Login.png)
+
+
+**Click on Board that you want to create a Post-It**
+
+![Choose a Board](Demonstration/ChooseBoard.png)
+
+
+**Click on Cell that you want to create a Post-It**
+
+![Choose a Cell](Demonstration/BoardCell.png)
+
+**Write content and click Create**
+
+![Create Post-It](Demonstration/CreatePostIt.png)
+
+**If you want to upload image click on icon and select image**
+
+![Create Post-It](Demonstration/UploadImage.png)
+
+**After upload image a link will be generated and you can click on create**
+
+![Create Post-It](Demonstration/UploadImageDone.png)

@@ -208,7 +208,6 @@ function createBoard(){
 function createPostIt(){
     event.preventDefault();
 
-    const createPostIt = document.getElementById("create-post-it-section");
     const boardId = getBoardUserIsIn();
     const content = document.getElementById('post-it-content');
 
@@ -216,7 +215,9 @@ function createPostIt(){
 
     requestCreatePostIt.onload = function() {
         if (requestCreatePostIt.status === 200) {
-            notification(requestCreatePostIt.responseText, requestCreatePostIt.status);
+            console.log(JSON.parse(requestCreatePostIt.responseText));
+
+            notification("Post-It created successfully!", requestCreatePostIt.status);
         } else {
             notification(requestCreatePostIt.responseText, requestCreatePostIt.status);
         }
@@ -343,7 +344,7 @@ function showBoard() {
         liElement.appendChild(divElement);
 
         const h4Element = document.createElement('h4');
-        h4Element.textContent = 'To Do';
+        h4Element.textContent = 'To Do (' + i + ')';
 
         divElement.appendChild(h4Element);
 
@@ -357,11 +358,12 @@ function showBoard() {
                 liElement.appendChild(rowElement);
 
                 const h4Element = document.createElement('h4');
-                h4Element.textContent = 'To Do';
+                h4Element.textContent = 'To Do (' + j + ')';
                 rowElement.appendChild(h4Element);
             } else {
                 const liPostItItem = document.createElement('li');
                 liPostItItem.classList.add('post-it');
+                liPostItItem.id = `post-it-${i}-${j}`;
                 ulPostItList.appendChild(liPostItItem);
 
                 const imgElement = document.createElement('img');

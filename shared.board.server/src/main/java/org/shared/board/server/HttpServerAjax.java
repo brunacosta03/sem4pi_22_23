@@ -8,6 +8,7 @@ import org.boards.controller.CreateBoardController;
 import org.boards.controller.GetBoardsController;
 import org.domain.model.Board;
 import org.domain.model.BoardEntry;
+import org.domain.model.postit.PostIt;
 import org.postit.controller.CreatePostItController;
 import org.shared.board.server.gson_adapter.HibernateProxyTypeAdapter;
 import org.shared.board.server.gson_adapter.LocalDateAdapter;
@@ -20,9 +21,18 @@ import org.usermanagement.domain.model.User;
 import java.time.LocalDate;
 import java.util.*;
 
+/**
+ * The type Http server ajax.
+ */
 public class HttpServerAjax {
+    /**
+     * The Session manager.
+     */
     SessionManager sessionManager;
 
+    /**
+     * The Json.
+     */
     Gson json;
 
     /**
@@ -30,9 +40,15 @@ public class HttpServerAjax {
      */
     private static final String MIN_ROWS_COLS = "1";
 
+    /**
+     * The Lock objects.
+     */
     Map<String, Object> lockObjects = new HashMap<>();
 
 
+    /**
+     * Instantiates a new Http server ajax.
+     */
     public HttpServerAjax() {
         this.sessionManager = SessionManager.getInstance();
 
@@ -43,6 +59,13 @@ public class HttpServerAjax {
         this.json = gsonBuilder.create();
     }
 
+    /**
+     * Gets authenticated user.
+     * @param token the token
+     * @return the authenticated user
+     * @throws IllegalArgumentException the illegal argument exception
+     * @throws NullPointerException     the null pointer exception
+     */
     public String getAuthenticatedUser(String token)
             throws IllegalArgumentException, NullPointerException {
         String textHtml = String.valueOf(sessionManager.getUserByToken(token).identity());
@@ -50,6 +73,14 @@ public class HttpServerAjax {
         return textHtml;
     }
 
+    /**
+     * Create board string.
+     * @param requestBody the request body
+     * @param token       the token
+     * @return the string
+     * @throws IntegrityViolationException the integrity violation exception
+     * @throws NumberFormatException       the number format exception
+     */
     public String createBoard(BoardBody requestBody, String token)
             throws IntegrityViolationException, NumberFormatException {
         CreateBoardController theController = new CreateBoardController();
@@ -99,6 +130,12 @@ public class HttpServerAjax {
         return json.toJson(board);
     }
 
+    /**
+     * Login user and add session.
+     * @param body the body
+     * @return the string
+     * @throws InvalidCredentialsException the invalid credentials exception
+     */
     public String login(LoginBody body)
             throws InvalidCredentialsException {
         UUID token = sessionManager.login(body.email(), body.password());
@@ -106,15 +143,22 @@ public class HttpServerAjax {
         return token.toString();
     }
 
+    /**
+     * Create post it to board.
+     * @param requestBody the request body
+     * @param token       the token
+     * @return the string
+     */
     public String createPostIt(PostItBody requestBody, String token){
         CreatePostItController theController = new CreatePostItController();
         User authUser = sessionManager.getUserByToken(token);
 
         String lockKey = generateLockKey(requestBody);
         Object lock = getOrCreateLockObject(lockKey);
+        PostIt postIt;
 
         synchronized (lock){
-            theController.createPostIt(
+            postIt = theController.createPostIt(
                     requestBody.content(),
                     requestBody.row(),
                     requestBody.column(),
@@ -122,10 +166,14 @@ public class HttpServerAjax {
                     authUser);
         }
 
-
-        return "Post-It created successfully!";
+        return json.toJson(postIt);
     }
 
+    /**
+     * Get user access boards string.
+     * @param token the token
+     * @return the string
+     */
     public String getUserAccessBoards(String token){
         User authUser = sessionManager.getUserByToken(token);
 
@@ -136,10 +184,21 @@ public class HttpServerAjax {
         return json.toJson(boards);
     }
 
+    /**
+     * Generate String based on row column and board id.
+     * @param requestBody post-it
+     * @return String
+     */
     private String generateLockKey(PostItBody requestBody) {
         return requestBody.row() + requestBody.column() + requestBody.boardId();
     }
 
+    /**
+     * Get object corresponding to String.
+     * Or create a new one if that string doesn't exist.
+     * @param lockKey string base on post-it
+     * @return Object
+     */
     private synchronized Object getOrCreateLockObject(String lockKey) {
         return lockObjects.computeIfAbsent(lockKey, k -> new Object());
     }

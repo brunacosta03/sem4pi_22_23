@@ -63,7 +63,7 @@ public class PostIt
     /**
      * Post-It Owner.
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "owner_email")
     private User postItOwner;
 
@@ -78,8 +78,8 @@ public class PostIt
      * Moved from post it.
      */
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "moved_from_post_it_id")
-    private PostIt comeFromPostIt;
+    @JoinColumn(name = "before_post_it")
+    private PostIt beforePostIt;
 
     /**
      * Instantiates a new Post-It.
@@ -158,6 +158,10 @@ public class PostIt
      */
     public PostItState state() {
         return postItState;
+    }
+
+    public PostIt rollBackPostIt(){
+        return beforePostIt;
     }
 
     /**
