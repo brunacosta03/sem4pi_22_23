@@ -45,6 +45,18 @@ public class HttpRequestThread extends Thread {
             String token = request.getAuthorization();
 
             if(request.getMethod().equals("GET")) {
+                if(request.getURI().startsWith("/board/")) {
+                    String fullname = baseFolder + "/board-view.html";
+
+                    if(response.setContentFromFile(fullname)) {
+                        response.setResponseStatus("200 Ok");
+                    } else {
+                        fileNotFound(response);
+                    }
+
+                    response.send(outS);
+                }
+
                 if(request.getURI().equals("/myboards")) {
                     String fullname = baseFolder + "/myboards.html";
 
@@ -58,10 +70,17 @@ public class HttpRequestThread extends Thread {
                 }
 
                 if(request.getURI().equals("/all_my_boards")) {
-                    response.setContentFromString(
-                            httpServerAjax.getUserAccessBoards(token),
-                            "application/json");
-                    response.setResponseStatus("200 Ok");
+                    try{
+                        response.setContentFromString(
+                                httpServerAjax.getUserAccessBoards(token),
+                                "application/json");
+                        response.setResponseStatus("200 Ok");
+                    } catch (IllegalArgumentException e){
+                        response.setContentFromString(
+                                e.getMessage(),
+                                "text");
+                        response.setResponseStatus("401 unauthorized");
+                    }
 
                     response.send(outS);
                 }

@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <title>View Board</title>
+
+        <link rel="stylesheet" href="../css/style.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+        <link rel="apple-touch-icon" sizes="180x180" href="../favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="../favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="../favicon/favicon-16x16.png">
+        <link rel="manifest" href="../favicon/site.webmanifest">
+        <link rel="mask-icon" href="../favicon/safari-pinned-tab.svg" color="#5bbad5">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="theme-color" content="#ffffff">
+
+        <script src="../index.js"></script>
+    </head>
+
+    <body onload="boardViewLoad()">
+        <div id="loader"></div>
+        <div id="overlay" onclick="disableOverlay()"></div>
+        <div id="main-container">
+            <h2 class="title center-content">Board Owner - </h2>
+            <div id="board-container">
+                <ul class="columns">
+<!--                    <li class="column">-->
+<!--                        <div class="entry-header">-->
+<!--                            <h4>To Do</h4>-->
+<!--                        </div>-->
+<!--                        <ul class="post-it-list">-->
+<!--                            <li class="post-it">-->
+<!--                                <p>Analysis</p>-->
+<!--                            </li>-->
+<!--                            <li class="post-it">-->
+<!--                                <p>Coding</p>-->
+<!--                            </li>-->
+<!--                            <li class="post-it">-->
+<!--                                <p>Card Sorting</p>-->
+<!--                            </li>-->
+<!--                            <li class="post-it">-->
+<!--                                <p>Measure</p>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+
+<!--                    <li class="column">-->
+<!--                        <div class="entry-header">-->
+<!--                            <h4>Doing</h4>-->
+<!--                        </div>-->
+<!--                        <ul class="post-it-list">-->
+<!--                            <li class="post-it">-->
+<!--                                <p>Hypothesis</p>-->
+<!--                            </li>-->
+<!--                            <li class="post-it">-->
+<!--                                <p>User Testing</p>-->
+<!--                            </li>-->
+<!--                            <li class="post-it">-->
+<!--                                <p>Prototype</p>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+
+<!--                    <li class="column">-->
+<!--                        <div class="entry-header">-->
+<!--                            <h4>Done</h4>-->
+<!--                        </div>-->
+<!--                        <ul class="post-it-list">-->
+<!--                            <li class="post-it">-->
+<!--                                <p>Ideation</p>-->
+<!--                            </li>-->
+<!--                            <li class="post-it">-->
+<!--                                <p>Sketches</p>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+
+<!--                    <li class="column">-->
+<!--                        <div class="entry-header">-->
+<!--                            <h4>Trash</h4>-->
+<!--                        </div>-->
+<!--                        <ul class="post-it-list">-->
+<!--                            <li class="post-it">-->
+<!--                                <p>Interviews</p>-->
+<!--                            </li>-->
+<!--                            <li class="post-it">-->
+<!--                                <p>Research</p>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+                </ul>
+            </div>
+
+
+            <section id="create-post-it-section">
+                <div id="create-post-it-container" class="container">
+                    <div class="center-content min-width-container">
+                        <form id="create-post-it-form" class="boards-form">
+                            <h2 class="title">Post-It</h2>
+
+                            <div class="content-header">
+                                <h3 class="title">Content:</h3>
+                                <div class="inputWrapper">
+                                    <input id="file" class="fileInput" type="file" name="file1" accept="image/jpeg, image/png"/>
+                                </div>
+                            </div>
+
+                            <textarea id="post-it-content" maxlength="100"></textarea>
+
+                            <div class="buttons-form">
+                                <button class="button add-button" onclick="createPostIt()">Create</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <div id="container-notification">
+                <div id="rectangle-notification">
+                    <div class="notification-text">
+                        <i class="material-icons">info</i>
+                        <span id="notification-text"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

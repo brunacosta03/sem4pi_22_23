@@ -24,8 +24,6 @@ public class HibernateProxyTypeAdapter extends TypeAdapter<HibernateProxy> {
 
     @Override
     public void write(JsonWriter out, HibernateProxy value) throws IOException {
-        // You can customize the serialization of HibernateProxy as per your requirements
-        // For example, you can serialize only the ID or any other relevant information
         out.nullValue();
     }
 

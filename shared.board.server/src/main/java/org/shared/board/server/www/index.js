@@ -30,18 +30,18 @@ function checkUser() {
     const request = new XMLHttpRequest();
     const mainContainer = document.getElementById("main-container");
     const loader = document.getElementById("loader");
+    const user = document.getElementById("user");
 
     request.onload = function() {
         if(request.status === 200){
             setTimeout(() => {
                 loader.style.display = "none";
                 mainContainer.style.display = "block";
-                console.log(request.responseText);
+
+                if(user !== null){
+                    user.innerText = user.innerText + " " + request.responseText;
+                }
             }, 1);
-
-
-            fileListener();
-            getAllUserBoards();
         } else {
             window.location.href = window.location.origin;
         }
@@ -57,6 +57,12 @@ function checkUser() {
     }
 
     request.send();
+}
+
+function boardViewLoad(){
+    checkUser();
+    showBoard();
+    fileListener();
 }
 
 function login(){
@@ -169,7 +175,9 @@ function createBoard(){
 
                 form.reset();
 
-                notification(requestPost.responseText, requestPost.status);
+                addBoardCreatedToList(JSON.parse(requestPost.responseText));
+
+                notification("Board created successfully!", requestPost.status);
             } else {
                 notification(requestPost.responseText, requestPost.status);
             }
@@ -200,23 +208,21 @@ function createBoard(){
 function createPostIt(){
     event.preventDefault();
 
-    const form = document.getElementById('create-post-it-form');
-    const boardId = document.getElementById('board-id').value;
-    const rowPos = document.getElementById('post-it-row-position').value;
-    const colPos = document.getElementById('post-it-column-position').value;
+    const createPostIt = document.getElementById("create-post-it-section");
+    const boardId = getBoardUserIsIn();
     const content = document.getElementById('post-it-content');
 
     const requestCreatePostIt = new XMLHttpRequest();
 
     requestCreatePostIt.onload = function() {
         if (requestCreatePostIt.status === 200) {
-            form.reset();
-            content.value = '';
-
             notification(requestCreatePostIt.responseText, requestCreatePostIt.status);
         } else {
             notification(requestCreatePostIt.responseText, requestCreatePostIt.status);
         }
+
+        content.value = '';
+        disableOverlay();
     };
 
     const token = getTokenCookie();
@@ -238,12 +244,29 @@ function createPostIt(){
     requestCreatePostIt.send(JSON.stringify(data));
 }
 
+let numberOfBoards = 0;
+
 function getAllUserBoards(){
+    const container = document.getElementById('all-boards-container');
     const request = new XMLHttpRequest();
 
     request.onload = function() {
         if(request.status === 200){
-            console.log(JSON.parse(request.responseText))
+            const boards = JSON.parse(request.responseText);
+
+            if(boards.length !== numberOfBoards){
+                numberOfBoards = boards.length;
+
+                boards.forEach((board) => {
+                    const existingBoard = container.querySelector(`[data-board-id="${board.boardId}"]`);
+
+                    if (!existingBoard) {
+                        addBoardCreatedToList(board);
+                    }
+                });
+            }
+
+            setTimeout(() => getAllUserBoards(), 3000);
         }
     };
 
@@ -289,6 +312,95 @@ function fileListener() {
     });
 }
 
+function addBoardCreatedToList(board){
+    const container = document.getElementById('all-boards-container');
+
+    const newBoardDiv = document.createElement('div');
+    newBoardDiv.className = 'my-boards';
+    newBoardDiv.setAttribute('data-board-id', board.boardId);
+
+    newBoardDiv.innerHTML = '<a href="board/' + board.boardId + '">' +
+        '<h3 class="title">' + board.boardTitle.value + '</h3>' +
+        '<h3 class="title">Rows Number - ' + board.boardNRow.value + '</h3>' +
+        '<h3 class="title">Columns Number - ' + board.boardNCol.value + '</h3>' +
+        '</a>';
+
+    container.appendChild(newBoardDiv);
+}
+
+let rowPos = 0;
+let colPos = 0;
+
+function showBoard() {
+    const ulElement = document.querySelector('ul.columns');
+
+    for(let i = 1; i <= 3; i++){
+        const liElement = document.createElement('li');
+        liElement.classList.add('column');
+
+        const divElement = document.createElement('div');
+        divElement.classList.add('entry-header');
+        liElement.appendChild(divElement);
+
+        const h4Element = document.createElement('h4');
+        h4Element.textContent = 'To Do';
+
+        divElement.appendChild(h4Element);
+
+        const ulPostItList = document.createElement('ul');
+        ulPostItList.classList.add('post-it-list');
+
+        for(let j = 2; j <= 3; j++){
+            if(i === 1){
+                const rowElement = document.createElement('div');
+                rowElement.classList.add('entry-header');
+                liElement.appendChild(rowElement);
+
+                const h4Element = document.createElement('h4');
+                h4Element.textContent = 'To Do';
+                rowElement.appendChild(h4Element);
+            } else {
+                const liPostItItem = document.createElement('li');
+                liPostItItem.classList.add('post-it');
+                ulPostItList.appendChild(liPostItItem);
+
+                const imgElement = document.createElement('img');
+                imgElement.src = '../change-cell.png';
+                imgElement.classList.add('add-image');
+                liPostItItem.appendChild(imgElement);
+
+                liPostItItem.onclick = () =>{
+                    colPos = i;
+                    rowPos = j;
+                    showCreatePostIt();
+                };
+            }
+        }
+
+        if(i !== 1){
+            liElement.appendChild(divElement);
+            liElement.appendChild(ulPostItList);
+        }
+
+        ulElement.appendChild(liElement);
+    }
+}
+
+function showCreatePostIt(){
+    const createPostIt = document.getElementById("create-post-it-section");
+    const overlay = document.getElementById("overlay");
+
+    createPostIt.style.display = "block";
+    overlay.style.display = "block";
+}
+
+function disableOverlay(){
+    const overlay = document.getElementById("overlay");
+    const createPostIt = document.getElementById("create-post-it-section");
+
+    overlay.style.display = "none";
+    createPostIt.style.display = "none";
+}
 
 function notification(text, code){
     const notificationContainer = document.getElementById("container-notification");
@@ -313,6 +425,14 @@ function getTokenCookie(){
     const token = decodeURIComponent(tokenCookie.split("=")[1]);
 
     return token;
+}
+
+function getBoardUserIsIn(){
+    const link = window.location.href;
+    const parts = link.split('/');
+    const boardId = parts[parts.length - 1];
+
+    return boardId;
 }
 
 function voteFor(option) {

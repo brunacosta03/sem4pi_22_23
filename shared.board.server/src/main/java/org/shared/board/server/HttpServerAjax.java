@@ -89,14 +89,14 @@ public class HttpServerAjax {
             allBoardEntrys.add(boardEntry);
         }
 
-        theController.createBoard(
+        Board board = theController.createBoard(
                 requestBody.boardTitle(),
                 requestBody.boardNRow(),
                 requestBody.boardNColumn(),
                 allBoardEntrys,
                 authUser);
 
-        return "Board created successfully!";
+        return json.toJson(board);
     }
 
     public String login(LoginBody body)
