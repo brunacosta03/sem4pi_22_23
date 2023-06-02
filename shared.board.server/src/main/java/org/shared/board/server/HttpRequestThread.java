@@ -87,6 +87,18 @@ public class HttpRequestThread extends Thread {
                     response.send(outS);
                 }
 
+                if(request.getURI().equals("/history")) {
+                    String fullname = baseFolder + "/history.html";
+
+                    if(response.setContentFromFile(fullname)) {
+                        response.setResponseStatus("200 Ok");
+                    } else {
+                        fileNotFound(response);
+                    }
+
+                    response.send(outS);
+                }
+
                 if(request.getURI().matches(BOARD_HISTORY_BY_ID_REGEX)){
 
                     String id = request.getURI().split("\\?")[1];
