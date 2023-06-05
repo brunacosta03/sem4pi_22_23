@@ -388,6 +388,46 @@ function showBoard() {
     }
 }
 
+function updatePostItContent(){
+    event.preventDefault();
+
+    const boardId = getBoardUserIsIn();
+    const content = document.getElementById('post-it-content');
+
+    const requestCreatePostIt = new XMLHttpRequest();
+
+    requestCreatePostIt.onload = function() {
+        if (requestCreatePostIt.status === 200) {
+            console.log(JSON.parse(requestCreatePostIt.responseText));
+
+            notification("Post-It updated successfully!", requestCreatePostIt.status);
+        } else {
+            notification(requestCreatePostIt.responseText, requestCreatePostIt.status);
+        }
+
+        content.value = '';
+        disableOverlay();
+    };
+
+    const token = getTokenCookie();
+
+    requestCreatePostIt.open("PUT", "/update_post_it", true);
+    requestCreatePostIt.setRequestHeader("Content-Type", "application/json");
+
+    if(token){
+        requestCreatePostIt.setRequestHeader("Authorization", token);
+    }
+
+    const data = {
+        postItContent: content.value,
+        postItRow: rowPos,
+        postItColumn: colPos,
+        boardId: boardId
+    };
+
+    requestCreatePostIt.send(JSON.stringify(data));
+}
+
 function showCreatePostIt(){
     const createPostIt = document.getElementById("create-post-it-section");
     const overlay = document.getElementById("overlay");

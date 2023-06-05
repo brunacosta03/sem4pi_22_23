@@ -8,7 +8,7 @@ skinparam shadowing false
 
 actor User as Actor
 participant HttpServerAjax as Server <<http server>>
-participant CreatePostItController as Controller <<application>>
+participant UpdatePostItController as Controller <<application>>
 participant SessionManager as SM
 participant PostItService as Service <<service>>
 participant PostItFactory as PFactory <<factory>>
@@ -17,7 +17,7 @@ database PostItRepository as Repository <<repository>>
 database BoardRepository as RepositoryB <<repository>>
 
 
-Actor --> Server: Create Post-It
+Actor --> Server: Update Post-It Content
 activate Server
     Server -> Controller: create()
     Server -> SM: create()
@@ -31,14 +31,14 @@ activate Server
     SM -> Server: authUser
     deactivate SM
         
-    Server -> Controller: createPostIt(postItContent, postItRow,\npostItColumn, boardId, authUser)
+    Server -> Controller: updatePostItContent(postItContent, postItRow,\npostItColumn, boardId, authUser)
     activate Controller
 
 
     Controller -> Service: create()
     note right: dependency injection was abastracted\nfor diagram readability
 
-    Controller -> Service: createPostIt(postItContent, postItRow,\npostItColumn, boardId, authUser)
+    Controller -> Service: updateContent(postItContent, postItRow,\npostItColumn, boardId, userUpdating)
     activate Service
 
         Service -> RepositoryB: ofIdentity(boardId)
@@ -53,28 +53,28 @@ activate Server
 
 
         Service -> PFactory: create()
-        Service -> PFactory: create(postItContent, postItRow, postItColumn,\npostItOwner, board, PostItStateType.CREATED)
+        Service -> PFactory: createChange(postItContent, postItRow, postItColumn,\nuserUpdating, board, PostItStateType.UPDATED, lastPostIt)
         activate PFactory
 
-        PFactory -> Domain: PostIt(postItContent, postItRow, postItColumn,\npostItOwner, board, postItState)
+        PFactory -> Domain: PostIt(postItContent, postItRow, postItColumn,\npostItOwner, board, postItState, lastPostIt)
         activate Domain
-            Domain -> PFactory: postIt
+            Domain -> PFactory: postItUpdated
         deactivate Domain
-            PFactory -> Service: postIt
+            PFactory -> Service: postItUpdated
         deactivate PFactory
 
 
-        Service -> Repository: save(postIt)
+        Service -> Repository: save(postItUpdated)
         activate Repository
-        Repository -> Service: postIt
+        Repository -> Service: postItUpdated
         deactivate Repository
 
-        Service -> Controller: postIt
+        Service -> Controller: postItUpdated
         deactivate Service
-        Controller -> Server: postIt
+        Controller -> Server: postItUpdated
         deactivate Controller
 
-        Server --> Actor: displayPostItCreated
+        Server --> Actor: displayPostItUpdated
 
 deactivate Server
 @enduml

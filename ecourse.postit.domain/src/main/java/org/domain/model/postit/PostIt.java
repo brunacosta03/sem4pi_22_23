@@ -78,8 +78,8 @@ public class PostIt
      * Moved from post it.
      */
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "before_post_it")
-    private PostIt beforePostIt;
+    @JoinColumn(name = "last_post_it")
+    private PostIt lastPostIt;
 
     /**
      * Instantiates a new Post-It.
@@ -110,6 +110,33 @@ public class PostIt
         this.boardId = boardIdp;
         this.postItState = postItStatep;
         this.postItTimeStamp = CurrentTimeCalendars.now();
+    }
+
+    /**
+     * Instantiates a new Post-It.
+     * @param postItContentp the post-it contentp
+     * @param postItRowp     the post-it rowp
+     * @param postItColumnp  the post-it columnp
+     * @param postItOwnerp   the post-it ownerp
+     * @param boardIdp       the board idp
+     * @param postItStatep   the post-it state
+     * @param lastPostItp    the last post-it
+     */
+    PostIt(final PostItContent postItContentp,
+           final PostItRow postItRowp,
+           final PostItColumn postItColumnp,
+           final User postItOwnerp,
+           final Board boardIdp,
+           final PostItState postItStatep,
+           final PostIt lastPostItp) {
+        this.postItContent = postItContentp;
+        this.postItRow = postItRowp;
+        this.postItColumn = postItColumnp;
+        this.postItOwner = postItOwnerp;
+        this.boardId = boardIdp;
+        this.postItState = postItStatep;
+        this.postItTimeStamp = CurrentTimeCalendars.now();
+        this.lastPostIt = lastPostItp;
     }
 
     /**
@@ -161,7 +188,7 @@ public class PostIt
     }
 
     public PostIt rollBackPostIt(){
-        return beforePostIt;
+        return lastPostIt;
     }
 
     /**

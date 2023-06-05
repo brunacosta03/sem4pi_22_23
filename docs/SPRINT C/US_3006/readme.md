@@ -18,8 +18,6 @@ Dependencies:
 Information in System Specification
 
     Users with write permission may post content to a cell in the board. The content can be a text or an image. When the server commits a post it also should notify all clients with access to the board of the update.
-    The system should maintain an history/log of all the updates in the board.
-    The system should generate "real-time" HTML rendering of the board, presenting all the actual contents of the board, the row and column titles, the board title, the authors (short name and email) of the posts and a timestamp of each post.
 
 Information in Forum
 
@@ -526,7 +524,8 @@ public class PostItService {
                 postItByPosition(
                         postItRowp,
                         postItColumnp,
-                        board
+                        board,
+                        false
                 ) == null, "Already exist a Post-It in that cell!");
 
         Preconditions.ensure(
@@ -557,13 +556,15 @@ public class PostItService {
      */
     private PostIt postItByPosition(final String postItRowp,
                                     final String postItColumnp,
-                                    final Board boardp){
+                                    final Board boardp,
+                                    final boolean isUndo){
         PostIt postIt = postItRepository.positByPosition(postItRowp,
                     postItColumnp, boardp);
 
         if(postIt != null
-                && (postIt.state().equals(PostItStateType.DELETED)
-                || postIt.state().equals(PostItStateType.MOVED))){
+                && ((postIt.state().equals(PostItStateType.DELETED)
+                || postIt.state().equals(PostItStateType.MOVED)
+                && !isUndo))){
             return null;
         }
 
@@ -629,26 +630,26 @@ public class PostItService {
 
 **Login into the application**
 
-![Login](Demonstration/Login.png)
+![Login](Demonstration/Login.PNG)
 
 
 **Click on Board that you want to create a Post-It**
 
-![Choose a Board](Demonstration/ChooseBoard.png)
+![Choose a Board](Demonstration/ChooseBoard.PNG)
 
 
 **Click on Cell that you want to create a Post-It**
 
-![Choose a Cell](Demonstration/BoardCell.png)
+![Choose a Cell](Demonstration/BoardCell.PNG)
 
 **Write content and click Create**
 
-![Create Post-It](Demonstration/CreatePostIt.png)
+![Create Post-It](Demonstration/CreatePostIt.PNG)
 
 **If you want to upload image click on icon and select image**
 
-![Create Post-It](Demonstration/UploadImage.png)
+![Create Post-It](Demonstration/UploadImage.PNG)
 
 **After upload image a link will be generated and you can click on create**
 
-![Create Post-It](Demonstration/UploadImageDone.png)
+![Create Post-It](Demonstration/UploadImageDone.PNG)

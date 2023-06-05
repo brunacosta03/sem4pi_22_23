@@ -76,7 +76,8 @@ public class PostItService {
                 postItByPosition(
                         postItRowp,
                         postItColumnp,
-                        board
+                        board,
+                        false
                 ) == null, "Already exist a Post-It in that cell!");
 
         Preconditions.ensure(
@@ -99,6 +100,63 @@ public class PostItService {
     }
 
     /**
+     * Update content post-it.
+     * @param postItContentp the post-it contentp
+     * @param postItRowp     the post-it rowp
+     * @param postItColumnp  the post-it columnp
+     * @param userUpdating   the user updating
+     * @param boardIdp       the board idp
+     * @return the post-it
+     * @throws NoSuchElementException the no such element exception
+     */
+    public PostIt updateContent(final String postItContentp,
+                                String postItRowp,
+                                String postItColumnp,
+                                final String boardIdp,
+                                final User userUpdating)
+            throws NoSuchElementException {
+        Long boardId = Long.parseLong(boardIdp);
+        Board board = boardRepository.ofIdentity(boardId).get();
+
+        postItRowp = checkIfIsRowEntryTitle(postItRowp, board);
+        postItColumnp = checkIfIsColumnEntryTitle(postItColumnp, board);
+
+        PostIt lastPostIt = postItByPosition(
+                postItRowp,
+                postItColumnp,
+                board,
+                false);
+
+        Preconditions.ensure(
+                lastPostIt != null,
+                "There is no post-it in this cell!");
+
+        Preconditions.ensure(
+                lastPostIt.owner().sameAs(userUpdating),
+                "Only the owner of this post-it can update!"
+        );
+
+        Preconditions.ensure(
+                board.userHasPermission(userUpdating,
+                        AccessLevelType.WRITE), "You don't have "
+                        + AccessLevelType.WRITE + " permission"
+        );
+
+        PostItFactory postItFactory = new PostItFactory();
+
+        PostIt postItUpdated = postItFactory.createChange(
+                postItContentp,
+                postItRowp,
+                postItColumnp,
+                userUpdating,
+                board,
+                PostItStateType.UPDATED,
+                lastPostIt);
+
+        return postItRepository.save(postItUpdated);
+    }
+
+    /**
      * Check if already exist a Post-it in that position.
      * @param postItRowp postItRowp
      * @param postItColumnp postItColumnp
@@ -107,13 +165,15 @@ public class PostItService {
      */
     private PostIt postItByPosition(final String postItRowp,
                                     final String postItColumnp,
-                                    final Board boardp){
+                                    final Board boardp,
+                                    final boolean isUndo){
         PostIt postIt = postItRepository.positByPosition(postItRowp,
                     postItColumnp, boardp);
 
         if(postIt != null
-                && (postIt.state().equals(PostItStateType.DELETED)
-                || postIt.state().equals(PostItStateType.MOVED))){
+                && ((postIt.state().equals(PostItStateType.DELETED)
+                || postIt.state().equals(PostItStateType.MOVED)
+                && !isUndo))){
             return null;
         }
 
@@ -162,6 +222,7 @@ public class PostItService {
 
     /**
      * Is numeric.
+     *
      * @param strNum the str num
      * @return the boolean
      */

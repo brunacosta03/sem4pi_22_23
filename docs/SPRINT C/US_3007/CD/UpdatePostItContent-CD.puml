@@ -8,7 +8,7 @@ skinparam shadowing false
 
 
 class HttpServerAjax <<http server>>
-class CreatePostItController <<application>>
+class UpdatePostItController <<application>>
 class SessionManager
 class PostItService <<service>>
 class PostItFactory <<factory>>
@@ -19,10 +19,10 @@ class User <<domain>>
 class Board <<domain>>
 
 
-HttpServerAjax --> CreatePostItController: theController
+HttpServerAjax --> UpdatePostItController: theController
 HttpServerAjax --> SessionManager: sessionManager
 SessionManager ..> User
-CreatePostItController --> PostItService: postItSvc
+UpdatePostItController --> PostItService: postItSvc
 PostItService --> PostItFactory: postItFactory
 PostItService --> PostItRepository: postItRepository
 PostItService --> BoardRepository: boardRepository
@@ -34,22 +34,22 @@ PostItService --> Board: board
 
 
 
-HttpServerAjax : createPostIt(PostItBody, String)
+HttpServerAjax : updatePostItContent(PostItBody, String)
 HttpServerAjax : generateLockKey(PostItBody)
 HttpServerAjax : getOrCreateLockObject(String)
 SessionManager : getUserByToken(String)
-CreatePostItController : createPostIt(String, String, String, String, User)
-PostItService : createPostIt(String, String, String, User, String)
+UpdatePostItController : updatePostItContent(String, String, String, String, User)
+PostItService : updateContent(String, String, String, String, User)
 PostItService : checkIfIsRowEntryTitle(String, Board)
 PostItService : checkIfIsColumnEntryTitle(String, Board)
 PostItService : postItByPosition(String, String, Board, boolean)
 PostItService : isNumeric(String)
-PostItFactory : create(String, String, String, User, Board, PostItState)
+PostItFactory : create(String, String, String, User, Board, PostItState, PostIt)
+BoardRepository : ofIdentity(Long)
 Board : userHasPermission(User, AccessLevel)
 PostItRepository : positByPosition(String, String, Board)
 PostItRepository : save(PostIt)
-BoardRepository : ofIdentity(Long)
-PostIt : PostIt(PostItContent, PostItRow, PostItColumn, User, Board, PostItState)
+PostIt : PostIt(PostItContent, PostItRow, PostItColumn, User, Board, PostItState, PostIt)
 
 
 @enduml

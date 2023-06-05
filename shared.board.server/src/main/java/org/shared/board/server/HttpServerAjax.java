@@ -11,6 +11,7 @@ import org.domain.model.BoardEntry;
 import org.domain.model.postit.PostIt;
 import org.persistence.PersistenceContext;
 import org.postit.controller.CreatePostItController;
+import org.postit.controller.UpdatePostItController;
 import org.shared.board.server.gson_adapter.HibernateProxyTypeAdapter;
 import org.shared.board.server.gson_adapter.LocalDateAdapter;
 import org.shared.board.server.request_bodys.BoardBody;
@@ -185,6 +186,32 @@ public class HttpServerAjax {
         Iterable<Board> boards = theController.getBoardsByUser(authUser);
 
         return json.toJson(boards);
+    }
+
+    /**
+     * Update content of post-it.
+     * @param requestBody the request body
+     * @param token the token
+     * @return the string
+     */
+    public String updatePostItContent(PostItBody requestBody, String token){
+        UpdatePostItController theController = new UpdatePostItController();
+        User authUser = sessionManager.getUserByToken(token);
+
+        String lockKey = generateLockKey(requestBody);
+        Object lock = getOrCreateLockObject(lockKey);
+        PostIt postIt;
+
+        synchronized (lock){
+            postIt = theController.updatePostItContent(
+                    requestBody.content(),
+                    requestBody.row(),
+                    requestBody.column(),
+                    requestBody.boardId(),
+                    authUser);
+        }
+
+        return json.toJson(postIt);
     }
 
     /**

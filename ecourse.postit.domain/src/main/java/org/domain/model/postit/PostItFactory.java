@@ -18,6 +18,7 @@ public class PostItFactory {
 
     /**
      * Create post it.
+     *
      * @param postItContent the post-it content
      * @param postItRow     the post-it row
      * @param postItColumn  the post-it column
@@ -39,6 +40,35 @@ public class PostItFactory {
                 postItOwner,
                 board,
                 postItState
+        );
+    }
+
+    /**
+     * Create update post-it.
+     * @param postItContent the post-it content
+     * @param postItRow     the post-it row
+     * @param postItColumn  the post-it column
+     * @param postItOwner   the post-it owner
+     * @param board         the board
+     * @param postItState   the post-it state
+     * @param lastPostIt    the last post-it
+     * @return the post it
+     */
+    public PostIt createChange(final String postItContent,
+                               final String postItRow,
+                               final String postItColumn,
+                               final User postItOwner,
+                               final Board board,
+                               final PostItState postItState,
+                               final PostIt lastPostIt) {
+        return new PostIt(
+                PostItContent.of(postItContent),
+                PostItRow.of(postItRow, board.boardNRow()),
+                PostItColumn.of(postItColumn, board.boardNCol()),
+                postItOwner,
+                board,
+                postItState,
+                lastPostIt
         );
     }
 }

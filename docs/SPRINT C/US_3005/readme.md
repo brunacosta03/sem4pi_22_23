@@ -32,7 +32,7 @@ All possible updates to shared boards:
 
 Information in System Specification
 
-
+    The system should generate "real-time" HTML rendering of the board, presenting all the actual contents of the board, the row and column titles, the board title, the authors (short name and email) of the posts and a timestamp of each post.
 
 Information in Forum
 
@@ -52,11 +52,13 @@ This is an excerpt of our domain Model, it provides the clear idea of how the Po
 
 #### 4.1.1. Sequence Diagram get boards user have access
 
-![Create Post-It SD](SD/UserAccessBoards-SD.svg)
+![User Access Boards SD](SD/UserAccessBoards-SD.svg)
 
-### 4.2.1 Class Diagram get boards user have access
+### 4.2 Class Diagram
 
-![Create Post-It CD](CD/UserAccessBoards-CD.svg)
+#### 4.2.1 Class Diagram get boards user have access
+
+![User Access Boards CD](CD/UserAccessBoards-CD.svg)
 
 ### 4.3. Applied Patterns
 
