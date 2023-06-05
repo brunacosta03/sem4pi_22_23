@@ -4,6 +4,7 @@ import eapli.framework.validations.Preconditions;
 import org.authz.application.AuthorizationService;
 import org.authz.application.AuthzRegistry;
 import org.domain.model.postit.PostIt;
+import org.domain.model.postit.PostItStateType;
 import org.persistence.PersistenceContext;
 import org.postit.service.PostItService;
 import org.user.management.CourseRoles;
@@ -19,14 +20,14 @@ public class UpdatePostItController {
     private final AuthorizationService authz;
 
     /**
-     * Create a board service with repository injection.
+     * Create a postIt service with repository injection.
      */
     private final PostItService postItSvc = new PostItService(
             PersistenceContext.repositories().postIt(),
             PersistenceContext.repositories().boards());
 
     /**
-     * Instantiates CreatePostItController.
+     * Instantiates UpdatePostItController.
      */
     public UpdatePostItController() {
         authz = AuthzRegistry.authorizationService();
@@ -46,8 +47,9 @@ public class UpdatePostItController {
                                       final String boardIdp) {
         authz.ensureAuthenticatedUserHasAnyOf(CourseRoles.allRoles());
 
-        return postItSvc.updateContent(postItContentp, postItRowp, postItColumnp,
-                boardIdp, authz.session().get().authenticatedUser());
+        return postItSvc.changePostIt(postItContentp, postItRowp, postItColumnp,
+                boardIdp, authz.session().get().authenticatedUser(),
+                PostItStateType.UPDATED);
     }
 
     /**
@@ -67,7 +69,7 @@ public class UpdatePostItController {
         Preconditions.ensure(authUser != null,
                 "You need to authenticate first");
 
-        return postItSvc.updateContent(postItContentp, postItRowp, postItColumnp,
-                boardIdp, authUser);
+        return postItSvc.changePostIt(postItContentp, postItRowp, postItColumnp,
+                boardIdp, authUser, PostItStateType.UPDATED);
     }
 }

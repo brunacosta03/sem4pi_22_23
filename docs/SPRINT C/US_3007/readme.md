@@ -45,11 +45,19 @@ This is an excerpt of our domain Model, it provides the clear idea of how the Po
 
 ![Update Post-It Content SD](SD/UpdatePostItContent-SD.svg)
 
+#### 4.1.2. Sequence Diagram delete post-it
+
+![Delete Post-It SD](SD/DeletePostIt-SD.svg)
+
 ### 4.2 Class Diagram
 
 #### 4.2.1 Class Diagram change post-it content
 
 ![Update Post-It Content CD](CD/UpdatePostItContent-CD.svg)
+
+#### 4.2.2 Class Diagram delete post-it
+
+![Delete Post-It CD](CD/DeletePostIt-CD.svg)
 
 ### 4.3. Applied Patterns
 
@@ -80,7 +88,7 @@ This is an excerpt of our domain Model, it provides the clear idea of how the Po
 
 ```Java
 @Test
-void testUpdateContentSuccessful() {
+void testChangePostItContentSuccessful() {
     User postItOwner = managerUser();
     Board board = createBoard();
     PostItFactory postItFactory = new PostItFactory();
@@ -124,7 +132,40 @@ void testUpdateContentSuccessful() {
 **Test 3:** *Test delete post-it successfully.*
 
 ```Java
+@Test
+void testDeletePostItSuccessful() {
+    User postItOwner = managerUser();
+    Board board = createBoard();
+    PostItFactory postItFactory = new PostItFactory();
 
+    board.addPermission(createBoardPermission(postItOwner));
+    when(boardRepository.ofIdentity(123L)).thenReturn(Optional.of(board));
+
+    PostIt existingPostIt = postItFactory.create(
+            POST_IT_CONTENT,
+            POST_IT_ROW_COL,
+            POST_IT_ROW_COL,
+            postItOwner,
+            board,
+            PostItStateType.CREATED
+    );
+
+    when(postItRepository.positByPosition(POST_IT_ROW_COL, POST_IT_ROW_COL, board)).thenReturn(existingPostIt);
+    when(postItRepository.save(any(PostIt.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+    String updatedContent = PostItStateType.DELETED.toString();
+    PostIt updatedPostIt = postItService.changePostIt(updatedContent,
+            POST_IT_ROW_COL, POST_IT_ROW_COL, BOARD_ID, postItOwner, PostItStateType.DELETED);
+
+    assertNotNull(updatedPostIt);
+    assertEquals(updatedContent, updatedPostIt.content().value());
+    assertEquals(PostItRow.of(POST_IT_ROW_COL, board.boardNRow()), updatedPostIt.rowPos());
+    assertEquals(PostItColumn.of(POST_IT_ROW_COL, board.boardNCol()), updatedPostIt.columnPos());
+    assertEquals(postItOwner, updatedPostIt.owner());
+    assertEquals(board, updatedPostIt.board());
+    assertEquals(PostItStateType.DELETED, updatedPostIt.state());
+    verify(postItRepository, times(1)).save(any(PostIt.class));
+}
 ```
 
 ## 5. Implementation

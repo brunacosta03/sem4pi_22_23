@@ -218,6 +218,33 @@ public class HttpRequestThread extends Thread {
                 }
             }
 
+            if(request.getMethod().equals("DELETE")){
+                if(request.getURI().equals("/delete_post_it")){
+                    String requestBody = request.getContentAsString();
+
+                    PostItBody body = json.fromJson(requestBody, PostItBody.class);
+
+                    try{
+                        response.setContentFromString(
+                                httpServerAjax.deletePostIt(body, token),
+                                "application/json");
+                        response.setResponseStatus("200 Ok");
+                    } catch (IllegalArgumentException e){
+                        response.setContentFromString(
+                                e.getMessage(),
+                                "text");
+                        response.setResponseStatus("400 Bad Request");
+                    } catch (NoSuchElementException e){
+                        response.setContentFromString(
+                                "This board doesn't exist",
+                                "text");
+                        response.setResponseStatus("400 Bad Request");
+                    }
+
+                    response.send(outS);;
+                }
+            }
+
         } catch(IOException ex) {
             System.out.println("Thread error when reading request");
         }

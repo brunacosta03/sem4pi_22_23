@@ -8,7 +8,7 @@ skinparam shadowing false
 
 
 class HttpServerAjax <<http server>>
-class UpdatePostItController <<application>>
+class DeletePostItController <<application>>
 class SessionManager
 class PostItService <<service>>
 class PostItFactory <<factory>>
@@ -19,10 +19,10 @@ class User <<domain>>
 class Board <<domain>>
 
 
-HttpServerAjax --> UpdatePostItController: theController
+HttpServerAjax --> DeletePostItController: theController
 HttpServerAjax --> SessionManager: sessionManager
 SessionManager ..> User
-UpdatePostItController --> PostItService: postItSvc
+DeletePostItController --> PostItService: postItSvc
 PostItService --> PostItFactory: postItFactory
 PostItService --> PostItRepository: postItRepository
 PostItService --> BoardRepository: boardRepository
@@ -34,11 +34,11 @@ PostItService --> Board: board
 
 
 
-HttpServerAjax : updatePostItContent(PostItBody, String)
+HttpServerAjax : deletePostIt(PostItBody, String)
 HttpServerAjax : generateLockKey(PostItBody)
 HttpServerAjax : getOrCreateLockObject(String)
 SessionManager : getUserByToken(String)
-UpdatePostItController : updatePostItContent(String, String, String, String, User)
+DeletePostItController : deletePostIt(String, String, String, User)
 PostItService : changePostIt(String, String, String, String, User, PostItState)
 PostItService : checkIfIsRowEntryTitle(String, Board)
 PostItService : checkIfIsColumnEntryTitle(String, Board)

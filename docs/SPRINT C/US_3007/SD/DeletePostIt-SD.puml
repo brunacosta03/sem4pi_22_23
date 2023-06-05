@@ -8,7 +8,7 @@ skinparam shadowing false
 
 actor User as Actor
 participant HttpServerAjax as Server <<http server>>
-participant UpdatePostItController as Controller <<application>>
+participant DeletePostItController as Controller <<application>>
 participant SessionManager as SM
 participant PostItService as Service <<service>>
 participant PostItFactory as PFactory <<factory>>
@@ -17,13 +17,13 @@ database PostItRepository as Repository <<repository>>
 database BoardRepository as RepositoryB <<repository>>
 
 
-Actor --> Server: Update Post-It Content
+Actor --> Server: Delete Post-It
 activate Server
     Server -> Controller: create()
     Server -> SM: create()
 
     Server --> Actor: Ask post-it information
-    Actor --> Server: PostItContent, PostItRow, PostItColumn, BoardId
+    Actor --> Server: PostItRow, PostItColumn, BoardId
 
 
     Server -> SM: getUserByToken(token)
@@ -31,14 +31,14 @@ activate Server
     SM -> Server: authUser
     deactivate SM
         
-    Server -> Controller: updatePostItContent(postItContent, postItRow,\npostItColumn, boardId, authUser)
+    Server -> Controller: deletePostIt(postItRow, postItColumn,\nboardId, authUser)
     activate Controller
 
 
     Controller -> Service: create()
     note right: dependency injection was abastracted\nfor diagram readability
 
-    Controller -> Service: changePostIt(postItContent, postItRow,\npostItColumn, boardId, authUser, PostItStateType.UPDATED)
+    Controller -> Service: changePostIt(PostItStateType.DELETED.toString(), postItRow,\npostItColumn, boardId, authUser, PostItStateType.DELETED)
     activate Service
 
         Service -> RepositoryB: ofIdentity(boardId)
@@ -74,7 +74,7 @@ activate Server
         Controller -> Server: postItUpdated
         deactivate Controller
 
-        Server --> Actor: displayPostItUpdated
+        Server --> Actor: displayPostItDeleted
 
 deactivate Server
 @enduml

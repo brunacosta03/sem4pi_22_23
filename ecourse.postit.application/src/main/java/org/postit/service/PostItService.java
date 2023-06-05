@@ -101,19 +101,22 @@ public class PostItService {
 
     /**
      * Update content post-it.
+     *
      * @param postItContentp the post-it contentp
      * @param postItRowp     the post-it rowp
      * @param postItColumnp  the post-it columnp
-     * @param userUpdating   the user updating
      * @param boardIdp       the board idp
+     * @param authUser   the user updating
+     * @param postItStatep    the post-it state
      * @return the post-it
      * @throws NoSuchElementException the no such element exception
      */
-    public PostIt updateContent(final String postItContentp,
+    public PostIt changePostIt(final String postItContentp,
                                 String postItRowp,
                                 String postItColumnp,
                                 final String boardIdp,
-                                final User userUpdating)
+                                final User authUser,
+                                final PostItState postItStatep)
             throws NoSuchElementException {
         Long boardId = Long.parseLong(boardIdp);
         Board board = boardRepository.ofIdentity(boardId).get();
@@ -132,12 +135,12 @@ public class PostItService {
                 "There is no post-it in this cell!");
 
         Preconditions.ensure(
-                lastPostIt.owner().sameAs(userUpdating),
-                "Only the owner of this post-it can update!"
+                lastPostIt.owner().sameAs(authUser),
+                "Only the owner of this post-it can change it!"
         );
 
         Preconditions.ensure(
-                board.userHasPermission(userUpdating,
+                board.userHasPermission(authUser,
                         AccessLevelType.WRITE), "You don't have "
                         + AccessLevelType.WRITE + " permission"
         );
@@ -148,9 +151,9 @@ public class PostItService {
                 postItContentp,
                 postItRowp,
                 postItColumnp,
-                userUpdating,
+                authUser,
                 board,
-                PostItStateType.UPDATED,
+                postItStatep,
                 lastPostIt);
 
         return postItRepository.save(postItUpdated);

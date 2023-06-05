@@ -184,7 +184,7 @@ class PostItServiceTest {
     }
 
     @Test
-    void testUpdateContentSuccessful() {
+    void testChangePostItContentSuccessful() {
         User postItOwner = managerUser();
         Board board = createBoard();
         PostItFactory postItFactory = new PostItFactory();
@@ -205,8 +205,8 @@ class PostItServiceTest {
         when(postItRepository.save(any(PostIt.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         String updatedContent = "Updated Post-it Content";
-        PostIt updatedPostIt = postItService.updateContent(updatedContent,
-                POST_IT_ROW_COL, POST_IT_ROW_COL, BOARD_ID, postItOwner);
+        PostIt updatedPostIt = postItService.changePostIt(updatedContent,
+                POST_IT_ROW_COL, POST_IT_ROW_COL, BOARD_ID, postItOwner, PostItStateType.UPDATED);
 
         assertNotNull(updatedPostIt);
         assertEquals(updatedContent, updatedPostIt.content().value());
@@ -219,7 +219,42 @@ class PostItServiceTest {
     }
 
     @Test
-    void testUpdateContentThrowsExceptionWhenPostItNotFound() {
+    void testDeletePostItSuccessful() {
+        User postItOwner = managerUser();
+        Board board = createBoard();
+        PostItFactory postItFactory = new PostItFactory();
+
+        board.addPermission(createBoardPermission(postItOwner));
+        when(boardRepository.ofIdentity(123L)).thenReturn(Optional.of(board));
+
+        PostIt existingPostIt = postItFactory.create(
+                POST_IT_CONTENT,
+                POST_IT_ROW_COL,
+                POST_IT_ROW_COL,
+                postItOwner,
+                board,
+                PostItStateType.CREATED
+        );
+
+        when(postItRepository.positByPosition(POST_IT_ROW_COL, POST_IT_ROW_COL, board)).thenReturn(existingPostIt);
+        when(postItRepository.save(any(PostIt.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        String updatedContent = PostItStateType.DELETED.toString();
+        PostIt updatedPostIt = postItService.changePostIt(updatedContent,
+                POST_IT_ROW_COL, POST_IT_ROW_COL, BOARD_ID, postItOwner, PostItStateType.DELETED);
+
+        assertNotNull(updatedPostIt);
+        assertEquals(updatedContent, updatedPostIt.content().value());
+        assertEquals(PostItRow.of(POST_IT_ROW_COL, board.boardNRow()), updatedPostIt.rowPos());
+        assertEquals(PostItColumn.of(POST_IT_ROW_COL, board.boardNCol()), updatedPostIt.columnPos());
+        assertEquals(postItOwner, updatedPostIt.owner());
+        assertEquals(board, updatedPostIt.board());
+        assertEquals(PostItStateType.DELETED, updatedPostIt.state());
+        verify(postItRepository, times(1)).save(any(PostIt.class));
+    }
+
+    @Test
+    void testchangePostItThrowsExceptionWhenPostItNotFound() {
         User postItOwner = managerUser();
         Board board = createBoard();
 
@@ -228,14 +263,14 @@ class PostItServiceTest {
         when(postItRepository.positByPosition(POST_IT_ROW_COL, POST_IT_ROW_COL, board)).thenReturn(null);
 
         assertThrows(IllegalArgumentException.class, () ->
-                postItService.updateContent("Updated Post-it Content",
-                        POST_IT_ROW_COL, POST_IT_ROW_COL, BOARD_ID, postItOwner));
+                postItService.changePostIt("Updated Post-it Content",
+                        POST_IT_ROW_COL, POST_IT_ROW_COL, BOARD_ID, postItOwner, PostItStateType.UPDATED));
 
         verify(postItRepository, never()).save(any(PostIt.class));
     }
 
     @Test
-    void testUpdateContentThrowsExceptionWhenUserDoesNotHavePermission() {
+    void testchangePostItThrowsExceptionWhenUserDoesNotHavePermission() {
         User postItOwner = managerUser();
         Board board = createBoard();
         PostItFactory postItFactory = new PostItFactory();
@@ -254,14 +289,14 @@ class PostItServiceTest {
         when(postItRepository.positByPosition(POST_IT_ROW_COL, POST_IT_ROW_COL, board)).thenReturn(existingPostIt);
 
         assertThrows(IllegalArgumentException.class, () ->
-                postItService.updateContent("Updated Post-it Content",
-                        POST_IT_ROW_COL, POST_IT_ROW_COL, BOARD_ID, postItOwner));
+                postItService.changePostIt("Updated Post-it Content",
+                        POST_IT_ROW_COL, POST_IT_ROW_COL, BOARD_ID, postItOwner, PostItStateType.UPDATED));
 
         verify(postItRepository, never()).save(any(PostIt.class));
     }
 
     @Test
-    void testUpdateContentThrowsExceptionWhenUserDoesIsNotTheSame() {
+    void testchangePostItThrowsExceptionWhenUserDoesIsNotTheSame() {
         User postItOwner = managerUser();
         User updateOwner = anotherManagerUser();
         Board board = createBoard();
@@ -281,8 +316,8 @@ class PostItServiceTest {
         when(postItRepository.positByPosition(POST_IT_ROW_COL, POST_IT_ROW_COL, board)).thenReturn(existingPostIt);
 
         assertThrows(IllegalArgumentException.class, () ->
-                postItService.updateContent("Updated Post-it Content",
-                        POST_IT_ROW_COL, POST_IT_ROW_COL, BOARD_ID, updateOwner));
+                postItService.changePostIt("Updated Post-it Content",
+                        POST_IT_ROW_COL, POST_IT_ROW_COL, BOARD_ID, updateOwner, PostItStateType.UPDATED));
 
         verify(postItRepository, never()).save(any(PostIt.class));
     }

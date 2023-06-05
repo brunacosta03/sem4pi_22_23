@@ -428,6 +428,43 @@ function updatePostItContent(){
     requestCreatePostIt.send(JSON.stringify(data));
 }
 
+function deletePostIt(){
+    event.preventDefault();
+
+    const boardId = getBoardUserIsIn();
+
+    const requestCreatePostIt = new XMLHttpRequest();
+
+    requestCreatePostIt.onload = function() {
+        if (requestCreatePostIt.status === 200) {
+            console.log(JSON.parse(requestCreatePostIt.responseText));
+
+            notification("Post-It deleted successfully!", requestCreatePostIt.status);
+        } else {
+            notification(requestCreatePostIt.responseText, requestCreatePostIt.status);
+        }
+
+        disableOverlay();
+    };
+
+    const token = getTokenCookie();
+
+    requestCreatePostIt.open("DELETE", "/delete_post_it", true);
+    requestCreatePostIt.setRequestHeader("Content-Type", "application/json");
+
+    if(token){
+        requestCreatePostIt.setRequestHeader("Authorization", token);
+    }
+
+    const data = {
+        postItRow: rowPos,
+        postItColumn: colPos,
+        boardId: boardId
+    };
+
+    requestCreatePostIt.send(JSON.stringify(data));
+}
+
 function showCreatePostIt(){
     const createPostIt = document.getElementById("create-post-it-section");
     const overlay = document.getElementById("overlay");

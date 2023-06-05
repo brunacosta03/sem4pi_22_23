@@ -11,6 +11,7 @@ import org.domain.model.BoardEntry;
 import org.domain.model.postit.PostIt;
 import org.persistence.PersistenceContext;
 import org.postit.controller.CreatePostItController;
+import org.postit.controller.DeletePostItController;
 import org.postit.controller.UpdatePostItController;
 import org.shared.board.server.gson_adapter.HibernateProxyTypeAdapter;
 import org.shared.board.server.gson_adapter.LocalDateAdapter;
@@ -205,6 +206,24 @@ public class HttpServerAjax {
         synchronized (lock){
             postIt = theController.updatePostItContent(
                     requestBody.content(),
+                    requestBody.row(),
+                    requestBody.column(),
+                    requestBody.boardId(),
+                    authUser);
+        }
+
+        return json.toJson(postIt);
+    }
+    public String deletePostIt(PostItBody requestBody, String token){
+        DeletePostItController theController = new DeletePostItController();
+        User authUser = sessionManager.getUserByToken(token);
+
+        String lockKey = generateLockKey(requestBody);
+        Object lock = getOrCreateLockObject(lockKey);
+        PostIt postIt;
+
+        synchronized (lock){
+            postIt = theController.deletePostIt(
                     requestBody.row(),
                     requestBody.column(),
                     requestBody.boardId(),
