@@ -87,7 +87,7 @@ public class HttpRequestThread extends Thread {
                     response.send(outS);
                 }
 
-                if(request.getURI().equals("/history")) {
+                if(request.getURI().startsWith("/history/")) {
                     String fullname = baseFolder + "/history.html";
 
                     if(response.setContentFromFile(fullname)) {

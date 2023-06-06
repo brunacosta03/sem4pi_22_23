@@ -1,6 +1,10 @@
-var validation = {
+const validation = {
     isNumber:function(str) {
         var pattern = /^\d+\.?\d*$/;
+        return pattern.test(str);
+    },
+    isLink: function(str) {
+        var pattern = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
         return pattern.test(str);
     }
 };
@@ -62,7 +66,13 @@ function checkUser() {
 function boardViewLoad(){
     checkUser();
     showBoard();
-    fileListener();
+    fileListener("file", "post-it-content");
+    fileListener("update-file", "update-post-it-content");
+    setHistoryRef();
+}
+
+function historyLoad(){
+    checkUser();
 }
 
 function login(){
@@ -215,7 +225,9 @@ function createPostIt(){
 
     requestCreatePostIt.onload = function() {
         if (requestCreatePostIt.status === 200) {
-            console.log(JSON.parse(requestCreatePostIt.responseText));
+            const data = JSON.parse(requestCreatePostIt.responseText);
+
+            writeContentInCell(data.postItColumn.value, data.postItRow.value, data.postItContent.value);
 
             notification("Post-It created successfully!", requestCreatePostIt.status);
         } else {
@@ -283,9 +295,9 @@ function getAllUserBoards(){
     request.send();
 }
 
-function fileListener() {
-    const file = document.getElementById("file");
-    const content = document.getElementById('post-it-content');
+function fileListener(fileElementId, contentId) {
+    const file = document.getElementById(fileElementId);
+    const content = document.getElementById(contentId);
 
     file.addEventListener("change", ev => {
         ev.preventDefault();
@@ -301,7 +313,8 @@ function fileListener() {
             if (request.readyState === XMLHttpRequest.DONE) {
                 if (request.status === 200) {
                     const response = JSON.parse(request.responseText);
-                    content.textContent = response.data.link;
+
+                    content.value = response.data.link;
 
                     notification("Image upload with success!", request.status);
                 } else {
@@ -363,18 +376,28 @@ function showBoard() {
             } else {
                 const liPostItItem = document.createElement('li');
                 liPostItItem.classList.add('post-it');
-                liPostItItem.id = `post-it-${i}-${j}`;
+                liPostItItem.id = `cell-${i}-${j}`;
                 ulPostItList.appendChild(liPostItItem);
+
+                const postItText = document.createElement('p');
+                liPostItItem.classList.add('post-it-text');
+                postItText.id = `post-it-${i}-${j}`;
+                liPostItItem.appendChild(postItText);
 
                 const imgElement = document.createElement('img');
                 imgElement.src = '../change-cell.png';
                 imgElement.classList.add('add-image');
                 liPostItItem.appendChild(imgElement);
 
+                const postItImage = document.createElement('img');
+                postItImage.classList.add('post-it-img');
+                postItImage.id = `img-${i}-${j}`;
+                liPostItItem.appendChild(postItImage);
+
                 liPostItItem.onclick = () =>{
                     colPos = i;
                     rowPos = j;
-                    showCreatePostIt();
+                    showCreateUpdatePostIt(i, j);
                 };
             }
         }
@@ -392,13 +415,15 @@ function updatePostItContent(){
     event.preventDefault();
 
     const boardId = getBoardUserIsIn();
-    const content = document.getElementById('post-it-content');
+    const content = document.getElementById('update-post-it-content');
 
     const requestCreatePostIt = new XMLHttpRequest();
 
     requestCreatePostIt.onload = function() {
         if (requestCreatePostIt.status === 200) {
-            console.log(JSON.parse(requestCreatePostIt.responseText));
+            const data = JSON.parse(requestCreatePostIt.responseText);
+
+            writeContentInCell(data.postItColumn.value, data.postItRow.value, data.postItContent.value);
 
             notification("Post-It updated successfully!", requestCreatePostIt.status);
         } else {
@@ -437,7 +462,9 @@ function deletePostIt(){
 
     requestCreatePostIt.onload = function() {
         if (requestCreatePostIt.status === 200) {
-            console.log(JSON.parse(requestCreatePostIt.responseText));
+            const data = JSON.parse(requestCreatePostIt.responseText);
+
+            writeContentInCell(data.postItColumn.value, data.postItRow.value, "");
 
             notification("Post-It deleted successfully!", requestCreatePostIt.status);
         } else {
@@ -465,20 +492,48 @@ function deletePostIt(){
     requestCreatePostIt.send(JSON.stringify(data));
 }
 
-function showCreatePostIt(){
-    const createPostIt = document.getElementById("create-post-it-section");
+function undoPostIt(){
+    event.preventDefault();
+
+    console.log("UNDOOO");
+}
+
+function undoDeletedPostIt(){
+    event.preventDefault();
+
+    console.log("UNDOOO DELETED POST IT");
+}
+
+function setHistoryRef() {
+    const history = document.getElementById("history-button");
+
+    history.href = "/history/" + getBoardUserIsIn();
+}
+
+function showCreateUpdatePostIt(colPos, rowPos){
+    const postIt = document.getElementById('post-it-' + colPos + '-' + rowPos);
+    const postItImg = document.getElementById('img-' + colPos + '-' + rowPos);
     const overlay = document.getElementById("overlay");
 
-    createPostIt.style.display = "block";
+    if(postIt.textContent === '' && postItImg.src === ''){
+        const createPostIt = document.getElementById("create-post-it-section");
+        createPostIt.style.display = "block";
+    } else {
+        const changePostIt = document.getElementById("change-post-it-section");
+        changePostIt.style.display = "block";
+    }
+
     overlay.style.display = "block";
 }
 
 function disableOverlay(){
     const overlay = document.getElementById("overlay");
     const createPostIt = document.getElementById("create-post-it-section");
+    const changePostIt = document.getElementById("change-post-it-section");
 
     overlay.style.display = "none";
     createPostIt.style.display = "none";
+    changePostIt.style.display = "none";
 }
 
 function notification(text, code){
@@ -501,9 +556,12 @@ function notification(text, code){
 function getTokenCookie(){
     const cookies = document.cookie.split(";").map(cookie => cookie.trim());
     const tokenCookie = cookies.find(cookie => cookie.startsWith("token="));
-    const token = decodeURIComponent(tokenCookie.split("=")[1]);
 
-    return token;
+    if(tokenCookie !== undefined){
+        return decodeURIComponent(tokenCookie.split("=")[1]);
+    }
+
+    return null;
 }
 
 function getBoardUserIsIn(){
@@ -514,10 +572,26 @@ function getBoardUserIsIn(){
     return boardId;
 }
 
-function voteFor(option) {
-	// var request = new XMLHttpRequest();
-  	// request.open("PUT", "/votes/" + option , true);
-  	// request.send();
-    //     var vBoard=document.getElementById("votes");
-    //     vBoard.innerHTML = vBoard.innerHTML + "<p>Casting your vote ... Please wait.";
+function writeContentInCell(column, row, content){
+    const cell = document.getElementById('cell-' + column + '-' + row);
+    const postItText = document.getElementById('post-it-' + column + '-' + row);
+    const postItImg = document.getElementById('img-' + column + '-' + row);
+
+    if(validation.isLink(content)){
+        postItText.style.display = "none";
+        postItImg.style.display = "block";
+        postItText.textContent = "";
+        postItImg.src = content;
+    } else {
+        postItImg.style.display = "none";
+        postItText.style.display = "block";
+        postItImg.removeAttribute('src');
+        postItText.textContent = content;
+    }
+
+    if(content === '') {
+        cell.style.backgroundColor = "#FFFFFF";
+    } else {
+        cell.style.backgroundColor = "#F9EA83";
+    }
 }

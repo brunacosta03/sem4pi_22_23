@@ -22,7 +22,7 @@
         <div id="loader"></div>
         <div id="overlay" onclick="disableOverlay()"></div>
         <div id="main-container">
-            <h2 class="title center-content">Board Owner - </h2>
+            <h2 class="title center-content">Board Title</h2>
             <div id="board-container">
                 <ul class="columns">
 <!--                    <li class="column">-->
@@ -92,6 +92,26 @@
                 </ul>
             </div>
 
+            <section id="boards-section">
+                <div class="container">
+                    <div id="all-boards-container">
+                        <h2 class="title center-content">Board Settings</h2>
+
+                        <div class="settings-board shadow">
+                            <a id="history-button" href="/history">
+                                <h3 class="title">History</h3>
+                            </a>
+                        </div>
+
+                        <div class="settings-board shadow">
+                            <a href="/myboards">
+                                <h3 class="title">Change Board</h3>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
 
             <section id="create-post-it-section">
                 <div id="create-post-it-container" class="container">
@@ -109,11 +129,64 @@
                             <textarea id="post-it-content" maxlength="100"></textarea>
 
                             <div class="buttons-form">
+                                <button id="undo-deleted-post-it" class="button add-button" onclick="undoDeletedPostIt()">
+                                    <span class="material-icons">undo</span>
+                                </button>
+
                                 <button class="button add-button" onclick="createPostIt()">Create</button>
                             </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
 
-                            <button class="button add-button" onclick="updatePostItContent()">UPDATE</button>
-                            <button class="button add-button" onclick="deletePostIt()">DELETE</button>
+            <section id="change-post-it-section">
+                <div id="change-post-it-container" class="container">
+                    <div class="center-content min-width-container">
+                        <form id="change-post-it-form" class="boards-form">
+                            <h2 class="title">Post-It</h2>
+
+                            <div class="content-header">
+                                <h3 class="title">Content:</h3>
+                                <div class="inputWrapper">
+                                    <input id="update-file" class="fileInput" type="file" name="file1" accept="image/jpeg, image/png"/>
+                                </div>
+                            </div>
+
+                            <textarea id="update-post-it-content" maxlength="100"></textarea>
+
+                            <div class="buttons-form">
+                                <button id="delete-post-it" class="button delete-button" onclick="deletePostIt()">
+                                    <span class="material-icons">delete</span>
+                                    <div>
+                                        Delete
+                                    </div>
+                                </button>
+
+                                <button id="undo-post-it" class="button add-button" onclick="undoPostIt()">
+                                    <span class="material-icons">undo</span>
+                                </button>
+
+                                <button class="button add-button" onclick="updatePostItContent()">Update</button>
+                            </div>
+
+                            <div class="line-gradient"></div>
+
+                            <div>
+                                <div class="move-to-another-cell">
+                                    <div>
+                                        <h3 class="title">Column:</h3>
+                                        <input id="move-to-column" type="number">
+                                    </div>
+
+                                    <div>
+                                        <h3 class="title">Row:</h3>
+                                        <input id="move-to-row" type="number">
+                                    </div>
+                                </div>
+
+                                <button class="button add-button" onclick="">Move</button>
+                            </div>
                         </form>
                     </div>
                 </div>
