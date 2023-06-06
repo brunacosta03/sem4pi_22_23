@@ -444,4 +444,7 @@ package BoardAggregate {
     ANTLR --> "N" TemplateFormativeQuestion : parses
     ANTLR --> "N" ExamTemplate : parses
     ANTLR --> "N" Exam : parses
+
+
+    PostIt --> PostIt : keeps history of
 @enduml
