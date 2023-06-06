@@ -554,6 +554,14 @@ function showCreateUpdatePostIt(colPos, rowPos){
         const createPostIt = document.getElementById("create-post-it-section");
         createPostIt.style.display = "block";
     } else {
+        const content = document.getElementById('update-post-it-content');
+
+        if(postIt.textContent !== ''){
+            content.value = postIt.textContent;
+        } else {
+            content.value = postItImg.src;
+        }
+
         const changePostIt = document.getElementById("change-post-it-section");
         changePostIt.style.display = "block";
     }

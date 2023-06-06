@@ -118,5 +118,6 @@ package PostItAggregate {
 
 PostIt --> "1" User :owner
 PostIt --> "1" SharedBoard :belongs
+PostIt --> PostIt : keeps history of
 
 @enduml
