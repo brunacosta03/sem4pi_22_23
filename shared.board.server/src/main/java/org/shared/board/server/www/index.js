@@ -65,6 +65,7 @@ function checkUser() {
 
 function boardViewLoad(){
     checkUser();
+    checkIfUserCanSeeThis();
     showBoard();
     fileListener("file", "post-it-content");
     fileListener("update-file", "update-post-it-content");
@@ -73,6 +74,7 @@ function boardViewLoad(){
 
 function historyLoad(){
     checkUser();
+    checkIfUserCanSeeThis();
 }
 
 function login(){
@@ -492,6 +494,39 @@ function deletePostIt(){
     requestCreatePostIt.send(JSON.stringify(data));
 }
 
+function checkIfUserCanSeeThis(){
+    const request = new XMLHttpRequest();
+
+    request.onload = function() {
+        if(request.status === 200){
+            const boards = JSON.parse(request.responseText);
+            let redirect = true;
+            const boardUserIsIn = getBoardUserIsIn();
+
+            boards.forEach((board) => {
+                if(board.boardId === boardUserIsIn){
+                    redirect = false;
+                }
+            });
+
+            if (redirect) {
+                window.location.href = window.location.origin + '/myboards';
+            }
+        }
+    };
+
+    request.open("GET", "/all_my_boards", true);
+    request.timeout = 5000;
+
+    const token = getTokenCookie();
+
+    if(token){
+        request.setRequestHeader("Authorization", token);
+    }
+
+    request.send();
+}
+
 function undoPostIt(){
     event.preventDefault();
 
@@ -569,7 +604,7 @@ function getBoardUserIsIn(){
     const parts = link.split('/');
     const boardId = parts[parts.length - 1];
 
-    return boardId;
+    return parseInt(boardId);
 }
 
 function writeContentInCell(column, row, content){
