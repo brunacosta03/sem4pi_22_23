@@ -38,6 +38,8 @@ public class PostItBootstrapper implements Action {
 
         rollbackPostIt("2", "2", "4");
         rollbackPostIt("3", "3", "4");
+        rollbackPostIt("2", "2", "4");
+
 
         return true;
     }
