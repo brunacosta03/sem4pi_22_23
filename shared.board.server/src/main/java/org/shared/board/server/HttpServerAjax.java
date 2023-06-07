@@ -12,6 +12,7 @@ import org.domain.model.postit.PostIt;
 import org.persistence.PersistenceContext;
 import org.postit.controller.CreatePostItController;
 import org.postit.controller.DeletePostItController;
+import org.postit.controller.UndoPostItController;
 import org.postit.controller.UpdatePostItController;
 import org.shared.board.server.gson_adapter.HibernateProxyTypeAdapter;
 import org.shared.board.server.gson_adapter.LocalDateAdapter;
@@ -21,7 +22,6 @@ import org.shared.board.server.request_bodys.PostItBody;
 import org.shared.board.server.session.SessionManager;
 import org.usermanagement.domain.model.User;
 
-import javax.persistence.Persistence;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -234,6 +234,35 @@ public class HttpServerAjax {
     }
 
     /**
+     * Undo post it string.
+     *
+     * @param requestBody the request body
+     * @param token       the token
+     * @return the string
+     */
+    public String undoPostIt(PostItBody requestBody, String token) {
+
+        UndoPostItController ctrl = new UndoPostItController();
+        User authenticated = sessionManager.getUserByToken(token);
+
+        String lockKey = generateLockKey(requestBody);
+        Object lock = getOrCreateLockObject(lockKey);
+
+        PostIt postIt;
+
+        synchronized (lock) {
+            postIt = ctrl.undoPostIt(
+                    requestBody.row(),
+                    requestBody.column(),
+                    requestBody.boardId(),
+                    authenticated
+            );
+        }
+
+        return json.toJson(postIt);
+    }
+
+    /**
      * Generate String based on row column and board id.
      * @param requestBody post-it
      * @return String
@@ -251,4 +280,6 @@ public class HttpServerAjax {
     private synchronized Object getOrCreateLockObject(String lockKey) {
         return lockObjects.computeIfAbsent(lockKey, k -> new Object());
     }
+
+
 }

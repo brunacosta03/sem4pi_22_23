@@ -1,6 +1,7 @@
 package org.postit.service;
 
 import eapli.framework.validations.Preconditions;
+import exceptions.NoPreviousElementException;
 import org.domain.model.AccessLevelType;
 import org.domain.model.Board;
 import org.domain.model.postit.*;
@@ -10,10 +11,7 @@ import org.springframework.stereotype.Service;
 import org.usermanagement.domain.model.User;
 import repositories.PostItRepository;
 
-import java.text.ParseException;
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.regex.Pattern;
 
 /**
@@ -106,8 +104,8 @@ public class PostItService {
      * @param postItRowp     the post-it rowp
      * @param postItColumnp  the post-it columnp
      * @param boardIdp       the board idp
-     * @param authUser   the user updating
-     * @param postItStatep    the post-it state
+     * @param authUser       the user updating
+     * @param postItStatep   the post-it state
      * @return the post-it
      * @throws NoSuchElementException the no such element exception
      */
@@ -175,12 +173,123 @@ public class PostItService {
 
         if(postIt != null
                 && ((postIt.state().equals(PostItStateType.DELETED)
-                || postIt.state().equals(PostItStateType.MOVED)
-                && !isUndo))){
+                || postIt.state().equals(PostItStateType.MOVED))
+                && !isUndo)){
             return null;
         }
 
         return postIt;
+    }
+
+    /**
+     * Undo post it.
+     *
+     * @param postItRowp    the post it rowp
+     * @param postItColumnp the post it columnp
+     * @param boardIdp      the board idp
+     * @param authUser      the auth user
+     * @return the post it
+     */
+    public PostIt undoPostIt(String postItRowp,
+                             String postItColumnp,
+                             final Long boardIdp,
+                             final User authUser) {
+        Board board = boardRepository.ofIdentity(boardIdp)
+                .get();
+
+
+
+        postItRowp = checkIfIsRowEntryTitle(postItRowp, board);
+        postItColumnp = checkIfIsColumnEntryTitle(postItColumnp, board);
+
+        PostIt lastPostIt = postItByPosition(postItRowp, postItColumnp,
+                board, true);
+
+        PostIt previousPostIt = lastPostIt.rollBackPostIt();
+
+        checkForUserOwnership(authUser, board, lastPostIt);
+
+        if(previousPostIt == null)
+            throw new NoPreviousElementException(
+                    "This post-it has no history");
+
+        PostItState previousState = previousPostIt.state();
+
+
+        PostItFactory postItFactory = new PostItFactory();
+
+        PostIt newPostIt = postItFactory.createChange(
+                previousPostIt.content().value(),
+                String.valueOf(previousPostIt.rowPos().value()),
+                String.valueOf(previousPostIt.columnPos().value()),
+                previousPostIt.owner(),
+                previousPostIt.board(),
+                PostItStateType.UPDATED,
+                lastPostIt);
+
+        if(previousState.equals(PostItStateType.MOVED)) {
+            savePreviousPostItMoved(lastPostIt,
+                    previousPostIt,
+                    postItFactory,
+                    newPostIt);
+        }
+
+
+        return this.postItRepository.save(newPostIt);
+    }
+
+    /**
+     * If the undo-ing is a move,
+     * the last post it must be
+     * saved again with the moved state.
+     *
+     * @param lastPostIt
+     * @param previousPostIt
+     * @param postItFactory
+     * @param newPostIt
+     */
+    private void savePreviousPostItMoved(PostIt lastPostIt,
+                                         PostIt previousPostIt,
+                                         PostItFactory postItFactory,
+                                         PostIt newPostIt) {
+
+            Preconditions.ensure(
+                    postItByPosition(
+                            String.valueOf(newPostIt.rowPos().value()),
+                            String.valueOf(newPostIt.columnPos().value()),
+                            newPostIt.board(),
+                            false
+                    ) == null,
+                    "Unable to undo post-it since "
+                            + "there is already another "
+                            + "post-it in that cell."
+            );
+
+            PostIt movedPostIt = postItFactory.createChange(
+                    lastPostIt.content().value(),
+                    String.valueOf(lastPostIt.rowPos().value()),
+                    String.valueOf(lastPostIt.columnPos().value()),
+                    lastPostIt.owner(),
+                    lastPostIt.board(),
+                    PostItStateType.MOVED,
+                    previousPostIt
+            );
+
+            this.postItRepository.save(movedPostIt);
+    }
+
+    private void checkForUserOwnership(User authUser, Board board, PostIt lastPostIt) {
+        Preconditions.ensure(
+                board.userHasPermission(authUser,
+                        AccessLevelType.WRITE), "You don't have "
+                        + AccessLevelType.WRITE + " permission"
+        );
+
+
+        Preconditions.ensure(
+                lastPostIt.owner().sameAs(authUser),
+                "Only the owner of this post-it can change it!"
+        );
     }
 
     /**

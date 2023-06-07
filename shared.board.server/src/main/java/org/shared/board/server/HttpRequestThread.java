@@ -2,6 +2,7 @@ package org.shared.board.server;
 
 import com.google.gson.Gson;
 import eapli.framework.domain.repositories.IntegrityViolationException;
+import exceptions.NoPreviousElementException;
 import org.shared.board.server.request_bodys.BoardBody;
 import org.shared.board.server.request_bodys.LoginBody;
 import org.shared.board.server.request_bodys.PostItBody;
@@ -216,6 +217,35 @@ public class HttpRequestThread extends Thread {
 
                     response.send(outS);;
                 }
+
+                if(request.getURI().equals("/undo_post_it")) {
+                    String requestBody = request.getContentAsString();
+
+                    PostItBody body = json.fromJson(requestBody, PostItBody.class);
+
+                    try {
+                        response.setContentFromString(
+                                httpServerAjax.undoPostIt(body, token),
+                                "application/json");
+
+                        response.setResponseStatus("200 Ok");
+                    } catch(NoPreviousElementException n) {
+                        response.setContentFromString(
+                                n.getMessage(),
+                                "text");
+
+                        response.setResponseStatus("400 Bad Request");
+                    } catch(IllegalArgumentException i) {
+                        response.setContentFromString(
+                                i.getMessage(),
+                                "text");
+
+                        response.setResponseStatus("400 Bad Request");
+                    }
+
+
+                }
+
             }
 
             if(request.getMethod().equals("DELETE")){
