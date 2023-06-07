@@ -39,6 +39,8 @@ public class PostItBootstrapper implements Action {
 
         rollbackPostIt("2", "2", "4");
         rollbackPostIt("3", "3", "4");
+        rollbackPostIt("2", "2", "4");
+
 
         updatePostItPosition("Title Row 2", "Title Column 2", "Title Row 2", "Title Column 3", "1");
         updatePostItPosition("3", "3", "2", "3", "4");

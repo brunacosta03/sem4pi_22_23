@@ -203,16 +203,22 @@ public class PostItService {
 
         PostItState previousState = previousPostIt.state();
 
+        PostItState newState = PostItStateType.UPDATED;
+
+        if(previousState.equals(PostItStateType.DELETED)) {
+            newState = PostItStateType.DELETED; // if the previous state was deleted
+            // it must be deleted again
+        }
 
         PostItFactory postItFactory = new PostItFactory();
 
         PostIt newPostIt = postItFactory.createChange(
-                previousPostIt.content().value(),
-                String.valueOf(previousPostIt.rowPos().value()),
-                String.valueOf(previousPostIt.columnPos().value()),
+                previousPostIt.content(),
+                previousPostIt.rowPos(),
+                previousPostIt.columnPos(),
                 previousPostIt.owner(),
                 previousPostIt.board(),
-                PostItStateType.UPDATED,
+                newState,
                 lastPostIt);
 
         if(previousState.equals(PostItStateType.MOVED)) {
@@ -221,7 +227,6 @@ public class PostItService {
                     postItFactory,
                     newPostIt);
         }
-
 
         return this.postItRepository.save(newPostIt);
     }
@@ -254,9 +259,9 @@ public class PostItService {
             );
 
             PostIt movedPostIt = postItFactory.createChange(
-                    lastPostIt.content().value(),
-                    String.valueOf(lastPostIt.rowPos().value()),
-                    String.valueOf(lastPostIt.columnPos().value()),
+                    lastPostIt.content(),
+                    lastPostIt.rowPos(),
+                    lastPostIt.columnPos(),
                     lastPostIt.owner(),
                     lastPostIt.board(),
                     PostItStateType.MOVED,
