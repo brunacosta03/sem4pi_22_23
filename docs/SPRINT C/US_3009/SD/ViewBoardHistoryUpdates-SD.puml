@@ -1,11 +1,55 @@
 @startuml
-'https://plantuml.com/sequence-diagram
 
-autonumber
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+actor User as Actor
+participant HttpServerAjax as Server <<http server>>
+participant ViewBoardHistoryController as Controller <<application>>
+participant SessionManager as SM
+participant BoardService as Service <<service>>
+participant Board as Domain <<domain>>
+database BoardRepository as RepositoryB <<repository>>
 
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+Actor -> Server: View the history of a board
+activate Server
+
+Server -> Controller: create()
+Server -> SM : create()
+Server -> Actor : onLoad after clicking on the previous page
+Actor -> Server : boardId
+Server -> SM : getUserByToken(token)
+activate SM
+
+SM -> Server : authUser
+deactivate SM
+
+Server -> Controller : getBoardHistory(boardId)
+activate Controller
+
+Controller -> Service : create()
+note right: dependency injection was abastracted\nfor diagram readability
+
+Controller -> Service : viewBoardHistory(boardId)
+activate Service
+
+Service -> Domain : boardHistory()
+activate Domain
+Domain -> RepositoryB : ofIdentity(boardId)
+activate RepositoryB
+RepositoryB -> Domain : board
+deactivate RepositoryB
+Domain -> Service : boardHistory
+deactivate Domain
+
+Service -> Controller : boardHistory
+deactivate Service
+Controller -> Server : boardHistory
+deactivate Controller
+Server -> Actor : boardHistory
+deactivate Server
+
+
 @enduml
