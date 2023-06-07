@@ -1,11 +1,33 @@
 @startuml
-'https://plantuml.com/sequence-diagram
 
-autonumber
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+class HttpServerAjax <<http server>>
+class ViewBoardHistoryController <<application>>
+class SessionManager
+class BoardRepository <<repository>>
+class BoardService <<service>>
+class Board <<domain>>
+class User <<domain>>
 
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+HttpServerAjax --> ViewBoardHistoryController : theController
+HttpServerAjax --> SessionManager : sessionManager
+SessionManager ..> User
+ViewBoardHistoryController --> BoardService : boardService
+BoardService --> BoardRepository : boardRepository
+BoardRepository --> Board
+BoardService --> Board : board
+
+HttpServerAjax : viewBoardHistory()
+SessionManager : getUserByToken()
+ViewBoardHistoryController : viewBoardHistory()
+BoardService : viewBoardHistoryUpdates()
+Board : userHasPermission(User, AccessLevel)
+BoardRepository : ofIdentity(Long)
+BoardRepository : save(Board)
+
+
 @enduml
