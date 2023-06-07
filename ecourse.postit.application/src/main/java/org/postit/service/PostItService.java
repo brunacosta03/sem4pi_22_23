@@ -225,9 +225,9 @@ public class PostItService {
         PostItFactory postItFactory = new PostItFactory();
 
         PostIt newPostIt = postItFactory.createChange(
-                previousPostIt.content().value(),
-                String.valueOf(previousPostIt.rowPos().value()),
-                String.valueOf(previousPostIt.columnPos().value()),
+                previousPostIt.content(),
+                previousPostIt.rowPos(),
+                previousPostIt.columnPos(),
                 previousPostIt.owner(),
                 previousPostIt.board(),
                 newState,
@@ -271,9 +271,9 @@ public class PostItService {
             );
 
             PostIt movedPostIt = postItFactory.createChange(
-                    lastPostIt.content().value(),
-                    String.valueOf(lastPostIt.rowPos().value()),
-                    String.valueOf(lastPostIt.columnPos().value()),
+                    lastPostIt.content(),
+                    lastPostIt.rowPos(),
+                    lastPostIt.columnPos(),
                     lastPostIt.owner(),
                     lastPostIt.board(),
                     PostItStateType.MOVED,
