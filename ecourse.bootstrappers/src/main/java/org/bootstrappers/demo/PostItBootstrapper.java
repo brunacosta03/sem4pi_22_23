@@ -35,9 +35,13 @@ public class PostItBootstrapper implements Action {
 
         deletePostIt("Title Row 2", "Title Column 3", "1");
         deletePostIt("2", "2", "4");
+        deletePostIt("2", "3", "4");
 
         rollbackPostIt("2", "2", "4");
         rollbackPostIt("3", "3", "4");
+
+        updatePostItPosition("Title Row 2", "Title Column 2", "Title Row 2", "Title Column 3", "1");
+        updatePostItPosition("3", "3", "2", "3", "4");
 
         return true;
     }
@@ -109,6 +113,24 @@ public class PostItBootstrapper implements Action {
             System.out.println("Board with that id doesn't exist");
         } catch(NoPreviousElementException e){
             System.out.println("There is no previous version of this post-it");
+        }
+    }
+
+    private void updatePostItPosition(final String previousPostItRowp,
+                                      final String previousPostItColumnp,
+                                      final String newPostItRowp,
+                                      final String newPostItColumnp,
+                                      final String boardIdp){
+        try{
+            PostIt postIt = updateController.updatePostItPosition(
+                    previousPostItRowp, previousPostItColumnp,
+                    newPostItRowp, newPostItColumnp, boardIdp);
+
+            System.out.println("[+] Post-It Id - " + postIt.identity());
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        } catch (NoSuchElementException e){
+            System.out.println("Board with that id doesn't exist");
         }
     }
 }

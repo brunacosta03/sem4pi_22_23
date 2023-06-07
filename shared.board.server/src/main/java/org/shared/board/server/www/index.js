@@ -75,6 +75,7 @@ function boardViewLoad(){
 function historyLoad(){
     checkUser();
     checkIfUserCanSeeThis();
+    setBoardRef();
 }
 
 function login(){
@@ -543,6 +544,12 @@ function setHistoryRef() {
     const history = document.getElementById("history-button");
 
     history.href = "/history/" + getBoardUserIsIn();
+}
+
+function setBoardRef() {
+    const boardRef = document.getElementById("my-board-view");
+
+    boardRef.href = "/board/" + getBoardUserIsIn();
 }
 
 function showCreateUpdatePostIt(colPos, rowPos){

@@ -72,4 +72,17 @@ public class UpdatePostItController {
         return postItSvc.changePostIt(postItContentp, postItRowp, postItColumnp,
                 boardIdp, authUser, PostItStateType.UPDATED);
     }
+
+    public PostIt updatePostItPosition(final String previousPostItRowp,
+                                       final String previousPostItColumnp,
+                                       final String newPostItRowp,
+                                       final String newPostItColumnp,
+                                       final String boardIdp) {
+        authz.ensureAuthenticatedUserHasAnyOf(CourseRoles.allRoles());
+
+        return postItSvc.changePostItPosition(
+                previousPostItRowp, previousPostItColumnp,
+                newPostItRowp, newPostItColumnp,
+                boardIdp, authz.session().get().authenticatedUser());
+    }
 }

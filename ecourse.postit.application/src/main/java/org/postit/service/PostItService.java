@@ -36,7 +36,6 @@ public class PostItService {
 
     /**
      * Instantiates a new Post-it service.
-     *
      * @param postItRepo the post-it repo
      * @param boardRepo  the board repo
      */
@@ -49,13 +48,12 @@ public class PostItService {
 
     /**
      * Create post-it.
-     *
      * @param postItContentp the post-it contentp
      * @param postItRowp     the post-it rowp
      * @param postItColumnp  the post-it columnp
      * @param postItOwner    the post-it owner
      * @param boardIdp       the board idp
-     * @return the post it
+     * @return the post-it
      * @throws NoSuchElementException the no such element exception
      */
     public PostIt createPostIt(final String postItContentp,
@@ -98,8 +96,7 @@ public class PostItService {
     }
 
     /**
-     * Update content post-it.
-     *
+     * Update post-it content.
      * @param postItContentp the post-it contentp
      * @param postItRowp     the post-it rowp
      * @param postItColumnp  the post-it columnp
@@ -132,16 +129,7 @@ public class PostItService {
                 lastPostIt != null,
                 "There is no post-it in this cell!");
 
-        Preconditions.ensure(
-                lastPostIt.owner().sameAs(authUser),
-                "Only the owner of this post-it can change it!"
-        );
-
-        Preconditions.ensure(
-                board.userHasPermission(authUser,
-                        AccessLevelType.WRITE), "You don't have "
-                        + AccessLevelType.WRITE + " permission"
-        );
+        checkForUserOwnership(authUser, board, lastPostIt);
 
         PostItFactory postItFactory = new PostItFactory();
 
@@ -280,15 +268,14 @@ public class PostItService {
 
     private void checkForUserOwnership(User authUser, Board board, PostIt lastPostIt) {
         Preconditions.ensure(
+                lastPostIt.owner().sameAs(authUser),
+                "Only the owner of this post-it can change it!"
+        );
+
+        Preconditions.ensure(
                 board.userHasPermission(authUser,
                         AccessLevelType.WRITE), "You don't have "
                         + AccessLevelType.WRITE + " permission"
-        );
-
-
-        Preconditions.ensure(
-                lastPostIt.owner().sameAs(authUser),
-                "Only the owner of this post-it can change it!"
         );
     }
 
@@ -344,5 +331,67 @@ public class PostItService {
         }
 
         return pattern.matcher(strNum).matches();
+    }
+
+    public PostIt changePostItPosition(String previousPostItRowp,
+                                       String previousPostItColumnp,
+                                       String newPostItRowp,
+                                       String newPostItColumnp,
+                                       final String boardIdp,
+                                       final User authUser) {
+        Long boardId = Long.parseLong(boardIdp);
+        Board board = boardRepository.ofIdentity(boardId).get();
+
+        previousPostItRowp = checkIfIsRowEntryTitle(previousPostItRowp, board);
+        previousPostItColumnp = checkIfIsColumnEntryTitle(previousPostItColumnp, board);
+
+        PostIt lastPostIt = postItByPosition(
+                previousPostItRowp,
+                previousPostItColumnp,
+                board,
+                false);
+
+        Preconditions.ensure(
+                lastPostIt != null,
+                "There is no post-it in this cell!");
+
+        checkForUserOwnership(authUser, board, lastPostIt);
+
+        newPostItRowp = checkIfIsRowEntryTitle(newPostItRowp, board);
+        newPostItColumnp = checkIfIsColumnEntryTitle(newPostItColumnp, board);
+
+        PostIt newPostItPosition = postItByPosition(
+                newPostItRowp,
+                newPostItColumnp,
+                board,
+                false);
+
+        Preconditions.ensure(
+                newPostItPosition == null,
+                "Already exist a Post-It in that cell!");
+
+        PostItFactory postItFactory = new PostItFactory();
+
+        PostIt lastPostItMoved = postItFactory.createChange(
+                lastPostIt.content().value(),
+                previousPostItRowp,
+                previousPostItColumnp,
+                authUser,
+                board,
+                PostItStateType.MOVED,
+                null);
+
+        PostIt lastPostItSaved = postItRepository.save(lastPostItMoved);
+
+        PostIt newPostIt = postItFactory.createChange(
+                lastPostIt.content().value(),
+                newPostItRowp,
+                newPostItColumnp,
+                authUser,
+                board,
+                PostItStateType.UPDATED,
+                lastPostItSaved);
+
+        return postItRepository.save(newPostIt);
     }
 }
