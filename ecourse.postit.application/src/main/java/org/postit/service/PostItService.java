@@ -185,13 +185,15 @@ public class PostItService {
         Board board = boardRepository.ofIdentity(boardIdp)
                 .get();
 
-
-
         postItRowp = checkIfIsRowEntryTitle(postItRowp, board);
         postItColumnp = checkIfIsColumnEntryTitle(postItColumnp, board);
 
         PostIt lastPostIt = postItByPosition(postItRowp, postItColumnp,
                 board, true);
+
+        Preconditions.ensure(!(lastPostIt == null ||
+                        lastPostIt.state().equals(PostItStateType.MOVED)),
+                "There is no post-it in this cell!");
 
         PostIt previousPostIt = lastPostIt.rollBackPostIt();
 
@@ -212,6 +214,13 @@ public class PostItService {
 
         PostItFactory postItFactory = new PostItFactory();
 
+
+        if(previousState.equals(PostItStateType.MOVED)) {
+            lastPostIt = savePreviousPostItMoved(lastPostIt,
+                    previousPostIt,
+                    postItFactory);
+        }
+
         PostIt newPostIt = postItFactory.createChange(
                 previousPostIt.content(),
                 previousPostIt.rowPos(),
@@ -220,13 +229,6 @@ public class PostItService {
                 previousPostIt.board(),
                 newState,
                 lastPostIt);
-
-        if(previousState.equals(PostItStateType.MOVED)) {
-            savePreviousPostItMoved(lastPostIt,
-                    previousPostIt,
-                    postItFactory,
-                    newPostIt);
-        }
 
         return this.postItRepository.save(newPostIt);
     }
@@ -239,18 +241,16 @@ public class PostItService {
      * @param lastPostIt
      * @param previousPostIt
      * @param postItFactory
-     * @param newPostIt
      */
-    private void savePreviousPostItMoved(PostIt lastPostIt,
+    private PostIt savePreviousPostItMoved(PostIt lastPostIt,
                                          PostIt previousPostIt,
-                                         PostItFactory postItFactory,
-                                         PostIt newPostIt) {
+                                         PostItFactory postItFactory) {
 
             Preconditions.ensure(
                     postItByPosition(
-                            String.valueOf(newPostIt.rowPos().value()),
-                            String.valueOf(newPostIt.columnPos().value()),
-                            newPostIt.board(),
+                            String.valueOf(previousPostIt.rowPos().value()),
+                            String.valueOf(previousPostIt.columnPos().value()),
+                            previousPostIt.board(),
                             false
                     ) == null,
                     "Unable to undo post-it since "
@@ -265,10 +265,10 @@ public class PostItService {
                     lastPostIt.owner(),
                     lastPostIt.board(),
                     PostItStateType.MOVED,
-                    previousPostIt
+                    null
             );
 
-            this.postItRepository.save(movedPostIt);
+            return this.postItRepository.save(movedPostIt);
     }
 
     private void checkForUserOwnership(User authUser, Board board, PostIt lastPostIt) {

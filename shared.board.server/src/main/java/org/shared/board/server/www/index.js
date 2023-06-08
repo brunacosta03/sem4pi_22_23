@@ -531,13 +531,48 @@ function checkIfUserCanSeeThis(){
 function undoPostIt(){
     event.preventDefault();
 
-    console.log("UNDOOO");
-}
+    const request = new XMLHttpRequest();
 
-function undoDeletedPostIt(){
-    event.preventDefault();
 
-    console.log("UNDOOO DELETED POST IT");
+    request.onload = function() {
+        if (request.status === 200) {
+            const data = JSON.parse(request.responseText);
+
+            console.log(data);
+
+
+            writeContentInCell(colPos, rowPos, "");
+
+            if(data.postItState.postItState !== "DELETED"){
+                writeContentInCell(data.postItColumn.value,
+                    data.postItRow.value,
+                    data.postItContent.value);
+            }
+
+
+            notification("Post-it undone successfully!", request.status);
+        } else {
+            notification(request.responseText, request.status);
+        }
+
+        disableOverlay();
+    }
+
+    request.open("PUT", "/undo_post_it", true);
+
+    const token = getTokenCookie();
+
+    if(token){
+        request.setRequestHeader("Authorization", token);
+    }
+
+    const data = {
+        postItRow: rowPos,
+        postItColumn: colPos,
+        boardId: getBoardUserIsIn()
+    };
+
+    request.send(JSON.stringify(data));
 }
 
 function setHistoryRef() {
