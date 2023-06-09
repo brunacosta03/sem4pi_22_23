@@ -255,23 +255,16 @@ public class HttpRequestThread extends Thread {
                                 "application/json");
 
                         response.setResponseStatus("200 Ok");
-                    } catch(NoPreviousElementException n) {
+                    } catch(NoPreviousElementException | IllegalArgumentException n) {
                         response.setContentFromString(
                                 n.getMessage(),
                                 "text");
 
                         response.setResponseStatus("400 Bad Request");
-                    } catch(IllegalArgumentException i) {
-                        response.setContentFromString(
-                                i.getMessage(),
-                                "text");
-
-                        response.setResponseStatus("400 Bad Request");
                     }
 
-
+                    response.send(outS);
                 }
-
             }
 
             if(request.getMethod().equals("DELETE")){
