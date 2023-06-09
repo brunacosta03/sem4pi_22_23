@@ -11,6 +11,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The type Board.
+ */
 @Entity
 @Table(name = "T_SHARED_BOARD")
 public class Board
@@ -80,10 +83,22 @@ public class Board
     )
     private List<BoardEntry> boardEntrys;
 
+    /**
+     * Instantiates a new Board.
+     */
     protected Board() {
 
     }
 
+    /**
+     * Instantiates a new Board.
+     *
+     * @param boardTitlep    the board titlep
+     * @param boardNRowp     the board n rowp
+     * @param boardNColp     the board n colp
+     * @param allBoardEntrys the all board entrys
+     * @param boardOwnerp    the board ownerp
+     */
     Board(final BoardTitle boardTitlep,
           final BoardNRow boardNRowp,
           final BoardNCol boardNColp,
@@ -101,7 +116,8 @@ public class Board
 
     /**
      * Get board title.
-     * @return BoardTitle
+     *
+     * @return BoardTitle board title
      */
     public BoardTitle boardTitle() {
         return boardTitle;
@@ -109,7 +125,8 @@ public class Board
 
     /**
      * Get board number of columns.
-     * @return BoardNCol
+     *
+     * @return BoardNCol board n col
      */
     public BoardNCol boardNCol() {
         return boardNCol;
@@ -117,7 +134,8 @@ public class Board
 
     /**
      * Get board number of rows.
-     * @return BoardNCol
+     *
+     * @return BoardNCol board n row
      */
     public BoardNRow boardNRow() {
         return boardNRow;
@@ -125,7 +143,8 @@ public class Board
 
     /**
      * Get board owner of rows.
-     * @return User
+     *
+     * @return User user
      */
     public User boardOwner() {
         return boardOwner;
@@ -133,6 +152,7 @@ public class Board
 
     /**
      * Add Permissions to board.
+     *
      * @param boardPermissionp board permission.
      */
     public void addPermission(final BoardPermission boardPermissionp) {
@@ -141,9 +161,10 @@ public class Board
 
     /**
      * Check if user has specific permission in board
-     * @param user user that should have permission
+     *
+     * @param user        user that should have permission
      * @param accessLevel typer of permission
-     * @return true/false
+     * @return true /false
      */
     public boolean userHasPermission(User user, AccessLevel accessLevel){
         for (BoardPermission boardPermission : this.boardPermissions) {
@@ -157,8 +178,25 @@ public class Board
     }
 
     /**
+     * User has any permission boolean.
+     * @param user the user
+     * @return the boolean
+     */
+    public boolean userHasAnyPermission(User user){
+        for (BoardPermission boardPermission : this.boardPermissions) {
+            if(boardPermission.userWithPermission().sameAs(user)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Find row of entry Title
-     * @return String
+     *
+     * @param rowTitle the row title
+     * @return String string
      */
     public String findRowByEntryTitle(String rowTitle){
         EntryTitle findEntryTitle = EntryTitle.of(rowTitle);
@@ -174,7 +212,9 @@ public class Board
 
     /**
      * Find column of entry Title
-     * @return String
+     *
+     * @param colTitle the col title
+     * @return String string
      */
     public String findColumnByEntryTitle(String colTitle){
         EntryTitle findEntryTitle = EntryTitle.of(colTitle);

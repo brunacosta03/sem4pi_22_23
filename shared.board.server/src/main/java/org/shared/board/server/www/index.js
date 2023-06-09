@@ -65,8 +65,7 @@ function checkUser() {
 
 function boardViewLoad(){
     checkUser();
-    checkIfUserCanSeeThis();
-    showBoard();
+    getBoardById(showBoard);
     fileListener("file", "post-it-content");
     fileListener("update-file", "update-post-it-content");
     setHistoryRef();
@@ -74,8 +73,8 @@ function boardViewLoad(){
 
 function historyLoad(){
     checkUser();
-    checkIfUserCanSeeThis();
     setBoardRef();
+    getBoardById(historyLoadOnPage);
 }
 
 function login(){
@@ -345,13 +344,49 @@ function addBoardCreatedToList(board){
     container.appendChild(newBoardDiv);
 }
 
+
+
+function getBoardById(functionCallBack){
+    const request = new XMLHttpRequest();
+
+    request.onload = function() {
+        if(request.status === 200){
+            const board = JSON.parse(request.responseText);
+
+            functionCallBack(board);
+        } else {
+            window.location.href = window.location.origin + '/myboards';
+        }
+    };
+
+    request.open("GET", "/get_board/" + getBoardUserIsIn(), true);
+    request.timeout = 5000;
+
+    const token = getTokenCookie();
+
+    if(token){
+        request.setRequestHeader("Authorization", token);
+    }
+
+    request.send();
+}
+
+
+
+
+
 let rowPos = 0;
 let colPos = 0;
 
-function showBoard() {
+function showBoard(board) {
     const ulElement = document.querySelector('ul.columns');
 
-    for(let i = 1; i <= 3; i++){
+    const boardNCol = board.boardNCol.value;
+    const boardNRow = board.boardNRow.value;
+    const boardEntrys = board.boardEntrys;
+    console.log(board);
+
+    for(let i = 1; i <= boardNCol; i++){
         const liElement = document.createElement('li');
         liElement.classList.add('column');
 
@@ -360,21 +395,21 @@ function showBoard() {
         liElement.appendChild(divElement);
 
         const h4Element = document.createElement('h4');
-        h4Element.textContent = 'To Do (' + i + ')';
+        h4Element.textContent = boardEntrys[i - 1].entryTitle.value + ' (' + i + ')';
 
         divElement.appendChild(h4Element);
 
         const ulPostItList = document.createElement('ul');
         ulPostItList.classList.add('post-it-list');
 
-        for(let j = 2; j <= 3; j++){
+        for(let j = 2; j <= boardNRow; j++){
             if(i === 1){
                 const rowElement = document.createElement('div');
                 rowElement.classList.add('entry-header');
                 liElement.appendChild(rowElement);
 
                 const h4Element = document.createElement('h4');
-                h4Element.textContent = 'To Do (' + j + ')';
+                h4Element.textContent = boardEntrys[j + boardNCol - 2].entryTitle.value + ' (' + j + ')';
                 rowElement.appendChild(h4Element);
             } else {
                 const liPostItItem = document.createElement('li');
@@ -495,39 +530,6 @@ function deletePostIt(){
     request.send(JSON.stringify(data));
 }
 
-function checkIfUserCanSeeThis(){
-    const request = new XMLHttpRequest();
-
-    request.onload = function() {
-        if(request.status === 200){
-            const boards = JSON.parse(request.responseText);
-            let redirect = true;
-            const boardUserIsIn = getBoardUserIsIn();
-
-            boards.forEach((board) => {
-                if(board.boardId === boardUserIsIn){
-                    redirect = false;
-                }
-            });
-
-            if (redirect) {
-                window.location.href = window.location.origin + '/myboards';
-            }
-        }
-    };
-
-    request.open("GET", "/all_my_boards", true);
-    request.timeout = 5000;
-
-    const token = getTokenCookie();
-
-    if(token){
-        request.setRequestHeader("Authorization", token);
-    }
-
-    request.send();
-}
-
 function undoPostIt(){
     event.preventDefault();
 
@@ -619,6 +621,32 @@ function movePostIt(){
     };
 
     request.send(JSON.stringify(data));
+}
+
+function historyLoadOnPage(board){
+    const timeline = document.querySelector('.timeline ul');
+    const {dayOfMonth, month, year, hourOfDay, minute} = board.createdOn;
+
+    const timelineItems = {
+        timestamp: dayOfMonth + '/' + month + '/' + year + ' ' + hourOfDay + ':' + minute,
+        content: 'Board Created with title "' + board.boardTitle.value
+            + '". Board has ' + board.boardNCol.value + ' columns and '
+            + board.boardNRow.value + ' rows'
+    };
+
+    const li = document.createElement('li');
+    const div = document.createElement('div');
+    const time = document.createElement('time');
+    const content = document.createTextNode(timelineItems.content);
+
+    time.textContent = timelineItems.timestamp;
+
+    div.appendChild(time);
+    div.appendChild(content);
+    li.appendChild(div);
+    timeline.appendChild(li);
+
+    //call function to make http request to get post-its and add post-its to timeline
 }
 
 function setHistoryRef() {

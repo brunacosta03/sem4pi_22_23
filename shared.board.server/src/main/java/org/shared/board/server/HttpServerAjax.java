@@ -279,6 +279,7 @@ public class HttpServerAjax {
 
     /**
      * Update post-it position.
+     *
      * @param requestBody the request body
      * @param token       the token
      * @return the string
@@ -314,6 +315,22 @@ public class HttpServerAjax {
         }
 
         return json.toJson(postIt);
+    }
+
+    /**
+     * Get board by id string.
+     * @param boardId the board id
+     * @param token   the token
+     * @return the string
+     */
+    public String getBoardById(String boardId, String token){
+        GetBoardsController theController = new GetBoardsController(
+                PersistenceContext.repositories().boards());
+        User authUser = sessionManager.getUserByToken(token);
+
+        Board board = theController.getBoardById(Long.valueOf(boardId), authUser);
+
+        return json.toJson(board);
     }
 
     /**
