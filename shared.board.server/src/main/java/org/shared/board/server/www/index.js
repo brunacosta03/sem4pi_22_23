@@ -420,17 +420,17 @@ function updatePostItContent(){
     const boardId = getBoardUserIsIn();
     const content = document.getElementById('update-post-it-content');
 
-    const requestCreatePostIt = new XMLHttpRequest();
+    const request = new XMLHttpRequest();
 
-    requestCreatePostIt.onload = function() {
-        if (requestCreatePostIt.status === 200) {
-            const data = JSON.parse(requestCreatePostIt.responseText);
+    request.onload = function() {
+        if (request.status === 200) {
+            const data = JSON.parse(request.responseText);
 
             writeContentInCell(data.postItColumn.value, data.postItRow.value, data.postItContent.value);
 
-            notification("Post-It updated successfully!", requestCreatePostIt.status);
+            notification("Post-It updated successfully!", request.status);
         } else {
-            notification(requestCreatePostIt.responseText, requestCreatePostIt.status);
+            notification(request.responseText, request.status);
         }
 
         content.value = '';
@@ -439,11 +439,11 @@ function updatePostItContent(){
 
     const token = getTokenCookie();
 
-    requestCreatePostIt.open("PUT", "/update_post_it", true);
-    requestCreatePostIt.setRequestHeader("Content-Type", "application/json");
+    request.open("PUT", "/update_post_it", true);
+    request.setRequestHeader("Content-Type", "application/json");
 
     if(token){
-        requestCreatePostIt.setRequestHeader("Authorization", token);
+        request.setRequestHeader("Authorization", token);
     }
 
     const data = {
@@ -453,7 +453,7 @@ function updatePostItContent(){
         boardId: boardId
     };
 
-    requestCreatePostIt.send(JSON.stringify(data));
+    request.send(JSON.stringify(data));
 }
 
 function deletePostIt(){
@@ -461,17 +461,17 @@ function deletePostIt(){
 
     const boardId = getBoardUserIsIn();
 
-    const requestCreatePostIt = new XMLHttpRequest();
+    const request = new XMLHttpRequest();
 
-    requestCreatePostIt.onload = function() {
-        if (requestCreatePostIt.status === 200) {
-            const data = JSON.parse(requestCreatePostIt.responseText);
+    request.onload = function() {
+        if (request.status === 200) {
+            const data = JSON.parse(request.responseText);
 
             writeContentInCell(data.postItColumn.value, data.postItRow.value, "");
 
-            notification("Post-It deleted successfully!", requestCreatePostIt.status);
+            notification("Post-It deleted successfully!", request.status);
         } else {
-            notification(requestCreatePostIt.responseText, requestCreatePostIt.status);
+            notification(request.responseText, request.status);
         }
 
         disableOverlay();
@@ -479,11 +479,11 @@ function deletePostIt(){
 
     const token = getTokenCookie();
 
-    requestCreatePostIt.open("DELETE", "/delete_post_it", true);
-    requestCreatePostIt.setRequestHeader("Content-Type", "application/json");
+    request.open("DELETE", "/delete_post_it", true);
+    request.setRequestHeader("Content-Type", "application/json");
 
     if(token){
-        requestCreatePostIt.setRequestHeader("Authorization", token);
+        request.setRequestHeader("Authorization", token);
     }
 
     const data = {
@@ -492,7 +492,7 @@ function deletePostIt(){
         boardId: boardId
     };
 
-    requestCreatePostIt.send(JSON.stringify(data));
+    request.send(JSON.stringify(data));
 }
 
 function checkIfUserCanSeeThis(){
@@ -538,6 +538,52 @@ function undoDeletedPostIt(){
     event.preventDefault();
 
     console.log("UNDOOO DELETED POST IT");
+}
+
+function movePostIt(){
+    event.preventDefault();
+
+    const newRowPos = document.getElementById("move-to-row");
+    const newColumnPos = document.getElementById("move-to-column");
+    const boardId = getBoardUserIsIn();
+
+    const request = new XMLHttpRequest();
+
+    request.onload = function() {
+        if (request.status === 200) {
+            const data = JSON.parse(request.responseText);
+
+            writeContentInCell(colPos, rowPos, "");
+            writeContentInCell(data.postItColumn.value, data.postItRow.value, data.postItContent.value);
+
+            notification("Post-It updated successfully!", request.status);
+        } else {
+            notification(request.responseText, request.status);
+        }
+
+        newRowPos.value = '';
+        newColumnPos.value = '';
+        disableOverlay();
+    };
+
+    const token = getTokenCookie();
+
+    request.open("PUT", "/update_post_it_position", true);
+    request.setRequestHeader("Content-Type", "application/json");
+
+    if(token){
+        request.setRequestHeader("Authorization", token);
+    }
+
+    const data = {
+        previousPostItRow: rowPos,
+        previousPostItColumn: colPos,
+        newPostItRow: newRowPos.value,
+        newPostItColumn: newColumnPos.value,
+        boardId: boardId
+    };
+
+    request.send(JSON.stringify(data));
 }
 
 function setHistoryRef() {

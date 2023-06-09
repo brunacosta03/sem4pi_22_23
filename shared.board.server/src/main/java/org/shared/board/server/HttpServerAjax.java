@@ -19,6 +19,7 @@ import org.shared.board.server.gson_adapter.LocalDateAdapter;
 import org.shared.board.server.request_bodys.BoardBody;
 import org.shared.board.server.request_bodys.LoginBody;
 import org.shared.board.server.request_bodys.PostItBody;
+import org.shared.board.server.request_bodys.PostItPositionBody;
 import org.shared.board.server.session.SessionManager;
 import org.usermanagement.domain.model.User;
 
@@ -65,6 +66,7 @@ public class HttpServerAjax {
 
     /**
      * Gets authenticated user.
+     *
      * @param token the token
      * @return the authenticated user
      * @throws IllegalArgumentException the illegal argument exception
@@ -79,6 +81,7 @@ public class HttpServerAjax {
 
     /**
      * Create board string.
+     *
      * @param requestBody the request body
      * @param token       the token
      * @return the string
@@ -136,6 +139,7 @@ public class HttpServerAjax {
 
     /**
      * Login user and add session.
+     *
      * @param body the body
      * @return the string
      * @throws InvalidCredentialsException the invalid credentials exception
@@ -149,6 +153,7 @@ public class HttpServerAjax {
 
     /**
      * Create post it to board.
+     *
      * @param requestBody the request body
      * @param token       the token
      * @return the string
@@ -175,6 +180,7 @@ public class HttpServerAjax {
 
     /**
      * Get user access boards string.
+     *
      * @param token the token
      * @return the string
      */
@@ -191,8 +197,9 @@ public class HttpServerAjax {
 
     /**
      * Update content of post-it.
+     *
      * @param requestBody the request body
-     * @param token the token
+     * @param token       the token
      * @return the string
      */
     public String updatePostItContent(PostItBody requestBody, String token){
@@ -214,6 +221,14 @@ public class HttpServerAjax {
 
         return json.toJson(postIt);
     }
+
+    /**
+     * Delete post-it string.
+     *
+     * @param requestBody the request body
+     * @param token       the token
+     * @return the string
+     */
     public String deletePostIt(PostItBody requestBody, String token){
         DeletePostItController theController = new DeletePostItController();
         User authUser = sessionManager.getUserByToken(token);
@@ -234,7 +249,7 @@ public class HttpServerAjax {
     }
 
     /**
-     * Undo post it string.
+     * Undo post-it string.
      *
      * @param requestBody the request body
      * @param token       the token
@@ -257,6 +272,45 @@ public class HttpServerAjax {
                     requestBody.boardId(),
                     authenticated
             );
+        }
+
+        return json.toJson(postIt);
+    }
+
+    /**
+     * Update post-it position.
+     * @param requestBody the request body
+     * @param token       the token
+     * @return the string
+     */
+    public String updatePostItPosition(PostItPositionBody requestBody, String token){
+        UpdatePostItController theController = new UpdatePostItController();
+        User authUser = sessionManager.getUserByToken(token);
+        String lockKey;
+        PostIt postIt;
+
+        //lock previous cell
+        lockKey = requestBody.previousPostItRow()
+                    + requestBody.previousPostItColumn()
+                    + requestBody.boardId();
+        Object lockPrevious = getOrCreateLockObject(lockKey);
+
+        //lock new cell
+        lockKey = requestBody.newPostItRow()
+                + requestBody.newPostItColumn()
+                + requestBody.boardId();
+        Object lockNew = getOrCreateLockObject(lockKey);
+
+        synchronized (lockPrevious){
+            synchronized (lockNew){
+                postIt = theController.updatePostItPosition(
+                        requestBody.previousPostItRow(),
+                        requestBody.previousPostItColumn(),
+                        requestBody.newPostItRow(),
+                        requestBody.newPostItColumn(),
+                        requestBody.boardId(),
+                        authUser);
+            }
         }
 
         return json.toJson(postIt);

@@ -388,7 +388,7 @@ public class PostItService {
 
         PostIt lastPostItSaved = postItRepository.save(lastPostItMoved);
 
-        PostIt newPostIt = postItFactory.createChange(
+        PostIt updatedPostIt = postItFactory.createChange(
                 lastPostIt.content().value(),
                 newPostItRowp,
                 newPostItColumnp,
@@ -397,6 +397,6 @@ public class PostItService {
                 PostItStateType.UPDATED,
                 lastPostItSaved);
 
-        return postItRepository.save(newPostIt);
+        return postItRepository.save(updatedPostIt);
     }
 }

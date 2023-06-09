@@ -6,6 +6,7 @@ import exceptions.NoPreviousElementException;
 import org.shared.board.server.request_bodys.BoardBody;
 import org.shared.board.server.request_bodys.LoginBody;
 import org.shared.board.server.request_bodys.PostItBody;
+import org.shared.board.server.request_bodys.PostItPositionBody;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -201,6 +202,31 @@ public class HttpRequestThread extends Thread {
                     try{
                         response.setContentFromString(
                                 httpServerAjax.updatePostItContent(body, token),
+                                "application/json");
+                        response.setResponseStatus("200 Ok");
+                    } catch (IllegalArgumentException e){
+                        response.setContentFromString(
+                                e.getMessage(),
+                                "text");
+                        response.setResponseStatus("400 Bad Request");
+                    } catch (NoSuchElementException e){
+                        response.setContentFromString(
+                                "This board doesn't exist",
+                                "text");
+                        response.setResponseStatus("400 Bad Request");
+                    }
+
+                    response.send(outS);;
+                }
+
+                if(request.getURI().equals("/update_post_it_position")){
+                    String requestBody = request.getContentAsString();
+
+                    PostItPositionBody body = json.fromJson(requestBody, PostItPositionBody.class);
+
+                    try{
+                        response.setContentFromString(
+                                httpServerAjax.updatePostItPosition(body, token),
                                 "application/json");
                         response.setResponseStatus("200 Ok");
                     } catch (IllegalArgumentException e){

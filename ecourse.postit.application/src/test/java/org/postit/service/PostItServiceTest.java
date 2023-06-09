@@ -43,6 +43,7 @@ class PostItServiceTest {
     private static final String POST_IT_CONTENT = "Test Post-it";
     private static final String POST_IT_ROW_COL = "2";
     private static final String BOARD_ID = "123";
+    private final String NEW_ROW_COL = "3";
 
     @BeforeEach
     void setUp() {
@@ -321,6 +322,108 @@ class PostItServiceTest {
 
         verify(postItRepository, never()).save(any(PostIt.class));
     }
+
+    @Test
+    void testChangePostItPositionSuccessful() {
+        User postItOwner = managerUser();
+        Board board = createBoard();
+        PostItFactory postItFactory = new PostItFactory();
+
+        PostIt existingPostIt = postItFactory.create(
+                POST_IT_CONTENT,
+                POST_IT_ROW_COL,
+                POST_IT_ROW_COL,
+                postItOwner,
+                board,
+                PostItStateType.CREATED
+        );
+
+        PostIt newPostIt = postItFactory.create(
+                POST_IT_CONTENT,
+                NEW_ROW_COL,
+                NEW_ROW_COL,
+                postItOwner,
+                board,
+                PostItStateType.CREATED
+        );
+
+        board.addPermission(createBoardPermission(postItOwner));
+        when(boardRepository.ofIdentity(Long.parseLong(BOARD_ID))).thenReturn(Optional.of(board));
+        when(postItRepository.positByPosition(POST_IT_ROW_COL, POST_IT_ROW_COL, board)).thenReturn(existingPostIt);
+        when(postItRepository.positByPosition(NEW_ROW_COL, NEW_ROW_COL, board)).thenReturn(null);
+        when(postItRepository.save(any(PostIt.class))).thenReturn(newPostIt);
+
+        PostIt updatedPostIt = postItService.changePostItPosition(POST_IT_ROW_COL, POST_IT_ROW_COL, NEW_ROW_COL, NEW_ROW_COL, BOARD_ID, postItOwner);
+
+        assertNotNull(updatedPostIt);
+        verify(postItRepository, times(2)).save(any(PostIt.class));
+    }
+
+    @Test
+    void testChangePostItPositionThrowsExceptionWhenNewPositionOccupied() {
+        User postItOwner = managerUser();
+        Board board = createBoard();
+
+        PostItFactory postItFactory = new PostItFactory();
+
+        PostIt postIt = postItFactory.create(
+                POST_IT_CONTENT,
+                POST_IT_ROW_COL,
+                POST_IT_ROW_COL,
+                postItOwner,
+                board,
+                PostItStateType.CREATED
+        );
+
+        PostIt existingPostIt = postItFactory.create(
+                POST_IT_CONTENT,
+                NEW_ROW_COL,
+                NEW_ROW_COL,
+                postItOwner,
+                board,
+                PostItStateType.CREATED
+        );
+
+        board.addPermission(createBoardPermission(postItOwner));
+        when(boardRepository.ofIdentity(Long.parseLong(BOARD_ID))).thenReturn(Optional.of(board));
+        when(postItRepository.positByPosition(POST_IT_ROW_COL, POST_IT_ROW_COL, board)).thenReturn(postIt);
+        when(postItRepository.positByPosition(NEW_ROW_COL, NEW_ROW_COL, board)).thenReturn(existingPostIt);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            postItService.changePostItPosition(
+                    POST_IT_ROW_COL,
+                    POST_IT_ROW_COL,
+                    NEW_ROW_COL,
+                    NEW_ROW_COL,
+                    BOARD_ID,
+                    postItOwner);
+        });
+
+        verify(postItRepository, never()).save(any(PostIt.class));
+    }
+
+    @Test
+    void testChangePostItPositionThrowsExceptionWhenPreviousDontExist() {
+        User postItOwner = managerUser();
+        Board board = createBoard();
+
+        board.addPermission(createBoardPermission(postItOwner));
+        when(boardRepository.ofIdentity(Long.parseLong(BOARD_ID))).thenReturn(Optional.of(board));
+        when(postItRepository.positByPosition(POST_IT_ROW_COL, POST_IT_ROW_COL, board)).thenReturn(null);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            postItService.changePostItPosition(
+                    POST_IT_ROW_COL,
+                    POST_IT_ROW_COL,
+                    NEW_ROW_COL,
+                    NEW_ROW_COL,
+                    BOARD_ID,
+                    postItOwner);
+        });
+
+        verify(postItRepository, never()).save(any(PostIt.class));
+    }
+
 
     @Test
     public void testIsNumeric_NullInput_ReturnsFalse() {
