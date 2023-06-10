@@ -790,4 +790,34 @@ public class PostItService {
 
 ## 6. Integration/Demonstration
 
-> ⚠️ The demonstration of this user story will only be available after the finishing of the viewing the board is totally implemented (this was tested using hardcoded boards).
+### 6.1. Login into the app
+
+![Login](Demonstration/login.png)
+
+### 6.2. Choose a board
+
+![Choose a board](Demonstration/choose_board.png)
+
+### 6.3. Choose a post-it to edit
+
+![Choose a post-it to edit](Demonstration/new_post_it.png)
+
+### 6.4. Edit the post-it
+
+- Could be a deletion, a move or a change of content
+
+![Edit the post-it](Demonstration/editar_post_it.png)
+
+### 6.5. Verify it was edited
+
+![Verify it was edited](Demonstration/verificar_post_it_editado.png)
+
+### 6.6. Undo the post-it
+
+![Undo the post-it](Demonstration/carregar_undo_post_it.png)
+
+### 6.7. Verify it was undone
+
+- As we can see the previous post-it content was recovered
+
+![Verify it was undone](Demonstration/verificar_recuperacao_post_it.png)
