@@ -64,11 +64,27 @@ public class HttpRequestThread extends Thread {
                 if(request.getURI().startsWith("/get_board/")) {
                     String boardId = request.getURI().substring(11);
 
-                    System.out.println(boardId);
-
                     try{
                         response.setContentFromString(
                                 httpServerAjax.getBoardById(boardId, token),
+                                "application/json");
+                        response.setResponseStatus("200 Ok");
+                    } catch (IllegalArgumentException | NoSuchElementException e){
+                        response.setContentFromString(
+                                e.getMessage(),
+                                "text");
+                        response.setResponseStatus("401 unauthorized");
+                    }
+
+                    response.send(outS);
+                }
+
+                if(request.getURI().startsWith("/post-its/board/")) {
+                    String boardId = request.getURI().substring(16);
+
+                    try{
+                        response.setContentFromString(
+                                httpServerAjax.getLastPostItsByBoard(boardId, token),
                                 "application/json");
                         response.setResponseStatus("200 Ok");
                     } catch (IllegalArgumentException | NoSuchElementException e){

@@ -130,6 +130,7 @@ p {
   width: 48px;
   height: 48px;
   display: none;
+  opacity: 0.6;
 }
 
 .post-it-list li:hover .add-image {
@@ -700,6 +701,37 @@ time {
 
 .post-it-text {
   display: none;
+}
+
+.post-it .tooltiptext {
+  visibility: hidden;
+  position: absolute;
+  width: 200px;
+  background-color: var(--black);
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  z-index: 1;
+  transition: opacity 0.3s;
+  font-size: 14px;
+  margin-top: 140px;
+  opacity: 0.6;
+}
+
+.post-it .tooltiptext::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -7px;
+  border-width: 7px;
+  border-style: solid;
+  border-color: transparent transparent var(--black) transparent;
+}
+
+.post-it:hover .tooltiptext {
+  visibility: visible;
 }
 
 @media only screen and (max-width: 800px) {

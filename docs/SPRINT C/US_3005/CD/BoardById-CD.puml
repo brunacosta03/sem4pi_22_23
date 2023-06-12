@@ -18,13 +18,14 @@ HttpServerAjax --> GetBoardsController: theController
 HttpServerAjax --> SessionManager: sessionManager
 GetBoardsController --> BoardRepository: boardRepository
 SessionManager ..> User
-BoardRepository ..> Board
+BoardRepository --> Board
 
 
 
-HttpServerAjax : getUserAccessBoards(String)
+HttpServerAjax : getBoardById(String, String)
 SessionManager : getUserByToken(String)
-GetBoardsController : getBoardsByUser(User)
-BoardRepository : getBoardsByUser(User)
+GetBoardsController : getBoardById(Long, User)
+BoardRepository : ofIdentity(Long)
+Board : userHasAnyPermission(User)
 
 @enduml

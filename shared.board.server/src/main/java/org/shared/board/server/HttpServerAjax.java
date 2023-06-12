@@ -10,10 +10,7 @@ import org.domain.model.Board;
 import org.domain.model.BoardEntry;
 import org.domain.model.postit.PostIt;
 import org.persistence.PersistenceContext;
-import org.postit.controller.CreatePostItController;
-import org.postit.controller.DeletePostItController;
-import org.postit.controller.UndoPostItController;
-import org.postit.controller.UpdatePostItController;
+import org.postit.controller.*;
 import org.shared.board.server.gson_adapter.HibernateProxyTypeAdapter;
 import org.shared.board.server.gson_adapter.LocalDateAdapter;
 import org.shared.board.server.request_bodys.BoardBody;
@@ -66,7 +63,6 @@ public class HttpServerAjax {
 
     /**
      * Gets authenticated user.
-     *
      * @param token the token
      * @return the authenticated user
      * @throws IllegalArgumentException the illegal argument exception
@@ -80,8 +76,7 @@ public class HttpServerAjax {
     }
 
     /**
-     * Create board string.
-     *
+     * Create board.
      * @param requestBody the request body
      * @param token       the token
      * @return the string
@@ -139,7 +134,6 @@ public class HttpServerAjax {
 
     /**
      * Login user and add session.
-     *
      * @param body the body
      * @return the string
      * @throws InvalidCredentialsException the invalid credentials exception
@@ -153,7 +147,6 @@ public class HttpServerAjax {
 
     /**
      * Create post it to board.
-     *
      * @param requestBody the request body
      * @param token       the token
      * @return the string
@@ -179,8 +172,7 @@ public class HttpServerAjax {
     }
 
     /**
-     * Get user access boards string.
-     *
+     * Get user access boards.
      * @param token the token
      * @return the string
      */
@@ -197,7 +189,6 @@ public class HttpServerAjax {
 
     /**
      * Update content of post-it.
-     *
      * @param requestBody the request body
      * @param token       the token
      * @return the string
@@ -223,8 +214,7 @@ public class HttpServerAjax {
     }
 
     /**
-     * Delete post-it string.
-     *
+     * Delete post-it.
      * @param requestBody the request body
      * @param token       the token
      * @return the string
@@ -249,8 +239,7 @@ public class HttpServerAjax {
     }
 
     /**
-     * Undo post-it string.
-     *
+     * Undo post-it.
      * @param requestBody the request body
      * @param token       the token
      * @return the string
@@ -279,7 +268,6 @@ public class HttpServerAjax {
 
     /**
      * Update post-it position.
-     *
      * @param requestBody the request body
      * @param token       the token
      * @return the string
@@ -318,7 +306,7 @@ public class HttpServerAjax {
     }
 
     /**
-     * Get board by id string.
+     * Get board by id.
      * @param boardId the board id
      * @param token   the token
      * @return the string
@@ -331,6 +319,24 @@ public class HttpServerAjax {
         Board board = theController.getBoardById(Long.valueOf(boardId), authUser);
 
         return json.toJson(board);
+    }
+
+    /**
+     * Get last post its by board.
+     * @param boardId the board id
+     * @param token   the token
+     * @return the string
+     */
+    public String getLastPostItsByBoard(String boardId, String token){
+        GetPostItsController theController = new GetPostItsController(
+                PersistenceContext.repositories().postIt(),
+                PersistenceContext.repositories().boards());
+        User authUser = sessionManager.getUserByToken(token);
+
+        Iterable<PostIt> postIts = theController.getLastPostItsByBoard(
+                Long.valueOf(boardId), authUser);
+
+        return json.toJson(postIts);
     }
 
     /**

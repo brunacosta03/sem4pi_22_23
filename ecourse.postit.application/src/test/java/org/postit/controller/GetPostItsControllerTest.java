@@ -1,4 +1,4 @@
-package org.boards.controller;
+package org.postit.controller;
 
 import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
 import org.domain.model.*;
@@ -11,18 +11,24 @@ import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.ECoursePasswordPolicy;
 import org.usermanagement.domain.model.User;
 import org.usermanagement.domain.model.UserBuilder;
+import repositories.PostItRepository;
 
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
-class GetBoardsControllerTest {
+class GetPostItsControllerTest {
     @Mock
     private BoardRepository boardRepository;
 
-    private GetBoardsController getBoardsController;
+    @Mock
+    private PostItRepository postItRepository;
+
+
+    private GetPostItsController getPostItsController;
 
     ECoursePasswordPolicy passwordPolicy = new ECoursePasswordPolicy();
 
@@ -38,47 +44,8 @@ class GetBoardsControllerTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         boardRepository = mock(BoardRepository.class);
-        getBoardsController = new GetBoardsController(boardRepository);
-    }
-
-    @Test
-    public void testGetBoardsByUser() {
-        User authUser = managerUser();
-        when(boardRepository.getBoardsByUser(authUser)).thenReturn(new ArrayList<>());
-
-        getBoardsController.getBoardsByUser(authUser);
-
-        verify(boardRepository, times(1)).getBoardsByUser(authUser);
-    }
-
-    @Test
-    public void testGetBoardsByUserWithInvalidUser() {
-        assertThrows(IllegalArgumentException.class, () ->{
-            getBoardsController.getBoardsByUser(null);
-        });
-    }
-
-    @Test
-    public void getBoardById() {
-        User authUser = managerUser();
-        Board board = board();
-
-        board.addPermission(createBoardPermission(authUser));
-        when(boardRepository.ofIdentity(1L)).thenReturn(Optional.ofNullable(board));
-
-        getBoardsController.getBoardById(1L, authUser);
-
-        verify(boardRepository, times(1)).ofIdentity(1L);
-    }
-
-    @Test
-    public void getBoardByIdWithoutPermissionShouldThrowError() {
-        User authUser = managerUser();
-        when(boardRepository.ofIdentity(1L)).thenReturn(Optional.ofNullable(board()));
-
-        assertThrows(IllegalArgumentException.class, () ->{
-            getBoardsController.getBoardById(1L, authUser);
-        });
+        postItRepository = mock(PostItRepository.class);
+        getPostItsController = new GetPostItsController(postItRepository, boardRepository);
     }
 
     private User managerUser(){
@@ -90,6 +57,34 @@ class GetBoardsControllerTest {
                         STRING_EMAIL,
                         CourseRoles.MANAGER)
                 .build();
+    }
+
+    @Test
+    public void getLastPostItsByBoard() {
+        User authUser = managerUser();
+        Board board = board();
+
+        board.addPermission(createBoardPermission(authUser));
+        when(boardRepository.ofIdentity(1L)).thenReturn(Optional.ofNullable(board));
+        when(postItRepository.lastPostItsOnBoard(board)).thenReturn(new ArrayList<>());
+
+        getPostItsController.getLastPostItsByBoard(1L, authUser);
+
+        verify(boardRepository, times(1)).ofIdentity(1L);
+        verify(postItRepository, times(1)).lastPostItsOnBoard(board);
+    }
+
+    @Test
+    public void getLastPostItsByBoardWithoutPermissionShouldThrowError() {
+        User authUser = managerUser();
+        Board board = board();
+
+        when(boardRepository.ofIdentity(1L)).thenReturn(Optional.ofNullable(board));
+        when(postItRepository.lastPostItsOnBoard(board)).thenReturn(new ArrayList<>());
+
+        assertThrows(IllegalArgumentException.class, () ->{
+            getPostItsController.getLastPostItsByBoard(1L, authUser);
+        });
     }
 
 

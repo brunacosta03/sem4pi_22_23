@@ -18,7 +18,6 @@ public class GetBoardsController {
 
     /**
      * Instantiates a new Get boards controller.
-     *
      * @param repository the repository
      */
     public GetBoardsController(BoardRepository repository) {
@@ -27,7 +26,6 @@ public class GetBoardsController {
 
     /**
      * Gets boards by user.
-     *
      * @param authUser the auth user
      * @return the boards by user
      */

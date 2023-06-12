@@ -30,4 +30,11 @@ public interface PostItRepository extends DomainRepository<Long, PostIt> {
     PostIt positByPosition(final String postItRowp,
                            final String postItColumnp,
                            final Board board);
+
+    /**
+     * Get last post-its on board.
+     * @param board the board
+     * @return PostIt
+     */
+    Iterable<PostIt> lastPostItsOnBoard(final Board board);
 }
