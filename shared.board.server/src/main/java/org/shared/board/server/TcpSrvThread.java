@@ -1,5 +1,6 @@
 package org.shared.board.server;
 
+import eapli.framework.domain.repositories.IntegrityViolationException;
 import org.authz.application.AuthorizationService;
 import org.authz.application.AuthzRegistry;
 import org.shared.board.common.Message;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.NoSuchElementException;
 
 /**
  * The type Tcp srv thread.
@@ -26,6 +28,11 @@ public class TcpSrvThread implements Runnable {
     private SharedBoardServerController theController;
 
     /**
+     * The SharedBoardServerController.
+     */
+    private AuthorizationService authz;
+
+    /**
      * The constant VERSION.
      */
     public static final int VERSION = 1;
@@ -35,10 +42,11 @@ public class TcpSrvThread implements Runnable {
      *
      * @param cliSer the cli s
      */
-    public TcpSrvThread(final Socket cliSer) {
+    public TcpSrvThread(final Socket cliSer, final AuthorizationService authzp) {
         sock = cliSer;
         theController = new SharedBoardServerController(
-                new SharedBoardServerService());
+                new SharedBoardServerService(), authzp);
+        authz = authzp;
     }
 
     /**
@@ -54,11 +62,13 @@ public class TcpSrvThread implements Runnable {
                 + clientIP.getHostAddress()
                 + ", port number " + sock.getPort());
 
+
         try {
             MessageFormat mf = new MessageFormat(sock);
 
             do {
                 message = mf.readMessage();
+
 
                 if (message.code() == MessageCodes.COMMTEST) {
                     mf.sendMessage(VERSION, MessageCodes.ACK, "");
@@ -72,6 +82,23 @@ public class TcpSrvThread implements Runnable {
                     } catch (IllegalArgumentException e) {
                         mf.sendMessage(VERSION, MessageCodes.ERR,
                                 e.getMessage());
+                    }
+                }
+
+                if (message.code() == MessageCodes.CB){
+                    try {
+                        int result = theController.createBoard(message);
+
+                        mf.sendMessage(VERSION, result, "");
+                    } catch (IllegalArgumentException e) {
+                        mf.sendMessage(VERSION, MessageCodes.ERR,
+                                e.getMessage());
+                    } catch (IntegrityViolationException e){
+                        mf.sendMessage(VERSION, MessageCodes.ERR,
+                                "A board with that name already exists");
+                    } catch (NoSuchElementException e){
+                        mf.sendMessage(VERSION, MessageCodes.ERR,
+                                "User is not authenticated!");
                     }
                 }
             } while (message.code() != MessageCodes.DISCONN);

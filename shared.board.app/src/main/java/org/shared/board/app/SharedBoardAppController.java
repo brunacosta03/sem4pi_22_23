@@ -36,8 +36,12 @@ public class SharedBoardAppController {
     public Message authenticate(String data){
         mf.sendMessage(VERSION, MessageCodes.AUTH, data);
 
-        Message result = mf.readMessage();
+        return mf.readMessage();
+    }
 
-        return result;
+    public Message createBoard(String data){
+        mf.sendMessage(VERSION, MessageCodes.CB, data);
+
+        return mf.readMessage();
     }
 }

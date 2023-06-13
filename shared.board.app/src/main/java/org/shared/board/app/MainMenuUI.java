@@ -51,6 +51,7 @@ public class MainMenuUI {
         do {
             System.out.println("1 - Communication test");
             System.out.println("2 - Authenticate");
+            System.out.println("3 - Create Board");
             System.out.println("0 - End of session request");
             System.out.println("\nOption - ");
             try {
@@ -75,6 +76,10 @@ public class MainMenuUI {
                     LoginUI loginUI = new LoginUI(theController);
                     loginUI.doShow();
                     break;
+                case 3:
+                    CreateBoardUI boardUI = new CreateBoardUI(theController);
+                    boardUI.doShow();
+                    break;
                 case 0:
                     codeResult = theController.sendEndOfSession();
 
@@ -87,7 +92,8 @@ public class MainMenuUI {
 
                     break;
                 default:
-                    System.out.println("Invalid choice");
+                    System.out.println("Invalid choice!\n");
+                    choice = 0;
                     break;
             }
 
