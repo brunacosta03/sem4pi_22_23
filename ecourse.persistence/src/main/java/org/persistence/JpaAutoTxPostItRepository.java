@@ -126,4 +126,18 @@ public class JpaAutoTxPostItRepository
         return query.getResultList();
     }
 
+    @Override
+    public Iterable<PostIt> getPostItsHistory(Board board) {
+        TypedQuery<PostIt> query = createQuery(
+                "SELECT p " +
+                        "FROM PostIt p " +
+                        "WHERE p.boardId = :board " +
+                        "ORDER BY p.postItTimeStamp DESC",
+                PostIt.class);
+
+        query.setParameter("board", board);
+
+        return query.getResultList();
+    }
+
 }

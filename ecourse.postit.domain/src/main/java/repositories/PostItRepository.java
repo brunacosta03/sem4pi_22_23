@@ -37,4 +37,6 @@ public interface PostItRepository extends DomainRepository<Long, PostIt> {
      * @return PostIt
      */
     Iterable<PostIt> lastPostItsOnBoard(final Board board);
+
+    Iterable<PostIt> getPostItsHistory(Board board);
 }
