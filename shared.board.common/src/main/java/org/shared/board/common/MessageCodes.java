@@ -30,6 +30,11 @@ public final class MessageCodes {
      */
     public static final int CB = 5;
 
+    /**
+     * The constant CPI.
+     */
+    public static final int CPI = 6;
+
     private MessageCodes() {
         // Private constructor to prevent instantiation
     }

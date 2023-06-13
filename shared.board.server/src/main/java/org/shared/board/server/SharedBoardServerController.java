@@ -15,13 +15,14 @@ public class SharedBoardServerController {
     private SharedBoardServerService sbSvc;
 
     /**
-     * AU
+     * AuthorizationService.
      */
     private AuthorizationService authz;
 
     /**
      * Instantiates a new Shared board server controller.
      * @param sbSvcp the sb svcp
+     * @param authzp the authzp
      */
     public SharedBoardServerController(final SharedBoardServerService sbSvcp,
                                        final AuthorizationService authzp) {
@@ -30,7 +31,7 @@ public class SharedBoardServerController {
     }
 
     /**
-     * Authenticate int.
+     * Authenticate.
      * @param data the data
      * @return the int
      */
@@ -40,9 +41,25 @@ public class SharedBoardServerController {
         return sbSvc.authenticateUser(result);
     }
 
+    /**
+     * Create board.
+     * @param data the data
+     * @return the int
+     */
     public int createBoard(final Message data) {
         String result = new String(data.data(), StandardCharsets.US_ASCII);
 
         return sbSvc.createBoard(result, authz.session().get().authenticatedUser());
+    }
+
+    /**
+     * Create post it.
+     * @param data the data
+     * @return the int
+     */
+    public int createPostIt(final Message data) {
+        String result = new String(data.data(), StandardCharsets.US_ASCII);
+
+        return sbSvc.createPostIt(result, authz.session().get().authenticatedUser());
     }
 }

@@ -21,7 +21,9 @@ import org.shared.board.server.session.SessionManager;
 import org.usermanagement.domain.model.User;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * The type Http server ajax.
@@ -43,9 +45,9 @@ public class HttpServerAjax {
     private static final String MIN_ROWS_COLS = "1";
 
     /**
-     * The Lock objects.
+     * The Synchronizer.
      */
-    Map<String, Object> lockObjects = new HashMap<>();
+    Synchronizer synchronizer;
 
 
     /**
@@ -53,6 +55,7 @@ public class HttpServerAjax {
      */
     public HttpServerAjax() {
         this.sessionManager = SessionManager.getInstance();
+        this.synchronizer = Synchronizer.getInstance();
 
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
@@ -155,8 +158,8 @@ public class HttpServerAjax {
         CreatePostItController theController = new CreatePostItController();
         User authUser = sessionManager.getUserByToken(token);
 
-        String lockKey = generateLockKey(requestBody);
-        Object lock = getOrCreateLockObject(lockKey);
+        String lockKey = synchronizer.generateLockKey(requestBody);
+        Object lock = synchronizer.getOrCreateLockObject(lockKey);
         PostIt postIt;
 
         synchronized (lock){
@@ -197,8 +200,8 @@ public class HttpServerAjax {
         UpdatePostItController theController = new UpdatePostItController();
         User authUser = sessionManager.getUserByToken(token);
 
-        String lockKey = generateLockKey(requestBody);
-        Object lock = getOrCreateLockObject(lockKey);
+        String lockKey = synchronizer.generateLockKey(requestBody);
+        Object lock = synchronizer.getOrCreateLockObject(lockKey);
         PostIt postIt;
 
         synchronized (lock){
@@ -223,8 +226,8 @@ public class HttpServerAjax {
         DeletePostItController theController = new DeletePostItController();
         User authUser = sessionManager.getUserByToken(token);
 
-        String lockKey = generateLockKey(requestBody);
-        Object lock = getOrCreateLockObject(lockKey);
+        String lockKey = synchronizer.generateLockKey(requestBody);
+        Object lock = synchronizer.getOrCreateLockObject(lockKey);
         PostIt postIt;
 
         synchronized (lock){
@@ -245,12 +248,11 @@ public class HttpServerAjax {
      * @return the string
      */
     public String undoPostIt(PostItBody requestBody, String token) {
-
         UndoPostItController ctrl = new UndoPostItController();
         User authenticated = sessionManager.getUserByToken(token);
 
-        String lockKey = generateLockKey(requestBody);
-        Object lock = getOrCreateLockObject(lockKey);
+        String lockKey = synchronizer.generateLockKey(requestBody);
+        Object lock = synchronizer.getOrCreateLockObject(lockKey);
 
         PostIt postIt;
 
@@ -279,16 +281,21 @@ public class HttpServerAjax {
         PostIt postIt;
 
         //lock previous cell
-        lockKey = requestBody.previousPostItRow()
-                    + requestBody.previousPostItColumn()
-                    + requestBody.boardId();
-        Object lockPrevious = getOrCreateLockObject(lockKey);
+        lockKey = synchronizer.generateLockKey(
+                requestBody.previousPostItRow(),
+                requestBody.previousPostItColumn(),
+                requestBody.boardId());
+
+        Object lockPrevious = synchronizer.getOrCreateLockObject(lockKey);
 
         //lock new cell
-        lockKey = requestBody.newPostItRow()
-                + requestBody.newPostItColumn()
-                + requestBody.boardId();
-        Object lockNew = getOrCreateLockObject(lockKey);
+        lockKey = synchronizer.generateLockKey(
+                requestBody.newPostItRow(),
+                requestBody.newPostItColumn(),
+                requestBody.boardId()
+        );
+
+        Object lockNew = synchronizer.getOrCreateLockObject(lockKey);
 
         synchronized (lockPrevious){
             synchronized (lockNew){
@@ -338,25 +345,4 @@ public class HttpServerAjax {
 
         return json.toJson(postIts);
     }
-
-    /**
-     * Generate String based on row column and board id.
-     * @param requestBody post-it
-     * @return String
-     */
-    private String generateLockKey(PostItBody requestBody) {
-        return requestBody.row() + requestBody.column() + requestBody.boardId();
-    }
-
-    /**
-     * Get object corresponding to String.
-     * Or create a new one if that string doesn't exist.
-     * @param lockKey string base on post-it
-     * @return Object
-     */
-    private synchronized Object getOrCreateLockObject(String lockKey) {
-        return lockObjects.computeIfAbsent(lockKey, k -> new Object());
-    }
-
-
 }
