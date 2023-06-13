@@ -92,9 +92,15 @@ class TcpSrv {
         }).start();
 
         while (true) {
+            AuthzRegistry.configure(
+                    PersistenceContext.repositories().users(),
+                    new PlainTextEncoder(),
+                    new ECoursePasswordPolicy()
+            );
+
             tpcCliSock = tcpSock.accept();
 
-            new Thread(new TcpSrvThread(tpcCliSock)).start();
+            new Thread(new TcpSrvThread(tpcCliSock, AuthzRegistry.authorizationService())).start();
         }
     }
 
