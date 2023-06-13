@@ -376,9 +376,30 @@ function getBoardById(functionCallBack){
     request.send();
 }
 
+function getHistoryOfBoard(functionCallBack){
+    const request = new XMLHttpRequest();
 
+    request.onload = function() {
+        if(request.status === 200){
+            const history = JSON.parse(request.responseText);
 
+            functionCallBack(history);
+        } else {
+            window.location.href = window.location.origin + '/myboards';
+        }
+    };
 
+    request.open("GET", "/get_history/" + getBoardUserIsIn(), true);
+    request.timeout = 5000;
+
+    const token = getTokenCookie();
+
+    if(token){
+        request.setRequestHeader("Authorization", token);
+    }
+
+    request.send();
+}
 
 let rowPos = 0;
 let colPos = 0;
@@ -647,7 +668,7 @@ function historyLoadOnPage(board){
 
     const timelineItems = {
         timestamp: dayOfMonth + '/' + month + '/' + year + ' ' + hourOfDay + ':' + minute,
-        content: 'Board Created with title "' + board.boardTitle.value
+        content: 'Board created with title "' + board.boardTitle.value
             + '". Board has ' + board.boardNCol.value + ' columns and '
             + board.boardNRow.value + ' rows'
     };
@@ -664,8 +685,34 @@ function historyLoadOnPage(board){
     li.appendChild(div);
     timeline.appendChild(li);
 
-    //call function to make http request to get post-its and add post-its to timeline
+    setPostItHistory();
 }
+
+function setPostItHistory(){
+    const request = new XMLHttpRequest();
+
+    request.onload = function() {
+        if(request.status === 200){
+            const postIts = JSON.parse(request.responseText);
+
+            console.log(postIts);
+        } else {
+            window.location.href = window.location.origin + '/myboards';
+        }
+    };
+
+    request.open("GET", "/board_history?id=" + getBoardUserIsIn(), true);
+    request.timeout = 5000;
+
+    const token = getTokenCookie();
+
+    if(token){
+        request.setRequestHeader("Authorization", token);
+    }
+
+    request.send();
+}
+
 
 let postItsAlreadyExist = false;
 function showPostIts(){

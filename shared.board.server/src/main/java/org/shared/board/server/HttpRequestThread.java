@@ -138,13 +138,23 @@ public class HttpRequestThread extends Thread {
                 }
 
                 if(request.getURI().matches(BOARD_HISTORY_BY_ID_REGEX)){
-
                     String id = request.getURI().split("\\?")[1];
 
                     Long value = Long.parseLong(id.split("=")[1]);
 
-                    // call controller that retrieves all occurrings of a board change
-                    // logic of response can either be done here or on the server
+                    System.out.println(value);
+
+                    try{
+                        response.setContentFromString(
+                                httpServerAjax.viewBoardHistory(value, token),
+                                "application/json");
+                        response.setResponseStatus("200 Ok");
+                    } catch (IllegalArgumentException e){
+                        response.setContentFromString(
+                                e.getMessage(),
+                                "text");
+                        response.setResponseStatus("401 unauthorized");
+                    }
 
                     response.send(outS);
                 }

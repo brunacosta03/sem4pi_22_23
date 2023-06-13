@@ -345,4 +345,16 @@ public class HttpServerAjax {
 
         return json.toJson(postIts);
     }
+
+    public String viewBoardHistory(Long boardId, String token) {
+        ViewBoardHistoryController ctrl = new ViewBoardHistoryController(
+                PersistenceContext.repositories().boards(),
+                PersistenceContext.repositories().postIt());
+
+        User authUser = sessionManager.getUserByToken(token);
+
+        Iterable<PostIt> history = ctrl.viewBoardHistory(boardId, authUser);
+
+        return json.toJson(history);
+    }
 }
