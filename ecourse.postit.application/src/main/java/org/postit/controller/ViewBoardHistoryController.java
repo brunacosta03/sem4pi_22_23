@@ -9,18 +9,33 @@ import repositories.PostItRepository;
 
 public class ViewBoardHistoryController {
 
+    /**
+     * The Board repository.
+     */
     private final BoardRepository boardRepository;
 
+    /**
+     * The Post it repository.
+     */
     private final PostItRepository postItRepository;
 
-
+    /**
+     * Instantiates a new View board history controller.
+     * @param boardRepository the board repository
+     * @param postItRepository the post it repository
+     */
     public ViewBoardHistoryController(BoardRepository boardRepository,
                                       PostItRepository postItRepository) {
         this.boardRepository = boardRepository;
         this.postItRepository = postItRepository;
     }
 
-
+    /**
+     * View board history.
+     * @param boardId the board id
+     * @param authUser the auth user
+     * @return Iterable<PostIt> - post-its history
+     */
     public Iterable<PostIt> viewBoardHistory(Long boardId,
                                             User authUser) {
 

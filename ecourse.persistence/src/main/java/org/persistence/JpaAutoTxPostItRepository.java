@@ -126,13 +126,18 @@ public class JpaAutoTxPostItRepository
         return query.getResultList();
     }
 
+    /**
+     * Retrieves an Iterable<PostIt> entity by the given Board.
+     * @param board board
+     * @return PostIt
+     */
     @Override
     public Iterable<PostIt> getPostItsHistory(Board board) {
         TypedQuery<PostIt> query = createQuery(
                 "SELECT p " +
                         "FROM PostIt p " +
                         "WHERE p.boardId = :board " +
-                        "ORDER BY p.postItTimeStamp DESC",
+                        "ORDER BY p.postItTimeStamp",
                 PostIt.class);
 
         query.setParameter("board", board);
