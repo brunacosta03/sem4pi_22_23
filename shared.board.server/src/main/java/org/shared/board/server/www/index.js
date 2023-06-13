@@ -663,14 +663,17 @@ function movePostIt(){
 }
 
 function historyLoadOnPage(board){
+
+    setPostItHistory();
+
     const timeline = document.querySelector('.timeline ul');
-    const {dayOfMonth, month, year, hourOfDay, minute} = board.createdOn;
+    const {dayOfMonth, month, year, hourOfDay, minute, second} = board.createdOn;
 
     const timelineItems = {
-        timestamp: dayOfMonth + '/' + month + '/' + year + ' ' + hourOfDay + ':' + minute,
+        timestamp: dayOfMonth + '/' + (month + 1) + '/' + year + ' ' + hourOfDay + ':' + minute + ':' + second,
         content: 'Board created with title "' + board.boardTitle.value
             + '". Board has ' + board.boardNCol.value + ' columns and '
-            + board.boardNRow.value + ' rows'
+            + board.boardNRow.value + ' rows. The owner of the board is ' + board.boardOwner.email.email
     };
 
     const li = document.createElement('li');
@@ -685,7 +688,6 @@ function historyLoadOnPage(board){
     li.appendChild(div);
     timeline.appendChild(li);
 
-    setPostItHistory();
 }
 
 function setPostItHistory(){
@@ -695,10 +697,65 @@ function setPostItHistory(){
         if(request.status === 200){
             const postIts = JSON.parse(request.responseText);
 
-            console.log(postIts);
+            console.log(postIts)
+
+            for (let i = 0; i < postIts.length; i++) {
+                const timeline = document.querySelector('.timeline ul');
+                const {dayOfMonth, month, year, hourOfDay, minute, second} = postIts[i].postItTimeStamp;
+
+                const timelineItems = {
+                    timestamp: dayOfMonth + '/' + (month + 1) + '/' + year + ' ' + hourOfDay + ':' + minute + ':' + second,
+                    content: ''
+                };
+
+                console.log(postIts[i])
+
+                const img = document.createElement('img');
+                img.src = postIts[i].postItContent.value;
+                img.classList.add('img-history');
+
+                if (postIts[i].postItState.postItState === "CREATED") {
+                    timelineItems.content = 'CREATED: Post-it created with content "' + postIts[i].postItContent.value
+                        + '" in column ' + postIts[i].postItColumn.value + ' and row '
+                        + postIts[i].postItRow.value + '. The owner of the post-it is ' + postIts[i].postItOwner.email.email;
+
+                } else if (postIts[i].postItState.postItState === "DELETED") {
+                    timelineItems.content = 'DELETED: Post-It deleted from column ' + postIts[i].postItColumn.value + ' and row '
+                        + postIts[i].postItRow.value + '. The owner of this post-it is ' + postIts[i].postItOwner.email.email;
+
+                } else if (postIts[i].postItState.postItState === "UPDATED") {
+                    timelineItems.content = 'UPDATED: Post-It updated with content "' + postIts[i].postItContent.value
+                        + '" in column ' + postIts[i].postItColumn.value + ' and row '
+                        + postIts[i].postItRow.value + '. The owner of this post-it is ' + postIts[i].postItOwner.email.email;
+
+                } else if (postIts[i].postItState.postItState === "MOVED") {
+                    timelineItems.content = 'MOVED: Post-It moved from column ' + postIts[i].postItColumn.value + ' and row '
+                        + postIts[i].postItRow.value + ' to column ' + postIts[i + 1].postItColumn.value + ' and row '
+                        + postIts[i + 1].postItRow.value + '. The owner of this post-it is ' + postIts[i].postItOwner.email.email;
+                    i++;
+                }
+
+                const li = document.createElement('li');
+                const div = document.createElement('div');
+                const time = document.createElement('time');
+                const content = document.createTextNode(timelineItems.content);
+
+
+                time.textContent = timelineItems.timestamp;
+
+                div.appendChild(time);
+                div.appendChild(content);
+
+                if (validation.isLink(postIts[i].postItContent.value)) {
+                    div.appendChild(img);
+                }
+
+                li.appendChild(div);
+                timeline.appendChild(li);
+            }
         } else {
-            window.location.href = window.location.origin + '/myboards';
-        }
+                window.location.href = window.location.origin + '/myboards';
+            }
     };
 
     request.open("GET", "/board_history?id=" + getBoardUserIsIn(), true);
