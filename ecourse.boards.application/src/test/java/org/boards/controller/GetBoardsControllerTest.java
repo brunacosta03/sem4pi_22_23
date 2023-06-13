@@ -1,8 +1,7 @@
 package org.boards.controller;
 
 import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
-import org.domain.model.Board;
-import org.domain.model.BoardFactory;
+import org.domain.model.*;
 import org.domain.repositories.BoardRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,13 +13,9 @@ import org.usermanagement.domain.model.User;
 import org.usermanagement.domain.model.UserBuilder;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 class GetBoardsControllerTest {
@@ -63,6 +58,29 @@ class GetBoardsControllerTest {
         });
     }
 
+    @Test
+    public void getBoardById() {
+        User authUser = managerUser();
+        Board board = board();
+
+        board.addPermission(createBoardPermission(authUser));
+        when(boardRepository.ofIdentity(1L)).thenReturn(Optional.ofNullable(board));
+
+        getBoardsController.getBoardById(1L, authUser);
+
+        verify(boardRepository, times(1)).ofIdentity(1L);
+    }
+
+    @Test
+    public void getBoardByIdWithoutPermissionShouldThrowError() {
+        User authUser = managerUser();
+        when(boardRepository.ofIdentity(1L)).thenReturn(Optional.ofNullable(board()));
+
+        assertThrows(IllegalArgumentException.class, () ->{
+            getBoardsController.getBoardById(1L, authUser);
+        });
+    }
+
     private User managerUser(){
         UserBuilder userBuilder = new UserBuilder(passwordPolicy, new PlainTextEncoder());
 
@@ -80,5 +98,12 @@ class GetBoardsControllerTest {
         Board board = factory.create(boardTitle, boardNRow, boardNCol, new ArrayList<>(), managerUser());
 
         return board;
+    }
+
+    public BoardPermission createBoardPermission(User user){
+        BoardPermissionFactory factory = new BoardPermissionFactory();
+        BoardPermission boardPermission = factory.create(user, AccessLevelType.WRITE);
+
+        return boardPermission;
     }
 }

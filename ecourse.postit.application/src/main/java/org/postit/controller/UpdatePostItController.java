@@ -34,7 +34,7 @@ public class UpdatePostItController {
     }
 
     /**
-     * Update post it content post-it.
+     * Update post-it content.
      * @param postItContentp the post-it contentp
      * @param postItRowp     the post-it rowp
      * @param postItColumnp  the post-it columnp
@@ -53,7 +53,7 @@ public class UpdatePostItController {
     }
 
     /**
-     * Update post it content post-it.
+     * Update post-it content.
      * @param postItContentp the post-it contentp
      * @param postItRowp     the post-it rowp
      * @param postItColumnp  the post-it columnp
@@ -71,5 +71,52 @@ public class UpdatePostItController {
 
         return postItSvc.changePostIt(postItContentp, postItRowp, postItColumnp,
                 boardIdp, authUser, PostItStateType.UPDATED);
+    }
+
+    /**
+     * Update post-it position.
+     * @param previousPostItRowp    the previous post-it rowp
+     * @param previousPostItColumnp the previous post-it columnp
+     * @param newPostItRowp         the new post-it rowp
+     * @param newPostItColumnp      the new post-it columnp
+     * @param boardIdp              the board idp
+     * @return the post it
+     */
+    public PostIt updatePostItPosition(final String previousPostItRowp,
+                                       final String previousPostItColumnp,
+                                       final String newPostItRowp,
+                                       final String newPostItColumnp,
+                                       final String boardIdp) {
+        authz.ensureAuthenticatedUserHasAnyOf(CourseRoles.allRoles());
+
+        return postItSvc.changePostItPosition(
+                previousPostItRowp, previousPostItColumnp,
+                newPostItRowp, newPostItColumnp,
+                boardIdp, authz.session().get().authenticatedUser());
+    }
+
+    /**
+     * Update post-it position.
+     * @param previousPostItRowp    the previous post-it rowp
+     * @param previousPostItColumnp the previous post-it columnp
+     * @param newPostItRowp         the new post-it rowp
+     * @param newPostItColumnp      the new post-it columnp
+     * @param boardIdp              the board idp
+     * @param authUser              the auth user
+     * @return the post it
+     */
+    public PostIt updatePostItPosition(final String previousPostItRowp,
+                                       final String previousPostItColumnp,
+                                       final String newPostItRowp,
+                                       final String newPostItColumnp,
+                                       final String boardIdp,
+                                       final User authUser) {
+        Preconditions.ensure(authUser != null,
+                "You need to authenticate first");
+
+        return postItSvc.changePostItPosition(
+                previousPostItRowp, previousPostItColumnp,
+                newPostItRowp, newPostItColumnp,
+                boardIdp, authUser);
     }
 }

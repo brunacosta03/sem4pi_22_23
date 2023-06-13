@@ -2,9 +2,11 @@ package org.shared.board.server;
 
 import com.google.gson.Gson;
 import eapli.framework.domain.repositories.IntegrityViolationException;
+import exceptions.NoPreviousElementException;
 import org.shared.board.server.request_bodys.BoardBody;
 import org.shared.board.server.request_bodys.LoginBody;
 import org.shared.board.server.request_bodys.PostItBody;
+import org.shared.board.server.request_bodys.PostItPositionBody;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -59,6 +61,42 @@ public class HttpRequestThread extends Thread {
                     response.send(outS);
                 }
 
+                if(request.getURI().startsWith("/get_board/")) {
+                    String boardId = request.getURI().substring(11);
+
+                    try{
+                        response.setContentFromString(
+                                httpServerAjax.getBoardById(boardId, token),
+                                "application/json");
+                        response.setResponseStatus("200 Ok");
+                    } catch (IllegalArgumentException | NoSuchElementException e){
+                        response.setContentFromString(
+                                e.getMessage(),
+                                "text");
+                        response.setResponseStatus("401 unauthorized");
+                    }
+
+                    response.send(outS);
+                }
+
+                if(request.getURI().startsWith("/post-its/board/")) {
+                    String boardId = request.getURI().substring(16);
+
+                    try{
+                        response.setContentFromString(
+                                httpServerAjax.getLastPostItsByBoard(boardId, token),
+                                "application/json");
+                        response.setResponseStatus("200 Ok");
+                    } catch (IllegalArgumentException | NoSuchElementException e){
+                        response.setContentFromString(
+                                e.getMessage(),
+                                "text");
+                        response.setResponseStatus("401 unauthorized");
+                    }
+
+                    response.send(outS);
+                }
+
                 if(request.getURI().equals("/myboards")) {
                     String fullname = baseFolder + "/myboards.html";
 
@@ -100,13 +138,23 @@ public class HttpRequestThread extends Thread {
                 }
 
                 if(request.getURI().matches(BOARD_HISTORY_BY_ID_REGEX)){
-
                     String id = request.getURI().split("\\?")[1];
 
                     Long value = Long.parseLong(id.split("=")[1]);
 
-                    // call controller that retrieves all occurrings of a board change
-                    // logic of response can either be done here or on the server
+                    System.out.println(value);
+
+                    try{
+                        response.setContentFromString(
+                                httpServerAjax.viewBoardHistory(value, token),
+                                "application/json");
+                        response.setResponseStatus("200 Ok");
+                    } catch (IllegalArgumentException e){
+                        response.setContentFromString(
+                                e.getMessage(),
+                                "text");
+                        response.setResponseStatus("401 unauthorized");
+                    }
 
                     response.send(outS);
                 }
@@ -215,6 +263,53 @@ public class HttpRequestThread extends Thread {
                     }
 
                     response.send(outS);;
+                }
+
+                if(request.getURI().equals("/update_post_it_position")){
+                    String requestBody = request.getContentAsString();
+
+                    PostItPositionBody body = json.fromJson(requestBody, PostItPositionBody.class);
+
+                    try{
+                        response.setContentFromString(
+                                httpServerAjax.updatePostItPosition(body, token),
+                                "application/json");
+                        response.setResponseStatus("200 Ok");
+                    } catch (IllegalArgumentException e){
+                        response.setContentFromString(
+                                e.getMessage(),
+                                "text");
+                        response.setResponseStatus("400 Bad Request");
+                    } catch (NoSuchElementException e){
+                        response.setContentFromString(
+                                "This board doesn't exist",
+                                "text");
+                        response.setResponseStatus("400 Bad Request");
+                    }
+
+                    response.send(outS);;
+                }
+
+                if(request.getURI().equals("/undo_post_it")) {
+                    String requestBody = request.getContentAsString();
+
+                    PostItBody body = json.fromJson(requestBody, PostItBody.class);
+
+                    try {
+                        response.setContentFromString(
+                                httpServerAjax.undoPostIt(body, token),
+                                "application/json");
+
+                        response.setResponseStatus("200 Ok");
+                    } catch(NoPreviousElementException | IllegalArgumentException n) {
+                        response.setContentFromString(
+                                n.getMessage(),
+                                "text");
+
+                        response.setResponseStatus("400 Bad Request");
+                    }
+
+                    response.send(outS);
                 }
             }
 

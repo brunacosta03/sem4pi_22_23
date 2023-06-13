@@ -8,6 +8,7 @@ import org.domain.model.postit.PostItColumn;
 import org.domain.model.postit.PostItRow;
 import org.enrollment.request.domain.EnrollmentRequest;
 import org.usermanagement.domain.model.MecanographicNumber;
+import org.usermanagement.domain.model.User;
 import repositories.PostItRepository;
 
 import javax.persistence.NoResultException;
@@ -15,12 +16,16 @@ import javax.persistence.TypedQuery;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The type Jpa auto tx post it repository.
+ */
 public class JpaAutoTxPostItRepository
         extends JpaAutoTxRepository<PostIt, Long, Long>
         implements PostItRepository {
 
     /**
      * Constructs a JpaAutoTxUserRepository.
+     *
      * @param autoTx TransactionalContext
      */
     public JpaAutoTxPostItRepository(final TransactionalContext autoTx) {
@@ -29,7 +34,8 @@ public class JpaAutoTxPostItRepository
 
     /**
      * Constructs a JpaAutoTxUserRepository.
-     * @param puname the persistence unit name
+     *
+     * @param puname     the persistence unit name
      * @param properties the properties for EntityManagerFactory
      */
     public JpaAutoTxPostItRepository(final String puname, final Map properties) {
@@ -56,6 +62,13 @@ public class JpaAutoTxPostItRepository
         return this.repo.ofIdentity(id);
     }
 
+    /**
+     * Retrieves an PostIt entity by the given Row, Column and Board.
+     * @param postItRowp postIt row
+     * @param postItColumnp postIt column
+     * @param board board
+     * @return PostIt
+     */
     @Override
     public PostIt positByPosition(final String postItRowp,
                                   final String postItColumnp,
@@ -86,4 +99,45 @@ public class JpaAutoTxPostItRepository
             return null;
         }
     }
+
+    /**
+     * Retrieves an Iterable<PostIt> entity by the given Board.
+     * Only Max timestamp in every Row and Column combination.
+     * @param board board
+     * @return PostIt
+     */
+    @Override
+    public Iterable<PostIt> lastPostItsOnBoard(final Board board) {
+        TypedQuery<PostIt> query = createQuery(
+                "SELECT p " +
+                        "FROM PostIt p " +
+                        "WHERE p.boardId = :board " +
+                        "AND p.postItTimeStamp = (" +
+                        "   SELECT MAX(p2.postItTimeStamp) " +
+                        "   FROM PostIt p2 " +
+                        "   WHERE p2.boardId = :board " +
+                        "   AND p2.postItRow = p.postItRow " +
+                        "   AND p2.postItColumn = p.postItColumn" +
+                        ")",
+                PostIt.class);
+
+        query.setParameter("board", board);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public Iterable<PostIt> getPostItsHistory(Board board) {
+        TypedQuery<PostIt> query = createQuery(
+                "SELECT p " +
+                        "FROM PostIt p " +
+                        "WHERE p.boardId = :board " +
+                        "ORDER BY p.postItTimeStamp DESC",
+                PostIt.class);
+
+        query.setParameter("board", board);
+
+        return query.getResultList();
+    }
+
 }

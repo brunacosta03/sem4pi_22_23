@@ -1,6 +1,7 @@
 package org.postit.service;
 
 import eapli.framework.infrastructure.authz.domain.model.PlainTextEncoder;
+import exceptions.NoPreviousElementException;
 import org.domain.model.*;
 import org.domain.model.postit.*;
 import org.domain.repositories.BoardRepository;
@@ -43,6 +44,7 @@ class PostItServiceTest {
     private static final String POST_IT_CONTENT = "Test Post-it";
     private static final String POST_IT_ROW_COL = "2";
     private static final String BOARD_ID = "123";
+    private final String NEW_ROW_COL = "3";
 
     @BeforeEach
     void setUp() {
@@ -323,6 +325,108 @@ class PostItServiceTest {
     }
 
     @Test
+    void testChangePostItPositionSuccessful() {
+        User postItOwner = managerUser();
+        Board board = createBoard();
+        PostItFactory postItFactory = new PostItFactory();
+
+        PostIt existingPostIt = postItFactory.create(
+                POST_IT_CONTENT,
+                POST_IT_ROW_COL,
+                POST_IT_ROW_COL,
+                postItOwner,
+                board,
+                PostItStateType.CREATED
+        );
+
+        PostIt newPostIt = postItFactory.create(
+                POST_IT_CONTENT,
+                NEW_ROW_COL,
+                NEW_ROW_COL,
+                postItOwner,
+                board,
+                PostItStateType.CREATED
+        );
+
+        board.addPermission(createBoardPermission(postItOwner));
+        when(boardRepository.ofIdentity(Long.parseLong(BOARD_ID))).thenReturn(Optional.of(board));
+        when(postItRepository.positByPosition(POST_IT_ROW_COL, POST_IT_ROW_COL, board)).thenReturn(existingPostIt);
+        when(postItRepository.positByPosition(NEW_ROW_COL, NEW_ROW_COL, board)).thenReturn(null);
+        when(postItRepository.save(any(PostIt.class))).thenReturn(newPostIt);
+
+        PostIt updatedPostIt = postItService.changePostItPosition(POST_IT_ROW_COL, POST_IT_ROW_COL, NEW_ROW_COL, NEW_ROW_COL, BOARD_ID, postItOwner);
+
+        assertNotNull(updatedPostIt);
+        verify(postItRepository, times(2)).save(any(PostIt.class));
+    }
+
+    @Test
+    void testChangePostItPositionThrowsExceptionWhenNewPositionOccupied() {
+        User postItOwner = managerUser();
+        Board board = createBoard();
+
+        PostItFactory postItFactory = new PostItFactory();
+
+        PostIt postIt = postItFactory.create(
+                POST_IT_CONTENT,
+                POST_IT_ROW_COL,
+                POST_IT_ROW_COL,
+                postItOwner,
+                board,
+                PostItStateType.CREATED
+        );
+
+        PostIt existingPostIt = postItFactory.create(
+                POST_IT_CONTENT,
+                NEW_ROW_COL,
+                NEW_ROW_COL,
+                postItOwner,
+                board,
+                PostItStateType.CREATED
+        );
+
+        board.addPermission(createBoardPermission(postItOwner));
+        when(boardRepository.ofIdentity(Long.parseLong(BOARD_ID))).thenReturn(Optional.of(board));
+        when(postItRepository.positByPosition(POST_IT_ROW_COL, POST_IT_ROW_COL, board)).thenReturn(postIt);
+        when(postItRepository.positByPosition(NEW_ROW_COL, NEW_ROW_COL, board)).thenReturn(existingPostIt);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            postItService.changePostItPosition(
+                    POST_IT_ROW_COL,
+                    POST_IT_ROW_COL,
+                    NEW_ROW_COL,
+                    NEW_ROW_COL,
+                    BOARD_ID,
+                    postItOwner);
+        });
+
+        verify(postItRepository, never()).save(any(PostIt.class));
+    }
+
+    @Test
+    void testChangePostItPositionThrowsExceptionWhenPreviousDontExist() {
+        User postItOwner = managerUser();
+        Board board = createBoard();
+
+        board.addPermission(createBoardPermission(postItOwner));
+        when(boardRepository.ofIdentity(Long.parseLong(BOARD_ID))).thenReturn(Optional.of(board));
+        when(postItRepository.positByPosition(POST_IT_ROW_COL, POST_IT_ROW_COL, board)).thenReturn(null);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            postItService.changePostItPosition(
+                    POST_IT_ROW_COL,
+                    POST_IT_ROW_COL,
+                    NEW_ROW_COL,
+                    NEW_ROW_COL,
+                    BOARD_ID,
+                    postItOwner);
+        });
+
+        verify(postItRepository, never()).save(any(PostIt.class));
+    }
+
+
+    @Test
     public void testIsNumeric_NullInput_ReturnsFalse() {
         assertFalse(postItService.isNumeric(null));
     }
@@ -370,6 +474,298 @@ class PostItServiceTest {
     @Test
     public void testIsNumeric_NumericWithTrailingZeros_ReturnsTrue() {
         assertTrue(postItService.isNumeric("123000"));
+    }
+
+
+    @Test
+    void ensurePersonWithoutPermsCannotUndoPostIt(){
+        User user = managerUser();
+        Board board = createBoard();
+        PostItFactory postItFactory = new PostItFactory();
+
+        when(boardRepository.ofIdentity(123L)).thenReturn(Optional.of(board));
+
+        PostIt existingPostIt = postItFactory.create(
+                POST_IT_CONTENT,
+                POST_IT_ROW_COL,
+                POST_IT_ROW_COL,
+                user,
+                board,
+                PostItStateType.CREATED
+        );
+
+        when(postItRepository.positByPosition(POST_IT_ROW_COL, POST_IT_ROW_COL, board)).thenReturn(existingPostIt);
+
+        Throwable t = assertThrows(IllegalArgumentException.class, () ->
+                postItService.undoPostIt(POST_IT_ROW_COL, POST_IT_ROW_COL, Long.parseLong(BOARD_ID), user));
+
+
+        verify(postItRepository, never()).save(any(PostIt.class));
+    }
+
+    @Test
+    void ensurePersonThatDidntCreatePostItCantUndoIt(){
+        User user = managerUser();
+        User user2 = anotherManagerUser();
+
+        Board board = createBoard();
+
+        PostItFactory postItFactory = new PostItFactory();
+
+        when(boardRepository.ofIdentity(123L)).thenReturn(Optional.of(board));
+
+        PostIt existingPostIt = postItFactory.create(
+                POST_IT_CONTENT,
+                POST_IT_ROW_COL,
+                POST_IT_ROW_COL,
+                user2,
+                board,
+                PostItStateType.CREATED
+        );
+
+        when(postItRepository.positByPosition(POST_IT_ROW_COL, POST_IT_ROW_COL, board)).thenReturn(existingPostIt);
+
+        Throwable t = assertThrows(IllegalArgumentException.class, () ->
+                postItService.undoPostIt(POST_IT_ROW_COL, POST_IT_ROW_COL, Long.parseLong(BOARD_ID), user));
+
+        verify(postItRepository, never()).save(any(PostIt.class));
+    }
+
+    @Test
+    void ensureCantUndoNewlyCreatedPostIt(){
+        User user = managerUser();
+        Board board = createBoard();
+        PostItFactory postItFactory = new PostItFactory();
+
+        board.addPermission(createBoardPermission(user));
+
+        when(boardRepository.ofIdentity(123L)).thenReturn(Optional.of(board));
+
+        PostIt existingPostIt = postItFactory.create(
+                POST_IT_CONTENT,
+                POST_IT_ROW_COL,
+                POST_IT_ROW_COL,
+                user,
+                board,
+                PostItStateType.CREATED
+        );
+
+        when(postItRepository.positByPosition(POST_IT_ROW_COL, POST_IT_ROW_COL, board)).thenReturn(existingPostIt);
+
+        Throwable t = assertThrows(NoPreviousElementException.class, () ->
+                postItService.undoPostIt(POST_IT_ROW_COL, POST_IT_ROW_COL, Long.parseLong(BOARD_ID), user));
+
+        verify(postItRepository, never()).save(any(PostIt.class));
+    }
+
+    @Test
+    void ensureCanUndoDeletedPostIt(){
+        User user = managerUser();
+        Board board = createBoard();
+
+        board.addPermission(createBoardPermission(user));
+
+        PostItFactory postItFactory = new PostItFactory();
+
+        when(boardRepository.ofIdentity(123L)).thenReturn(Optional.of(board));
+
+        PostIt previous = postItFactory.create(
+                POST_IT_CONTENT,
+                POST_IT_ROW_COL,
+                POST_IT_ROW_COL,
+                user,
+                board,
+                PostItStateType.CREATED
+        );
+
+        PostIt deleted = postItFactory.createChange(
+                POST_IT_CONTENT,
+                POST_IT_ROW_COL,
+                POST_IT_ROW_COL,
+                user,
+                board,
+                PostItStateType.DELETED,
+                previous
+        );
+
+        when(postItRepository.positByPosition(POST_IT_ROW_COL, POST_IT_ROW_COL, board)).thenReturn(deleted);
+
+        postItService.undoPostIt(POST_IT_ROW_COL, POST_IT_ROW_COL, Long.parseLong(BOARD_ID), user);
+
+        verify(postItRepository, times(1)).save(any()); // save the newly reverted post it
+    }
+
+    @Test
+    void ensureCanUndoChangedContentPostIt(){
+        User user = managerUser();
+        Board board = createBoard();
+
+        board.addPermission(createBoardPermission(user));
+
+        PostItFactory postItFactory = new PostItFactory();
+
+        when(boardRepository.ofIdentity(123L)).thenReturn(Optional.of(board));
+
+        PostIt previous = postItFactory.create(
+                POST_IT_CONTENT,
+                POST_IT_ROW_COL,
+                POST_IT_ROW_COL,
+                user,
+                board,
+                PostItStateType.CREATED
+        );
+
+        PostIt changed = postItFactory.createChange(
+                "CHANGED CONTENT",
+                POST_IT_ROW_COL,
+                POST_IT_ROW_COL,
+                user,
+                board,
+                PostItStateType.UPDATED,
+                previous
+        );
+
+        when(postItRepository.positByPosition(POST_IT_ROW_COL, POST_IT_ROW_COL, board)).thenReturn(changed);
+
+        postItService.undoPostIt(POST_IT_ROW_COL, POST_IT_ROW_COL, Long.parseLong(BOARD_ID), user);
+
+        verify(postItRepository, times(1)).save(any()); // save the newly reverted post it
+    }
+
+    @Test
+    void ensureCanUndoBackToDeleted(){
+        User user = managerUser();
+        Board board = createBoard();
+
+        board.addPermission(createBoardPermission(user));
+
+        PostItFactory postItFactory = new PostItFactory();
+
+        when(boardRepository.ofIdentity(123L)).thenReturn(Optional.of(board));
+
+        PostIt previous = postItFactory.create(
+                POST_IT_CONTENT,
+                POST_IT_ROW_COL,
+                POST_IT_ROW_COL,
+                user,
+                board,
+                PostItStateType.CREATED
+        );
+
+        PostIt deleted = postItFactory.createChange(
+                "DELETED",
+                POST_IT_ROW_COL,
+                POST_IT_ROW_COL,
+                user,
+                board,
+                PostItStateType.DELETED,
+                previous
+        );
+
+        PostIt updated = postItFactory.createChange(
+                POST_IT_CONTENT,
+                POST_IT_ROW_COL,
+                POST_IT_ROW_COL,
+                user,
+                board,
+                PostItStateType.UPDATED,
+                deleted
+        );
+
+        when(postItRepository.positByPosition(POST_IT_ROW_COL, POST_IT_ROW_COL, board)).thenReturn(updated);
+
+        postItService.undoPostIt(POST_IT_ROW_COL, POST_IT_ROW_COL, Long.parseLong(BOARD_ID), user);
+
+        verify(postItRepository, times(1)).save(any()); // save the newly reverted post it
+    }
+
+    @Test
+    void ensureCantUndoMoveWhenNewPostItInOldPosition(){
+        User user = managerUser();
+        Board board = createBoard();
+
+        board.addPermission(createBoardPermission(user));
+
+        PostItFactory postItFactory = new PostItFactory();
+
+        when(boardRepository.ofIdentity(123L)).thenReturn(Optional.of(board));
+
+        PostIt moved = postItFactory.createChange(
+                POST_IT_CONTENT,
+                POST_IT_ROW_COL,
+                POST_IT_ROW_COL,
+                user,
+                board,
+                PostItStateType.MOVED,
+                null
+        );
+
+        PostIt updated = postItFactory.createChange(
+                POST_IT_CONTENT,
+                POST_IT_ROW_COL,
+                "3" ,
+                user,
+                board,
+                PostItStateType.UPDATED,
+                moved
+        );
+
+        PostIt newPostIt = postItFactory.create(
+                POST_IT_CONTENT,
+                POST_IT_ROW_COL,
+                POST_IT_ROW_COL,
+                user,
+                board,
+                PostItStateType.CREATED
+        );
+
+        when(postItRepository.positByPosition(POST_IT_ROW_COL, POST_IT_ROW_COL, board)).thenReturn(newPostIt);
+        when(postItRepository.positByPosition(POST_IT_ROW_COL, "3", board)).thenReturn(updated);
+
+        Throwable t = assertThrows(IllegalArgumentException.class, () ->
+                postItService.undoPostIt(POST_IT_ROW_COL, "3", Long.parseLong(BOARD_ID), user));
+
+        verify(postItRepository, never()).save(any(PostIt.class));
+    }
+
+    @Test
+    void ensureCanUndoMovedPostItWithPreviousEntryFree(){
+        User user = managerUser();
+        Board board = createBoard();
+
+        board.addPermission(createBoardPermission(user));
+
+        PostItFactory postItFactory = new PostItFactory();
+
+        when(boardRepository.ofIdentity(123L)).thenReturn(Optional.of(board));
+
+        PostIt moved = postItFactory.createChange(
+                POST_IT_CONTENT,
+                POST_IT_ROW_COL,
+                POST_IT_ROW_COL,
+                user,
+                board,
+                PostItStateType.MOVED,
+                null
+        );
+
+        PostIt updated = postItFactory.createChange(
+                POST_IT_CONTENT,
+                POST_IT_ROW_COL,
+                "3" ,
+                user,
+                board,
+                PostItStateType.UPDATED,
+                moved
+        );
+
+        when(postItRepository.positByPosition(POST_IT_ROW_COL, "3", board)).thenReturn(updated);
+
+        postItService.undoPostIt(POST_IT_ROW_COL, "3", Long.parseLong(BOARD_ID), user);
+
+        verify(postItRepository, times(2)).save(any()); // create 2 post-its,
+        // one that means the moved becomes updated and the updated becomes moved
+        // because of this, it will save two times
     }
 
     private User managerUser(){

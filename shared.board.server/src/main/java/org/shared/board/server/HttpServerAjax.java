@@ -10,18 +10,16 @@ import org.domain.model.Board;
 import org.domain.model.BoardEntry;
 import org.domain.model.postit.PostIt;
 import org.persistence.PersistenceContext;
-import org.postit.controller.CreatePostItController;
-import org.postit.controller.DeletePostItController;
-import org.postit.controller.UpdatePostItController;
+import org.postit.controller.*;
 import org.shared.board.server.gson_adapter.HibernateProxyTypeAdapter;
 import org.shared.board.server.gson_adapter.LocalDateAdapter;
 import org.shared.board.server.request_bodys.BoardBody;
 import org.shared.board.server.request_bodys.LoginBody;
 import org.shared.board.server.request_bodys.PostItBody;
+import org.shared.board.server.request_bodys.PostItPositionBody;
 import org.shared.board.server.session.SessionManager;
 import org.usermanagement.domain.model.User;
 
-import javax.persistence.Persistence;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -78,7 +76,7 @@ public class HttpServerAjax {
     }
 
     /**
-     * Create board string.
+     * Create board.
      * @param requestBody the request body
      * @param token       the token
      * @return the string
@@ -174,7 +172,7 @@ public class HttpServerAjax {
     }
 
     /**
-     * Get user access boards string.
+     * Get user access boards.
      * @param token the token
      * @return the string
      */
@@ -192,7 +190,7 @@ public class HttpServerAjax {
     /**
      * Update content of post-it.
      * @param requestBody the request body
-     * @param token the token
+     * @param token       the token
      * @return the string
      */
     public String updatePostItContent(PostItBody requestBody, String token){
@@ -214,6 +212,13 @@ public class HttpServerAjax {
 
         return json.toJson(postIt);
     }
+
+    /**
+     * Delete post-it.
+     * @param requestBody the request body
+     * @param token       the token
+     * @return the string
+     */
     public String deletePostIt(PostItBody requestBody, String token){
         DeletePostItController theController = new DeletePostItController();
         User authUser = sessionManager.getUserByToken(token);
@@ -234,6 +239,119 @@ public class HttpServerAjax {
     }
 
     /**
+     * Undo post-it.
+     * @param requestBody the request body
+     * @param token       the token
+     * @return the string
+     */
+    public String undoPostIt(PostItBody requestBody, String token) {
+
+        UndoPostItController ctrl = new UndoPostItController();
+        User authenticated = sessionManager.getUserByToken(token);
+
+        String lockKey = generateLockKey(requestBody);
+        Object lock = getOrCreateLockObject(lockKey);
+
+        PostIt postIt;
+
+        synchronized (lock) {
+            postIt = ctrl.undoPostIt(
+                    requestBody.row(),
+                    requestBody.column(),
+                    requestBody.boardId(),
+                    authenticated
+            );
+        }
+
+        return json.toJson(postIt);
+    }
+
+    /**
+     * Update post-it position.
+     * @param requestBody the request body
+     * @param token       the token
+     * @return the string
+     */
+    public String updatePostItPosition(PostItPositionBody requestBody, String token){
+        UpdatePostItController theController = new UpdatePostItController();
+        User authUser = sessionManager.getUserByToken(token);
+        String lockKey;
+        PostIt postIt;
+
+        //lock previous cell
+        lockKey = requestBody.previousPostItRow()
+                    + requestBody.previousPostItColumn()
+                    + requestBody.boardId();
+        Object lockPrevious = getOrCreateLockObject(lockKey);
+
+        //lock new cell
+        lockKey = requestBody.newPostItRow()
+                + requestBody.newPostItColumn()
+                + requestBody.boardId();
+        Object lockNew = getOrCreateLockObject(lockKey);
+
+        synchronized (lockPrevious){
+            synchronized (lockNew){
+                postIt = theController.updatePostItPosition(
+                        requestBody.previousPostItRow(),
+                        requestBody.previousPostItColumn(),
+                        requestBody.newPostItRow(),
+                        requestBody.newPostItColumn(),
+                        requestBody.boardId(),
+                        authUser);
+            }
+        }
+
+        return json.toJson(postIt);
+    }
+
+    /**
+     * Get board by id.
+     * @param boardId the board id
+     * @param token   the token
+     * @return the string
+     */
+    public String getBoardById(String boardId, String token){
+        GetBoardsController theController = new GetBoardsController(
+                PersistenceContext.repositories().boards());
+        User authUser = sessionManager.getUserByToken(token);
+
+        Board board = theController.getBoardById(Long.valueOf(boardId), authUser);
+
+        return json.toJson(board);
+    }
+
+    /**
+     * Get last post its by board.
+     * @param boardId the board id
+     * @param token   the token
+     * @return the string
+     */
+    public String getLastPostItsByBoard(String boardId, String token){
+        GetPostItsController theController = new GetPostItsController(
+                PersistenceContext.repositories().postIt(),
+                PersistenceContext.repositories().boards());
+        User authUser = sessionManager.getUserByToken(token);
+
+        Iterable<PostIt> postIts = theController.getLastPostItsByBoard(
+                Long.valueOf(boardId), authUser);
+
+        return json.toJson(postIts);
+    }
+
+    public String viewBoardHistory(Long boardId, String token) {
+        ViewBoardHistoryController ctrl = new ViewBoardHistoryController(
+                PersistenceContext.repositories().boards(),
+                PersistenceContext.repositories().postIt());
+
+        User authUser = sessionManager.getUserByToken(token);
+
+        Iterable<PostIt> history = ctrl.viewBoardHistory(boardId, authUser);
+
+        return json.toJson(history);
+    }
+
+    /**
      * Generate String based on row column and board id.
      * @param requestBody post-it
      * @return String
@@ -251,4 +369,6 @@ public class HttpServerAjax {
     private synchronized Object getOrCreateLockObject(String lockKey) {
         return lockObjects.computeIfAbsent(lockKey, k -> new Object());
     }
+
+
 }

@@ -22,7 +22,7 @@ BoardRepository ..> Board
 
 
 
-HttpServerAjax : getUserAccessBoards( String)
+HttpServerAjax : getUserAccessBoards(String)
 SessionManager : getUserByToken(String)
 GetBoardsController : getBoardsByUser(User)
 BoardRepository : getBoardsByUser(User)

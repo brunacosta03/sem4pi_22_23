@@ -25,6 +25,11 @@ public final class MessageCodes {
      */
     public static final int AUTH = 4;
 
+    /**
+     * The constant CB.
+     */
+    public static final int CB = 5;
+
     private MessageCodes() {
         // Private constructor to prevent instantiation
     }

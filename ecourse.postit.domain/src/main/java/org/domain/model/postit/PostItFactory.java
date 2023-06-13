@@ -71,4 +71,33 @@ public class PostItFactory {
                 lastPostIt
         );
     }
+
+    /**
+     * Create update post-it.
+     * @param postItContent the post-it content
+     * @param postItRow     the post-it row
+     * @param postItColumn  the post-it column
+     * @param postItOwner   the post-it owner
+     * @param board         the board
+     * @param postItState   the post-it state
+     * @param lastPostIt    the last post-it
+     * @return the post it
+     */
+    public PostIt createChange(final PostItContent postItContent,
+                               final PostItRow postItRow,
+                                 final PostItColumn postItColumn,
+                                    final User postItOwner,
+                                    final Board board,
+                                    final PostItState postItState,
+                                    final PostIt lastPostIt) {
+        return new PostIt(
+                postItContent,
+                postItRow,
+                postItColumn,
+                postItOwner,
+                board,
+                postItState,
+                lastPostIt
+        );
+    }
 }

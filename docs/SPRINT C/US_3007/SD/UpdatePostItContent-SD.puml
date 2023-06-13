@@ -49,7 +49,7 @@ activate Server
         Service -> Service: checkIfIsRowEntryTitle(postItRow, board)
         Service -> Service: checkIfIsColumnEntryTitle(postItColumn, board)
         Service -> Service: postItByPosition(postItRow, postItColumn, board, false)
-        Service -> Service: board.userHasPermission(postItOwner, AccessLevelType.WRITE)
+        Service -> Service: checkForUserOwnership(authUser, board, lastPostIt)
 
 
         Service -> PFactory: create()

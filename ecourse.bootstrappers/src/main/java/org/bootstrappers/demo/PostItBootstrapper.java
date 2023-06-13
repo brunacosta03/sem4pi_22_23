@@ -2,9 +2,11 @@ package org.bootstrappers.demo;
 
 import eapli.framework.actions.Action;
 import eapli.framework.domain.repositories.IntegrityViolationException;
+import exceptions.NoPreviousElementException;
 import org.domain.model.postit.PostIt;
 import org.postit.controller.CreatePostItController;
 import org.postit.controller.DeletePostItController;
+import org.postit.controller.UndoPostItController;
 import org.postit.controller.UpdatePostItController;
 
 import java.util.NoSuchElementException;
@@ -13,6 +15,8 @@ public class PostItBootstrapper implements Action {
     CreatePostItController theController = new CreatePostItController();
     UpdatePostItController updateController = new UpdatePostItController();
     DeletePostItController deleteController = new DeletePostItController();
+
+    UndoPostItController undoController = new UndoPostItController();
     @Override
     public boolean execute() {
         registerPostIt("Content Post-It 1", "Title Row 2", "Title Column 3", "1");
@@ -31,6 +35,15 @@ public class PostItBootstrapper implements Action {
 
         deletePostIt("Title Row 2", "Title Column 3", "1");
         deletePostIt("2", "2", "4");
+        deletePostIt("2", "3", "4");
+
+        rollbackPostIt("2", "2", "4");
+        rollbackPostIt("3", "3", "4");
+        rollbackPostIt("2", "2", "4");
+
+
+        updatePostItPosition("Title Row 2", "Title Column 2", "Title Row 2", "Title Column 3", "1");
+        updatePostItPosition("3", "3", "2", "3", "4");
 
         return true;
     }
@@ -78,6 +91,42 @@ public class PostItBootstrapper implements Action {
         try{
             PostIt postIt = deleteController.deletePostIt(postItRowp,
                     postItColumnp, boardIdp);
+
+            System.out.println("[+] Post-It Id - " + postIt.identity());
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        } catch (NoSuchElementException e){
+            System.out.println("Board with that id doesn't exist");
+        }
+    }
+
+    private void rollbackPostIt(
+            final String postItRowp,
+            final String postItColumnp,
+            final String boardIdp){
+        try{
+            PostIt postIt = undoController.undoPostIt(postItRowp,
+                    postItColumnp, boardIdp);
+
+            System.out.println("[+] Post-It Id - " + postIt.identity());
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        } catch (NoSuchElementException e){
+            System.out.println("Board with that id doesn't exist");
+        } catch(NoPreviousElementException e){
+            System.out.println("There is no previous version of this post-it");
+        }
+    }
+
+    private void updatePostItPosition(final String previousPostItRowp,
+                                      final String previousPostItColumnp,
+                                      final String newPostItRowp,
+                                      final String newPostItColumnp,
+                                      final String boardIdp){
+        try{
+            PostIt postIt = updateController.updatePostItPosition(
+                    previousPostItRowp, previousPostItColumnp,
+                    newPostItRowp, newPostItColumnp, boardIdp);
 
             System.out.println("[+] Post-It Id - " + postIt.identity());
         } catch (IllegalArgumentException e) {

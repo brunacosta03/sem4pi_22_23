@@ -22,19 +22,21 @@
         <div id="loader"></div>
         <div id="overlay" onclick="disableOverlay()"></div>
         <div id="main-container">
-            <h2 class="title center-content">Board Title</h2>
+            <h2 id="board-title" class="title center-content">Board Title</h2>
             <div id="board-container">
                 <ul class="columns">
 <!--                    <li class="column">-->
 <!--                        <div class="entry-header">-->
-<!--                            <h4>To Do</h4>-->
+<!--                            <h4>To Do-->
 <!--                        </div>-->
 <!--                        <ul class="post-it-list">-->
 <!--                            <li class="post-it">-->
 <!--                                <p>Analysis</p>-->
+<!--                                <span class="tooltiptext">Tooltip text</span>-->
 <!--                            </li>-->
 <!--                            <li class="post-it">-->
 <!--                                <p>Coding</p>-->
+<!--                                <span class="tooltiptext">Tooltip text</span>-->
 <!--                            </li>-->
 <!--                            <li class="post-it">-->
 <!--                                <p>Card Sorting</p>-->
@@ -129,7 +131,7 @@
                             <textarea id="post-it-content" maxlength="100"></textarea>
 
                             <div class="buttons-form">
-                                <button id="undo-deleted-post-it" class="button add-button" onclick="undoDeletedPostIt()">
+                                <button id="undo-deleted-post-it" class="button add-button" onclick="undoPostIt()">
                                     <span class="material-icons">undo</span>
                                 </button>
 
@@ -176,16 +178,16 @@
                                 <div class="move-to-another-cell">
                                     <div>
                                         <h3 class="title">Column:</h3>
-                                        <input id="move-to-column" type="number">
+                                        <input id="move-to-column" type="text">
                                     </div>
 
                                     <div>
                                         <h3 class="title">Row:</h3>
-                                        <input id="move-to-row" type="number">
+                                        <input id="move-to-row" type="text">
                                     </div>
                                 </div>
 
-                                <button class="button add-button" onclick="">Move</button>
+                                <button class="button add-button" onclick="movePostIt()">Move</button>
                             </div>
                         </form>
                     </div>
