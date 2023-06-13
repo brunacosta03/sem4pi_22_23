@@ -9,25 +9,22 @@ class HttpServerAjax <<http server>>
 class ViewBoardHistoryController <<application>>
 class SessionManager
 class BoardRepository <<repository>>
-class BoardService <<service>>
+class PostItRepository <<repository>>
 class Board <<domain>>
 class User <<domain>>
 
 HttpServerAjax --> ViewBoardHistoryController : theController
 HttpServerAjax --> SessionManager : sessionManager
 SessionManager ..> User
-ViewBoardHistoryController --> BoardService : boardService
-BoardService --> BoardRepository : boardRepository
-BoardRepository --> Board
-BoardService --> Board : board
+ViewBoardHistoryController --> BoardRepository : boardRepository
+ViewBoardHistoryController --> PostItRepository : postItRepository
+BoardRepository ..> Board
 
 HttpServerAjax : viewBoardHistory()
 SessionManager : getUserByToken()
 ViewBoardHistoryController : viewBoardHistory()
-BoardService : viewBoardHistoryUpdates()
 Board : userHasPermission(User, AccessLevel)
-BoardRepository : ofIdentity(Long)
-BoardRepository : save(Board)
-
+PostItRepository : getPostItsHistory(Board)
+BoardRepository : ofIdentity(long)
 
 @enduml
