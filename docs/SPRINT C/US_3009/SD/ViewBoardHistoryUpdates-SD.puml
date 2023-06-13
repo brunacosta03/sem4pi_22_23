@@ -9,9 +9,9 @@ actor User as Actor
 participant HttpServerAjax as Server <<http server>>
 participant ViewBoardHistoryController as Controller <<application>>
 participant SessionManager as SM
-participant BoardService as Service <<service>>
 participant Board as Domain <<domain>>
 database BoardRepository as RepositoryB <<repository>>
+database PostItRepository as RepositoryP <<repository>>
 
 Actor -> Server: View the history of a board
 activate Server
@@ -26,30 +26,30 @@ activate SM
 SM -> Server : authUser
 deactivate SM
 
-Server -> Controller : getBoardHistory(boardId)
+Server -> Controller : viewBoardHistory(boardId, authUser)
 activate Controller
 
-Controller -> Service : create()
-note right: dependency injection was abastracted\nfor diagram readability
-
-Controller -> Service : viewBoardHistory(boardId)
-activate Service
-
-Service -> Domain : boardHistory()
-activate Domain
-Domain -> RepositoryB : ofIdentity(boardId)
+Controller -> RepositoryB : ofIdentity(boardId)
 activate RepositoryB
-RepositoryB -> Domain : board
+RepositoryB -> Board : userHasAccess(authUser)
+activate Board
+Board -> RepositoryB : board
+deactivate Board
+RepositoryB -> Controller : board
 deactivate RepositoryB
-Domain -> Service : boardHistory
-deactivate Domain
 
-Service -> Controller : boardHistory
-deactivate Service
-Controller -> Server : boardHistory
+Controller -> RepositoryP : getPostItsHistory(board)
+activate RepositoryP
+RepositoryP -> Controller : postIts
+deactivate RepositoryP
+
+Controller -> Server : postIts
 deactivate Controller
-Server -> Actor : boardHistory
+
+Server -> Actor : postIts
 deactivate Server
+
+
 
 
 @enduml
