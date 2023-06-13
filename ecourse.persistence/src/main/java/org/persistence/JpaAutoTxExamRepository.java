@@ -3,10 +3,12 @@ package org.persistence;
 import eapli.framework.domain.repositories.TransactionalContext;
 import eapli.framework.general.domain.model.EmailAddress;
 import eapli.framework.infrastructure.repositories.impl.jpa.JpaAutoTxRepository;
+import org.domain.model.Course;
 import org.domain.model.exam.Exam;
 import org.usermanagement.domain.model.User;
 import repositories.ExamRepository;
 
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.Map;
@@ -43,7 +45,21 @@ public class JpaAutoTxExamRepository
         query.setParameter("email", student.identity());
         try {
             return query.getResultList();
-        } catch (Exception e) {
+        } catch (NoResultException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public Iterable<Exam> findGradesByCourse(Course course){
+        TypedQuery<Exam> query = createQuery(
+                "SELECT e FROM Exam e WHERE e.examTemplate.course = :course",
+                Exam.class
+        );
+        query.setParameter("course", course);
+        try {
+            return query.getResultList();
+        } catch (NoResultException e){
             return new ArrayList<>();
         }
     }

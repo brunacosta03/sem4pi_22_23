@@ -1,6 +1,7 @@
 package org.exam.application;
 
 import eapli.framework.validations.Preconditions;
+import org.domain.model.Course;
 import org.domain.model.exam.Exam;
 import org.domain.model.examtemplate.domain.ExamTemplate;
 import org.domain.model.examtemplate.domain.ExamTitle;
@@ -52,5 +53,13 @@ public class ExamService {
         listExamGrades.addAll((Collection<? extends Exam>) repo.findGradesByStudentEmail(student));
 
         return listExamGrades;
+    }
+
+    public Iterable<Course> getTeacherCourses(User teacher){
+        return courseRepo.findCoursesThatITeach(teacher);
+    }
+
+    public Iterable<Exam> listTeacherGrades(Course course){
+        return repo.findGradesByCourse(course);
     }
 }

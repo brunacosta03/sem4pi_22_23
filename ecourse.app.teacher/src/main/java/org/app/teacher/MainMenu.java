@@ -11,6 +11,7 @@ import eapli.framework.presentation.console.menu.MenuRenderer;
 import eapli.framework.presentation.console.menu.VerticalMenuRenderer;
 import exams.CreateExamUI;
 import exams.ListCourseExamsUI;
+import exams.ListCourseGradesUI;
 import exams.UpdateExamUI;
 import formative.questions.CreateFormativeQuestionsUI;
 import org.authz.application.AuthorizationService;
@@ -47,6 +48,7 @@ public class MainMenu extends AbstractUI {
     private static final int SET_TEACHER_LIST_COURSE_EXAMS_OPTION = 3;
     private static final int SET_EXAM_OPTION = 3;
 
+    private static final int SET_TEACHER_EXAM_GRADES_OPTION = 4;
     private final AuthorizationService authz = AuthzRegistry.authorizationService();
 
     @Override
@@ -131,6 +133,8 @@ public class MainMenu extends AbstractUI {
                 new UpdateExamUI()::show);
         menu.addItem(SET_TEACHER_LIST_COURSE_EXAMS_OPTION,
                 "List Course Exams", new ListCourseExamsUI()::show);
+        menu.addItem(SET_TEACHER_EXAM_GRADES_OPTION, "Get Course Grades",
+                new ListCourseGradesUI()::show);
         menu.addItem(EXIT_OPTION, RETURN_LABEL, Actions.SUCCESS);
 
         return menu;
