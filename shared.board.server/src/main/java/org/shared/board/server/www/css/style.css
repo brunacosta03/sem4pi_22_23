@@ -546,6 +546,7 @@ a:link {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 10px;
 }
 
 .center-content {
@@ -739,6 +740,57 @@ time {
   height: 250px;
   margin-top: 8px;
 }
+
+#share-board-section {
+  margin-top: 20px;
+}
+
+#share-board-components {
+  background-color: var(--gray);
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  margin-top: 15px;
+  box-shadow: 4px 4px var(--blue-hover);
+}
+
+#share-board-components button {
+    display: block;
+    margin: 0 auto;
+}
+
+#permissions {
+  padding: 8px;
+  font-size: 18px;
+  width: 100%;
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-align: center;
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-weight: 500;
+}
+
+#permissions:focus {
+  outline: none;
+  box-shadow: 0 0 5px #007bff;
+}
+
+#choose-permission-div {
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#permissions-text {
+  width: 200px;
+  line-height: 2em;
+}
+
 
 @media only screen and (max-width: 800px) {
   .container{

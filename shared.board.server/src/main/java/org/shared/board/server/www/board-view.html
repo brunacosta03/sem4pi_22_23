@@ -118,18 +118,26 @@
                     <div id="share-board-container">
                         <h2 class="title center-content">Share Board</h2>
 
-                        <div class="title" id="text-and-input">
-                            <a id="email-text-field">
-                                <label for="email-share-board-input">Email</label>
-                                <input type="text" id="email-share-board-input">
-                            </a>
-                            <label class="title" for="permissions">Choose a permission: </label>
-                            <select name="permissions" id="permissions">
-                                <option>Read</option>
-                                <option>Write</option>
-                            </select>
+                        <div id="share-board-components">
+                            <div class="title" id="text-and-input">
+                                <a id="email-text-field">
+                                    <label for="email-share-board-input">Email</label>
+                                    <input type="text" id="email-share-board-input">
+                                </a>
+                                <div id="choose-permission-div">
+                                    <label class="title" for="permissions" id="permissions-text">Permission: </label>
+                                    <select name="permissions" id="permissions">
+                                        <option>Read</option>
+                                        <option>Write</option>
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+                            <button onclick="shareBoardData()" class="button">Share</button>
                         </div>
-                        <button onclick="shareBoardData()">Add User</button>
+
                     </div>
                 </div>
             </section>
