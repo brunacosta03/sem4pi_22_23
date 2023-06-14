@@ -12,7 +12,6 @@ import org.usermanagement.domain.model.User;
 import repositories.ExamRepository;
 import repositories.ExamTemplateRepository;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 @UseCaseController

@@ -1,7 +1,6 @@
 package org.persistence;
 
 import eapli.framework.domain.repositories.TransactionalContext;
-import eapli.framework.general.domain.model.EmailAddress;
 import eapli.framework.infrastructure.repositories.impl.jpa.JpaAutoTxRepository;
 import org.domain.model.Course;
 import org.domain.model.exam.Exam;

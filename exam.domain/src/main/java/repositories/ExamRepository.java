@@ -1,7 +1,6 @@
 package repositories;
 
 import eapli.framework.domain.repositories.DomainRepository;
-import eapli.framework.general.domain.model.EmailAddress;
 import org.domain.model.Course;
 import org.domain.model.exam.Exam;
 import org.usermanagement.domain.model.User;
