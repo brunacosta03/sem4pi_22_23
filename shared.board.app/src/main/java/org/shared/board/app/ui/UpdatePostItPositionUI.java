@@ -8,13 +8,13 @@ import org.shared.board.common.MessageCodes;
 import java.nio.charset.StandardCharsets;
 
 /**
- * The type UpdatePostItContentUI ui.
+ * The type UpdatePostItPositionUI ui.
  */
 public class UpdatePostItPositionUI {
     private SharedBoardAppController theController;
 
     /**
-     * Instantiates a new update postIt content ui.
+     * Instantiates a new update postIt position ui.
      * @param theControllerp the the controllerp
      */
     public UpdatePostItPositionUI(final SharedBoardAppController theControllerp) {

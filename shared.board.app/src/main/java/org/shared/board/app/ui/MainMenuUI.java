@@ -100,6 +100,11 @@ public class MainMenuUI {
                             new UpdatePostItPositionUI(theController);
                     updatePostItPositionUI.doShow();
                     break;
+                case 7:
+                    DeletePostItUI deletePostItUI =
+                            new DeletePostItUI(theController);
+                    deletePostItUI.doShow();
+                    break;
                 case 8:
                     UndoPostItUI undoPostItUI = new UndoPostItUI(theController);
                     undoPostItUI.doShow();

@@ -5,6 +5,7 @@ import org.authz.application.AuthzRegistry;
 import org.boards.controller.CreateBoardController;
 import org.domain.model.BoardEntry;
 import org.postit.controller.CreatePostItController;
+import org.postit.controller.DeletePostItController;
 import org.postit.controller.UndoPostItController;
 import org.postit.controller.UpdatePostItController;
 import org.shared.board.common.MessageCodes;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The type Shared board server service.
@@ -232,6 +234,38 @@ public class SharedBoardServerService {
                     throw new IllegalArgumentException(
                             "There is no board with that id!");
                 }
+            }
+        }
+
+        return MessageCodes.ACK;
+    }
+
+    /**
+     * Delete post-it.
+     * @param postItData the post-it data
+     * @param authUser   the auth user
+     * @return the int
+     */
+    public int deletePostIt(final String postItData,
+                                   final User authUser) {
+        DeletePostItController deletePostItController = new DeletePostItController();
+        final String rowPos = getStringByIndex(0, postItData);
+        final String colPos = getStringByIndex(1, postItData);
+        final String boardId = getStringByIndex(2, postItData);
+
+        String lockKey = synchronizer.generateLockKey(rowPos, colPos, boardId);
+        Object lock = synchronizer.getOrCreateLockObject(lockKey);
+
+        synchronized (lock){
+            try{
+                deletePostItController.deletePostIt(
+                        rowPos,
+                        colPos,
+                        boardId,
+                        authUser);
+            } catch (NoSuchElementException e){
+                throw new IllegalArgumentException(
+                        "There is no board with that id!");
             }
         }
 

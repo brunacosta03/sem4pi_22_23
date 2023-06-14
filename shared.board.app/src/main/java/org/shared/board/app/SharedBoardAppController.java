@@ -107,6 +107,17 @@ public class SharedBoardAppController {
     }
 
     /**
+     * Delete post-it.
+     * @param data the data
+     * @return the message
+     */
+    public Message deletePostIt(String data){
+        mf.sendMessage(VERSION, MessageCodes.DPI, data);
+
+        return mf.readMessage();
+    }
+
+    /**
      * Undo post-it.
      * @param data the data
      * @return the message

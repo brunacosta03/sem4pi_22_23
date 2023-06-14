@@ -143,6 +143,20 @@ public class TcpSrvThread implements Runnable {
                     }
                 }
 
+                if(message.code() == MessageCodes.DPI){
+                    try{
+                        int result = theController.deletePostIt(message);
+
+                        mf.sendMessage(VERSION, result, "");
+                    } catch (IllegalArgumentException e) {
+                        mf.sendMessage(VERSION, MessageCodes.ERR,
+                                e.getMessage());
+                    } catch (NoSuchElementException e){
+                        mf.sendMessage(VERSION, MessageCodes.ERR,
+                                "User is not authenticated!");
+                    }
+                }
+
                 if(message.code() == MessageCodes.UPI){
                     try{
                         int result = theController.undoPostIt(message);

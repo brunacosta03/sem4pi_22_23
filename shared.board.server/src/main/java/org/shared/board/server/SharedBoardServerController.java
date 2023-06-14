@@ -86,6 +86,17 @@ public class SharedBoardServerController {
     }
 
     /**
+     * Delete post-it.
+     * @param data the data
+     * @return the int
+     */
+    public int deletePostIt(final Message data) {
+        String result = new String(data.data(), StandardCharsets.US_ASCII);
+
+        return sbSvc.deletePostIt(result, authz.session().get().authenticatedUser());
+    }
+
+    /**
      * Undo post-it last change.
      * @param data the data
      * @return the int

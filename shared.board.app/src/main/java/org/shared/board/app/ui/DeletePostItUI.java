@@ -1,5 +1,6 @@
 package org.shared.board.app.ui;
 
+import eapli.framework.io.util.Console;
 import org.shared.board.app.SharedBoardAppController;
 import org.shared.board.app.Util;
 import org.shared.board.common.Message;
@@ -8,16 +9,16 @@ import org.shared.board.common.MessageCodes;
 import java.nio.charset.StandardCharsets;
 
 /**
- * The type UpdatePostItContentUI ui.
+ * The type DeletePostItUI ui.
  */
-public class UpdatePostItContentUI {
+public class DeletePostItUI {
     private SharedBoardAppController theController;
 
     /**
-     * Instantiates a new update postIt content ui.
+     * Instantiates a new delete postIt ui.
      * @param theControllerp the the controllerp
      */
-    public UpdatePostItContentUI(final SharedBoardAppController theControllerp) {
+    public DeletePostItUI(final SharedBoardAppController theControllerp) {
         this.theController = theControllerp;
     }
 
@@ -25,16 +26,21 @@ public class UpdatePostItContentUI {
      * Ask user Row position.
      * Ask user Col position.
      * Ask user board id.
-     * Ask user type of content.
-     * Call method to Update post-it.
+     * Call method to delete post-it.
      */
     protected void doShow() {
-        String data = Util.postItBody();
+        final String rowPos = Console.readLine("Post-It Row position:");
+        final String colPos = Console.readLine("Post-It Column position:");
+        final String boardId = Console.readLine("Board Id:");
 
-        Message result = theController.updatePostItContent(data);
+        String data = rowPos + "\0" + colPos + "\0" + boardId + "\0";
+
+        System.out.println();
+
+        Message result = theController.deletePostIt(data);
 
         if (result.code() == MessageCodes.ACK) {
-            System.out.println("Post-It updated successfully!\n");
+            System.out.println("Post-It deleted successfully!\n");
         } else {
             String errorData;
 
