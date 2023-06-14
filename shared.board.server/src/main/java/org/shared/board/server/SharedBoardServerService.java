@@ -161,6 +161,12 @@ public class SharedBoardServerService {
         return MessageCodes.ACK;
     }
 
+    /**
+     * Update post-it content.
+     * @param postItData the post-it data
+     * @param authUser   the auth user
+     * @return the int
+     */
     public int updatePostItContent(final String postItData,
                             final User authUser) {
         UpdatePostItController updatePostItController = new UpdatePostItController();
@@ -183,6 +189,49 @@ public class SharedBoardServerService {
             } catch (NoSuchElementException e){
                 throw new IllegalArgumentException(
                         "There is no board with that id!");
+            }
+        }
+
+        return MessageCodes.ACK;
+    }
+
+    /**
+     * Update post-it position.
+     * @param postItData the post-it data
+     * @param authUser   the auth user
+     * @return the int
+     */
+    public int updatePostItPosition(final String postItData,
+                                    final User authUser) {
+        UpdatePostItController updatePostItController = new UpdatePostItController();
+        final String previousRowPos = getStringByIndex(0, postItData);
+        final String previousColPos = getStringByIndex(1, postItData);
+        final String newRowPos = getStringByIndex(2, postItData);
+        final String newColPos = getStringByIndex(3, postItData);
+        final String boardId = getStringByIndex(4, postItData);
+
+        String lockKeyPrevious = synchronizer.generateLockKey(
+                previousRowPos, previousColPos, boardId);
+        Object previousLock = synchronizer.getOrCreateLockObject(lockKeyPrevious);
+
+        String lockKeyNew = synchronizer.generateLockKey(
+                newRowPos, newColPos, boardId);
+        Object newLock = synchronizer.getOrCreateLockObject(lockKeyNew);
+
+        synchronized (previousLock){
+            synchronized (newLock){
+                try{
+                    updatePostItController.updatePostItPosition(
+                            previousRowPos,
+                            previousColPos,
+                            newRowPos,
+                            newColPos,
+                            boardId,
+                            authUser);
+                } catch (NoSuchElementException e){
+                    throw new IllegalArgumentException(
+                            "There is no board with that id!");
+                }
             }
         }
 
