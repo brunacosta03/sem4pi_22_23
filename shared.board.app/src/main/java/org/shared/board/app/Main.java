@@ -1,5 +1,7 @@
 package org.shared.board.app;
 
+import org.shared.board.app.ui.MainMenuUI;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;

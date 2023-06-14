@@ -6,6 +6,7 @@ import org.boards.controller.CreateBoardController;
 import org.domain.model.BoardEntry;
 import org.postit.controller.CreatePostItController;
 import org.postit.controller.UndoPostItController;
+import org.postit.controller.UpdatePostItController;
 import org.shared.board.common.MessageCodes;
 import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.User;
@@ -13,6 +14,7 @@ import org.usermanagement.domain.model.UserSession;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
@@ -143,12 +145,45 @@ public class SharedBoardServerService {
         Object lock = synchronizer.getOrCreateLockObject(lockKey);
 
         synchronized (lock){
-            createPostItController.createPostIt(
-                    content,
-                    rowPos,
-                    colPos,
-                    boardId,
-                    authUser);
+            try{
+                createPostItController.createPostIt(
+                        content,
+                        rowPos,
+                        colPos,
+                        boardId,
+                        authUser);
+            } catch (NoSuchElementException e){
+                throw new IllegalArgumentException(
+                        "There is no board with that id!");
+            }
+        }
+
+        return MessageCodes.ACK;
+    }
+
+    public int updatePostItContent(final String postItData,
+                            final User authUser) {
+        UpdatePostItController updatePostItController = new UpdatePostItController();
+        final String content = getStringByIndex(0, postItData);
+        final String rowPos = getStringByIndex(1, postItData);
+        final String colPos = getStringByIndex(2, postItData);
+        final String boardId = getStringByIndex(3, postItData);
+
+        String lockKey = synchronizer.generateLockKey(rowPos, colPos, boardId);
+        Object lock = synchronizer.getOrCreateLockObject(lockKey);
+
+        synchronized (lock){
+            try{
+                updatePostItController.updatePostItContent(
+                        content,
+                        rowPos,
+                        colPos,
+                        boardId,
+                        authUser);
+            } catch (NoSuchElementException e){
+                throw new IllegalArgumentException(
+                        "There is no board with that id!");
+            }
         }
 
         return MessageCodes.ACK;
@@ -171,12 +206,17 @@ public class SharedBoardServerService {
         Object lock = synchronizer.getOrCreateLockObject(lockKey);
 
         synchronized (lock) {
-            ctrl.undoPostIt(
-                    rowPos,
-                    colPos,
-                    boardId,
-                    user
-            );
+            try{
+                ctrl.undoPostIt(
+                        rowPos,
+                        colPos,
+                        boardId,
+                        user
+                );
+            } catch (NoSuchElementException e){
+                throw new IllegalArgumentException(
+                        "There is no board with that id!");
+            }
         }
 
         return MessageCodes.ACK;

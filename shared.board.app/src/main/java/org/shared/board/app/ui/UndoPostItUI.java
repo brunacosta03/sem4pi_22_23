@@ -1,7 +1,8 @@
-package org.shared.board.app;
+package org.shared.board.app.ui;
 
 import eapli.framework.io.util.Console;
 import eapli.framework.presentation.console.AbstractUI;
+import org.shared.board.app.SharedBoardAppController;
 import org.shared.board.common.Message;
 import org.shared.board.common.MessageCodes;
 

@@ -63,6 +63,12 @@ public class SharedBoardServerController {
         return sbSvc.createPostIt(result, authz.session().get().authenticatedUser());
     }
 
+    public int updatePostItContent(final Message data) {
+        String result = new String(data.data(), StandardCharsets.US_ASCII);
+
+        return sbSvc.updatePostItContent(result, authz.session().get().authenticatedUser());
+    }
+
     public int undoPostIt(final Message data) {
         String result = new String(data.data(), StandardCharsets.US_ASCII);
 

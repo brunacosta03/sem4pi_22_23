@@ -84,6 +84,12 @@ public class SharedBoardAppController {
         return mf.readMessage();
     }
 
+    public Message updatePostItContent(String data){
+        mf.sendMessage(VERSION, MessageCodes.UPIC, data);
+
+        return mf.readMessage();
+    }
+
     /**
      * Undo post-it.
      * @param data the data

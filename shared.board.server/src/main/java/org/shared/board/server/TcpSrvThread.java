@@ -1,6 +1,7 @@
 package org.shared.board.server;
 
 import eapli.framework.domain.repositories.IntegrityViolationException;
+import exceptions.NoPreviousElementException;
 import org.authz.application.AuthorizationService;
 import org.authz.application.AuthzRegistry;
 import org.shared.board.common.Message;
@@ -116,12 +117,26 @@ public class TcpSrvThread implements Runnable {
                     }
                 }
 
+                if(message.code() == MessageCodes.UPIC){
+                    try{
+                        int result = theController.updatePostItContent(message);
+
+                        mf.sendMessage(VERSION, result, "");
+                    } catch (IllegalArgumentException e) {
+                        mf.sendMessage(VERSION, MessageCodes.ERR,
+                                e.getMessage());
+                    } catch (NoSuchElementException e){
+                        mf.sendMessage(VERSION, MessageCodes.ERR,
+                                "User is not authenticated!");
+                    }
+                }
+
                 if(message.code() == MessageCodes.UPI){
                     try{
                         int result = theController.undoPostIt(message);
 
                         mf.sendMessage(VERSION, result, "");
-                    } catch (IllegalArgumentException e) {
+                    } catch (IllegalArgumentException | NoPreviousElementException e) {
                         mf.sendMessage(VERSION, MessageCodes.ERR,
                                 e.getMessage());
                     } catch (NoSuchElementException e){

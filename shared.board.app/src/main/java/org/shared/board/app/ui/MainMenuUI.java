@@ -1,5 +1,6 @@
-package org.shared.board.app;
+package org.shared.board.app.ui;
 
+import org.shared.board.app.SharedBoardAppController;
 import org.shared.board.common.MessageCodes;
 
 import java.io.BufferedReader;
@@ -53,7 +54,10 @@ public class MainMenuUI {
             System.out.println("2 - Authenticate");
             System.out.println("3 - Create Board");
             System.out.println("4 - Create Post-It");
-            System.out.println("5 - Undo Post-It");
+            System.out.println("5 - Update Post-It content");
+            System.out.println("6 - Update Post-It position");
+            System.out.println("7 - Delete Post-It");
+            System.out.println("8 - Undo Post-It");
             System.out.println("0 - End of session request");
             System.out.println("\nOption - ");
             try {
@@ -87,6 +91,11 @@ public class MainMenuUI {
                     createPostItUI.doShow();
                     break;
                 case 5:
+                    UpdatePostItContentUI updatePostItContentUI =
+                            new UpdatePostItContentUI(theController);
+                    updatePostItContentUI.doShow();
+                    break;
+                case 8:
                     UndoPostItUI undoPostItUI = new UndoPostItUI(theController);
                     undoPostItUI.doShow();
                     break;
