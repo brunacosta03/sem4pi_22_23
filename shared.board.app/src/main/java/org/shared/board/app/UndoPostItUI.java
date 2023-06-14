@@ -28,8 +28,6 @@ public class UndoPostItUI extends AbstractUI {
 
         System.out.println();
 
-        //TODO: Send message to server and get response
-
         Message result = this.ctrl.undoPostIt(data);
 
         if(result == null){
