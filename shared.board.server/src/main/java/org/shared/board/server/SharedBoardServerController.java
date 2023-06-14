@@ -53,7 +53,7 @@ public class SharedBoardServerController {
     }
 
     /**
-     * Create post it.
+     * Create post-it.
      * @param data the data
      * @return the int
      */
@@ -61,5 +61,49 @@ public class SharedBoardServerController {
         String result = new String(data.data(), StandardCharsets.US_ASCII);
 
         return sbSvc.createPostIt(result, authz.session().get().authenticatedUser());
+    }
+
+    /**
+     * Update post-it content.
+     * @param data the data
+     * @return the int
+     */
+    public int updatePostItContent(final Message data) {
+        String result = new String(data.data(), StandardCharsets.US_ASCII);
+
+        return sbSvc.updatePostItContent(result, authz.session().get().authenticatedUser());
+    }
+
+    /**
+     * Update post-it position.
+     * @param data the data
+     * @return the int
+     */
+    public int updatePostItPosition(final Message data) {
+        String result = new String(data.data(), StandardCharsets.US_ASCII);
+
+        return sbSvc.updatePostItPosition(result, authz.session().get().authenticatedUser());
+    }
+
+    /**
+     * Delete post-it.
+     * @param data the data
+     * @return the int
+     */
+    public int deletePostIt(final Message data) {
+        String result = new String(data.data(), StandardCharsets.US_ASCII);
+
+        return sbSvc.deletePostIt(result, authz.session().get().authenticatedUser());
+    }
+
+    /**
+     * Undo post-it last change.
+     * @param data the data
+     * @return the int
+     */
+    public int undoPostIt(final Message data) {
+        String result = new String(data.data(), StandardCharsets.US_ASCII);
+
+        return sbSvc.undoPostIt(result, authz.session().get().authenticatedUser());
     }
 }

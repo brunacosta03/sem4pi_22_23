@@ -1,6 +1,9 @@
-package org.shared.board.app;
+package org.shared.board.app.ui;
 
 import eapli.framework.io.util.Console;
+import org.shared.board.app.ImgurUpload;
+import org.shared.board.app.SharedBoardAppController;
+import org.shared.board.app.Util;
 import org.shared.board.common.Message;
 import org.shared.board.common.MessageCodes;
 
@@ -30,37 +33,7 @@ public class CreatePostItUI {
      * Call method to Create post-it.
      */
     protected void doShow() {
-        String data = "";
-
-        String content = "";
-        final String rowPos = Console.readLine("Post-It Row position:");
-        final String colPos = Console.readLine("Post-It Column position:");
-        final String boardId = Console.readLine("Board Id:");
-
-        String opt = "";
-
-        do {
-            System.out.println("1 - Text Content");
-            System.out.println("2 - Image Content");
-            opt = Console.readLine("Option - ");
-
-            switch (opt) {
-                case "1":
-                    content = Console.readLine("Post-It Content:");
-                    break;
-                case "2":
-                    String filePath = Console.readLine("Image path:");
-                    content = ImgurUpload.uploadImage(filePath);
-                    break;
-                default:
-                    opt = "-1";
-                    break;
-            }
-        } while ("-1".compareTo(opt) == 0);
-
-        data = content + "\0" + rowPos + "\0" + colPos + "\0" + boardId + "\0";
-
-        System.out.println();
+        String data = Util.postItBody();
 
         Message result = theController.createPostIt(data);
 

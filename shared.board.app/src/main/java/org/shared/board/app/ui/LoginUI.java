@@ -1,5 +1,6 @@
-package org.shared.board.app;
+package org.shared.board.app.ui;
 
+import org.shared.board.app.SharedBoardAppController;
 import org.shared.board.common.Message;
 import org.shared.board.common.MessageCodes;
 

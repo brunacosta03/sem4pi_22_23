@@ -35,6 +35,26 @@ public final class MessageCodes {
      */
     public static final int CPI = 6;
 
+    /**
+     * The constant UPI.
+     */
+    public static final int UPI = 7;
+
+    /**
+     * The constant UPIC.
+     */
+    public static final int UPIC = 10;
+
+    /**
+     * The constant UPIP.
+     */
+    public static final int UPIP = 11;
+
+    /**
+     * The constant DPI.
+     */
+    public static final int DPI = 12;
+
     private MessageCodes() {
         // Private constructor to prevent instantiation
     }

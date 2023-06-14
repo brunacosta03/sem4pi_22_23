@@ -1,15 +1,14 @@
 package org.shared.board.server;
 
 import eapli.framework.domain.repositories.IntegrityViolationException;
+import exceptions.NoPreviousElementException;
 import org.authz.application.AuthorizationService;
-import org.authz.application.AuthzRegistry;
 import org.shared.board.common.Message;
 import org.shared.board.common.MessageCodes;
 import org.shared.board.common.MessageFormat;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.NoSuchElementException;
 
@@ -115,6 +114,63 @@ public class TcpSrvThread implements Runnable {
                                 "User is not authenticated!");
                     }
                 }
+
+                if(message.code() == MessageCodes.UPIC){
+                    try{
+                        int result = theController.updatePostItContent(message);
+
+                        mf.sendMessage(VERSION, result, "");
+                    } catch (IllegalArgumentException e) {
+                        mf.sendMessage(VERSION, MessageCodes.ERR,
+                                e.getMessage());
+                    } catch (NoSuchElementException e){
+                        mf.sendMessage(VERSION, MessageCodes.ERR,
+                                "User is not authenticated!");
+                    }
+                }
+
+                if(message.code() == MessageCodes.UPIP){
+                    try{
+                        int result = theController.updatePostItPosition(message);
+
+                        mf.sendMessage(VERSION, result, "");
+                    } catch (IllegalArgumentException e) {
+                        mf.sendMessage(VERSION, MessageCodes.ERR,
+                                e.getMessage());
+                    } catch (NoSuchElementException e){
+                        mf.sendMessage(VERSION, MessageCodes.ERR,
+                                "User is not authenticated!");
+                    }
+                }
+
+                if(message.code() == MessageCodes.DPI){
+                    try{
+                        int result = theController.deletePostIt(message);
+
+                        mf.sendMessage(VERSION, result, "");
+                    } catch (IllegalArgumentException e) {
+                        mf.sendMessage(VERSION, MessageCodes.ERR,
+                                e.getMessage());
+                    } catch (NoSuchElementException e){
+                        mf.sendMessage(VERSION, MessageCodes.ERR,
+                                "User is not authenticated!");
+                    }
+                }
+
+                if(message.code() == MessageCodes.UPI){
+                    try{
+                        int result = theController.undoPostIt(message);
+
+                        mf.sendMessage(VERSION, result, "");
+                    } catch (IllegalArgumentException | NoPreviousElementException e) {
+                        mf.sendMessage(VERSION, MessageCodes.ERR,
+                                e.getMessage());
+                    } catch (NoSuchElementException e){
+                        mf.sendMessage(VERSION, MessageCodes.ERR,
+                                "User is not authenticated!");
+                    }
+                }
+
             } while (message.code() != MessageCodes.DISCONN);
 
             mf.sendMessage(VERSION, MessageCodes.ACK, "");

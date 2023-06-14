@@ -83,4 +83,48 @@ public class SharedBoardAppController {
 
         return mf.readMessage();
     }
+
+    /**
+     * Update post-it content.
+     * @param data the data
+     * @return the message
+     */
+    public Message updatePostItContent(String data){
+        mf.sendMessage(VERSION, MessageCodes.UPIC, data);
+
+        return mf.readMessage();
+    }
+
+    /**
+     * Update post-it position.
+     * @param data the data
+     * @return the message
+     */
+    public Message updatePostItPosition(String data){
+        mf.sendMessage(VERSION, MessageCodes.UPIP, data);
+
+        return mf.readMessage();
+    }
+
+    /**
+     * Delete post-it.
+     * @param data the data
+     * @return the message
+     */
+    public Message deletePostIt(String data){
+        mf.sendMessage(VERSION, MessageCodes.DPI, data);
+
+        return mf.readMessage();
+    }
+
+    /**
+     * Undo post-it.
+     * @param data the data
+     * @return the message
+     */
+    public Message undoPostIt(String data) {
+        mf.sendMessage(VERSION, MessageCodes.UPI, data);
+
+        return mf.readMessage();
+    }
 }
