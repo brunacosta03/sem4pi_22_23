@@ -5,6 +5,7 @@ import org.authz.application.AuthzRegistry;
 import org.boards.controller.CreateBoardController;
 import org.domain.model.BoardEntry;
 import org.postit.controller.CreatePostItController;
+import org.postit.controller.UndoPostItController;
 import org.shared.board.common.MessageCodes;
 import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.User;
@@ -154,6 +155,34 @@ public class SharedBoardServerService {
     }
 
     /**
+     * Undo post-it.
+     * @param postItData the post-it data
+     * @param user the auth user
+     * @return the int
+     */
+    public int undoPostIt(String postItData, User user) {
+        UndoPostItController ctrl = new UndoPostItController();
+
+        final String boardId = getStringByIndex(0, postItData);
+        final String rowPos = getStringByIndex(1, postItData);
+        final String colPos = getStringByIndex(2, postItData);
+
+        String lockKey = synchronizer.generateLockKey(rowPos, colPos, boardId);
+        Object lock = synchronizer.getOrCreateLockObject(lockKey);
+
+        synchronized (lock) {
+            ctrl.undoPostIt(
+                    rowPos,
+                    colPos,
+                    boardId,
+                    user
+            );
+        }
+
+        return MessageCodes.ACK;
+    }
+
+    /**
      * All data is separated by \0.
      * So we want to split data to specific position.
      * @param index
@@ -169,4 +198,6 @@ public class SharedBoardServerService {
 
         return substrings[index];
     }
+
+
 }

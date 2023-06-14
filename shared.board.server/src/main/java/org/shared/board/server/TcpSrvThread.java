@@ -115,6 +115,21 @@ public class TcpSrvThread implements Runnable {
                                 "User is not authenticated!");
                     }
                 }
+
+                if(message.code() == MessageCodes.UPI){
+                    try{
+                        int result = theController.undoPostIt(message);
+
+                        mf.sendMessage(VERSION, result, "");
+                    } catch (IllegalArgumentException e) {
+                        mf.sendMessage(VERSION, MessageCodes.ERR,
+                                e.getMessage());
+                    } catch (NoSuchElementException e){
+                        mf.sendMessage(VERSION, MessageCodes.ERR,
+                                "User is not authenticated!");
+                    }
+                }
+
             } while (message.code() != MessageCodes.DISCONN);
 
             mf.sendMessage(VERSION, MessageCodes.ACK, "");
