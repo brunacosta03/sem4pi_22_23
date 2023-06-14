@@ -1,28 +1,23 @@
 # US G002
 
-*This is an example template*
-
 ## 1. Context
 
-*Explain the context for this task. It is the first time the task is assigned to be developed or this tasks was incomplete in a previous sprint and is to be completed in this sprint? Are we fixing some bug?*
+It is intended for all users to be able to share one of its own boards
 
 ## 2. Requirements
 
-*In this section you should present the functionality that is being developed, how do you understand it, as well as possible correlations to other requirements (i.e., dependencies).*
+**US 3004** : As User, I want to share a board
 
-*Example*
+*3004.1* : A user shares a board it owns with other users
 
-**US G002** As {Ator} I Want...
-
-- G002.1. Blá Blá Blá ...
-
-- G002.2. Blá Blá Blá ...
-
-*Regarding this requirement we understand that it relates to...*
+*3004.2* : This functional part of the system has very specific technical requirements, particularly some concerns
+about synchronization problems. In fact, several clients will try to concurrently update
+boards. As such, the solution design and implementation must be based on threads,
+condition variables and mutexes. Specific requirements will be provided in SCOMP.
 
 ## 3. Analysis
 
-*In this section, the team should report the study/analysis/comparison that was done in order to take the best design decisions for the requirement. This section should also include supporting diagrams/artifacts (such as domain model; use case diagrams, etc.),*
+![Domain Model](DM.svg)
 
 ## 4. Design
 
@@ -30,9 +25,11 @@
 
 ### 4.1. Realization
 
+![Sequence Diagram](SD.svg)
+
 ### 4.2. Class Diagram
 
-![a class diagram](class-diagram-01.svg "A Class Diagram")
+![Class Diagram](CD.svg)
 
 ### 4.3. Applied Patterns
 

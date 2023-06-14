@@ -1,0 +1,152 @@
+@startuml
+
+autonumber
+
+
+actor User
+participant ShareABoardUI <<presentation>>
+participant ShareBoardController<<application>>
+participant BoardService<<service>>
+participant Course<<course>>
+participant PersistenceContext<<persistence>>
+participant RepositoryFactory<<factory>>
+participant BoardPermissionFactory<<factory>>
+database BoardRepository <<repository>>
+
+activate User
+
+User -> ShareABoardUI : starts to add a person to\none of his boards
+
+activate ShareABoardUI
+
+ShareABoardUI -->User : asks for the email\naddress of the user to be added
+
+deactivate ShareABoardUI
+
+User -> ShareABoardUI : EmailAddress
+
+activate ShareABoardUI
+
+ShareABoardUI -> ShareBoardController : EmailAddress
+
+activate ShareBoardController
+
+ShareBoardController -> PersistenceContext : factories()
+
+activate PersistenceContext
+
+PersistenceContext -> RepositoryFactory : get
+
+PersistenceContext -> ShareBoardController : factory
+
+deactivate PersistenceContext
+
+ShareBoardController -> RepositoryFactory : users()
+
+activate RepositoryFactory
+
+RepositoryFactory -> UserRepository : findUserByEmail(EmailAddress)
+
+activate UserRepository
+
+UserRepository -> RepositoryFactory : user
+
+deactivate UserRepository
+
+RepositoryFactory -> ShareBoardController : user
+
+deactivate RepositoryFactory
+
+ShareBoardController -> ShareABoardUI : user
+
+deactivate ShareBoardController
+
+ShareABoardUI --> User : asks for the title of the board\nand the access level to be given
+
+deactivate ShareABoardUI
+
+User -> ShareABoardUI : BoardTitle, AccessLevel
+
+activate ShareABoardUI
+
+ShareABoardUI -> ShareBoardController : shareBoard(User, BoardTitle, AccessLevel)
+
+activate ShareBoardController
+
+ShareBoardController -> BoardService : findInBoard(User, Board)
+
+activate BoardService
+
+BoardService -> PersistenceContext : factories()
+
+activate PersistenceContext
+
+PersistenceContext -> RepositoryFactory : get
+
+PersistenceContext -> BoardService : factory
+
+deactivate PersistenceContext
+
+BoardService -> RepositoryFactory : boardRepository()
+
+activate RepositoryFactory
+
+RepositoryFactory -> BoardService : boards
+
+deactivate RepositoryFactory
+
+BoardService -> ShareBoardController : board
+
+deactivate BoardService
+
+ShareBoardController -> BoardService : confirmLevel(AccessLevel)
+
+activate BoardService
+
+BoardService -> AccessLevelType : allAccessLevelTypes()
+
+activate AccessLevelType
+
+AccessLevelType -> BoardService : accessLevelTypes
+
+deactivate AccessLevelType
+
+BoardService -> ShareBoardController : accessLevel
+
+deactivate BoardService
+
+ShareBoardController -> BoardService : addToBoard(Board, User, AccessLevel)
+
+activate BoardService
+
+BoardService -> BoardPermissionFactory : get
+
+BoardService -> BoardPermissionFactory : create(User, AccessLevel)
+
+activate BoardPermissionFactory
+
+BoardPermissionFactory -> BoardService : boardPermission
+
+BoardService -> Board : addPermission (BoardPermission)
+
+BoardService -> BoardRepository : save(Board)
+
+activate BoardRepository
+
+BoardRepository -> BoardService : board
+
+deactivate BoardRepository
+
+BoardService -> ShareBoardController : board
+
+deactivate BoardService
+
+ShareBoardController -> ShareABoardUI : board
+
+deactivate ShareBoardController
+
+ShareABoardUI -> User : shows the operation's success
+
+deactivate ShareABoardUI
+
+@enduml
