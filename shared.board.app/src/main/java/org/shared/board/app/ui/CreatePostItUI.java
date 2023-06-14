@@ -1,14 +1,10 @@
 package org.shared.board.app.ui;
 
-import eapli.framework.io.util.Console;
-import org.shared.board.app.ImgurUpload;
 import org.shared.board.app.SharedBoardAppController;
 import org.shared.board.app.Util;
 import org.shared.board.common.Message;
 import org.shared.board.common.MessageCodes;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 /**

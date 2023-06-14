@@ -55,6 +55,10 @@ public final class MessageCodes {
      */
     public static final int DPI = 12;
 
+    public static final int VBH = 13;
+
+    public static final int RVBH = 14;
+
     private MessageCodes() {
         // Private constructor to prevent instantiation
     }

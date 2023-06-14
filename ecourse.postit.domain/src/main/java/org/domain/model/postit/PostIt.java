@@ -7,6 +7,7 @@ import org.usermanagement.domain.model.User;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Objects;
 
@@ -189,6 +190,16 @@ public class PostIt
 
     public PostIt rollBackPostIt(){
         return lastPostIt;
+    }
+
+    /**
+     * Format the timestamp
+     * @return String timestamp
+     */
+
+    public String formatTimestamp() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        return sdf.format(this.postItTimeStamp.getTime());
     }
 
     /**

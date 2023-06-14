@@ -127,4 +127,16 @@ public class SharedBoardAppController {
 
         return mf.readMessage();
     }
+
+    /**
+     * View the history of a board.
+     * @param data the data
+     * @return the message
+     */
+
+    public Message viewBoardHistory(String data) {
+        mf.sendMessage(VERSION, MessageCodes.VBH, data);
+
+        return mf.readMessage();
+    }
 }

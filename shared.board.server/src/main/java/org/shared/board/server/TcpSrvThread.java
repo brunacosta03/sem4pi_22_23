@@ -171,6 +171,20 @@ public class TcpSrvThread implements Runnable {
                     }
                 }
 
+                if (message.code() == MessageCodes.VBH) {
+                    try {
+                        String result = theController.viewBoardHistory(message);
+
+                        mf.sendMessage(VERSION, MessageCodes.RVBH, result);
+                    } catch (IllegalArgumentException e) {
+                        mf.sendMessage(VERSION, MessageCodes.ERR,
+                                e.getMessage());
+                    } catch (NoSuchElementException e){
+                        mf.sendMessage(VERSION, MessageCodes.ERR,
+                                "User is not authenticated!");
+                    }
+                }
+
             } while (message.code() != MessageCodes.DISCONN);
 
             mf.sendMessage(VERSION, MessageCodes.ACK, "");

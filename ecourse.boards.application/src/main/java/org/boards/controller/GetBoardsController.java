@@ -50,6 +50,7 @@ public class GetBoardsController {
                 board.get().userHasAnyPermission(authUser),
                 "You don't have permission to access that board");
 
+
         return board.get();
     }
 }

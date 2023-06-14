@@ -6,6 +6,7 @@ import org.usermanagement.domain.model.User;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -239,6 +240,15 @@ public class Board
         }
 
         return null;
+    }
+
+    /**
+     * Format the date when board was created.
+     * @return String string
+     */
+    public String formatCreatedOn() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        return sdf.format(this.createdOn.getTime());
     }
 
     /**

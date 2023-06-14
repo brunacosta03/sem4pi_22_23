@@ -106,4 +106,10 @@ public class SharedBoardServerController {
 
         return sbSvc.undoPostIt(result, authz.session().get().authenticatedUser());
     }
+
+    public String viewBoardHistory(final Message data) {
+        String result = new String(data.data(), StandardCharsets.US_ASCII);
+
+        return sbSvc.viewBoardHistory(result, authz.session().get().authenticatedUser());
+    }
 }

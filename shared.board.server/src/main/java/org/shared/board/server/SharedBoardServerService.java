@@ -3,11 +3,12 @@ package org.shared.board.server;
 import org.authz.application.AuthenticationService;
 import org.authz.application.AuthzRegistry;
 import org.boards.controller.CreateBoardController;
+import org.boards.controller.GetBoardsController;
+import org.domain.model.Board;
 import org.domain.model.BoardEntry;
-import org.postit.controller.CreatePostItController;
-import org.postit.controller.DeletePostItController;
-import org.postit.controller.UndoPostItController;
-import org.postit.controller.UpdatePostItController;
+import org.domain.model.postit.PostIt;
+import org.persistence.PersistenceContext;
+import org.postit.controller.*;
 import org.shared.board.common.MessageCodes;
 import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.User;
@@ -305,6 +306,94 @@ public class SharedBoardServerService {
         return MessageCodes.ACK;
     }
 
+    public String viewBoardHistory(final String boardId,
+                                   final User authUser) {
+
+        Board board;
+        Iterable<PostIt> postItsList;
+        String result = "";
+
+        ViewBoardHistoryController ctrl = new ViewBoardHistoryController(
+                PersistenceContext.repositories().boards(),
+                PersistenceContext.repositories().postIt()
+        );
+
+        GetBoardsController getBoardsController = new GetBoardsController(
+                PersistenceContext.repositories().boards()
+        );
+
+        try {
+            board = getBoardsController.getBoardById(Long.valueOf(boardId), authUser);
+        } catch (NoSuchElementException e) {
+            throw new IllegalArgumentException(
+                    "There is no board with that id!");
+        }
+
+        try {
+            postItsList = ctrl.viewBoardHistory(Long.valueOf(boardId), authUser);
+        } catch (NoSuchElementException e) {
+            throw new IllegalArgumentException(
+                    "There is no board with that id!");
+        }
+
+        List<PostIt> postIts = new ArrayList<>();
+        postItsList.forEach(postIts::add);
+
+        result += "-------- BOARD CREATED --------\n";
+        result += "Board ID: " + boardId + "\n";
+        result += "Board Name: " + board.boardTitle().value() + "\n";
+        result += "Columns: " + board.boardNCol().value() + "\n";
+        result += "Rows: " + board.boardNRow().value() + "\n";
+        result += "By: " + board.boardOwner().emailAddress().toString() + "\n";
+        result += "Created at: " + board.formatCreatedOn() + "\n";
+
+        for (int i = 0; i < postIts.size(); i++) {
+            PostIt postIt = postIts.get(i);
+
+            if (postIt.state().toString().equals("CREATED")) {
+                result += "\n-------- POST-IT CREATED --------\n";
+                result += "Content: " + postIt.content().value() + "\n";
+                result += "Column: " + postIt.columnPos().value() + "\n";
+                result += "Row: " + postIt.rowPos().value() + "\n";
+                result += "By: " + postIt.owner().emailAddress().toString() + "\n";
+                result += "Created at: " + postIt.formatTimestamp() + "\n";
+            }
+
+            if (postIt.state().toString().equals("UPDATED")) {
+                result += "\n-------- POST-IT UPDATED --------\n";
+                result += "Content: " + postIt.content().value() + "\n";
+                result += "Column: " + postIt.columnPos().value() + "\n";
+                result += "Row: " + postIt.rowPos().value() + "\n";
+                result += "By: " + postIt.owner().emailAddress().toString() + "\n";
+                result += "Updated at: " + postIt.formatTimestamp() + "\n";
+            }
+
+            if (postIt.state().toString().equals("DELETED")) {
+                result += "\n-------- POST-IT DELETED --------\n";
+                result += "Column: " + postIt.columnPos().value() + "\n";
+                result += "Row: " + postIt.rowPos().value() + "\n";
+                result += "By: " + postIt.owner().emailAddress().toString() + "\n";
+                result += "Deleted at: " + postIt.formatTimestamp() + "\n";
+            }
+
+            if (postIt.state().toString().equals("MOVED")) {
+
+                PostIt moved = postIts.get(i + 1);
+
+                result += "\n-------- POST-IT MOVED --------\n";
+                result += "Old Column: " + postIt.columnPos().value() + "\n";
+                result += "Old Row: " + postIt.rowPos().value() + "\n";
+                result += "New Column: " + moved.columnPos().value() + "\n";
+                result += "New Row: " + moved.rowPos().value() + "\n";
+                result += "By: " + postIt.owner().emailAddress().toString() + "\n";
+                result += "Moved at: " + postIt.formatTimestamp() + "\n";
+                i++;
+            }
+        }
+
+        return result;
+    }
+
     /**
      * All data is separated by \0.
      * So we want to split data to specific position.
@@ -321,6 +410,5 @@ public class SharedBoardServerService {
 
         return substrings[index];
     }
-
 
 }

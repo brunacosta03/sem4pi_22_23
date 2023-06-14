@@ -58,6 +58,7 @@ public class MainMenuUI {
             System.out.println("6 - Update Post-It position");
             System.out.println("7 - Delete Post-It");
             System.out.println("8 - Undo Post-It");
+            System.out.println("9 - View Board History");
             System.out.println("0 - End of session request");
             System.out.println("\nOption - ");
             try {
@@ -108,6 +109,11 @@ public class MainMenuUI {
                 case 8:
                     UndoPostItUI undoPostItUI = new UndoPostItUI(theController);
                     undoPostItUI.doShow();
+                    break;
+                case 9:
+                    ViewBoardHistoryUI viewBoardHistoryUI =
+                            new ViewBoardHistoryUI(theController);
+                    viewBoardHistoryUI.doShow();
                     break;
                 case 0:
                     codeResult = theController.sendEndOfSession();
