@@ -1,7 +1,5 @@
 package org.shared.board.server;
 
-import org.shared.board.server.request_bodys.PostItBody;
-import org.shared.board.server.request_bodys.ShareBoardBody;
 
 import java.util.HashMap;
 import java.util.Map;

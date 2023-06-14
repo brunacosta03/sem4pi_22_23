@@ -1,7 +1,6 @@
 package org.boards.controller;
 
 import eapli.framework.application.UseCaseController;
-import eapli.framework.general.domain.model.EmailAddress;
 import eapli.framework.validations.Preconditions;
 import org.boards.service.BoardService;
 import org.domain.model.AccessLevel;
