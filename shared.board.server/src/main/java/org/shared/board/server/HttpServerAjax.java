@@ -3,22 +3,24 @@ package org.shared.board.server;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import eapli.framework.domain.repositories.IntegrityViolationException;
+import eapli.framework.general.domain.model.EmailAddress;
 import org.apache.commons.httpclient.auth.InvalidCredentialsException;
 import org.boards.controller.CreateBoardController;
 import org.boards.controller.GetBoardsController;
+import org.boards.controller.ShareBoardController;
 import org.domain.model.Board;
 import org.domain.model.BoardEntry;
+import org.domain.model.BoardPermission;
 import org.domain.model.postit.PostIt;
+import org.domain.repositories.BoardRepository;
 import org.persistence.PersistenceContext;
 import org.postit.controller.*;
 import org.shared.board.server.gson_adapter.HibernateProxyTypeAdapter;
 import org.shared.board.server.gson_adapter.LocalDateAdapter;
-import org.shared.board.server.request_bodys.BoardBody;
-import org.shared.board.server.request_bodys.LoginBody;
-import org.shared.board.server.request_bodys.PostItBody;
-import org.shared.board.server.request_bodys.PostItPositionBody;
+import org.shared.board.server.request_bodys.*;
 import org.shared.board.server.session.SessionManager;
 import org.usermanagement.domain.model.User;
+import org.usermanagement.domain.repositories.UserRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -48,6 +50,8 @@ public class HttpServerAjax {
      * The Synchronizer.
      */
     Synchronizer synchronizer;
+    BoardSynchronizer boardSynchronizer;
+
 
 
     /**
@@ -56,6 +60,7 @@ public class HttpServerAjax {
     public HttpServerAjax() {
         this.sessionManager = SessionManager.getInstance();
         this.synchronizer = Synchronizer.getInstance();
+        this.boardSynchronizer = BoardSynchronizer.getInstance();
 
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
@@ -328,6 +333,36 @@ public class HttpServerAjax {
         return json.toJson(board);
     }
 
+    public String shareABoard(ShareBoardBody body){
+
+
+        Object lockObject = boardSynchronizer
+                .getOrCreateLockObject(body.getBoardId());
+
+        long boardId = Long.parseLong(body.getBoardId());
+        String userEmail = body.getUserEmail();
+        String accessLevel = body.getPermission();
+        String token = body.getToken();
+
+        BoardRepository repo = PersistenceContext.repositories().boards();
+        UserRepository userRepo = PersistenceContext.repositories().users();
+
+        ShareBoardController ctrl = new ShareBoardController(
+                userRepo,
+                repo
+        );
+
+        User boardOwner = sessionManager.getUserByToken(token);
+
+        User user = userRepo.findUserByEmail(EmailAddress.valueOf(userEmail)).get();
+
+        BoardPermission perm;
+
+        synchronized (lockObject) {
+            perm = ctrl.shareBoard(boardId, user, boardOwner, accessLevel);
+        }
+        return json.toJson(perm);
+    }
     /**
      * Get last post its by board.
      * @param boardId the board id

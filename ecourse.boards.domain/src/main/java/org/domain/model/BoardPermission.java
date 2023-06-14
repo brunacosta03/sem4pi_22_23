@@ -65,6 +65,11 @@ public class BoardPermission
         return accessLevel;
     }
 
+    public AccessLevel changeAccess(AccessLevel newLevel){
+        accessLevel=newLevel;
+
+        return accessLevel;
+    }
     /**
      * Check if some BoardPermission is the same object then other.
      * @param other

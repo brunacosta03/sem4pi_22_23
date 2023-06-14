@@ -992,3 +992,35 @@ function checkDifference(postIt){
             + " | changed by: " + userEmail, 200);
     }
 }
+
+function shareBoardData(){
+    event.preventDefault();
+
+    const request = new XMLHttpRequest();
+
+    const email = document.getElementById("email-share-board-input").value;
+    const permission = document.getElementById("permissions").value;
+
+    request.open("POST", "/share_board", true);
+
+    request.onload = function() {
+        if(request.status === 200) {
+            notification("User added to board with success!", request.status);
+        } else {
+            notification(request.responseText, request.status);
+        }
+
+        disableOverlay();
+    };
+
+    const data = {
+        boardId: getBoardUserIsIn(),
+        email: email,
+        permission: permission,
+        token: getTokenCookie()
+    };
+
+    console.log(data);
+
+    request.send(JSON.stringify(data));
+}

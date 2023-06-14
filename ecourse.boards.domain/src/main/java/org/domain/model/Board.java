@@ -193,6 +193,19 @@ public class Board
     }
 
     /**
+     * Returns the permission of a user in the board
+     * @param user the user
+     * @return the permission
+     */
+    public BoardPermission userPermission(User user){
+        for(BoardPermission boardPermission : this.boardPermissions){
+            if(boardPermission.userWithPermission().sameAs(user)){
+                return boardPermission;
+            }
+        }
+        return null;
+    }
+    /**
      * Find row of entry Title
      *
      * @param rowTitle the row title

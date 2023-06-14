@@ -3,10 +3,7 @@ package org.shared.board.server;
 import com.google.gson.Gson;
 import eapli.framework.domain.repositories.IntegrityViolationException;
 import exceptions.NoPreviousElementException;
-import org.shared.board.server.request_bodys.BoardBody;
-import org.shared.board.server.request_bodys.LoginBody;
-import org.shared.board.server.request_bodys.PostItBody;
-import org.shared.board.server.request_bodys.PostItPositionBody;
+import org.shared.board.server.request_bodys.*;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -137,6 +134,9 @@ public class HttpRequestThread extends Thread {
                     response.send(outS);
                 }
 
+                if(request.getURI().matches("")){
+
+                }
                 if(request.getURI().matches(BOARD_HISTORY_BY_ID_REGEX)){
                     String id = request.getURI().split("\\?")[1];
 
@@ -189,6 +189,29 @@ public class HttpRequestThread extends Thread {
             }
 
             if(request.getMethod().equals("POST")){
+
+                if(request.getURI().equals("/share_board")){
+                    String requestBody = request.getContentAsString();
+
+                    ShareBoardBody body = json.fromJson(requestBody, ShareBoardBody.class);
+
+                    try{
+                        response.setContentFromString(httpServerAjax.shareABoard(body),
+                                "application/json");
+                        response.setResponseStatus("200 Ok");
+                    }catch (IllegalArgumentException | NullPointerException e){
+                        response.setContentFromString(e.getMessage(),
+                                "text");
+                        response.setResponseStatus("400 Bad Request");
+                    }catch (NoSuchElementException e){
+                        response.setContentFromString(e.getMessage(),
+                                "text");
+                        response.setResponseStatus("401 unauthorized");
+                    }
+
+                    response.send(outS);
+                }
+
                 if(request.getURI().equals("/create_board")){
                     createBoard(request, response, token);
                 }
