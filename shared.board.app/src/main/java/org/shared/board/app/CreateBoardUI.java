@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 /**
- * The type Login ui.
+ * The type CreateBoard ui.
  */
 public class CreateBoardUI {
     private BufferedReader in = new BufferedReader(
@@ -23,7 +23,7 @@ public class CreateBoardUI {
     private static final String MIN_ROWS_COLS = "1";
 
     /**
-     * Instantiates a new Login ui.
+     * Instantiates a new create board ui.
      * @param theControllerp the the controllerp
      */
     public CreateBoardUI(final SharedBoardAppController theControllerp) {

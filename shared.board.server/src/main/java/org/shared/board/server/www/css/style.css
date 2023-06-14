@@ -734,6 +734,12 @@ time {
   visibility: visible;
 }
 
+.img-history {
+  width: 370px;
+  height: 250px;
+  margin-top: 8px;
+}
+
 @media only screen and (max-width: 800px) {
   .container{
     display: block;

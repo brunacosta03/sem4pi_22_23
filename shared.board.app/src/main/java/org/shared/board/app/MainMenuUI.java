@@ -52,6 +52,7 @@ public class MainMenuUI {
             System.out.println("1 - Communication test");
             System.out.println("2 - Authenticate");
             System.out.println("3 - Create Board");
+            System.out.println("4 - Create Post-It");
             System.out.println("0 - End of session request");
             System.out.println("\nOption - ");
             try {
@@ -79,6 +80,10 @@ public class MainMenuUI {
                 case 3:
                     CreateBoardUI boardUI = new CreateBoardUI(theController);
                     boardUI.doShow();
+                    break;
+                case 4:
+                    CreatePostItUI createPostItUI = new CreatePostItUI(theController);
+                    createPostItUI.doShow();
                     break;
                 case 0:
                     codeResult = theController.sendEndOfSession();

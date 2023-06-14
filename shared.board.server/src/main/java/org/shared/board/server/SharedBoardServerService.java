@@ -1,14 +1,11 @@
 package org.shared.board.server;
 
-import eapli.framework.io.util.Console;
-import org.apache.commons.httpclient.auth.InvalidCredentialsException;
 import org.authz.application.AuthenticationService;
 import org.authz.application.AuthzRegistry;
 import org.boards.controller.CreateBoardController;
 import org.domain.model.BoardEntry;
-import org.hibernate.Session;
+import org.postit.controller.CreatePostItController;
 import org.shared.board.common.MessageCodes;
-import org.shared.board.server.session.SessionManager;
 import org.user.management.CourseRoles;
 import org.usermanagement.domain.model.User;
 import org.usermanagement.domain.model.UserSession;
@@ -16,7 +13,6 @@ import org.usermanagement.domain.model.UserSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 /**
  * The type Shared board server service.
@@ -29,12 +25,24 @@ public class SharedBoardServerService {
             .authenticationService();
 
     /**
+     * The Synchronizer.
+     */
+    Synchronizer synchronizer;
+
+    /**
      * The constant MIN_ROWS_COLUMNS.
      */
     private static final String MIN_ROWS_COLS = "1";
 
     /**
-     * Authenticate user int.
+     * Instantiates a new SharedBoardServerService.
+     */
+    public SharedBoardServerService() {
+        this.synchronizer = Synchronizer.getInstance();
+    }
+
+    /**
+     * Authenticate user.
      * @param userData the user data
      * @return the int
      * @throws IllegalArgumentException the illegal argument exception
@@ -56,7 +64,14 @@ public class SharedBoardServerService {
         return MessageCodes.ERR;
     }
 
-    public int createBoard(final String boardData, User authUser) {
+    /**
+     * Create board.
+     * @param boardData the board data
+     * @param authUser  the auth user
+     * @return the int
+     */
+    public int createBoard(final String boardData,
+                           final User authUser) {
         CreateBoardController boardController = new CreateBoardController();
         final String boardTitle = getStringByIndex(0, boardData);
         final String boardNCol = getStringByIndex(1, boardData);
@@ -109,6 +124,42 @@ public class SharedBoardServerService {
         return MessageCodes.ACK;
     }
 
+    /**
+     * Create post-it.
+     * @param postItData the post-it data
+     * @param authUser   the auth user
+     * @return the int
+     */
+    public int createPostIt(final String postItData,
+                            final User authUser) {
+        CreatePostItController createPostItController = new CreatePostItController();
+        final String content = getStringByIndex(0, postItData);
+        final String rowPos = getStringByIndex(1, postItData);
+        final String colPos = getStringByIndex(2, postItData);
+        final String boardId = getStringByIndex(3, postItData);
+
+        String lockKey = synchronizer.generateLockKey(rowPos, colPos, boardId);
+        Object lock = synchronizer.getOrCreateLockObject(lockKey);
+
+        synchronized (lock){
+            createPostItController.createPostIt(
+                    content,
+                    rowPos,
+                    colPos,
+                    boardId,
+                    authUser);
+        }
+
+        return MessageCodes.ACK;
+    }
+
+    /**
+     * All data is separated by \0.
+     * So we want to split data to specific position.
+     * @param index
+     * @param input
+     * @return
+     */
     private static String getStringByIndex(int index, String input) {
         String[] substrings = input.split("\0");
 

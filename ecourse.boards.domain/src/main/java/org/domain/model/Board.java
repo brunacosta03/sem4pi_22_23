@@ -60,7 +60,7 @@ public class Board
     /**
      * Board Owner.
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "owner_email")
     private User boardOwner;
 
