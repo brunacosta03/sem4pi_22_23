@@ -759,8 +759,12 @@ time {
     margin: 0 auto;
 }
 
+#logout-button {
+  height: 50px;
+}
+
 #permissions {
-  padding: 8px;
+  height: 45px;
   font-size: 18px;
   width: 100%;
   background-color: #f2f2f2;
@@ -772,6 +776,7 @@ time {
   text-align: center;
   font-family: "Segoe UI", Arial, sans-serif;
   font-weight: 500;
+  margin-left: 14px;
 }
 
 #permissions:focus {
