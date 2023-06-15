@@ -749,7 +749,7 @@ time {
   background-color: var(--gray);
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  padding: 20px;
   margin-top: 15px;
   box-shadow: 4px 4px var(--blue-hover);
 }
@@ -765,7 +765,7 @@ time {
   width: 100%;
   background-color: #f2f2f2;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 10px;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
