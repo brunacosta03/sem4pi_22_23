@@ -24,11 +24,10 @@ public class ShareBoardController {
         service = new BoardService(boardRepo);
     }
 
-    public synchronized BoardPermission shareBoard(final long boardId,
-                                                   final User user,
-                                                   final User boardOwner,
-                                                   final String accessLevel){
-
+    public BoardPermission shareBoard(final long boardId,
+                                      final User user,
+                                      final User boardOwner,
+                                      final String accessLevel){
         Board board = boardRepo.ofIdentity(boardId).orElse(null);
 
         Preconditions.nonNull(board, "The board is not on the system");

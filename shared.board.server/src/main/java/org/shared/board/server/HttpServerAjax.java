@@ -50,9 +50,6 @@ public class HttpServerAjax {
      * The Synchronizer.
      */
     Synchronizer synchronizer;
-    BoardSynchronizer boardSynchronizer;
-
-
 
     /**
      * Instantiates a new Http server ajax.
@@ -60,7 +57,6 @@ public class HttpServerAjax {
     public HttpServerAjax() {
         this.sessionManager = SessionManager.getInstance();
         this.synchronizer = Synchronizer.getInstance();
-        this.boardSynchronizer = BoardSynchronizer.getInstance();
 
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
@@ -334,9 +330,7 @@ public class HttpServerAjax {
     }
 
     public String shareABoard(ShareBoardBody body){
-
-
-        Object lockObject = boardSynchronizer
+        Object lockObject = synchronizer
                 .getOrCreateLockObject(body.getBoardId());
 
         long boardId = Long.parseLong(body.getBoardId());

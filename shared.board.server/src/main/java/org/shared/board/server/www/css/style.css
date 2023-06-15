@@ -814,6 +814,10 @@ time {
   #all-boards-container h2{
     width: 500px;
   }
+
+  #share-board-container h2{
+    width: 500px;
+  }
 }
 
 @media screen and (max-width: 900px) {

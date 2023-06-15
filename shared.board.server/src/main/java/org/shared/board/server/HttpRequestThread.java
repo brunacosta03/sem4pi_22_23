@@ -204,7 +204,8 @@ public class HttpRequestThread extends Thread {
                                 "text");
                         response.setResponseStatus("400 Bad Request");
                     }catch (NoSuchElementException e){
-                        response.setContentFromString(e.getMessage(),
+                        response.setContentFromString(
+                                "This user does not exist!",
                                 "text");
                         response.setResponseStatus("401 unauthorized");
                     }

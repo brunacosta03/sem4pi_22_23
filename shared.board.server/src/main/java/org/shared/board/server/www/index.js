@@ -45,7 +45,7 @@ function checkUser() {
                 if(user !== null){
                     user.innerText = user.innerText + " " + request.responseText;
                 }
-            }, 1);
+            }, 3000);
         } else {
             window.location.href = window.location.origin;
         }
