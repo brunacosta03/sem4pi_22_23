@@ -362,6 +362,30 @@ public class HttpRequestThread extends Thread {
 
                     response.send(outS);;
                 }
+
+                if(request.getURI().startsWith("/logout?token=")){
+                    String param = request.getURI().split("\\?")[1];
+
+                    String tokenValue = param.split("=")[1];
+                    System.out.println("LOGOUT TOKEN: " + tokenValue);
+
+                    try {
+
+                        response.setContentFromString(
+                                httpServerAjax.logout(tokenValue),
+                                "text");
+
+                        System.out.println("LOGGED OUT SUCCESSFULLY");
+                        response.setResponseStatus("200 Ok");
+                    } catch (Exception e) {
+                        System.err.println("GOT ERROR LOGGING OUT");
+                        response.setContentFromString(e.getMessage(), "text");
+
+                        response.setResponseStatus("400 Bad Request");
+                    }
+
+                    response.send(outS);
+                }
             }
 
         } catch(IOException ex) {

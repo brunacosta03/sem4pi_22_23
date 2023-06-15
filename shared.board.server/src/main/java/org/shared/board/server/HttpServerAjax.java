@@ -51,6 +51,8 @@ public class HttpServerAjax {
      */
     Synchronizer synchronizer;
 
+
+
     /**
      * Instantiates a new Http server ajax.
      */
@@ -330,6 +332,8 @@ public class HttpServerAjax {
     }
 
     public String shareABoard(ShareBoardBody body){
+
+
         Object lockObject = synchronizer
                 .getOrCreateLockObject(body.getBoardId());
 
@@ -385,5 +389,11 @@ public class HttpServerAjax {
         Iterable<PostIt> history = ctrl.viewBoardHistory(boardId, authUser);
 
         return json.toJson(history);
+    }
+
+    public String logout(String tokenValue) {
+        User loggedOut = sessionManager.logout(tokenValue);
+
+        return "Logged out successfully with email " + loggedOut.identity().toString();
     }
 }

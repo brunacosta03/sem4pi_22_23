@@ -791,6 +791,11 @@ time {
   line-height: 2em;
 }
 
+#user-identity-div {
+  display: flex;
+  /*flex-direction: column;*/
+  justify-content: space-between;
+}
 
 @media only screen and (max-width: 800px) {
   .container{
