@@ -16,18 +16,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Collection;
 
+/**
+ * The type Exam service.
+ */
 @Service
 public class ExamService {
     private ExamRepository repo;
     private ExamTemplateRepository templateRepo;
     private CourseRepository courseRepo;
 
+    /**
+     * Instantiates a new Exam service.
+     *
+     * @param repo         the repo
+     * @param templateRepo the template repo
+     * @param courseRepo   the course repo
+     */
     public ExamService(ExamRepository repo, ExamTemplateRepository templateRepo, CourseRepository courseRepo) {
         this.repo = repo;
         this.templateRepo = templateRepo;
         this.courseRepo = courseRepo;
     }
 
+    /**
+     * Evaluate exam from file exam.
+     *
+     * @param filePath  the file path
+     * @param student   the student
+     * @param examTitle the exam title
+     * @return the exam
+     * @throws IOException the io exception
+     */
     public Exam evaluateExamFromFile(String filePath, User student, ExamTitle examTitle) throws IOException {
 
         ExamTemplate examTemplate = templateRepo.findByTitle(examTitle)
@@ -46,6 +65,12 @@ public class ExamService {
         return this.repo.save(evaluated);
     }
 
+    /**
+     * List exam grades iterable.
+     *
+     * @param student the student
+     * @return the iterable
+     */
     public Iterable<Exam> listExamGrades(User student) {
 
         List<Exam> listExamGrades = new ArrayList<>();
@@ -55,10 +80,22 @@ public class ExamService {
         return listExamGrades;
     }
 
+    /**
+     * Get teacher courses iterable.
+     *
+     * @param teacher the teacher
+     * @return the iterable
+     */
     public Iterable<Course> getTeacherCourses(User teacher){
         return courseRepo.findCoursesThatITeach(teacher);
     }
 
+    /**
+     * List teacher grades iterable.
+     *
+     * @param course the course
+     * @return the iterable
+     */
     public Iterable<Exam> listTeacherGrades(Course course){
         return repo.findGradesByCourse(course);
     }

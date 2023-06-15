@@ -59,6 +59,8 @@ public final class MessageCodes {
 
     public static final int RVBH = 14;
 
+    public static final int SAB = 15;
+
     private MessageCodes() {
         // Private constructor to prevent instantiation
     }

@@ -167,7 +167,7 @@ public class TcpSrvThread implements Runnable {
                                 e.getMessage());
                     } catch (NoSuchElementException e){
                         mf.sendMessage(VERSION, MessageCodes.ERR,
-                                "User is not authenticated!");
+                                "User is not authenticated or is not in the system!");
                     }
                 }
 
@@ -182,6 +182,17 @@ public class TcpSrvThread implements Runnable {
                     } catch (NoSuchElementException e){
                         mf.sendMessage(VERSION, MessageCodes.ERR,
                                 "User is not authenticated!");
+                    }
+                }
+                if(message.code() == MessageCodes.SAB){
+                    try {
+                        int result = theController.shareBoard(message);
+
+                        mf.sendMessage(VERSION, result, "");
+                    }catch (IllegalArgumentException|NullPointerException e){
+                        mf.sendMessage(VERSION, MessageCodes.ERR, e.getMessage());
+                    }catch (NoSuchElementException e){
+                        mf.sendMessage(VERSION, MessageCodes.ERR, "User is not authenticated!");
                     }
                 }
 

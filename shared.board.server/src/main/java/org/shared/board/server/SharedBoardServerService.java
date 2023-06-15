@@ -1,9 +1,12 @@
 package org.shared.board.server;
 
+import eapli.framework.general.domain.model.EmailAddress;
+import eapli.framework.validations.Preconditions;
 import org.authz.application.AuthenticationService;
 import org.authz.application.AuthzRegistry;
 import org.boards.controller.CreateBoardController;
 import org.boards.controller.GetBoardsController;
+import org.boards.controller.ShareBoardController;
 import org.domain.model.Board;
 import org.domain.model.BoardEntry;
 import org.domain.model.postit.PostIt;
@@ -49,6 +52,7 @@ public class SharedBoardServerService {
 
     /**
      * Authenticate user.
+     *
      * @param userData the user data
      * @return the int
      * @throws IllegalArgumentException the illegal argument exception
@@ -72,6 +76,7 @@ public class SharedBoardServerService {
 
     /**
      * Create board.
+     *
      * @param boardData the board data
      * @param authUser  the auth user
      * @return the int
@@ -132,6 +137,7 @@ public class SharedBoardServerService {
 
     /**
      * Create post-it.
+     *
      * @param postItData the post-it data
      * @param authUser   the auth user
      * @return the int
@@ -166,6 +172,7 @@ public class SharedBoardServerService {
 
     /**
      * Update post-it content.
+     *
      * @param postItData the post-it data
      * @param authUser   the auth user
      * @return the int
@@ -200,6 +207,7 @@ public class SharedBoardServerService {
 
     /**
      * Update post-it position.
+     *
      * @param postItData the post-it data
      * @param authUser   the auth user
      * @return the int
@@ -243,6 +251,7 @@ public class SharedBoardServerService {
 
     /**
      * Delete post-it.
+     *
      * @param postItData the post-it data
      * @param authUser   the auth user
      * @return the int
@@ -275,8 +284,9 @@ public class SharedBoardServerService {
 
     /**
      * Undo post-it.
+     *
      * @param postItData the post-it data
-     * @param user the auth user
+     * @param user       the auth user
      * @return the int
      */
     public int undoPostIt(String postItData, User user) {
@@ -306,6 +316,13 @@ public class SharedBoardServerService {
         return MessageCodes.ACK;
     }
 
+    /**
+     * View board history string.
+     *
+     * @param boardId  the board id
+     * @param authUser the auth user
+     * @return the string
+     */
     public String viewBoardHistory(final String boardId,
                                    final User authUser) {
 
@@ -392,6 +409,50 @@ public class SharedBoardServerService {
         }
 
         return result;
+    }
+
+    /**
+     * Share a board int.
+     *
+     * @param data the data
+     * @param user the user
+     * @return the int
+     */
+    public int shareABoard(String data,
+                              User user){
+
+        ShareBoardController ctrl = new ShareBoardController(
+                PersistenceContext.repositories().users(),
+                PersistenceContext.repositories().boards());
+
+        final String boardId = getStringByIndex(0, data);
+        final String email = getStringByIndex(1, data);
+        final String accessLevel = getStringByIndex(2, data);
+
+        final User userAdded;
+
+        try {
+            userAdded = PersistenceContext.repositories().users().findUserByEmail(EmailAddress.valueOf(email)).get();
+        }catch (NoSuchElementException e){
+            throw new IllegalArgumentException("The user is not registered in the system!");
+        }
+
+        Object lockObject = synchronizer
+                .getOrCreateLockObject(boardId);
+
+        synchronized (lockObject){
+            try{
+                ctrl.shareBoard(Long.parseLong(boardId),
+                        userAdded,
+                        user,
+                        accessLevel);
+            } catch (NoSuchElementException e){
+                throw new IllegalArgumentException(
+                        "There is no board with that id!");
+            }
+        }
+
+        return MessageCodes.ACK;
     }
 
     /**

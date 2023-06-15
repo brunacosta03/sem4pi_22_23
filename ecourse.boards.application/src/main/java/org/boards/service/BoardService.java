@@ -9,6 +9,9 @@ import org.usermanagement.domain.model.User;
 
 import java.util.List;
 
+/**
+ * The type Board service.
+ */
 @Service
 public class BoardService {
     /**
@@ -18,7 +21,9 @@ public class BoardService {
 
 
     /**
-     * @param boardRepo
+     * Instantiates a new Board service.
+     *
+     * @param boardRepo the board repo
      */
     @Autowired
     public BoardService(final BoardRepository boardRepo) {
@@ -27,12 +32,13 @@ public class BoardService {
 
     /**
      * Create board.
-     * @param boardTitlep
-     * @param boardNRowp
-     * @param boardNColp
-     * @param allBoardEntrys
-     * @param boardOwner
-     * @return Board
+     *
+     * @param boardTitlep    the board titlep
+     * @param boardNRowp     the board n rowp
+     * @param boardNColp     the board n colp
+     * @param allBoardEntrys the all board entrys
+     * @param boardOwner     the board owner
+     * @return Board board
      */
     public Board createBoard(final String boardTitlep,
                             final String boardNRowp,
@@ -53,6 +59,14 @@ public class BoardService {
         return boardRepository.save(newBoard);
     }
 
+    /**
+     * Add to board to add board permission.
+     *
+     * @param board       the board
+     * @param user        the user
+     * @param accessLevel the access level
+     * @return the board permission
+     */
     public BoardPermission addToBoard(final Board board,
                             final User user,
                             final AccessLevel accessLevel){
@@ -89,6 +103,12 @@ public class BoardService {
         }
     }
 
+    /**
+     * Confirm level access level.
+     *
+     * @param accessLevel the access level
+     * @return the access level
+     */
     public AccessLevel confirmLevel(final String accessLevel){
         AccessLevel accessLev = null;
 

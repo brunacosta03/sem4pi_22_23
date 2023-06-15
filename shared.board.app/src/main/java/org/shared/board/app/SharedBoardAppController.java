@@ -139,4 +139,10 @@ public class SharedBoardAppController {
 
         return mf.readMessage();
     }
+
+    public Message shareABoard(String data){
+        mf.sendMessage(VERSION, MessageCodes.SAB, data);
+
+        return mf.readMessage();
+    }
 }

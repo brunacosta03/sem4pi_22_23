@@ -59,6 +59,7 @@ public class MainMenuUI {
             System.out.println("7 - Delete Post-It");
             System.out.println("8 - Undo Post-It");
             System.out.println("9 - View Board History");
+            System.out.println("10 - Share a board owned");
             System.out.println("0 - End of session request");
             System.out.println("\nOption - ");
             try {
@@ -114,6 +115,11 @@ public class MainMenuUI {
                     ViewBoardHistoryUI viewBoardHistoryUI =
                             new ViewBoardHistoryUI(theController);
                     viewBoardHistoryUI.doShow();
+                    break;
+
+                case 10:
+                    ShareBoardUI shareBoardUI = new ShareBoardUI(theController);
+                    shareBoardUI.doShow();
                     break;
                 case 0:
                     codeResult = theController.sendEndOfSession();

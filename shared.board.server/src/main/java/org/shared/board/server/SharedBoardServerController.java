@@ -21,6 +21,7 @@ public class SharedBoardServerController {
 
     /**
      * Instantiates a new Shared board server controller.
+     *
      * @param sbSvcp the sb svcp
      * @param authzp the authzp
      */
@@ -32,6 +33,7 @@ public class SharedBoardServerController {
 
     /**
      * Authenticate.
+     *
      * @param data the data
      * @return the int
      */
@@ -43,6 +45,7 @@ public class SharedBoardServerController {
 
     /**
      * Create board.
+     *
      * @param data the data
      * @return the int
      */
@@ -54,6 +57,7 @@ public class SharedBoardServerController {
 
     /**
      * Create post-it.
+     *
      * @param data the data
      * @return the int
      */
@@ -65,6 +69,7 @@ public class SharedBoardServerController {
 
     /**
      * Update post-it content.
+     *
      * @param data the data
      * @return the int
      */
@@ -76,6 +81,7 @@ public class SharedBoardServerController {
 
     /**
      * Update post-it position.
+     *
      * @param data the data
      * @return the int
      */
@@ -87,6 +93,7 @@ public class SharedBoardServerController {
 
     /**
      * Delete post-it.
+     *
      * @param data the data
      * @return the int
      */
@@ -98,6 +105,7 @@ public class SharedBoardServerController {
 
     /**
      * Undo post-it last change.
+     *
      * @param data the data
      * @return the int
      */
@@ -107,9 +115,27 @@ public class SharedBoardServerController {
         return sbSvc.undoPostIt(result, authz.session().get().authenticatedUser());
     }
 
+    /**
+     * View board history string.
+     *
+     * @param data the data
+     * @return the string
+     */
     public String viewBoardHistory(final Message data) {
         String result = new String(data.data(), StandardCharsets.US_ASCII);
 
         return sbSvc.viewBoardHistory(result, authz.session().get().authenticatedUser());
+    }
+
+    /**
+     * Share board int.
+     *
+     * @param data the data
+     * @return the int
+     */
+    public int shareBoard(final Message data){
+        String result = new String(data.data(), StandardCharsets.US_ASCII);
+
+        return sbSvc.shareABoard(result, authz.session().get().authenticatedUser());
     }
 }
