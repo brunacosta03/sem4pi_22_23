@@ -1024,3 +1024,27 @@ function shareBoardData(){
 
     request.send(JSON.stringify(data));
 }
+
+function doLogout(){
+    const request = new XMLHttpRequest();
+
+    const url = "/logout?token=" + getTokenCookie();
+
+    request.open("DELETE", url, true);
+
+    request.onload = function() {
+        deleteTokenCookie();
+
+        window.location.href = "/";
+    };
+
+    const data = {
+        token: getTokenCookie()
+    };
+
+    request.send();
+}
+
+function deleteTokenCookie() {
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}

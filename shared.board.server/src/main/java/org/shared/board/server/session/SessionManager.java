@@ -62,4 +62,17 @@ public class SessionManager implements SessionManagerInt{
 
         throw new IllegalArgumentException();
     }
+
+    @Override
+    public User logout(String token) {
+
+        if(token != null) {
+            UUID uuidToken = UUID.fromString(token);
+
+
+            return tokensUsers.remove(uuidToken);
+        }
+
+        throw new IllegalArgumentException();
+    }
 }

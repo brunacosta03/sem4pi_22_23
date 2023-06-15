@@ -9,4 +9,6 @@ public interface SessionManagerInt {
     UUID login(final String email, final String password) throws InvalidCredentialsException;
 
     User getUserByToken(String token) throws IllegalArgumentException;
+
+    User logout(String token);
 }
