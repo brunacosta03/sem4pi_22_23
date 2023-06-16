@@ -641,14 +641,14 @@ public class GetPostItsController {
 
 **Login into the application**
 
-![Login](Demonstration/Login.png)
+![Login](Demonstration/Login.PNG)
 
 
 **Click on Board that you want to view**
 
-![Choose a Board](Demonstration/ChooseBoard.png)
+![Choose a Board](Demonstration/ChooseBoard.PNG)
 
 
 **Board will show**
 
-![Show Board](Demonstration/ShowBoard.png)
+![Show Board](Demonstration/ShowBoard.PNG)
