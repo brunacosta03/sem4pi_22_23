@@ -260,3 +260,10 @@ function setPostItHistory(){
 ## 6. Integration/Demonstration
 ![img.png](CreateAndUpdateHistory.png)
 ![img.png](MovedAndDeletedHistory.png)
+
+## 7. Observations
+
+It was developed 2 ways to execute this functionality: http and console.
+
+- In http, there is no input, you need to click the "history" button on the board and you will be automatically redirected.
+- In TCP, the necessary input is the boardId displaying the history on the console of such board.

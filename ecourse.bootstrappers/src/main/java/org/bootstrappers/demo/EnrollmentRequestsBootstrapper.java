@@ -19,11 +19,6 @@ public class EnrollmentRequestsBootstrapper
         User student4 = findUserByEmail("student4@email.com");
 
         createRequest(
-                "MAT-1",
-                student3
-        );
-
-        createRequest(
                 "APROG-3",
                 student3
         );

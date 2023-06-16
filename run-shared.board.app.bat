@@ -5,4 +5,4 @@ shared.board.app\target\dependency\*;
 
 
 REM call the java VM, e.g, 
-java -cp %ECOURSE_CP% org.shared.board.app.Main localhost
+java -cp %ECOURSE_CP% org.shared.board.app.Main ecourse.ddns.net

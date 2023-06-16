@@ -28,7 +28,7 @@ public class TakeExamUI extends AbstractUI {
             Exam exam = ctrl.evaluateExamFromFile(filePath, examTitle);
 
             System.out.println("Final grade is: "
-                    + String.format("%.1f", Math.ceil(exam.schoolGrade()))
+                    + String.format("%.1f", exam.schoolGrade())
                     + "/20.\n");
         }
         catch(IllegalArgumentException iae) {

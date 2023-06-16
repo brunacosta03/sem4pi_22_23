@@ -21,3 +21,4 @@
 | **B**  | [US 2007](../SPRINT%20B/US_2007/readme.md)          |
 | **C**  | [US 2004](../SPRINT%20C/US_2004/readme.md)          |
 | **C**  | [US 3008](../SPRINT%20C/US_3008/readme.md)          |
+| **C**  | [US 5002](../SPRINT%20C/US_5002/US5002_Group8.pptx) |
