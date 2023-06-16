@@ -42,6 +42,10 @@ public class CoursesBootstrapper extends CoursesBootstrapperBase {
 
         serv.addStudent("student2@email.com", "MAT-1");
 
+        serv.addStudent("student3@email.com", "MAT-1");
+
+        serv.addStudent("student4@email.com", "MAT-1");
+
         serv.addStudent("student1@email.com", "PT-1");
 
         serv.addStudent("student2@email.com", "APROG-3");
