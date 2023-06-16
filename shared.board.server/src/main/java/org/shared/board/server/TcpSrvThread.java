@@ -167,7 +167,7 @@ public class TcpSrvThread implements Runnable {
                                 e.getMessage());
                     } catch (NoSuchElementException e){
                         mf.sendMessage(VERSION, MessageCodes.ERR,
-                                "User is not authenticated or is not in the system!");
+                                "User is not authenticated!");
                     }
                 }
 

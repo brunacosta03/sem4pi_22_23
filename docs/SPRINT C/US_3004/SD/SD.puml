@@ -1,152 +1,73 @@
 @startuml
+'http://plantuml.com/skinparam.html
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
 
-autonumber
+actor User as Actor
+participant HttpServerAjax as Server <<http server>>
+participant ShareBoardController as Controller <<application>>
+
+database BoardRepository as Repository <<repository>>
+participant BoardService as Service <<service>>
 
 
-actor User
-participant ShareABoardUI <<presentation>>
-participant ShareBoardController<<application>>
-participant BoardService<<service>>
-participant Course<<course>>
-participant PersistenceContext<<persistence>>
-participant RepositoryFactory<<factory>>
-participant BoardPermissionFactory<<factory>>
-database BoardRepository <<repository>>
+Actor --> Server: Writes the email address and the \naccess level to be given and pushes the button to add
+activate Server
 
-activate User
 
-User -> ShareABoardUI : starts to add a person to\none of his boards
 
-activate ShareABoardUI
 
-ShareABoardUI -->User : asks for the email\naddress of the user to be added
+    Server -> Controller: shareBoard(boardId, userToBeAdded, boardOwner, accessLevel)
 
-deactivate ShareABoardUI
+    activate Controller
 
-User -> ShareABoardUI : EmailAddress
+     Controller -> SessionManager: getUserByToken(token)
+        activate SessionManager
+        SessionManager -> Controller: authUser
+        deactivate SessionManager
 
-activate ShareABoardUI
+    Controller -> Repository: ofIdentity(boardId)
+    activate Repository
+    Repository -> Controller: board
+    deactivate Repository
 
-ShareABoardUI -> ShareBoardController : EmailAddress
+   Controller -> Service : confirmLevel(accessLevel)
+   activate Service
+   Service -> Controller : AccessLevel
+    deactivate Service
 
-activate ShareBoardController
+    Controller -> Service : shareBoard(boardId, userToBeAdded, accessLevel)
+activate Service
+Service -> Board : userHasPermission(userToBeAdded, accessLevel)
+activate Board
+Board -> Service : boolean
+deactivate Board
 
-ShareBoardController -> PersistenceContext : factories()
+Service -> Board : userHasPermission(userToBeAdded, differentLevel)
+activate Board
+Board -> Service : boolean
+deactivate Board
 
-activate PersistenceContext
+Service -> Board : addPermission(userToBeAdded, accessLevel)
+activate Board
+Board -> Service : boardPermission
+deactivate Board
 
-PersistenceContext -> RepositoryFactory : get
-
-PersistenceContext -> ShareBoardController : factory
-
-deactivate PersistenceContext
-
-ShareBoardController -> RepositoryFactory : users()
-
-activate RepositoryFactory
-
-RepositoryFactory -> UserRepository : findUserByEmail(EmailAddress)
-
-activate UserRepository
-
-UserRepository -> RepositoryFactory : user
-
-deactivate UserRepository
-
-RepositoryFactory -> ShareBoardController : user
-
-deactivate RepositoryFactory
-
-ShareBoardController -> ShareABoardUI : user
-
-deactivate ShareBoardController
-
-ShareABoardUI --> User : asks for the title of the board\nand the access level to be given
-
-deactivate ShareABoardUI
-
-User -> ShareABoardUI : BoardTitle, AccessLevel
-
-activate ShareABoardUI
-
-ShareABoardUI -> ShareBoardController : shareBoard(User, BoardTitle, AccessLevel)
-
-activate ShareBoardController
-
-ShareBoardController -> BoardService : findInBoard(User, Board)
-
-activate BoardService
-
-BoardService -> PersistenceContext : factories()
-
-activate PersistenceContext
-
-PersistenceContext -> RepositoryFactory : get
-
-PersistenceContext -> BoardService : factory
-
-deactivate PersistenceContext
-
-BoardService -> RepositoryFactory : boardRepository()
-
-activate RepositoryFactory
-
-RepositoryFactory -> BoardService : boards
-
-deactivate RepositoryFactory
-
-BoardService -> ShareBoardController : board
-
-deactivate BoardService
-
-ShareBoardController -> BoardService : confirmLevel(AccessLevel)
-
-activate BoardService
-
-BoardService -> AccessLevelType : allAccessLevelTypes()
-
-activate AccessLevelType
-
-AccessLevelType -> BoardService : accessLevelTypes
-
-deactivate AccessLevelType
-
-BoardService -> ShareBoardController : accessLevel
-
-deactivate BoardService
-
-ShareBoardController -> BoardService : addToBoard(Board, User, AccessLevel)
-
-activate BoardService
-
-BoardService -> BoardPermissionFactory : get
-
-BoardService -> BoardPermissionFactory : create(User, AccessLevel)
-
-activate BoardPermissionFactory
-
-BoardPermissionFactory -> BoardService : boardPermission
-
-BoardService -> Board : addPermission (BoardPermission)
-
-BoardService -> BoardRepository : save(Board)
-
+Service -> BoardRepository : save(Board)
 activate BoardRepository
-
-BoardRepository -> BoardService : board
-
+BoardRepository -> Service : board
 deactivate BoardRepository
 
-BoardService -> ShareBoardController : board
+Service -> Controller : boardPermission
+deactivate Service
 
-deactivate BoardService
+    Controller -> Server: boardPermission
+    deactivate Controller
 
-ShareBoardController -> ShareABoardUI : board
+    Server --> Actor: confirmation
 
-deactivate ShareBoardController
-
-ShareABoardUI -> User : shows the operation's success
-
-deactivate ShareABoardUI
-
+deactivate Server
 @enduml
