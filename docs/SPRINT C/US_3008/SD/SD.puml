@@ -13,6 +13,8 @@ participant PostItService as service <<service>>
 
 participant SessionManager as session <<service>>
 
+participant Synchronizer as sync <<service>>
+
 database BoardRepository as boardRepo <<repository>>
 
 database PostItRepository as postItRepo <<repository>>
@@ -61,9 +63,24 @@ session --> http : authUser
 
 deactivate session
 
-http -> http : lockKey = generateLockKey(requestBody)
+http -> sync** : getInstance()
 
-http -> http : lock = getOrCreateLockObject(lockKey)
+
+http -> sync : generateLockKey(requestBody)
+
+activate sync
+
+sync --> http : lockKey
+
+deactivate sync
+
+http -> sync : getOrCreateLockObject(lockKey)
+
+activate sync
+
+sync --> http : lockObject
+
+deactivate sync
 
 note right http
  the lockKey gets or creates an

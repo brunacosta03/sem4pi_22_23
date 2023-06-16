@@ -821,3 +821,13 @@ public class PostItService {
 - As we can see the previous post-it content was recovered
 
 ![Verify it was undone](Demonstration/verificar_recuperacao_post_it.png)
+
+## 7. Observations
+
+It was developed 2 ways to execute this functionality: http and console. But there are some differences between them both:
+
+- HTTP
+    - Undo post-it: Only needed to click the undo button on a certain cell of a board.
+
+- Console
+    - Undo post-it: Needed to write the row, column and boardId of the post-it to undo it.
