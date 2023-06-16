@@ -1189,6 +1189,21 @@ public class PostItService {
 
 **Write column and row click on move**
 
-**Click on button Delete Post-it**
+**If user want to delete just need to click on button Delete**
 
 ![Choose a Board](Demonstration/ChangePostIt.PNG)
+
+
+## 7. Observations
+
+It was developed 2 ways to execute this functionality: http and console. But there are some differences between them both:
+
+   - HTTP
+        - Update post-it: Only the content of the post-it is requested, which can be text or an image via upload. The cell where the post-it is created is detected by the click. The board is recognized by the link that the user is accessing.
+        - Move post-it: Only the new column position and new row position will be asked. Previous column and row will be recognized by the click on cell.
+        - Delete post-it: Just need to click on button delete. Cell will be recognized by the click.
+
+   - Console
+        - Update post-it: The data will be asked (row position, column position, board id, post-it content) by console line.
+        - Move post-it: The data will be asked (previous row position, previous column position, new row position, new column position, board id) by console line.
+        - Delete post-it: The data will be asked (row position, column position, board id) by console line.

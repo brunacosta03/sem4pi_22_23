@@ -653,3 +653,11 @@ public class PostItService {
 **After upload image a link will be generated and you can click on create**
 
 ![Create Post-It](Demonstration/UploadImageDone.PNG)
+
+
+## 7. Observations
+
+It was developed 2 ways to execute this functionality: http and console. But there are some differences between them both:
+
+- HTTP : Only the content of the post-it is requested, which can be text or an image via upload. The cell where the post-it is created is detected by the click. The board is recognized by the link that the user is accessing.
+- Console : The data will be asked (row position, column position, board id, post-it content) by console line.

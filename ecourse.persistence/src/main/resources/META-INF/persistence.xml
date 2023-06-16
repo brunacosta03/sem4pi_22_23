@@ -22,8 +22,8 @@
     <class>org.domain.model.postit.PostIt</class>
 
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost:9092/./ecourse"/>
-<!--      <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://vsgate-s2.dei.isep.ipp.pt:10689/ecourse"/>-->
+<!--      <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost:9092/./ecourse"/>-->
+      <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://vsgate-s2.dei.isep.ipp.pt:10689/ecourse"/>
 
       <property name="javax.persistence.jdbc.user" value="user"/>
       <property name="javax.persistence.jdbc.password" value="password"/>
