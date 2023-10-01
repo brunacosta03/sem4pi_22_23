@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="ecourse.postit.domain" />
+        <module name="enrollment.request.domain" />
+        <module name="ecourse.boards.domain" />
+        <module name="exam.application" />
+        <module name="ecourse.postit.application" />
+        <module name="shared.board.app" />
+        <module name="ecourse.infrastructure.authz" />
+        <module name="enrollment.request.application" />
+        <module name="ecourse.app.manager" />
+        <module name="ecourse.bootstrappers" />
+        <module name="ecourse.app.student" />
+        <module name="ecourse.infrastructure" />
+        <module name="shared.board.server" />
+        <module name="ecourse.boards.application" />
+        <module name="course.domain" />
+        <module name="ecourse.core" />
+        <module name="ecourse.app.bootstrap" />
+        <module name="usermanagement.application" />
+        <module name="course.application" />
+        <module name="ecourse.app.teacher" />
+        <module name="shared.board.common" />
+        <module name="ecourse.app.common.console" />
+        <module name="usermanagement.domain" />
+        <module name="exam.domain" />
+        <module name="ecourse.persistence" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>
